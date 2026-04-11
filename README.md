@@ -1,2 +1,93 @@
-# Dialecta
-Dialecta. A discourse platform that redirects social media's reward loops away from outrage and toward clarity. It is a discourse platform where ideas are evaluated on their merits, not their tribe. Comments are sorted into transparent quality tiers by a hybrid AI, self, and community engine.
+Dialecta
+A discourse platform that redirects social media's reward loops away from outrage and toward clarity.
+
+What this is
+Dialecta is an editorial blog and community platform built on a single premise: the mechanics that make social media toxic are not inevitable. Reward loops are extraordinarily powerful shapers of human behavior, and most platforms have pointed them at reflexive anger and tribal conformity. Dialecta points them at curiosity, specificity, and honest disagreement.
+The goal is not to make people agree. It is to make disagreement more interesting. Ideas are stripped of tribal labels and evaluated on their own merits. Strong, passionate disagreement is welcome. Vague outrage is not.
+Dialecta does not ask users to be better people. It engineers an environment where thoughtful engagement is the path of least resistance.
+
+Core principles
+
+Ideas are the protagonist, not identities. No binary left/right labeling. No tribal framing.
+Classification, not censorship. Comments are never hidden outright. They are sorted into visible, browseable tiers.
+Transparency is non-negotiable. Every classification decision is explained in plain language. The engine is documented and inspectable.
+The AI is a mirror, never a gatekeeper. It reflects, describes, and invites growth. It never alters core intent or tries to change minds.
+Contributor autonomy is absolute. Coercion and manipulation are explicitly out of scope, even in service of "better" discourse.
+
+
+The tier system
+Comments live on a brightness ladder. Lighter badges signal higher-quality discourse. Every tier is browseable; the default view surfaces the top.
+TierNameWhat it isForumConstructive, specific, fact-referenced or clearly reasoned. Strong disagreement welcome if it engages with something specific.SparkA genuinely interesting idea, underdeveloped. The seed of something good.EchoRestates the article or a prior comment without adding to it. Not harmful, just not propulsive.FogVague, unclear, or disconnected. The reader cannot tell what the person believes.HeatEmotionally charged without constructive specificity. Passion without a point.StanceHeavy rhetoric, tribal framing, or coded language signaling team membership over idea engagement.BreachName-calling, slander, targeted personal attacks. Suppressed from default view (not deleted), with transparent reason shown.
+Tier icons are part of the visual identity: Roman columns (Forum), lightning bolt (Spark), circular chase arrows (Echo), fluffy cloud (Fog), asymmetric flame (Heat), planted pennant flag (Stance), broken chain links (Breach).
+
+The hybrid classification engine
+Classification runs in three sequential stages, with weighted inputs.
+Stage 1: AI pre-analysis (instant, on submit)
+Before publication, the engine identifies the core claim, flags rhetorical patterns, detects specificity level, and suggests a tier with a plain-language reason. The commenter sees a non-blocking reflection prompt. The friction is the point: not blocking, just reflecting.
+Stage 2: Self-declaration
+The commenter accepts the suggestion or overrides it. The declaration is visible. If they claim Forum and the community disagrees, that contrast becomes interesting data.
+Stage 3: Community voting
+Readers vote within a tier and can nominate comments for reclassification. Enough nominations trigger re-review.
+Weighting: AI suggestion 40%, community voting 35%, self-declaration 15%, Stage 2.5 response quality 10%.
+Backend: Anthropic Claude API. Nuanced language analysis (especially distinguishing passionate-but-constructive from tribal-but-empty) requires reasoning, not keyword matching.
+
+Opinion mapping tools
+Binary agree/disagree is replaced with dimensional, spatial representations of where readers stand. Positions as landscapes, not scores.
+
+2-axis Cartesian plot. Two independent dimensions, reader places a dot, aggregate forms a heat map. The default for most articles.
+Ternary plot. A triangular plot where a point represents a simultaneous blend of three positions summing to 100%. Real academic credibility, nothing in public discourse currently uses it. Dialecta's signature feature.
+Archetype picker. For articles where named positions are clearer than axes.
+
+The AI pre-analysis can suggest which mapping tool fits a given article based on the nature of the debate it detects.
+
+Tech stack
+Current prototype layer
+
+React with JSX components
+Custom design token system (see dialecta-design-spec-v2.html)
+Anthropic Claude API for classification
+
+Target launch stack (Phase 4)
+
+Next.js
+Supabase (auth, database, realtime vote updates)
+Headless CMS (Sanity or Contentful)
+D3.js for ternary and 2D visualization
+Anthropic API for the classification pipeline
+
+
+Project structure
+/components       React components (profile, pact, stewards, opinion maps)
+/design           Design spec, tokens, logo assets
+/docs             Project brief, classification engine spec, tier psychology
+/snapshots        Versioned nightly snapshots tracking progress
+/prompts          AI prompt architecture (core analysis, reflection, suggestion refinement)
+Components follow the canonical design spec at v1.2. Page background, nav treatment, gold tokens, typography stack, and tier icons are all locked in the spec.
+
+Status
+Roughly mid-build. Substantially delivered:
+
+Contributor Profile (desktop and mobile), with the petal-engine Thinking Fingerprint
+Pact page with Declaration Layer and interactive classification quiz
+Stewards page with writer Orders, Cadence modifiers, and the Satirist's Charter
+Opinion mapping UX prototypes (ternary, 2-axis, archetype picker)
+AI prompt architecture (Core Analysis, Reflection Language, Suggestion Refinement)
+Design spec v1.2 with full token system
+Growth Layer Principles v1.0
+
+In progress: Delta mechanic, Responsive Foundations, Steelman/Advocate terminology resolution, Phase 2+ feature scoping.
+Progress is tracked in versioned nightly snapshots using semver (v0.1.x for daily increments, v0.2.0 for major shifts).
+
+Roadmap
+PhaseFocus1. PilotFamily contributors, manual tier classification, concept proven2. EngineAI comment analysis, self-declaration, community voting, Pact onboarding3. Mapping2-axis live, ternary in beta on select articles4. PlatformMigration to Next.js + Supabase, full feature set, broader public5. ScaleFine-tuned model on platform's own classified data, mobile app, governance features
+
+A note on philosophy
+If you are reading this as a contributor or collaborator, a few things to internalize before writing code:
+The AI is not a judge. When you write prompts, copy, or interaction logic, the test is always: does this reflect, or does this coerce? Suggestions should name something specific, point toward rather than away, and find a dopamine hit wherever possible. The Growth Frame doctrine is load-bearing.
+Archetypes are platform-assigned based on observed behavior, never self-declared. A user may declare an aspiration. They cannot declare an identity.
+New contributors get Path A (pre-publication reflection) for their first three submissions. After that, the choice is fully theirs. Posts become permanent after the reflection window closes. Tracked public amendments are available indefinitely.
+
+License
+TBD. Likely source-available with a non-compete clause to protect the editorial mission.
+
+Dialecta is engineered, not preached.
