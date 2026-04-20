@@ -44,6 +44,14 @@ const EDITABLE_FIELDS = ['display_name', 'bio', 'avatar_url', 'location'];
 export default async function handler(req, res) {
   const { id } = req.query;
 
+  res.setHeader('Access-Control-Allow-Origin', 'https://www.dialecta.org');
+res.setHeader('Access-Control-Allow-Methods', 'GET, PATCH, OPTIONS');
+res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+if (req.method === 'OPTIONS') {
+  return res.status(200).end();
+}
+
   if (!id) {
     return res.status(400).json({ error: 'Member id is required' });
   }
