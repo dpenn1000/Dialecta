@@ -31,96 +31,16 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { classifyComment } from './_classify.js';
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
 );
 
-// ─── Inline classification ────────────────────────────────────────────────
-// Shared with /api/classify but inlined here to avoid an extra HTTP round
-// trip on the hot path. Keep the two prompts in sync.
-
-const CLASSIFY_SYSTEM_PROMPT = `You are the classification engine for Dialecta — a platform that rewards constructive dialogue and honest debate. Your job is to analyze a comment and assign it to the correct tier.
-
-## THE TIER SYSTEM
-
-forum      — Specific claim, engaged with content, reasoning present. Strong disagreement is welcome here.
-spark      — Interesting idea, but underdeveloped. Potential not yet realized.
-echo       — Restates the article or a prior comment without adding to it.
-fog        — Unclear. Reader cannot identify what the commenter believes.
-heat       — Emotionally charged without a specific claim. Passion without a point.
-stance     — Tribal framing, rhetoric, or identity signaling dominates. A position planted, not a conversation joined.
-breach     — Personal attack on a person, not an idea. The Pact broken.
-
-## CLAIM SPECIFICITY SCALE
-
-0 — No claim (pure feeling, label, or tribal signal)
-1 — Vague claim (you know which side they are on, not what they think)
-2 — Specific claim (an identifiable proposition someone could engage with on substance)
-3 — Developed claim (specific proposition + supporting reasoning, evidence, or named counter-argument)
-
-## CRITICAL EDGE CASE
-
-A comment can be angry, sharp, or contemptuous and still be forum tier — provided it is anchored to a specific, arguable proposition. Emotional register alone is never the disqualifier. The absence of a claimable proposition is.
-
-## COMMENTER MESSAGE TONE
-
-Write observationally, not evaluatively. If the tier is below forum, include one concrete suggestion. Do not moralize. 1–2 sentences maximum.
-
-## OUTPUT
-
-Respond ONLY with valid JSON. No preamble, no markdown, no explanation outside the JSON.
-
-{
-  "claim_text": "The claim paraphrased or quoted. 'None identified' if absent.",
-  "specificity": 0,
-  "emotion": "low|medium|high",
-  "tribal_markers": false,
-  "tribal_example": null,
-  "article_engagement": "specific|general",
-  "opposing_view_engaged": "yes|partially|no",
-  "ai_suggested_tier": "forum|spark|echo|fog|heat|stance|breach",
-  "borderline_flag": false,
-  "borderline_other_tier": null,
-  "commenter_message": "1–2 sentence message shown to the commenter."
-}`;
-
-async function classifyComment(commentBody, articleClaims = []) {
-  const claimsBlock =
-    articleClaims.length > 0
-      ? `## ARTICLE KEY CLAIMS\n${articleClaims.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n`
-      : '';
-
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': process.env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 512,
-      system: CLASSIFY_SYSTEM_PROMPT,
-      messages: [
-        {
-          role: 'user',
-          content: `${claimsBlock}## THE COMMENT\n"${commentBody}"`,
-        },
-      ],
-    }),
-  });
-
-  if (!response.ok) throw new Error('Anthropic API returned ' + response.status);
-
-  const data = await response.json();
-  const text = data?.content?.[0]?.text ?? '';
-  const clean = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-  const result = JSON.parse(clean);
-  result.ai_suggested_tier = (result.ai_suggested_tier ?? '').toLowerCase().trim();
-  return result;
-}
+// Classification runs synchronously on this hot path (rather than via an HTTP
+// hop to /api/classify) so a single request returns both the stored comment
+// and its tier suggestion. The prompt and Anthropic call live in _classify.js.
 
 // ─── Handler ──────────────────────────────────────────────────────────────
 
