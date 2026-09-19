@@ -66,6 +66,8 @@ scripts/          voice_check.py, extract-tokens.mjs, import-ghost.mjs, install-
 
 ## Known drift and open work
 
+- The April to May 2026 doc import carries 1,667 hard voice-rule hits, all of them dashes, across 43 files under `docs/`. `.voiceignore` lists them and the CI gate skips them. They are exempt rather than fixed because `guard-docs.mjs` blocks agents from editing specs, and because handoffs and reviews are write-once records. The list is paths, not patterns, so any new file is gated normally. Clean a doc's dashes and delete its line. Nothing outside `docs/` is exempt.
+
 - `api/classify.js` system prompt uses em dashes and predates Editorial Voice v1.2. Changing it changes live output; do it as its own commit and test against sample comments.
 - `docs/reviews/2026-09-08-site-review.md` lists eight visible site bugs, a restructure proposal, and per-page prose findings. Start there for any site cleanup.
 - Cloud-only OneDrive files that did not copy on 2026-09-08 (open them once in Explorer to download, then re-copy): `Fundamentals/Dialecta_Stewards_Reflection.txt`, `Fundamentals/dialecta-quote-library.json`, `Data Handling/dialecta_data_architecture.svg`, `Write Layer/Articles/*.txt`, `Dialecta-Private-Draft-Mode.jsx`, `Fundamentals/dialecta-discourse-layer.jsx`, `Fundamentals/dialecta-fingerprint-engine.jsx`, `Fundamentals/Components/WoodFrameProgressBar.jsx`, `Growth Layer/dialecta-growth-scroll-v5.jsx`, `Opinion Map/dialecta-opinion-maps.jsx`, `Private Draft Mode/dialecta-s11-private-draft-mode.jsx`, `Profile Pages/dialecta-profile-responsive.jsx`, two logos. The `components/` copies of the jsx files are the older April project exports.

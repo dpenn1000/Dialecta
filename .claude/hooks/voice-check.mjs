@@ -15,6 +15,18 @@ if (!isProse || !existsSync(p)) process.exit(0);
 if (/Dialecta_Editorial_Voice\.md$/.test(p)) process.exit(0);
 
 const root = resolve(process.env.CLAUDE_PROJECT_DIR || process.cwd());
+
+// .voiceignore exempts the April to May 2026 import. CI filters on the same list;
+// without this the hook would block an agent appending to an exempt handoff.
+const ignoreFile = resolve(root, '.voiceignore');
+if (existsSync(ignoreFile)) {
+  const rel = p.replace(/^.*?\/Dialecta\//, '');
+  const ignored = readFileSync(ignoreFile, 'utf8')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith('#'));
+  if (ignored.includes(rel)) process.exit(0);
+}
 const script = resolve(root, 'scripts/voice_check.py');
 for (const py of ['python3', 'python', 'py']) {
   const r = spawnSync(py, [script, '--strict', p], { encoding: 'utf8' });

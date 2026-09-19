@@ -41,8 +41,15 @@ jobs:
             fi
           fi
           files=$(git diff --name-only --diff-filter=AM "$range" -- '*.md' 'apps/web/src/strings.ts' || true)
+          # .voiceignore lists the April to May 2026 import, exempt for the reasons in its header.
+          if [ -f .voiceignore ]; then
+            grep -v '^#' .voiceignore | grep -v '^$' > /tmp/voiceignore.txt || true
+            if [ -s /tmp/voiceignore.txt ]; then
+              files=$(printf '%s\n' "$files" | grep -vxF -f /tmp/voiceignore.txt || true)
+            fi
+          fi
           if [ -z "$files" ]; then
-            echo "No prose files changed; skipping voice check."
+            echo "No gated prose files changed; skipping voice check."
             exit 0
           fi
           echo "$files"
