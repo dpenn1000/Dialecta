@@ -12,7 +12,7 @@ Read `docs/Dialecta_Project_Index.md` (v0.16, May 2026) first when orienting. It
 | `C:\Users\dan\OneDrive\Websites\Dialecta` | The concept archive: hand-tended specs in `Fundamentals/`, session handoffs, logos, marketing, article drafts | Read-only reference. `docs/` here mirrors it as of 2026-09-08. When the two disagree, the OneDrive copy is older or the same; edit here, then copy back if Dan wants the archive current |
 | `C:\dialecta-api`, `C:\dialecta-local`, `C:\dialecta-next` | Named in older handoffs as the API repo, the Ghost theme (`versions/6.28.0/content/themes/dialecta`), and the OG-image sidecar | Not present on studio-pc as of 2026-09-08. The theme source is not in this repo. If a theme task comes up, find the checkout first |
 | Ghost on Magic Pages (`dialecta.mymagic.page`) | Articles, members, pages, theme | Live |
-| Vercel (`dialecta.vercel.app`) | The `api/` functions | Live |
+| Vercel (`dialecta.vercel.app`) | Serves a 2026-05-08 build from a DIFFERENT repo, `dpenn1000/dialecta-api` at commit `53364fa`. The project's Git connection now points at this repo, so this repo's pushes build previews there, but production has not been redeployed since May | Live, from `dialecta-api` |
 | Supabase | `profiles`, comments, classifications, votes | Live |
 | claude.ai project "Dialecta Platform Development" | Copies of the April docs | Stale except `Dialecta_Editorial_Voice.md` (v1.2 written back 2026-09-08) |
 
@@ -68,6 +68,8 @@ scripts/          voice_check.py, extract-tokens.mjs, import-ghost.mjs, install-
 - **Concept vs. code:** the spec wins. Surface drift, propose a code fix, don't amend the spec silently.
 
 ## Known drift and open work
+
+- The Vercel project named `dialecta` is connected to `dpenn1000/Dialecta` and serves production from `dpenn1000/dialecta-api`. Verified against the Vercel API on 2026-09-19: all five most recent production deployments carry `githubRepo: dialecta-api`, `githubCommitSha: 53364fa`. Preview builds from this repo fail at the last step with `No Output Directory named "public"`, because the project's root directory is still the repo root from the old `api/` setup. The Next.js build itself succeeds. Backlog P0-3 owns the fix and it is Dan's to make in the dashboard. A failed production build leaves the May deployment aliased, so merging here does not take the API down.
 
 - `.claude/skills/dialecta-council/SKILL.md` names a `council-guard` hook that enforces the advisor folder rules. No such hook exists. The hooks present are `guard-docs.mjs`, `voice-check.mjs` and `handoff-note.mjs`, and `guard-docs.mjs` covers charters but not the wider rule. Either write the hook or drop the claim.
 
