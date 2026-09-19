@@ -34,3 +34,27 @@
 | todo | Open Collective and Every.org as fiscal hosts for a small project taking recurring donations | If patronage becomes a line, someone has to receive the money. Relevant to whether Dialecta ever needs a legal entity, which is a cost the floor model does not yet carry |
 | todo | The cost of a legal entity and the accounting for taking recurring money: LLC or nonprofit, state fees, bookkeeping | The floor model in `../positions/monetization.md` counts vendors only. Taking money has its own fixed cost and the position is weaker until it is priced |
 | todo | Comment spam economics: what an automated sign-up run costs an attacker, and what rate limiting is standard | The open sign-up position in `../positions/p0-d2-signup.md` rests on this and currently reasons from first principles rather than from a source |
+
+## Leads added 2026-09-19, second pass: prior art in code and in research
+
+*Dan asked whether there are useful repositories and research bodies on subscriptions, finance models and advertising. Searched 2026-09-19. Ranked by whether they are proportionate to a platform that needs about $744 a year, because most of this field is built for companies two or three orders of magnitude larger.*
+
+### Worth reading
+
+| State | Lead | Why it matters here |
+| --- | --- | --- |
+| todo | Membership Puzzle Project, *The Membership Guide*, membershippuzzle.org, with the Lenfest Institute | The single best match for Dialecta's situation. Founded out of NYU's Studio 20 with De Correspondent to research membership as the alternative to ad funding, which is the exact question this advisor is answering. Case studies and step-by-step process rather than theory. Read this before anything else on this list |
+| todo | Membership Puzzle Project, the routines and tools pages, and the Membership News Fund case studies (23 experiments across 13 countries, grants of $10k to $60k) | Small-organisation membership experiments at roughly Dialecta's order of magnitude, with published outcomes. The closest thing to a control group this research tree will get |
+| todo | Lemmy (LemmyNet/lemmy) funding model: join-lemmy.org/donate | The strongest comparable case. Open source discussion platform, explicitly no advertising, no monetization, no venture capital, funded by donations through Liberapay, Open Collective, Ko-fi and Patreon plus an NLnet Foundation grant, with a stated sustainability target near 5,000 euros a month. A live test of the multi-channel patronage model this advisor is recommending, at a platform with the same ethical constraints |
+| todo | NLnet Foundation grant programmes | Named as a funder of Lemmy. Funds open internet and discourse infrastructure. Relevant to the charter's carve-out that a grant may fund a discrete build with an end date. Pairs with the untouched Knight and Omidyar lead |
+| todo | stripe-samples/subscription-use-cases on GitHub | Stripe's own reference implementation for fixed-price and usage-based subscriptions. This is the right size for the billing row that blindspot 2026-09-19-003 says is missing. Read it instead of adopting a billing platform |
+| todo | Discourse.org's open-core business: paid hosting funding open source core | Already on the seeded list and still untouched. The second pass confirms it is the more instructive of the two forum comparables, because unlike Lemmy it is a business |
+
+### Checked and judged disproportionate, recorded so nobody re-checks
+
+| State | Lead | Why it matters here |
+| --- | --- | --- |
+| dead | Self-hosted billing platforms: getlago/lago, billabear/billabear, useautumn/autumn, service-bot/servicebot | All real, all maintained, all wrong for Dialecta. These are metering and billing engines for companies with pricing tiers, usage metering and revenue analytics. Running one means another service to host, patch and pay for, in order to collect $744 a year from about sixteen people. **This advisor would veto adopting any of them.** Stripe Checkout, a webhook and one table is the proportionate build. Marked dead as a Dialecta lead, not as software |
+| dead | strangerstudios/paid-memberships-pro, membermatters/MemberMatters | Membership and access-control portals for WordPress and for makerspaces respectively. Neither fits a Next.js and Supabase stack, and both solve a gating problem that the standing position specifically rejects, since the position gates nothing |
+| dead | SaaS FP&A and unit-economics model templates (rahul9908/saas-fpa-financial-model, Fruth28/unit-economics-ltv, Faeif/casekit) | Genuine, useful artifacts for a venture-scale business. LTV to CAC ratios, cohort retention curves, 48-month driver-based forecasts and payback-period analysis are instruments for deciding how to spend an acquisition budget. Dialecta has no acquisition budget and needs sixteen members. Building a three-statement model against a $744 annual floor is the kind of spend with no path to being paid for that this advisor exists to veto. Revisit only if Dialecta ever has staff costs |
+| todo | openclaw/skills, `jimmy974/financial-model-builder` SKILL.md | Filed as todo rather than dead only because it is a skill rather than a spreadsheet, so the cost of having it available is near zero. Same caution applies: do not let the existence of a modelling tool turn a $62 monthly bill into a modelling exercise |

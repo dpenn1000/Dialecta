@@ -18,13 +18,14 @@ The decisive line for Dialecta is not a price. It is this: **"Free projects are 
 
 Running the Pro quotas against Dialecta's shape:
 
-- 8 GB of database at roughly 2 KB per comment row plus its classification row is on the order of four million comments before the first $0.125 overage.
+- 8 GB of database at the Scaling spec's stated 3 to 5 KB of write amplification per comment is roughly 1.6 to 2.7 million comments before the first $0.125 overage. An earlier version of this note assumed 2 KB and said four million.
 - 100,000 included MAUs against 14 live Ghost members is five orders of magnitude of headroom.
 - 250 GB of egress at roughly 500 KB per page load is about 500,000 page loads a month.
 
 ## Implies for Dialecta
 
-- $25/month is a fixed cost from the day the site opens, not a cost that grows with contributors. It belongs in the floor, not in the per-user model.
+- $25/month is a fixed cost from the day the site opens. **Corrected 2026-09-19: $25 is not the launch-ready price.** Pro ships a Micro instance, and `docs/Dialecta_Supabase_Scaling.md` puts the jump to Small on its pre-launch checklist because the `axis_scores` replay pattern is RAM-sensitive. Launch-ready Supabase is $40. See `2026-dialecta-supabase-scaling-spec.md`.
+- The compute ladder is the one line here that does track user count, in steps: Small to about 10,000 active users, Medium at $60, Large at $110. Small in absolute terms, real in shape, and sprint 1 first claimed no such curve existed.
 - On P0-D2, Supabase gives no reason to prefer invite-only over open sign-up. Auth is free to 100,000 monthly active users. Anyone arguing that open sign-up costs money has to point at something other than the database.
 - The first quota Dialecta crosses is egress, and it crosses at around half a million page loads a month. That is a success problem, and at $0.09/GB it is a cheap one.
 - The live project `mguulnibvzusfvyuowwh` holds 32 tables and 20 applied migrations. Confirm which plan it is on before this floor is treated as fact; the charter asks Dan for current spend and this is one of the lines.

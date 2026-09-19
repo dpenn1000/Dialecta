@@ -14,19 +14,33 @@ The gates: email verification before a comment can be submitted, a per-account r
 
 ## Cost per user, and where it does not bend
 
-The honest finding first. **Almost nothing in the stack bends with user count.**
+*Corrected 2026-09-19, same day. The first version of this section claimed almost nothing in the stack bends with user count, and named egress as the first quota crossed. Both were wrong, because this advisor took a position on Dialecta's cost curve without reading `docs/Dialecta_Supabase_Scaling.md`, which is the spec about Dialecta's cost curve. The conclusion below survives. The reasoning that reached it did not, and the corrected version is weaker in a way worth seeing.*
+
+The vendor quotas, which is where sprint 1 stopped:
 
 | Line | Included | Where it runs out | Cost after |
 | --- | --- | --- | --- |
 | Supabase monthly active users | 100,000 on Pro | 100,000 MAU | $0.00325/MAU |
-| Supabase database | 8 GB on Pro | roughly 4 million comment rows | $0.125/GB |
+| Supabase database | 8 GB on Pro | roughly 1.6 to 2.7 million comment rows | $0.125/GB |
 | Supabase egress | 250 GB on Pro | roughly 500,000 page loads a month | $0.09/GB |
 | Vercel function invocations | 1M on Pro | 1M a month | $0.60 per 1M |
 | Vercel data transfer | 1 TB on Pro | 1 TB a month | $0.15/GB |
 
-Against 14 live Ghost members, the MAU allowance alone is five orders of magnitude of headroom. **Anybody arguing that open sign-up costs money has to point at something other than the database, the auth system or the hosting.** This advisor went looking for a cost argument against open sign-up in the infrastructure and did not find one.
+Against 14 live Ghost members the MAU allowance alone is five orders of magnitude of headroom, and none of those lines is reached soon. But the quotas are not what breaks first, and the Scaling spec says so in its opening principle: **"Storage is not the first wall. Connection saturation and `axis_scores` recompute cost are."**
 
-Two places it does bend, and only one of them is about users:
+**There is a per-user cost curve, and it is a step function on the database compute tier.** Supabase Pro ships a Micro instance; the spec's pre-launch checklist requires Small. Its sizing guidance then reads Small to about 10,000 active users, Medium at $60 from 10,000 to 50,000, Large at $110 past that.
+
+| Active users | Compute | Monthly |
+| --- | --- | --- |
+| Launch to ~10,000 | Small | $15 |
+| ~10,000 to 50,000 | Medium | $60 |
+| Past 50,000 | Large | $110 |
+
+So the earlier claim was too strong. Cost does track user count. It tracks it in three steps, the first arrives at roughly 10,000 active users, and it costs $45 more a month to climb. **At 10,000 active users, $45 a month is a rounding error against any membership revenue that user count implies, which is why the conclusion holds.** The spec also warns against planning off the user number at all: "The signal for jumping a tier is sustained p95 query time creeping above ~200ms on profile loads, not a specific user count. Watch the dashboard, not the calendar."
+
+The two genuine first walls are latency, not billing, and both cost nothing recurring to fix. Connection saturation is solved by the Supavisor transaction pooler, which is a connection-string change. The `axis_scores` replay pattern, which "does not scale past roughly 800 to 1,200 lifetime comments per contributor on a small Supabase compute instance", is solved by incremental update with a nightly reconcile. **Dialecta's scaling risk is engineering attention, not vendor spend**, and engineering attention is Dan's time, which is the one input this advisor cannot price.
+
+Two further places it bends, and only one of them is about users:
 
 **1. Email, at about 100 members.** Resend's free tier allows 3,000 emails a month but only 100 a day. Those are different constraints and the daily one binds first. The first announcement to 101 members fails, and the line goes to $20 a month. Notification email crosses it sooner than the newsletter does, because notifications scale with users multiplied by activity rather than with users alone. `../research/2026-resend-pricing.md`.
 
@@ -59,3 +73,4 @@ This advisor's claim is narrow and firm: **on cost alone, invite-only cannot be 
 - A source on comment spam economics, meaning what an automated sign-up run costs an attacker in 2026 and what rate limits are standard. The position reasons from first principles and is weaker for it. Lead is open in `../research/reading-list.md`.
 - A decision on A-2 that moves classification off the submit path. If classification becomes asynchronous, it can be batched at a 50 percent discount and it can be deferred for unverified accounts, which changes the abuse arithmetic considerably. `../research/2026-anthropic-caching-batch-limits.md`.
 - Dan's reader count. The case for open sign-up rests on contributors spreading a fixed cost, and that argument is only as good as the number of people who might sign up.
+- Whether the `axis_scores` incremental-update fix actually ships. Pure replay degrades at 800 to 1,200 lifetime comments per contributor, which a single prolific contributor reaches without any help from open sign-up. If the fix is deferred, the first cost of opening the doors is a compute upgrade bought to paper over a query pattern, which is the worst money on this list. `../research/2026-dialecta-supabase-scaling-spec.md`.

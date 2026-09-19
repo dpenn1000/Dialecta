@@ -15,15 +15,25 @@ for the mandate; this file is the state of the training and what comes next.
 
 ## Where it is now
 
-Sprint 1 ran 2026-09-19. Fourteen sources filed in `research/`, eleven of the fifteen seeded leads
-worked, eight new leads added. Twenty-four standing positions in `positions.md`, each with confidence
+Sprint 1 ran 2026-09-19. Fifteen sources filed in `research/`, eleven of the fifteen seeded leads
+worked, eighteen new leads added including a second pass on prior art in code and research. Twenty-four standing positions in `positions.md`, each with confidence
 and a filed note behind it. Long-form arguments in `positions/monetization.md` and
-`positions/p0-d2-signup.md`. One blindspot open to the other two advisors
-(`exchange/open/2026-09-19-002`).
+`positions/p0-d2-signup.md`. Two blindspots open: 2026-09-19-002 to the other two
+advisors, and 2026-09-19-003 to `decider` and `builder` on the missing billing row.
 
-The monetization gap is closed enough to argue. The headline: Dialecta's fixed floor is about $47 a
-month after Ghost cutover, roughly $564 a year, which is twelve annual memberships or six of Kelly's
-true fans. AI classification is $0.002 a comment and is not the budget problem. The recommendation is
+Corrected the same day, after Dan asked whether the sprint had reviewed Dialecta's own
+subscription and advertising material. It had not. Reading `docs/Dialecta_Supabase_Scaling.md`,
+`docs/Dialecta_Data_Architecture.md`, `docs/Dialecta_Growth_Layer_Principles.md` and all 47 backlog
+rows changed three things: the floor was understated by $15 a month because Supabase Pro ships a
+Micro instance and the Scaling spec requires Small before launch; the claim that nothing bends with
+user count was too strong, since the compute ladder is a step function starting near 10,000 active
+users; and nothing in the backlog builds payments at all, while Phase C retires Ghost's subscription
+management in week 8. All three are recorded in place rather than patched over. A fifteenth note,
+`research/2026-dialecta-supabase-scaling-spec.md`, files the spec that caused the correction.
+
+The monetization gap is closed enough to argue. The headline: Dialecta's fixed floor is about $62 a
+month after Ghost cutover, roughly $744 a year, which is sixteen annual memberships or eight of
+Kelly's true fans. AI classification is $0.002 a comment and is not the budget problem. The recommendation is
 a voluntary annual membership plus patronage, gating nothing, with grants ruled out of the operating
 base. The uncomfortable finding this advisor did not want: self-hosting is not the frugal choice
 against Substack and should never be defended as one.
