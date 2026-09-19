@@ -29,7 +29,8 @@ Env vars (see `.env.example`): `ANTHROPIC_API_KEY`, `SUPABASE_URL`, `SUPABASE_SE
 
 1. `docs/plans/backlog.md`: the ordered work. Pick the top unblocked item.
 2. `docs/handoffs/current.md`: what the last session left.
-3. `docs/plans/build-plan.md`: the architecture. `docs/decisions/`: the ADRs it rests on (001 leave Ghost, 002 Supabase Auth, 003 own editor).
+3. `exchange/ledger.md`: what agents have open with each other. An open record on your question means answering that one.
+4. `docs/plans/build-plan.md`: the architecture. `docs/decisions/`: the ADRs it rests on (001 leave Ghost, 002 Supabase Auth, 003 own editor).
 Delegate with `/dialecta-brief` to `builder`; review with `reviewer`; prose with `voice-editor`; schema with `migrator`; spec questions to `spec-reader`; any `-D` backlog row or "should we" question to `decider` (`/dialecta-decide`), or to the full council (`/dialecta-council`: `treasurer`, `designer`, `philosopher` argue it, `decider` chairs, Dan decides). Hooks in `.claude/settings.json` block spec edits and voice hard-rule failures.
 
 ## Repo layout
@@ -42,6 +43,8 @@ supabase/         migrations, config, generated types (see supabase/CLAUDE.md)
 docs/plans/       backlog and build plan
 docs/decisions/   ADRs, numbered, never edited after Decided
 council/          advisor charters, standing positions, research trees, debate log
+team/             the six working agents: briefs, standing practices, knowledge trees
+exchange/         handoffs, blind spots, advice and votes between agents (see exchange/README.md)
 tools/            local-research MCP server: Ollama-backed search, summarize, index (see tools/local-research/README.md)
 api/              legacy Vercel functions, frozen until apps/web replaces them
 components/       React/HTML prototypes (pact, stewards, guidebook, profile, fingerprint, opinion maps, delta, growth scroll)
@@ -65,6 +68,8 @@ scripts/          voice_check.py, extract-tokens.mjs, import-ghost.mjs, install-
 - **Concept vs. code:** the spec wins. Surface drift, propose a code fix, don't amend the spec silently.
 
 ## Known drift and open work
+
+- `.claude/skills/dialecta-council/SKILL.md` names a `council-guard` hook that enforces the advisor folder rules. No such hook exists. The hooks present are `guard-docs.mjs`, `voice-check.mjs` and `handoff-note.mjs`, and `guard-docs.mjs` covers charters but not the wider rule. Either write the hook or drop the claim.
 
 - The April to May 2026 doc import carries 1,667 hard voice-rule hits, all of them dashes, across 43 files under `docs/`. `.voiceignore` lists them and the CI gate skips them. They are exempt rather than fixed because `guard-docs.mjs` blocks agents from editing specs, and because handoffs and reviews are write-once records. The list is paths, not patterns, so any new file is gated normally. Clean a doc's dashes and delete its line. Nothing outside `docs/` is exempt.
 

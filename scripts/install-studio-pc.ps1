@@ -6,7 +6,8 @@
   Run from anywhere in PowerShell 5.1 or 7:
     powershell -ExecutionPolicy Bypass -File C:\Dialecta\scripts\install-studio-pc.ps1
   Optional:
-    -Zip C:\Users\dan\Downloads\dialecta-scaffold.zip   unzip the scaffold over C:\Dialecta first
+    -Bundle C:\Dialecta\_to_delete\dialecta-foundation.bundle   fetch the integrated branch from a git bundle (preferred)
+    -Zip C:\Users\dan\Downloads\dialecta-scaffold.zip   unzip the scaffold over C:\Dialecta first (older path)
     -Push                                                push the foundation branch to GitHub
     -ChatModel qwen2.5:32b                               pick the local chat model (default qwen2.5:14b)
     -SkipOllama                                          skip the local model setup
@@ -19,6 +20,7 @@
 param(
   [string]$Root = 'C:\Dialecta',
   [string]$Zip = '',
+  [string]$Bundle = '',
   [switch]$Push,
   [string]$ChatModel = 'qwen2.5:14b',
   [string]$EmbedModel = 'nomic-embed-text',
@@ -55,9 +57,21 @@ if (-not (Test-Path (Join-Path $Root 'package.json'))) { Fail "$Root has no pack
 Set-Location $Root
 
 Step 'Git sanity'
-if (-not (Test-Path '.git')) { Fail 'not a git repo; clone dpenn1000/Dialecta into C:\Dialecta first, then rerun with -Zip' }
+if (-not (Test-Path '.git')) { Fail 'not a git repo; clone dpenn1000/Dialecta into C:\Dialecta first, then rerun' }
 git config core.filemode false; git config core.autocrlf true
+if (Test-Path '.git\index.lock') { Remove-Item '.git\index.lock' -Force; Warn 'removed a stale .git\index.lock' }
 Ok "branch: $(git branch --show-current)"
+
+if ($Bundle) {
+  Step "Fetch integrated branch from $Bundle"
+  if (-not (Test-Path $Bundle)) { Fail "bundle not found: $Bundle" }
+  git bundle verify $Bundle; if ($LASTEXITCODE -ne 0) { Fail 'bundle verify' }
+  git fetch $Bundle 'chore/monorepo-foundation:chore/monorepo-foundation'; if ($LASTEXITCODE -ne 0) { Fail 'bundle fetch' }
+  # The working tree may hold untracked copies of files the branch tracks; the branch is the truth.
+  git checkout -f chore/monorepo-foundation; if ($LASTEXITCODE -ne 0) { Fail 'checkout' }
+  git clean -fd -e _to_delete | Out-Null
+  Ok "on chore/monorepo-foundation at $(git rev-parse --short HEAD)"
+}
 
 Step 'npm install'
 npm install --no-audit --no-fund; if ($LASTEXITCODE -ne 0) { Fail 'npm install' }; Ok 'dependencies installed'
@@ -89,6 +103,7 @@ if (-not $SkipOllama) {
 Step 'Branch and commit'
 $branch = 'chore/monorepo-foundation'
 if ((git branch --show-current) -ne $branch) { git checkout -B $branch }
+if (Test-Path '.git\index.lock') { Remove-Item '.git\index.lock' -Force }
 git add -A
 if ((git status --porcelain | Measure-Object).Count -gt 0) {
   git commit -m "Monorepo foundation: apps/web, packages/core, supabase, agent team, council, local research, build plan"
@@ -98,7 +113,8 @@ if ($Push) { git push -u origin $branch; if ($LASTEXITCODE -ne 0) { Fail 'push' 
 
 Step 'Next'
 Write-Host @"
-   1. Open the PR for $branch and merge it (CI runs typecheck, tests, voice check).
+   1. Open the PR for $branch into main and merge it (CI runs typecheck, tests, voice check).
+      It contains recover/api-from-deployment + sync/studio-pc-2026-09-08 + the monorepo.
    2. Supabase: create dialecta-staging, then: npx supabase login; npx supabase link --project-ref <ref>; npx supabase db push; npm run types
    3. Vercel: new project, root directory apps/web, env vars from apps/web/.env.example
    4. Start the research sprint (this trains the council):
