@@ -22,7 +22,8 @@ P0-D2, A-D1, A-D2, A-D3. It also chairs the council and calls every vote.
 
 1. Run `/dialecta-research decider`. The ADR origin and the reversed-decision lead are the two that change how it writes records.
 2. Prepare P0-D2 for the council: the question in a sentence, the locked constraints, and what it blocks. The council skill already names it as the first question.
-3. Run one `vote` record end to end on something small, so the format is exercised before it is needed on something that matters.
+3. `exchange/open/2026-09-19-001` is addressed to you and is open. The live Supabase schema is 20 migrations ahead of `supabase/migrations/`, and which way it resolves depends on a fact only Dan has. Frame the three options from `docs/handoffs/dialecta-handoff-2026-09-19-supabase-reality.md`, recommend one, and say what you would need from him to be sure. Do not decide it.
+4. Run one `vote` record end to end on something small, so the format is exercised before it is needed on something that matters.
 
 ## What this agent posts to the exchange
 
