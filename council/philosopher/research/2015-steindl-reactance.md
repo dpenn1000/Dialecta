@@ -1,0 +1,16 @@
+# Understanding Psychological Reactance: New Developments and Findings
+
+**Source:** Steindl, C., Jonas, E., Sittenthaler, S., Traut-Mattausch, E., and Greenberg, J. (2015). "Understanding Psychological Reactance: New Developments and Findings." Zeitschrift für Psychologie, 223(4), 205-214. DOI 10.1027/2151-2604/a000222 https://pmc.ncbi.nlm.nih.gov/articles/PMC4675534/
+
+## Summary
+
+A peer reviewed review of reactance research since the 2006 Miron and Brehm review. Reactance is an unpleasant motivational arousal that emerges when a person experiences a threat to, or loss of, a free behavior, and it motivates restoring that freedom. Triggers include social influence attempts, situational barriers, and controlling language built on words such as should, ought, must and need (Miller et al. 2007; Quick and Stephenson 2008). Dillard and Shen's (2005) intertwined model treats reactance as a single latent variable mixing anger with negative cognition, and Rains' (2013) meta analysis found that this fits better than models keeping the two separate. The negative cognitions named are counterarguing, devaluing the imposed option, and derogating the source of the threat. Sittenthaler, Steindl and Jonas (2015) found that threats perceived as illegitimate produce an immediate emotional response, while threats perceived as legitimate produce delayed cognitive reflection instead. The review lists what lowers reactance: restoration postscripts telling people they are free to decide for themselves (Miller et al. 2007; Bessarabova, Fink and Turner 2013), perspective taking (Steindl and Jonas 2012), induced empathy (Shen 2010), non controlling verbs such as consider, can, could and may, forewarning (Richards and Banas 2015), and humor (Shen and Coles 2015).
+
+## Implies for Dialecta
+
+- Reactance is the best supported of the four biases the charter names for the classification card, and the card is a textbook trigger: an unrequested judgment of a person's own words, delivered at the moment they had decided to act.
+- The legitimacy finding is the load bearing one. Whether a contributor gets angry or thinks depends on whether the classification reads as legitimate. That is evidence for the structured analysis grid in Stage 2 of the Discourse Layer, and against any later change that hides the engine's reasoning. The charter's veto on "classification that hides its reasoning" now has an empirical leg, not only an ethical one.
+- Derogating the source is a named reactance behavior. Here the source is the classifier, so the predicted failure is contributors dismissing the engine rather than revising the comment. It is measurable: the rate at which a contributor self declares against the engine, tracked over time, is a reactance meter, and the Classification Engine Specification already stores both tiers under Self-Declaration Contrast.
+- The controlling word list is directly checkable against the system prompt in `api/classify.js`, which generates the commenter message and predates Editorial Voice v1.2. Any generated message containing should, ought, must or need carries reactance risk, and `scripts/voice_check.py` has no rule for controlling language today.
+
+*Filed 2026-09-19*
