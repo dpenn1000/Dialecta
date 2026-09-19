@@ -13,7 +13,7 @@ Read `docs/Dialecta_Project_Index.md` (v0.16, May 2026) first when orienting. It
 | `C:\dialecta-api`, `C:\dialecta-local`, `C:\dialecta-next` | Named in older handoffs as the API repo, the Ghost theme (`versions/6.28.0/content/themes/dialecta`), and the OG-image sidecar | Not present on studio-pc as of 2026-09-08. The theme source is not in this repo. If a theme task comes up, find the checkout first |
 | Ghost on Magic Pages (`dialecta.mymagic.page`) | Articles, members, pages, theme | Live |
 | Vercel (`dialecta.vercel.app`) | Serves a 2026-05-08 build from a DIFFERENT repo, `dpenn1000/dialecta-api` at commit `53364fa`. The project's Git connection now points at this repo, so this repo's pushes build previews there, but production has not been redeployed since May | Live, from `dialecta-api` |
-| Supabase | `profiles`, comments, classifications, votes | Live |
+| Supabase project `mguulnibvzusfvyuowwh`, org Pennington Media Group | 32 tables, 20 applied migrations dated 2026-04-29 to 2026-05-07, numbered to `035_growth_engine_schema`. Far ahead of this repo: articles, follows, sparring partners, opinion maps, notifications, a roles and capabilities admin system, handle history, share and celebration events, self descriptions | Live. `supabase/types.ts` is generated from it |
 | claude.ai project "Dialecta Platform Development" | Copies of the April docs | Stale except `Dialecta_Editorial_Voice.md` (v1.2 written back 2026-09-08) |
 
 ## Stack
@@ -68,6 +68,8 @@ scripts/          voice_check.py, extract-tokens.mjs, import-ghost.mjs, install-
 - **Concept vs. code:** the spec wins. Surface drift, propose a code fix, don't amend the spec silently.
 
 ## Known drift and open work
+
+- **`supabase/migrations/` is not this database's history, and P0-2 through P0-7 were planned as if Supabase were empty.** The live project holds 32 tables and 20 applied migrations from April and May 2026. The two migration files here, both dated 2026-09-19, create 13 tables, and 10 of those already exist live with rows in them: `profiles` (14), `axis_scores` (36), `axis_events` (27), `articles` (5), `feed_events` (6), `fp_snapshots` (4), `archetypes` (3), `comments` (3), `classifications` (3), `aspirations` (0). Two more are named differently live (`comment_votes` against `tier_nominations`, `opinion_positions` against `opinion_map_positions`) and `recommitments` has no live counterpart. Running `db push` against the live project would collide. Creating `dialecta-staging` from these files would produce a schema behind production. This needs a decision from Dan before any Supabase work proceeds; it is not a migration to write.
 
 - The Vercel project named `dialecta` is connected to `dpenn1000/Dialecta` and serves production from `dpenn1000/dialecta-api`. Verified against the Vercel API on 2026-09-19: all five most recent production deployments carry `githubRepo: dialecta-api`, `githubCommitSha: 53364fa`. Preview builds from this repo fail at the last step with `No Output Directory named "public"`, because the project's root directory is still the repo root from the old `api/` setup. The Next.js build itself succeeds. Backlog P0-3 owns the fix and it is Dan's to make in the dashboard. A failed production build leaves the May deployment aliased, so merging here does not take the API down.
 

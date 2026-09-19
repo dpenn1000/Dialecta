@@ -18,7 +18,7 @@
     "typecheck": "npm -ws --if-present run typecheck",
     "lint": "npm -ws --if-present run lint",
     "tokens": "node scripts/extract-tokens.mjs",
-    "types": "supabase gen types typescript --local > supabase/types.ts"
+    "types": "npx --yes supabase gen types typescript --project-id mguulnibvzusfvyuowwh > supabase/types.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0"

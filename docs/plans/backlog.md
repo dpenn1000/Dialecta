@@ -4,6 +4,14 @@
 
 ## Phase 0: Foundation (week 1)
 
+> **P0-2 onward is blocked on a decision, not on work.** The live Supabase project
+> (`mguulnibvzusfvyuowwh`, Pennington Media Group) already holds 32 tables and 20 applied
+> migrations from April and May 2026. Ten of the 13 tables `supabase/migrations/` creates exist
+> there with rows in them. These rows were written as greenfield and several of them describe
+> work that appears done. Read `docs/handoffs/dialecta-handoff-2026-09-19-supabase-reality.md`
+> and `exchange/open/2026-09-19-001-advice-supabase-schema-collision.md` before starting any of
+> them. Do not run `supabase db push`.
+
 | Id | Item | Spec | Blocked by | State |
 | --- | --- | --- | --- | --- |
 | P0-1 | Commit scaffold, push, open PR "monorepo foundation", confirm CI green | plans/build-plan.md | | Todo |
