@@ -16,35 +16,47 @@ for the mandate; this file is the state of the training and what comes next.
 
 ## Where it is now
 
-All three of the previous next three are done, on 2026-09-19.
+Two sprints on 2026-09-19. Six next-three tasks set and all six done.
 
-Twelve practices, ten of them now backed by a filed note or by a finding rather than by the
-mandate alone. Six files in `knowledge/`: five sprint notes and the review checklist.
+Seventeen practices, fifteen backed by a filed note or by a finding rather than by the mandate
+alone. Eight files in `knowledge/`: seven sprint notes and the review checklist, which now runs
+to sixteen rows and puts the grant layer before the policy layer.
 
-The sprint took all five seeded leads and filed all five. None turned out dead. One needed a
-correction: the OWASP chapter is `V8 Authorization` in ASVS 5.0.0, not `V4 Access Control`,
-which was its name in 4.0. One was filed on half its claim, the Next.js environment variable
-half; the server action authorization half was not read and is carried as its own `todo`.
-Seven new leads added, so the list grew from five to seven open.
+Eight leads filed, none dead. Two needed correction rather than killing. The OWASP chapter is
+`V8 Authorization` in ASVS 5.0.0, not `V4 Access Control`, which was its name in 4.0. The
+Next.js lead bundled two claims and was filed on the half that was read, with the other half
+carried back as its own row. Eight leads open, so the list has grown as fast as it has shrunk.
 
 PR 3 has a real review on it: `exchange/open/2026-09-19-002-handoff-pr-3-review.md`, thirteen
-findings, three of them blockers. The two that matter are a stored XSS at
+findings, three blockers, plus an appended correction. The two that matter are a stored XSS at
 `apps/web/src/app/articles/[slug]/page.tsx:43` and row level update policies that let a
-contributor set their own `final_tier` and `status`. Both are the same underlying gap, which
-is that Postgres RLS cannot restrict columns. Neither would have been found by the check 2
-paragraph as written; both came from rows 3 and 11 of the new checklist.
+contributor set their own `final_tier` and `status`. Both are the same underlying gap: Postgres
+RLS cannot restrict columns, which OWASP calls BOPLA and puts at 8.2.3, a separate requirement
+at a separate level from the object-level one the policies do satisfy.
 
 The corrected shape of that PR, for anyone reading the old line here: four commits and 235
 files, not three and 199. The fourth is `116dc60`, the voice gate.
 
+Three things the second sprint changed about the review rather than adding to it. The grants
+assumption under B2 was flagged as reasoned and is now read and confirmed, and it does not
+expire, because Supabase's retirement of the default grants on 2026-10-30 reaches future
+objects only. B2 now has a worked remedy, which it did not before. And a fourth reachable path
+was found while writing that remedy: every column named in B2 is also settable at insert time,
+so a fix covering `UPDATE` alone leaves the hole open.
+
 Every check the repo runs before a merge is green on that diff. Typecheck clean, 25 tests
-passing, the voice gate reporting zero hard hits. None of them reads a policy.
+passing, the voice gate reporting zero hard hits. None of them reads a policy or a grant.
+
+The known weakness, recorded because nothing on the checklist fixes it: ASVS 8.1.1 and 8.1.2
+ask for documented field-level authorization rules and Dialecta has none. The row policies are
+the only record of who may write what, and they are the artifact under review, so every row of
+the checklist is this agent reconstructing intent from the code it is checking.
 
 ## Next three
 
-1. Confirm the load bearing assumption under blocker B2: that Supabase grants `authenticated` insert and update on every new table in the `public` schema by default, so RLS is the only gate. It is reasoned, not read. It is the first `todo` on the reading list and the severity of a blocker rests on it.
-2. Read OWASP ASVS 5.0.0 chapter V8 end to end at levels 1 to 3 and turn the level 1 requirements into rows on `knowledge/review-checklist.md`. The checklist's own "Rows this agent has not yet earned" section names four gaps: multi-tenant reads, rate limiting and model cost, storage policies beyond public read, and realtime authorization.
-3. Take the column-level privileges lead, `GRANT UPDATE (column)`, and write the fix this agent would recommend for `comments` and `articles` as a worked example in the note. The review named the hole twice without being able to name the remedy precisely, which is the gap to close before `migrator` picks up record 002.
+1. Close the two citation gaps both database notes lean on. The Postgres `ddl-rowsecurity` page for whether RLS and the privilege system are genuinely independent checks, which is currently sourced from Supabase rather than from the primary text, and PostgREST's behavior when a role lacks a column privilege, since Supabase has a troubleshooting page on `42501` that suggests the failure is not always legible. A remedy that turns a breach into a confusing 500 is half a remedy.
+2. Take the sanitizer and CSP leads together and write the remedy for blocker B1, which is the one blocker still named without a fix. Needs to answer where sanitizing belongs, at write time in the editor, at read time in the page, or both, and what a Next.js `headers()` policy costs. That closes row 15 of the checklist, which is `(unsourced)` today.
+3. Take the malleability window lead. Universal rule 6 of `docs/Dialecta_Axis_Mapping_v1.md` requires deleting prior `axis_events` on re-classification, which sits against the append-only mandate; `comments.hardened_at` exists for that window and nothing in the code reads it. Check 2 cannot rule on any edit path until this is settled, and the tension may be an `advice` record rather than a note.
 
 ## What this agent posts to the exchange
 

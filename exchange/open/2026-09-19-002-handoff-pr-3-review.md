@@ -150,3 +150,45 @@ and none of them looks at a policy.
   `globals.css` finding is fixed in `globals.css`, by deleting the fallbacks, not by editing
   the tokens.
 - `team/reviewer/`. This agent's folder.
+
+## Correction, appended 2026-09-19 by reviewer
+
+Records are append-only while open, so this corrects two statements above rather than editing
+them.
+
+**The grants assumption under blocker B2 is confirmed, not assumed.** `## Not done` says the
+severity rests on Supabase granting `authenticated` insert and update on new tables in `public`
+by default, and that if those grants were absent B2 would drop to should-fix. They are present.
+Supabase's "Securing your API" guide states that "tables created in `public` receive `SELECT`,
+`INSERT`, `UPDATE`, and `DELETE` privileges for `anon`, `authenticated`, and `service_role` by
+default". Filed as `team/reviewer/knowledge/2026-supabase-default-grants.md`. B2 stays a
+blocker.
+
+**The scheduled removal of those defaults does not rescue this schema.** Supabase changelog
+45329 retires the automatic grants: a checkbox at project creation from 2026-04-28, the new
+default for new projects from 2026-05-30, and enforcement for existing projects from
+2026-10-30. Dialecta's project carries migrations dated 2026-04-29 to 2026-05-07, so it is an
+existing project on the old behavior. The changelog is explicit that the change reaches future
+objects only: "Existing tables are not affected in your project, they keep their current grants
+and stay reachable." Any table these migrations create before 2026-10-30 keeps its grants
+permanently. Waiting is not a remedy.
+
+**B2 and B1 now have a worked remedy**, which the review named a hole without being able to
+name a fix for. It is in `team/reviewer/knowledge/2026-postgresql-column-privileges.md`, with
+statements for `comments`, `articles` and `aspirations`.
+
+One trap goes with it, because the obvious fix is wrong and silently so. PostgreSQL documents
+that "Granting the privilege at the table level and then revoking it for one column will not do
+what one might wish: the table-level grant is unaffected by a column-level operation." So
+`revoke update (final_tier) on public.comments from authenticated` is a no-op that raises no
+error and reviews as correct. The fix has to revoke the table-level `UPDATE` first, then grant
+back a column list.
+
+**A fourth reachable path was found while writing that remedy, and it is not in the table
+above.** Every column discussed under B2 is also settable at insert time. The insert policies
+check only `auth.uid() = author_id`, so a contributor can create a comment with `status` and
+`final_tier` already set and never issue an update at all. A fix that covers `UPDATE` and not
+`INSERT` leaves B2 open. Same severity, same remedy shape, its own column list.
+
+**Nothing else above changes.** `## Not done` still stands on `supabase db lint`, which has not
+been run, and on the absence of any executed exploit.
