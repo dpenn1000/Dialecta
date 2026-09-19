@@ -15,13 +15,37 @@ for the mandate; this file is the state of the training and what comes next.
 
 ## Where it is now
 
-No standing positions. A seeded reading list, unverified. It has never argued anything.
+Sprint 1 ran 2026-09-19. Nine sources filed in `research/`, six of them from the seed. Ten standing
+positions in `positions.md`, D-1 through D-10, each with confidence and a filed note behind it.
+Nothing is `(unsourced)`. It has still never argued in council.
+
+The reading list now carries three corrections to the seed and eleven leads, four of them new. No
+seed entry turned out to be fabricated; one had the wrong domain, one was attributed to a source that
+was not read, and one understated the mechanism it described.
+
+Two positions carry the sprint. On the first comment: no precedent filed gates the act of writing,
+and A-1's 12 character gate is both too small to filter anything and implemented as a disabled button
+with no message, which is the mechanism two government design systems say to avoid without user
+research. On P0-D2: Google OAuth first, because Supabase's own documentation says magic link cannot
+deliver to anyone outside the project team without custom SMTP.
+
+Two blindspots are open in `exchange/`: 2026-09-19-002 on the SMTP blocker, and 2026-09-19-003
+asking `philosopher` and `treasurer` for the evidence behind the composer gate before the debate.
+
+The standing ask from the charter is unchanged and now blocks its own positions. D-7 says plainly
+that nothing about the composer can be settled until first-comment completion is instrumented. That
+is the next thing worth buying.
 
 ## Next three
 
-1. Run `/dialecta-research designer`. Verify every seeded lead before filing.
-2. Write a standing position on the first comment: what gets a person from reading to posting once, and what the 12 character gate does to that.
-3. Take a position on P0-D2 from the return-rate side: which login method a person actually completes.
+1. Answer the two open blindspots when the replies land, then revise D-2 and D-5 against them. A
+   position that survives the philosopher and the treasurer is worth more than one that was never
+   shown to them.
+2. Write the instrumentation ask as a concrete proposal: the events, the surfaces they fire from, and
+   where they are stored, for first-comment completion, composer abandonment and seven day return.
+   D-7 makes every other position provisional until this exists.
+3. Argue P0-D2 and A-D3 in `/dialecta-council` once all three advisors have filed. Take D-8 in
+   knowing it is a borrowed prior, and say so.
 
 ## What this agent posts to the exchange
 
