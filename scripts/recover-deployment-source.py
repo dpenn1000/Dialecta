@@ -42,15 +42,21 @@ def load_token() -> str:
     token = os.environ.get("VERCEL_TOKEN", "").strip()
     if token:
         return token
-    path = Path.home() / ".vercel-token"
-    if path.is_file():
-        token = path.read_text(encoding="utf-8").strip()
-        if token:
-            return token
+    # Notepad appends .txt silently, and PowerShell's Out-File writes a UTF-8
+    # BOM. Accept both rather than make the caller fight their own editor.
+    candidates = [
+        Path.home() / ".vercel-token",
+        Path.home() / ".vercel-token.txt",
+    ]
+    for path in candidates:
+        if path.is_file():
+            token = path.read_text(encoding="utf-8-sig").strip()
+            if token:
+                return token
     sys.exit(
         "No token. Create one at https://vercel.com/account/tokens, then either\n"
         "  set VERCEL_TOKEN, or\n"
-        f"  save it as the only line of {path}"
+        f"  save it as the only line of {candidates[0]} (or {candidates[1].name})"
     )
 
 
@@ -118,7 +124,10 @@ def main() -> None:
 
     written = 0
     for index, (rel, uid) in enumerate(files, start=1):
-        raw = get(f"{API}/v6/deployments/{deployment}/files/{uid}?teamId={TEAM_ID}", token)
+        # The tree lives on v6, but file contents are v7 only. v5 and v6 both
+        # answer 410 Gone for this deployment, which reads like expiry and is
+        # not: it is the wrong API version.
+        raw = get(f"{API}/v7/deployments/{deployment}/files/{uid}?teamId={TEAM_ID}", token)
         # Vercel wraps text in {"data": "<base64>"}, but has returned raw bytes
         # for some content types. Handle both.
         try:

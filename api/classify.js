@@ -1,133 +1,82 @@
-/**
- * POST /api/classify
- *
- * Classifies a comment body using Claude Haiku and returns structured
- * Stage A + Stage B data ready to be written to the classifications table.
- *
- * Body: { body: string, article_claims?: string[] }
- *
- * Response: {
- *   claim_text, specificity, emotion, tribal_markers, tribal_example,
- *   article_engagement, opposing_view_engaged,
- *   ai_suggested_tier, borderline_flag, borderline_other_tier,
- *   commenter_message
- * }
- *
- * Env vars required:
- *   ANTHROPIC_API_KEY
- */
+import Anthropic from '@anthropic-ai/sdk';
+import { applyCors } from './_cors.js';
 
-const SYSTEM_PROMPT = `You are the classification engine for Dialecta — a platform that rewards constructive dialogue and honest debate. Your job is to analyze a comment and assign it to the correct tier.
-
-## THE TIER SYSTEM
-
-forum      — Specific claim, engaged with content, reasoning present. Strong disagreement is welcome here.
-spark      — Interesting idea, but underdeveloped. Potential not yet realized.
-echo       — Restates the article or a prior comment without adding to it.
-fog        — Unclear. Reader cannot identify what the commenter believes.
-heat       — Emotionally charged without a specific claim. Passion without a point.
-stance     — Tribal framing, rhetoric, or identity signaling dominates. A position planted, not a conversation joined.
-breach     — Personal attack on a person, not an idea. The Pact broken.
-
-## CLAIM SPECIFICITY SCALE
-
-0 — No claim (pure feeling, label, or tribal signal)
-1 — Vague claim (you know which side they are on, not what they think)
-2 — Specific claim (an identifiable proposition someone could engage with on substance)
-3 — Developed claim (specific proposition + supporting reasoning, evidence, or named counter-argument)
-
-## CRITICAL EDGE CASE
-
-A comment can be angry, sharp, or contemptuous and still be forum tier — provided it is anchored to a specific, arguable proposition. Emotional register alone is never the disqualifier. The absence of a claimable proposition is.
-
-## COMMENTER MESSAGE TONE
-
-Write observationally, not evaluatively. Describe what is present in the comment. If the tier is below forum, include one concrete suggestion for what would elevate it. Do not moralize. 1–2 sentences maximum.
-
-Correct: "This reads as Heat — the feeling is clear but there isn't a specific claim for others to engage with. Adding one sentence about what specifically you think is wrong would likely move this to Forum."
-Wrong: "Your comment doesn't make a specific point and relies too much on emotional language."
-
-## OUTPUT
-
-Respond ONLY with valid JSON. No preamble, no markdown, no explanation outside the JSON.
-
-{
-  "claim_text": "The claim in the comment, paraphrased or quoted. 'None identified' if absent.",
-  "specificity": 0,
-  "emotion": "low|medium|high",
-  "tribal_markers": false,
-  "tribal_example": "Brief excerpt if tribal_markers is true, otherwise null",
-  "article_engagement": "specific|general",
-  "opposing_view_engaged": "yes|partially|no",
-  "ai_suggested_tier": "forum|spark|echo|fog|heat|stance|breach",
-  "borderline_flag": false,
-  "borderline_other_tier": "The other tier if borderline, otherwise null",
-  "commenter_message": "1–2 sentence message shown to the commenter."
-}`;
+const client = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 
 export default async function handler(req, res) {
+  if (applyCors(req, res)) return;
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { body: commentBody, article_claims = [] } = req.body || {};
+  const { body, author_id, article_id, article_claims } = req.body;
 
-  if (!commentBody?.trim()) {
-    return res.status(400).json({ error: 'body is required' });
+  if (!body) {
+    return res.status(400).json({ error: 'Comment body is required' });
   }
 
-  // Build the user message. Injecting article claims gives the model the
-  // context it needs to judge engagement quality (specific vs. general).
-  const claimsBlock =
-    article_claims.length > 0
-      ? `## ARTICLE KEY CLAIMS\n${article_claims.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n`
-      : '';
+  const prompt = `You are Dialecta's comment classification engine. Your job is to analyze a comment and return a structured JSON classification.
 
-  const userMessage = `${claimsBlock}## THE COMMENT\n"${commentBody}"`;
+TIER DEFINITIONS:
+- forum: Claim specificity level 2 or higher. Constructive regardless of emotion. A specific, arguable proposition someone could engage with on substance.
+- spark: Interesting but underdeveloped. Level 1-2 claim that stops short. Invites expansion.
+- echo: Restates the article or a prior comment without adding to it. Level 0-1. ALSO: positive sentiment that just agrees ("love this", "great point", "well said") without adding a claim is Echo.
+- fog: Vague, unclear. Reader cannot determine what the person believes. Level 0. Includes positive-but-vague comments like "I love positive outlooks on humanity" that express a feeling but contain no specific belief the reader can identify.
+- heat: High OPPOSITIONAL or NEGATIVE emotional charge (anger, outrage, frustration, contempt, derision) without a specific claim. Heated arguing without a point. **Positive enthusiasm without a claim is NEVER Heat — route it to Echo (if it agrees with the article) or Fog (if the reader can't tell what the commenter actually believes).**
+- stance: Tribal framing dominant. Identity-signaling or rhetorical markers overshadow any claim present.
+- breach: Personal attack, slander, or targeted harassment. Content that must be suppressed.
 
-  let raw;
+EMOTIONAL VALENCE MATTERS FOR HEAT:
+The Heat tier exists to identify heated arguing — anger, outrage, contempt, frustration, indignation, derision. Comments expressing love, hope, admiration, gratitude, or enthusiasm for an idea are NOT Heat, even when emotionally charged. The "high emotion" signal must be paired with negative or oppositional valence to qualify as Heat. When in doubt, ask: would another reader feel attacked, dismissed, or talked-past by this comment? If no, it isn't Heat.
+
+CLAIM SPECIFICITY LEVELS:
+- 0: No claim. Pure feeling, label, or tribal signal.
+- 1: Vague claim. An assertion exists but too general to engage with specifically.
+- 2: Specific claim. An identifiable proposition someone could directly agree or disagree with.
+- 3: Developed claim. Specific proposition with supporting reasoning, evidence, or named counter-argument.
+
+ARTICLE CLAIMS (what this article argues):
+${article_claims ? article_claims.join('\n') : 'Not provided'}
+
+COMMENT TO CLASSIFY:
+"${body}"
+
+EDITORIAL VOICE PRINCIPLE FOR THE STRENGTH FIELD:
+The "strength" field is the platform's Growth Frame moment. It names what the comment is doing well. Even comments classified into lower tiers have something the platform should reflect back: they may have an honest emotional register, a real attempt at engagement, an underdeveloped but interesting seed of an idea. Name what is there, not what is missing. The strength field is observational, not flattering. If a comment is bad-faith, the strength field should still find one true thing about it (often: the commenter cares about the topic). Never invent qualities that aren't in the comment.
+
+Respond with ONLY a valid JSON object in this exact shape:
+{
+  "claim_text": "the core claim being made, or null if none",
+  "strength": "1 sentence naming what this comment does well. Name what is there, not what is missing.",
+  "specificity": 0,
+  "emotion": "low|medium|high",
+  "tribal_markers": false,
+  "tribal_example": null,
+  "article_engagement": "specific|general|none",
+  "opposing_view_engaged": "yes|partially|no",
+  "ai_suggested_tier": "forum|spark|echo|fog|heat|stance|breach",
+  "borderline_flag": false,
+  "borderline_other_tier": null,
+  "commenter_message": "1-2 sentence plain-language reflection shown to the commenter. Specific, non-judgmental, names the tier and one concrete reason."
+}`;
+
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 512,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: userMessage }],
-      }),
+    const message = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: prompt }],
     });
 
-    if (!response.ok) {
-      const err = await response.text();
-      console.error('Anthropic API error:', err);
-      return res.status(502).json({ error: 'Classification service unavailable' });
-    }
+    const raw = message.content[0].text.trim();
+    const cleaned = raw.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
+const classification = JSON.parse(cleaned);
 
-    raw = await response.json();
-  } catch (err) {
-    console.error('Classify fetch error:', err);
-    return res.status(502).json({ error: 'Classification service unavailable' });
+    return res.status(200).json(classification);
+  } catch (error) {
+    console.error('Classification error:', error);
+    return res.status(500).json({ error: 'Classification failed', detail: error.message });
   }
-
-  const text = raw?.content?.[0]?.text ?? '';
-
-  let result;
-  try {
-    // Strip any accidental markdown fences before parsing
-    const clean = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-    result = JSON.parse(clean);
-  } catch {
-    console.error('Failed to parse classify response:', text);
-    return res.status(500).json({ error: 'Malformed classification response', raw: text });
-  }
-
-  // Normalize tier name to lowercase for consistent DB writes
-  result.ai_suggested_tier = (result.ai_suggested_tier ?? '').toLowerCase().trim();
-
-  return res.status(200).json(result);
 }
