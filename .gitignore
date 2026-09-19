@@ -12,3 +12,9 @@ supabase/.temp/
 tools/local-research/.index/
 _to_delete/
 council/log/sprints/*.log
+
+# Credentials. Never commit these; they do not belong in the repo at all.
+*.token
+*.tolken
+*.pem
+*credentials*.json
