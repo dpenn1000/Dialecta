@@ -14,11 +14,20 @@ The second is the execute grant, and it is the one that reads as normal code. "b
 
 So a definer function with no revoke is callable by every role, including `anon`, and it runs as its owner. Nothing in the function body looks wrong.
 
+There is a third consequence that neither this page nor the review's check 2 names, and it is
+the largest one in a Supabase project. Section 5.9 of the same manual says "Table owners
+normally bypass row security as well". Migrations run as `postgres`, which owns every table in
+`public`, so a `SECURITY DEFINER` function owned by `postgres` does not merely borrow that
+role's grants. It skips row-level security on every table it touches. A definer function with
+a public execute grant is therefore not a hole in one table's policies; it is a hole in all of
+them at once.
+
 ## Implies for Dialecta
 
 - This is the failure mode the reading list predicted and it does not appear in PR 3. The one function the foundation migration adds, `public.set_updated_at()` at `supabase/migrations/20260919000000_foundation.sql:33`, is a plain trigger function with no `security definer`, so it runs as invoker and the execute-grant hazard does not apply.
 - It does still have a mutable `search_path`, which Supabase's own linter flags as `function_search_path_mutable`. `supabase/CLAUDE.md` requires `supabase db lint` to be clean before a migration is committed, so this is a gate failure rather than a breach. Filed as should-fix S5 in `exchange/open/2026-09-19-002-handoff-pr-3-review.md`.
-- Standing rule for check 2 from here on: any migration that adds `security definer` gets three questions before anything else. Does it set `search_path` with `pg_temp` last, does it revoke execute from `PUBLIC`, and are the create and the revoke in one transaction. A definer function missing the revoke is a blocker, not a nit, because the body gives no sign of it.
+- Standing rule for check 2 from here on: any migration that adds `security definer` gets four questions before anything else. Does it set `search_path` with `pg_temp` last, does it revoke execute from `PUBLIC`, are the create and the revoke in one transaction, and does the body touch a table whose RLS it is now skipping because `postgres` owns it. A definer function missing the revoke is a blocker, not a nit, because the body gives no sign of it.
+- The fourth question is the one that turns a definer function into a review event rather than a review item. In this schema it would reach `axis_events`, which has no insert policy precisely so that only the service role writes it. A definer helper owned by `postgres` with a default public execute grant would hand that write to `anon`.
 - Supabase's own helper functions in `auth` are definer functions. A migration that redefines or wraps one inherits this whole checklist.
 
 *Filed 2026-09-19*

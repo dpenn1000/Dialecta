@@ -192,3 +192,49 @@ check only `auth.uid() = author_id`, so a contributor can create a comment with 
 
 **Nothing else above changes.** `## Not done` still stands on `supabase db lint`, which has not
 been run, and on the absence of any executed exploit.
+
+## Second correction, appended 2026-09-19 by reviewer
+
+**Blocker B1 now has a remedy**, in `team/reviewer/knowledge/2026-cure53-dompurify.md`.
+Sanitize at both ends, for different reasons. Write time keeps the stored `body_html` clean so
+the row is not a loaded gun for any other consumer. Read time, in the server component at
+`apps/web/src/app/articles/[slug]/page.tsx:43`, is what actually closes B1, because B2 shows a
+contributor writing that column directly through PostgREST without ever touching the editor. A
+sanitizer that lives only in the editor protects nothing. DOMPurify strips inline handlers and
+script URLs with no configuration: its own example turns `<img src=x onerror=alert(1)//>` into
+`<img src="x">`. Server-side use needs jsdom, and the README warns that an old jsdom "can
+result in XSS even if DOMPurify does everything 100% correctly", so the pinned version is part
+of the boundary.
+
+**Correcting my own claim in finding S7.** That row says a Content Security Policy "turns the
+first blocker from a stolen session into a broken image". That is true of the nonce form and of
+the experimental SRI form, and false of the form a reader reaches for first. The Next.js guide's
+`next.config.js` recipe sets `script-src 'self' 'unsafe-inline'`, and `'unsafe-inline'` is
+exactly what permits the inline `onerror` handler in the B1 payload to run. The cheap CSP does
+nothing about this attack. S7 stands as a finding and its stated benefit was overclaimed. Two
+things to carry instead: the useful forms cost static rendering or ride on an experimental flag,
+and `connect-src 'self'` is the directive that breaks the exfiltration leg even where the script
+runs. Filed as `team/reviewer/knowledge/2026-nextjs-content-security-policy.md`.
+
+**A fourteenth finding, should-fix, not in the table above.** `comments.hardened_at` at
+`supabase/migrations/20260919000000_foundation.sql:125` is commented "when the tier stopped
+accepting reclassification" and nothing in the repo reads it. The only occurrences outside that
+line are three generated entries in `supabase/types.ts`. The 60 minute malleability window it
+exists for is specified at `docs/Dialecta_Axis_Mapping_v1.md:35` and listed at
+`docs/Dialecta_Tuning_Engine_Spec_v1.md:89`, and no code implements either.
+
+That finding carries a tension the reviewer cannot settle. Universal rule 6 of the axis mapping
+spec says: "when a comment is edited within its 60-min window and re-classified, prior
+axis_events for that classification are superseded... Implementation: delete prior axis_events
+with the same `classification_id` before appending the new ones." The mandate and
+`supabase/CLAUDE.md` both call `axis_events` append-only with no delete policy, and the
+migration correctly gives it none. Those are reconcilable only in one way: the service role
+bypasses RLS, so the pipeline can delete what no user can. Append-only is then a property of
+clients rather than of the table, which is a weaker claim than either document makes.
+
+This is a spec question and not a code fix, so it is recorded here rather than acted on. It is
+the second such item, with S6, the three sentence Breach message. Whoever picks this record up
+should decide whether both go to `spec-reader` as `advice` records. This agent has not filed
+them, because an `advice` record blocks its poster and the reviewer is not blocked.
+
+**Unchanged:** `supabase db lint` has still not been run, and no exploit has been executed.

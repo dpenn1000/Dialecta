@@ -10,7 +10,7 @@ sprint backs it.
 ## How to use it
 
 Run the rows in order on any diff that touches `supabase/migrations/`, `apps/web/src/lib/`,
-`apps/web/src/app/api/`, or a server action. Rows 1 to 9 are the database, 10 to 13 are the
+`apps/web/src/app/api/`, or a server action. Rows 1 to 9b are the database, 10 to 13 are the
 application, 14 to 16 are the render. A row that does not apply is skipped out loud in the
 report rather than silently.
 
@@ -39,7 +39,8 @@ not yet true.
 | 6 | **Owner may write a column only the pipeline should set** | For each `for update` policy, list the table's columns and ask which the owner may set. Tier, status, timestamps and any window column are the usual answers. The remedy is a table-level revoke followed by a column-list grant, never a column-level revoke | [2026-postgresql-column-privileges](2026-postgresql-column-privileges.md) has the worked fix for `comments`, `articles` and `aspirations`; [2025-owasp-asvs-authorization](2025-owasp-asvs-authorization.md) requirement 8.2.3, BOPLA. Blocker B2 of the PR 3 review |
 | 7 | Owner sets a restricted column at insert time instead of update time | The insert policy usually checks only `auth.uid() = owner`. Ask the row 6 question again for `INSERT`, with its own column list. A fix that covers `UPDATE` and not `INSERT` leaves the hole open | [2026-postgresql-column-privileges](2026-postgresql-column-privileges.md), cautions. `comments.status` is reachable this way in the PR 3 schema |
 | 8 | `update` policy with `using` and no `with check` | Read the `using` expression twice, as the visibility rule and as the write rule, because it serves as both | [2026-postgresql-create-policy](2026-postgresql-create-policy.md): "if no `WITH CHECK` expression is defined, then the `USING` expression will be used both" |
-| 9 | Ledger table given an update or delete policy, or a `security definer` function with a mutable `search_path` or no revoke | Does any append-only table gain `for update` or `for delete`. For a definer function: is `pg_temp` last in `search_path`, is execute revoked from `PUBLIC`, are create and revoke in one transaction | `.claude/agents/reviewer.md` check 2; `supabase/CLAUDE.md`; [2026-postgresql-security-definer](2026-postgresql-security-definer.md). Missing revoke is a blocker, because the body looks normal |
+| 9 | Ledger table given an update or delete policy, or a `security definer` function with a mutable `search_path` or no revoke | Does any append-only table gain `for update` or `for delete`. For a definer function, four questions: is `pg_temp` last in `search_path`, is execute revoked from `PUBLIC`, are create and revoke in one transaction, and does the body touch a table whose RLS it now skips | `.claude/agents/reviewer.md` check 2; `supabase/CLAUDE.md`; [2026-postgresql-security-definer](2026-postgresql-security-definer.md). Missing revoke is a blocker, because the body looks normal |
+| 9b | RLS treated as enforced for every connection | Which role is this connection. Table owners bypass RLS by default and nothing here sets `FORCE ROW LEVEL SECURITY`, so a policy can read as enforced in a migration and not apply to the role running the query | [2026-postgresql-create-policy](2026-postgresql-create-policy.md), section 5.9: "Table owners normally bypass row security as well". Not reachable through the Data API, which connects as `anon` or `authenticated`. It is what makes row 9's fourth question matter |
 
 ## Application
 
@@ -54,8 +55,8 @@ not yet true.
 
 | # | Failure mode | The question | Evidence |
 | --- | --- | --- | --- |
-| 14 | **User-controlled HTML rendered raw** | Grep for `dangerouslySetInnerHTML`. For each hit, trace the value back to the row and the policy that lets a user write it. No sanitizer in `package.json` means no sanitizer | Blocker B1 of the PR 3 review. Chains with row 6: the policy is what makes it user controlled |
-| 15 | No Content Security Policy | Does `next.config.ts` define `headers()`. Absence is not a blocker on its own, it is what turns row 14 from broken image into stolen session | S7 of the PR 3 review. `(unsourced)`, the CSP lead is still `todo` |
+| 14 | **User-controlled HTML rendered raw** | Grep for `dangerouslySetInnerHTML`. For each hit, trace the value back to the row and the policy that lets a user write it. No sanitizer in `package.json` means no sanitizer. A sanitizer that runs only in the editor does not count, because row 6 shows the column is writable without it | Blocker B1 of the PR 3 review; [2026-cure53-dompurify](2026-cure53-dompurify.md). Chains with row 6: the policy is what makes it user controlled |
+| 15 | Content Security Policy present but decorative | Not whether `headers()` exists, but whether `script-src` carries `'unsafe-inline'`. It permits the injected `onerror` handler that row 14 is about, so the common recipe stops nothing. Check `connect-src` too: it breaks the exfiltration leg even where the script runs | [2026-nextjs-content-security-policy](2026-nextjs-content-security-policy.md). The useful forms, nonce and experimental SRI, cost static rendering or ride on a flag |
 | 16 | Error text carrying a row or a query into the response | Does a thrown error interpolate data the caller could not otherwise read | `(unsourced)` |
 
 ## Rows this agent has not yet earned
@@ -74,6 +75,16 @@ Recorded so the gap is visible rather than implied by silence.
 - **Multi-tenant, ASVS 8.4.1.** Not applicable. Dialecta has one tenant. Listed so the absence
   is deliberate.
 
+## Open question this checklist cannot settle
+
+The 60 minute malleability window. `docs/Dialecta_Axis_Mapping_v1.md:35` requires deleting
+prior `axis_events` on re-classification; the mandate and `supabase/CLAUDE.md` call that table
+append-only and the migration correctly gives it no delete policy. They reconcile only through
+the service role, which means append-only is a property of clients rather than of the table.
+Until that is settled, row 9 cannot rule on any edit path, and `comments.hardened_at` exists
+with nothing reading it. Recorded as the fourteenth finding on
+`exchange/open/2026-09-19-002-handoff-pr-3-review.md`.
+
 ## What is missing above the checklist
 
 ASVS 8.1.1 and 8.1.2 ask for documented authorization rules, field level, read and write.
@@ -82,6 +93,8 @@ artifact under review, so they cannot also be the specification. Until that docu
 every row above is this agent reconstructing intent from the code it is checking. That is the
 structural weakness of this checklist and no amount of rows fixes it.
 
-*Written 2026-09-19, revised the same day after the ASVS chapter and the grant layer were read.
-Rows 6 and 14 are the two that found real blockers on PR 3; rows 1, 2, 3, 7 and 12 were added
-after, and would have caught more.*
+*Written 2026-09-19 and revised twice the same day: once after the ASVS chapter and the grant
+layer were read, once after the render layer was. Rows 6 and 14 are the two that found real
+blockers on PR 3. Rows 1, 2, 3, 7 and 12 were added after and would have caught more. Row 15
+was rewritten because the first version of it asked whether a CSP existed, which is the wrong
+question.*

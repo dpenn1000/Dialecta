@@ -13,6 +13,8 @@ named Dialecta surface or a named practice.
 | [2026-postgresql-security-definer.md](2026-postgresql-security-definer.md) | PostgreSQL 18.6, "CREATE FUNCTION", writing SECURITY DEFINER safely | Check 2. A definer function needs `pg_temp` last in `search_path` and an explicit revoke from `PUBLIC`, both in one transaction |
 | [2026-nextjs-environment-variables.md](2026-nextjs-environment-variables.md) | Next.js 16.3.5, "How to use environment variables" | Check 2. `NEXT_PUBLIC_` is a build-time inline and the prefix is the entire check. Dynamic lookups do not inline |
 | [2025-owasp-asvs-authorization.md](2025-owasp-asvs-authorization.md) | OWASP ASVS 5.0.0 (May 2025), "V8 Authorization", full chapter | Check 2. Object level (8.2.2) and field level (8.2.3) are separate requirements at separate levels. 8.1.1 and 8.1.2 ask for documentation Dialecta does not have |
-| [review-checklist.md](review-checklist.md) | This agent, from the mandate and the seven notes above | The named failure modes behind check 2, so it is a list rather than a category. Sixteen rows, grant layer first |
+| [2026-cure53-dompurify.md](2026-cure53-dompurify.md) | Cure53, DOMPurify README | The remedy for blocker B1. Sanitize at write time and at read time, for different reasons. The pinned jsdom version is part of the boundary |
+| [2026-nextjs-content-security-policy.md](2026-nextjs-content-security-policy.md) | Next.js 16.3.5, "How to set a Content Security Policy" | Check 2, second layer. The `next.config.js` recipe uses `unsafe-inline` and does nothing about an injected `onerror`. Only the nonce and SRI forms bite |
+| [review-checklist.md](review-checklist.md) | This agent, from the mandate and the nine notes above | The named failure modes behind check 2, so it is a list rather than a category. Seventeen rows, grant layer first |
 
 *Note: `review-checklist.md` is written by this agent rather than filed from a source. It is listed here so the index is the whole folder.*

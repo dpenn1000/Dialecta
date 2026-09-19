@@ -1,6 +1,7 @@
 # PostgreSQL, CREATE POLICY
 
 **Source:** PostgreSQL Global Development Group, "CREATE POLICY", PostgreSQL 18.6 documentation, read 2026-09-19. https://www.postgresql.org/docs/current/sql-createpolicy.html
+Also PostgreSQL Global Development Group, "Row Security Policies", section 5.9, PostgreSQL 18.6, read 2026-09-19. https://www.postgresql.org/docs/current/ddl-rowsecurity.html
 
 ## Summary
 
@@ -16,11 +17,34 @@ One exception worth remembering: a row returned by `RETURNING` is checked agains
 
 The whole mechanism is row-level. Nothing in `CREATE POLICY` restricts which columns of a permitted row may be written. Column restriction is a separate grant.
 
+## The two layers, from the primary text
+
+Both this note and [2026-supabase-default-grants](2026-supabase-default-grants.md) leaned on
+Supabase for the claim that grants and policies are independent checks. Section 5.9 is the
+primary source and says it directly: "In addition to the SQL-standard privilege system
+available through `GRANT`, tables can have *row security policies* that restrict, on a per-user
+basis, which rows can be returned by normal queries or inserted, updated, or deleted by data
+modification commands."
+
+Both must pass. "By default, tables do not have any policies, so that if a user has access
+privileges to a table according to the SQL privilege system, all rows within it are equally
+available", and once enabled, "all normal access to the table for selecting rows or modifying
+rows must be allowed by a row security policy". The page's own worked example pairs a
+column-list grant with a policy, which is the exact shape the PR 3 remedy takes.
+
+Two roles skip the row layer entirely, and neither is visible in a migration diff.
+"Superusers and roles with the `BYPASSRLS` attribute always bypass the row security system when
+accessing a table." And the one that is easy to forget: "Table owners normally bypass row
+security as well, though a table owner can choose to be subject to row security with `ALTER
+TABLE ... FORCE ROW LEVEL SECURITY`."
+
 ## Implies for Dialecta
 
 - Check 2 needs a column question, not just a row question. Every `for update` policy in `supabase/migrations/` is written as `auth.uid() = <owner>`, which permits the owner to write every column of their own row. `comments.final_tier`, `comments.status` and `articles.status` are all reachable that way. Filed as blockers B2 and B1 in the PR 3 review, `exchange/open/2026-09-19-002-handoff-pr-3-review.md`.
 - A missing `select` policy reads as an empty table, not as an error. When reviewing a diff that adds a table, an absent policy will not show up as a failing test; it shows up as a page that renders nothing. Ask for the policy, do not wait for the failure.
 - `axis_events` in `supabase/migrations/20260919000000_foundation.sql` has a permissive `select` policy and no `insert`, `update` or `delete` policy. Under the combination rule that is correct: no permissive policy for those commands means no grant, so the ledger is append-only for every role that RLS applies to. The service role bypasses RLS, so append-only is a property of clients, not of the table.
 - When a policy is written with `using` only on an `update`, read the `using` expression twice, once as the visibility rule and once as the write rule. They are the same expression by default and that is rarely what the author meant.
+- "RLS enabled" does not mean "RLS applies to everyone". The table owner bypasses it by default, and every table in `supabase/migrations/` is owned by `postgres`, the role migrations run as. Nothing in this repo sets `FORCE ROW LEVEL SECURITY`. That is not exploitable through the Data API, which connects as `anon` or `authenticated`, and it is the reason a policy can look enforced in a migration and not be enforced for the connection that is actually running. It matters most for `SECURITY DEFINER` functions; see [2026-postgresql-security-definer](2026-postgresql-security-definer.md).
 
-*Filed 2026-09-19*
+*Filed 2026-09-19. Revised the same day with section 5.9, which supplied the primary source for
+the two-layer claim and the owner bypass.*

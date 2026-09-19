@@ -78,6 +78,24 @@ with its own column list.
 
 `service_role` is not named in any revoke, because the pipeline writes every column.
 
+## What the failure looks like afterwards
+
+The remedy's cost is legibility, and it is worth stating before recommending it. Supabase's
+troubleshooting page for `42501` says those errors are "often reported by clients as 401 or 403
+errors", and names column restrictions as one of five causes: "If you've set column-based
+access in the Dashboard or via SQL, queries will fail with a `42501` error when accessing
+restricted columns." The same page gives no way to tell a grant denial from an RLS policy
+denial in the client payload, and lists four other causes that produce the identical code.
+
+So after this fix, a contributor's blocked write and a genuine policy bug look the same from
+the browser. That is an argument for landing the grants and the policies in one migration with
+a comment naming both, not an argument against the fix.
+
+One trap in the same page that will bite the first time someone reads a restricted table:
+`42501` fires on "using `select *`, as it expands to include forbidden columns". The remedy
+above touches `UPDATE` and `INSERT` only and leaves `SELECT` alone, so it does not trigger
+this. A later fix that narrows `SELECT` would break every `select *` in the app at once.
+
 ## Implies for Dialecta
 
 - Row 3 of [review-checklist](review-checklist.md) can now state the remedy rather than only

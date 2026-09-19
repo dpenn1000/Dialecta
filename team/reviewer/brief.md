@@ -16,16 +16,17 @@ for the mandate; this file is the state of the training and what comes next.
 
 ## Where it is now
 
-Two sprints on 2026-09-19. Six next-three tasks set and all six done.
+Three sprints on 2026-09-19. Nine next-three tasks set and all nine done.
 
-Seventeen practices, fifteen backed by a filed note or by a finding rather than by the mandate
-alone. Eight files in `knowledge/`: seven sprint notes and the review checklist, which now runs
-to sixteen rows and puts the grant layer before the policy layer.
+Twenty-two practices, twenty backed by a filed note or by a finding rather than by the mandate
+alone. Eleven files in `knowledge/`: ten sprint notes and the review checklist, which now runs
+to seventeen rows and puts the grant layer before the policy layer.
 
-Eight leads filed, none dead. Two needed correction rather than killing. The OWASP chapter is
-`V8 Authorization` in ASVS 5.0.0, not `V4 Access Control`, which was its name in 4.0. The
-Next.js lead bundled two claims and was filed on the half that was read, with the other half
-carried back as its own row. Eight leads open, so the list has grown as fast as it has shrunk.
+Twelve leads filed, none dead. Eight open, so the list has grown as fast as it has shrunk.
+Three leads corrected something rather than confirming it, which is the better result of the
+two: the OWASP chapter is `V8 Authorization` in ASVS 5.0.0 and not `V4 Access Control`; the
+Next.js lead bundled two claims and was filed on the half that was read; and the CSP lead
+withdrew a benefit this agent had already claimed in the review.
 
 PR 3 has a real review on it: `exchange/open/2026-09-19-002-handoff-pr-3-review.md`, thirteen
 findings, three blockers, plus an appended correction. The two that matter are a stored XSS at
@@ -37,12 +38,21 @@ at a separate level from the object-level one the policies do satisfy.
 The corrected shape of that PR, for anyone reading the old line here: four commits and 235
 files, not three and 199. The fourth is `116dc60`, the voice gate.
 
-Three things the second sprint changed about the review rather than adding to it. The grants
-assumption under B2 was flagged as reasoned and is now read and confirmed, and it does not
-expire, because Supabase's retirement of the default grants on 2026-10-30 reaches future
-objects only. B2 now has a worked remedy, which it did not before. And a fourth reachable path
-was found while writing that remedy: every column named in B2 is also settable at insert time,
-so a fix covering `UPDATE` alone leaves the hole open.
+Record 002 carries two appended corrections, because records are append-only while open. What
+the later sprints changed about the review rather than adding to it:
+
+- The grants assumption under B2 was flagged as reasoned and is now read and confirmed. It does
+  not expire either: Supabase retires the default grants for existing projects on 2026-10-30,
+  but the change reaches future objects only and existing tables keep their grants.
+- B2 and B1 both have worked remedies, which neither had when the review was written.
+- A fourth reachable path was found while writing the B2 remedy. Every column named in it is
+  also settable at insert time, so a fix covering `UPDATE` alone leaves the hole open.
+- Finding S7 overclaimed and was corrected on the record. A Content Security Policy does not
+  turn B1 into a broken image unless it is the nonce form or the experimental SRI form. The
+  `next.config.js` recipe most readers reach for sets `script-src 'self' 'unsafe-inline'`,
+  which permits the exact inline handler the B1 payload uses.
+- A fourteenth finding was added: `comments.hardened_at` is read by nothing, and the 60 minute
+  window it exists for is unimplemented and carries a spec tension against the append-only rule.
 
 Every check the repo runs before a merge is green on that diff. Typecheck clean, 25 tests
 passing, the voice gate reporting zero hard hits. None of them reads a policy or a grant.
@@ -54,9 +64,9 @@ the checklist is this agent reconstructing intent from the code it is checking.
 
 ## Next three
 
-1. Close the two citation gaps both database notes lean on. The Postgres `ddl-rowsecurity` page for whether RLS and the privilege system are genuinely independent checks, which is currently sourced from Supabase rather than from the primary text, and PostgREST's behavior when a role lacks a column privilege, since Supabase has a troubleshooting page on `42501` that suggests the failure is not always legible. A remedy that turns a breach into a confusing 500 is half a remedy.
-2. Take the sanitizer and CSP leads together and write the remedy for blocker B1, which is the one blocker still named without a fix. Needs to answer where sanitizing belongs, at write time in the editor, at read time in the page, or both, and what a Next.js `headers()` policy costs. That closes row 15 of the checklist, which is `(unsourced)` today.
-3. Take the malleability window lead. Universal rule 6 of `docs/Dialecta_Axis_Mapping_v1.md` requires deleting prior `axis_events` on re-classification, which sits against the append-only mandate; `comments.hardened_at` exists for that window and nothing in the code reads it. Check 2 cannot rule on any edit path until this is settled, and the tension may be an `advice` record rather than a note.
+1. The two spec tensions on record 002, S6 and the fourteenth finding, are both unresolved and both belong with `spec-reader` or `decider`. This agent did not file them because an `advice` record blocks its poster and the reviewer was not blocked. Decide whether that reasoning holds, or whether a reviewer needs a non-blocking way to raise a spec conflict, and take it to `exchange/` either way. Two questions means two records.
+2. Server action and route handler authorization in Next.js App Router, the unread half of the original Next.js lead. Rows 9, 11 and 12 of the checklist all assume something about what the framework does and does not do for you, and none of them can cite it. This is the largest remaining hole in check 2 for the application layer.
+3. Run `supabase db lint` once a local stack exists, and read the rule set. It is the one acceptance command in the mandate's orbit that has never been run here, the `set_updated_at` finding is reasoned from a rule name rather than observed, and knowing the rules tells this agent which findings the tooling already catches and which ones only a reader will.
 
 ## What this agent posts to the exchange
 
