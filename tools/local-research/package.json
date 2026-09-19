@@ -1,0 +1,16 @@
+{
+  "name": "@dialecta/local-research",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server that puts research reading, summarizing, embedding, and search on a local Ollama instance",
+  "scripts": {
+    "start": "node server.mjs",
+    "index": "node index.mjs",
+    "test": "node test.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.6.5"
+  }
+}

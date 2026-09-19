@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Dialecta Quote Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Source+Serif+4:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #b8862e;
+    --gold-secondary: #d4a84a;
+    --gold-soft: rgba(184, 134, 46, 0.3);
+    --gold-bg: rgba(184, 134, 46, 0.06);
+    --cream: #f7f2e8;
+    --ink: #2a2520;
+    --ink-mid: #4a4239;
+    --ink-soft: #6a6058;
+    --label: #8a7e72;
+    --hairline: #c0b8ae;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: linear-gradient(135deg, #a8a398 0px, #8c8780 175px, #f7f2e8 775px, #f7f2e8 100%);
+    background-attachment: fixed;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    background: var(--cream);
+    box-shadow: 0 0 80px rgba(0,0,0,0.12);
+    min-height: 100vh;
+  }
+  .container { padding: 80px 70px 100px; }
+  header.doc-header {
+    text-align: center;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 40px;
+    margin-bottom: 50px;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.4rem;
+    font-weight: 500;
+    color: var(--gold);
+    margin: 0 0 14px 0;
+    letter-spacing: 0.01em;
+  }
+  .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+  .preamble {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem;
+    color: var(--ink-mid);
+    max-width: 720px;
+    margin: 0 auto 50px;
+  }
+  .preamble p { margin: 0 0 18px 0; }
+  .three-tests {
+    background: var(--gold-bg);
+    border-left: 3px solid var(--gold);
+    padding: 22px 28px;
+    margin: 24px 0 30px;
+    font-size: 0.98rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .three-tests strong { color: var(--gold); font-weight: 700; }
+  .three-tests ol { margin: 12px 0 0 0; padding-left: 24px; }
+  .three-tests li { margin-bottom: 8px; }
+  .three-tests .substitution {
+    margin-top: 14px;
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    color: var(--ink-mid);
+    font-size: 0.96rem;
+  }
+  .toc {
+    text-align: center;
+    margin: 30px 0 70px;
+    padding: 18px;
+    border-top: 1px solid var(--gold-soft);
+    border-bottom: 1px solid var(--gold-soft);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .toc a {
+    color: var(--gold);
+    text-decoration: none;
+    margin: 0 14px;
+  }
+  .toc a:hover { text-decoration: underline; }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: var(--gold);
+    margin: 100px 0 8px 0;
+    letter-spacing: 0.01em;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 14px;
+  }
+  h2 .count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--label);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 400;
+    margin-left: 14px;
+    vertical-align: middle;
+  }
+  h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 60px 0 6px 0;
+    letter-spacing: 0.01em;
+  }
+  .group-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--label);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+  .group-def {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.98rem;
+    color: var(--ink-mid);
+    font-style: italic;
+    margin-bottom: 28px;
+    border-left: 2px solid var(--gold-soft);
+    padding: 4px 0 4px 14px;
+  }
+  .quote {
+    margin: 26px 0;
+    padding: 26px 30px;
+    background: rgba(255,255,255,0.45);
+    border-left: 3px solid var(--gold);
+  }
+  .quote.new {
+    border-left-color: var(--gold-secondary);
+    background: rgba(212, 168, 74, 0.08);
+  }
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.5;
+    margin: 0 0 18px 0;
+  }
+  .attribution {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink-mid);
+    font-weight: 500;
+  }
+  .source {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-top: 3px;
+  }
+  .meta {
+    margin-top: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--label);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .meta .tag { display: inline-block; margin-right: 14px; margin-bottom: 4px; }
+  .meta .id-tag { color: var(--hairline); margin-left: 12px; }
+  .new-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    background: rgba(212, 168, 74, 0.15);
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-left: 10px;
+    vertical-align: middle;
+    font-weight: 500;
+  }
+  footer {
+    text-align: center;
+    margin-top: 100px;
+    padding-top: 40px;
+    border-top: 1px solid var(--gold-soft);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--label);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  @media (max-width: 760px) {
+    .container { padding: 50px 30px 70px; }
+    h1 { font-size: 2.4rem; }
+    h2 { font-size: 1.8rem; }
+    .quote-text { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="container">
+
+<header class="doc-header">
+  <h1>The Dialecta Quote Library</h1>
+  <div class="subtitle">Curated source pool &nbsp;·&nbsp; 70 entries &nbsp;·&nbsp; Version 1.1 &nbsp;·&nbsp; April 2026</div>
+</header>
+
+<div class="preamble">
+  <p>This is the working library of philosophical, contemplative, classical, and speculative-fiction quotations the platform draws on at moments of ritual significance. Each entry is intended for placement at a specific editor surface (CONSENT, REFLECTING, POSTED, PACT, RECOMMITMENT) or as a structural anchor for one of the Six Pillars or Eight Archetypes.</p>
+  <p>The intellectual lineage now runs through the Stoics (Marcus Aurelius, Epictetus, Seneca), classical philosophy (Aristotle, Socrates, Plato, Heraclitus), the Jewish tradition (Buber, Heschel, Hillel, Maimonides), Christian wisdom and mysticism (Augustine, Aquinas, Meister Eckhart, Merton, Rohr), medieval polymaths (Hildegard of Bingen), African and Ubuntu thought (Tutu, Achebe, Soyinka), Indigenous wisdom (Kimmerer, Chief Joseph), modern thinkers (Feynman, Kahneman, Einstein, Brooks), and the speculative-fiction tradition that takes the same philosophical project seriously (Banks, Le Guin, Roddenberry, Butler, Herbert, Lem, Dick, Asimov).</p>
+  <p style="font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--label); text-transform: uppercase; letter-spacing: 0.12em; text-align: center; margin-top: 30px;">Entries highlighted in gold are new in version 1.1 (April 27, 2026 round).</p>
+  <div class="three-tests">
+    <strong>The Three Tests every quote must pass:</strong>
+    <ol>
+      <li><strong>Precision.</strong> The quote illuminates the specific concept, not the general theme.</li>
+      <li><strong>Weight.</strong> The speaker has earned the right to be quoted on this subject through their life's work.</li>
+      <li><strong>Brevity.</strong> One sentence preferred. Two sentences maximum.</li>
+    </ol>
+    <div class="substitution">For speculative fiction and in-world material: an additional substitution test. If the quote could have come from Marcus Aurelius and still carried the same meaning, it belongs.</div>
+  </div>
+</div>
+
+<div class="toc">
+  <a href="#surfaces">Surfaces</a>
+  <a href="#pillars">Pillars</a>
+  <a href="#archetypes">Archetypes</a>
+  <a href="#founding">Founding</a>
+</div>
+
+<h2 id="surfaces">By Editor Surface <span class="count">29 entries</span></h2>
+
+<h3 id="consent">CONSENT</h3>
+<div class="group-meta">Surface &nbsp;·&nbsp; 10 entries</div>
+<div class="group-def">The pause before the contributor declares intent. The moment of consenting to be seen and measured.</div>
+
+<div class="quote">
+  <p class="quote-text">"Fear is the mind-killer."</p>
+  <div class="attribution">Frank Herbert</div>
+  <div class="source">Dune, 1965 (Bene Gesserit Litany)</div>
+  <div class="meta"><span class="tag">surface-consent</span><span class="tag">theme-fear</span><span class="tag">tradition-sci-fi</span><span class="id-tag">herbert-fear-mind-killer</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Beginnings are such delicate times."</p>
+  <div class="attribution">Frank Herbert</div>
+  <div class="source">Dune, 1965 (Princess Irulan, Manual of Muad'Dib)</div>
+  <div class="meta"><span class="tag">surface-consent</span><span class="tag">theme-threshold</span><span class="tag">tradition-sci-fi</span><span class="id-tag">herbert-beginnings-delicate</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"It is very hard for evil to take hold of the unconsenting soul."</p>
+  <div class="attribution">Ursula K. Le Guin</div>
+  <div class="source">A Wizard of Earthsea, 1968</div>
+  <div class="meta"><span class="tag">surface-consent</span><span class="tag">theme-consent</span><span class="tag">theme-resistance</span><span class="tag">tradition-sci-fi</span><span class="id-tag">leguin-unconsenting-soul</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"If it is not right, do not do it; if it is not true, do not say it."</p>
+  <div class="attribution">Marcus Aurelius</div>
+  <div class="source">Meditations, Book XII, 17</div>
+  <div class="meta"><span class="tag">surface-consent</span><span class="tag">theme-honesty</span><span class="tag">theme-action</span><span class="tag">tradition-stoic</span><span class="id-tag">aurelius-not-right-not-true</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"It is impossible for a man to learn what he thinks he already knows."</p>
+  <div class="attribution">Epictetus</div>
+  <div class="source">Discourses, Book II, Chapter 17</div>
+  <div class="meta"><span class="tag">surface-consent</span><span class="tag">theme-humility</span><span class="tag">theme-self-knowledge</span><span class="tag">tradition-stoic</span><span class="id-tag">epictetus-cannot-learn-already-knows</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Withdraw into yourself, as much as you can."</p>
+  <div class="attribution">Seneca</div>
+  <div class="source">Letters to Lucilius, 7 (Recede in te ipsum quantum potes)</div>
+  <div class="meta"><span class="tag">surface-consent</span><span class="tag">theme-introspection</span><span class="tag">theme-withdrawal</span><span class="tag">tradition-stoic</span><span class="id-tag">seneca-withdraw-into-yourself</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"The unexamined life is not worth living."</p>
+  <div class="attribution">Socrates</div>
+  <div class="source">Plato, Apology</div>
+  <div class="meta"><span class="tag">surface-consent</span><span class="tag">theme-examination</span><span class="tag">tradition-classical</span><span class="id-tag">socrates-unexamined-life</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"One should not act or speak as if asleep."</p>
+  <div class="attribution">Heraclitus</div>
+  <div class="source">Fragment 73 (DK B73)</div>
+  <div class="meta"><span class="tag">surface-consent</span><span class="tag">theme-wakefulness</span><span class="tag">theme-deliberation</span><span class="tag">tradition-classical</span><span class="id-tag">heraclitus-not-asleep</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Wise men speak because they have something to say; fools because they have to say something."</p>
+  <div class="attribution">Often attributed to Plato</div>
+  <div class="source">Provenance unverified; also attributed to Eleanor Roosevelt</div>
+  <div class="meta"><span class="tag">surface-consent</span><span class="tag">theme-restraint</span><span class="tag">theme-purpose</span><span class="tag">tradition-philosophical</span><span class="id-tag">plato-attributed-wise-fools-speak</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"To light a candle is to cast a shadow."</p>
+  <div class="attribution">Ursula K. Le Guin</div>
+  <div class="source">A Wizard of Earthsea, 1968</div>
+  <div class="meta"><span class="tag">surface-consent</span><span class="tag">theme-consequence</span><span class="tag">theme-awareness</span><span class="tag">tradition-sci-fi</span><span class="id-tag">leguin-candle-shadow</span></div>
+</div>
+
+<h3 id="reflecting">REFLECTING</h3>
+<div class="group-meta">Surface &nbsp;·&nbsp; 6 entries</div>
+<div class="group-def">The AI's patient analysis. The moment of being read by something that can hear what the contributor actually meant.</div>
+
+<div class="quote">
+  <p class="quote-text">"All that you touch you change. All that you change changes you."</p>
+  <div class="attribution">Octavia Butler</div>
+  <div class="source">Parable of the Sower, 1993 (Earthseed verses)</div>
+  <div class="meta"><span class="tag">surface-reflecting</span><span class="tag">archetype-reviser</span><span class="tag">theme-change</span><span class="tag">tradition-sci-fi</span><span class="id-tag">butler-touch-change</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Reality is that which, when you stop believing in it, doesn't go away."</p>
+  <div class="attribution">Philip K. Dick</div>
+  <div class="source">How to Build a Universe That Doesn't Fall Apart Two Days Later, 1978 (essay)</div>
+  <div class="meta"><span class="tag">surface-reflecting</span><span class="tag">archetype-empiricist</span><span class="tag">theme-reality</span><span class="tag">tradition-sci-fi</span><span class="id-tag">pkd-reality-stops-believing</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"We have no need of other worlds. We need mirrors."</p>
+  <div class="attribution">Stanisław Lem</div>
+  <div class="source">Solaris, 1961 (Snaut)</div>
+  <div class="meta"><span class="tag">surface-reflecting</span><span class="tag">theme-self-knowledge</span><span class="tag">theme-mirror</span><span class="tag">tradition-sci-fi</span><span class="id-tag">lem-mirrors-not-other-worlds</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"The most exciting phrase to hear in science is not 'Eureka!' but 'That's funny...'"</p>
+  <div class="attribution">Isaac Asimov</div>
+  <div class="source">Attributed to Isaac Asimov (essays and talks)</div>
+  <div class="meta"><span class="tag">surface-reflecting</span><span class="tag">archetype-empiricist</span><span class="tag">theme-curiosity</span><span class="tag">tradition-sci-fi</span><span class="id-tag">asimov-thats-funny</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"To learn which questions are unanswerable, and not to answer them: this skill is most needful in times of stress and darkness."</p>
+  <div class="attribution">Ursula K. Le Guin</div>
+  <div class="source">The Left Hand of Darkness, 1969 (Estraven)</div>
+  <div class="meta"><span class="tag">surface-reflecting</span><span class="tag">theme-restraint</span><span class="tag">theme-discernment</span><span class="tag">tradition-sci-fi</span><span class="id-tag">leguin-unanswerable-questions</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"Wonder rather than doubt is the root of all knowledge."<span class="new-badge">New</span></p>
+  <div class="attribution">Abraham Joshua Heschel</div>
+  <div class="source">God in Search of Man, 1955</div>
+  <div class="meta"><span class="tag">surface-reflecting</span><span class="tag">theme-wonder</span><span class="tag">theme-knowledge</span><span class="tag">tradition-jewish</span><span class="id-tag">heschel-wonder-not-doubt</span></div>
+</div>
+
+<h3 id="posted">POSTED</h3>
+<div class="group-meta">Surface &nbsp;·&nbsp; 4 entries</div>
+<div class="group-def">The closing moment after publication. The released word.</div>
+
+<div class="quote">
+  <p class="quote-text">"It is the nature of idea to be communicated: written, spoken, done."</p>
+  <div class="attribution">Ursula K. Le Guin</div>
+  <div class="source">The Dispossessed, 1974</div>
+  <div class="meta"><span class="tag">surface-posted</span><span class="tag">theme-publishing</span><span class="tag">theme-communication</span><span class="tag">tradition-sci-fi</span><span class="id-tag">leguin-idea-communicated</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"True journey is return."</p>
+  <div class="attribution">Ursula K. Le Guin</div>
+  <div class="source">The Dispossessed, 1974 (Odo)</div>
+  <div class="meta"><span class="tag">surface-posted</span><span class="tag">theme-return</span><span class="tag">theme-completion</span><span class="tag">tradition-sci-fi</span><span class="id-tag">leguin-journey-return</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"Through the Thou a person becomes I."<span class="new-badge">New</span></p>
+  <div class="attribution">Martin Buber</div>
+  <div class="source">I and Thou (Ich und Du), 1923</div>
+  <div class="meta"><span class="tag">surface-posted</span><span class="tag">theme-identity-formation</span><span class="tag">theme-relationism</span><span class="tag">tradition-jewish</span><span class="id-tag">buber-through-thou-becomes-i</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"Words create worlds."<span class="new-badge">New</span></p>
+  <div class="attribution">Abraham Joshua Heschel</div>
+  <div class="source">Attributed to Abraham Joshua Heschel</div>
+  <div class="meta"><span class="tag">surface-posted</span><span class="tag">theme-speech</span><span class="tag">theme-creation</span><span class="tag">tradition-jewish</span><span class="id-tag">heschel-words-create-worlds</span></div>
+</div>
+
+<h3 id="pact">PACT</h3>
+<div class="group-meta">Surface &nbsp;·&nbsp; 7 entries</div>
+<div class="group-def">The moment of platform commitment. The Pact page opening, at-commitment, and the founding-thread.</div>
+
+<div class="quote">
+  <p class="quote-text">"First say to yourself what you would be; and then do what you have to do."</p>
+  <div class="attribution">Epictetus</div>
+  <div class="source">Discourses</div>
+  <div class="meta"><span class="tag">surface-pact</span><span class="tag">pillar-consistency</span><span class="tag">theme-commitment</span><span class="tag">tradition-stoic</span><span class="id-tag">epictetus-first-say-then-do</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Character is fate."</p>
+  <div class="attribution">Heraclitus</div>
+  <div class="source">Fragment 119</div>
+  <div class="meta"><span class="tag">surface-pact</span><span class="tag">theme-character</span><span class="tag">theme-fate</span><span class="tag">tradition-classical</span><span class="id-tag">heraclitus-character-fate</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Money implies poverty."</p>
+  <div class="attribution">Iain M. Banks</div>
+  <div class="source">A Few Notes on the Culture, 1994 (essay)</div>
+  <div class="meta"><span class="tag">surface-pact</span><span class="tag">theme-post-scarcity</span><span class="tag">tradition-sci-fi</span><span class="id-tag">banks-money-poverty</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"If you live for happiness, your life is meaningless. If you live for meaning, you'll find happiness."<span class="new-badge">New</span></p>
+  <div class="attribution">David Brooks</div>
+  <div class="source">Often attributed to David Brooks (The Road to Character, 2015)</div>
+  <div class="meta"><span class="tag">surface-pact</span><span class="tag">theme-meaning</span><span class="tag">theme-purpose</span><span class="tag">tradition-civic-humanist</span><span class="id-tag">brooks-meaning-happiness</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"If I am not for myself, who will be for me? If I am only for myself, what am I? If not now, when?"<span class="new-badge">New</span></p>
+  <div class="attribution">Hillel the Elder</div>
+  <div class="source">Pirkei Avot 1:14</div>
+  <div class="meta"><span class="tag">surface-pact</span><span class="tag">theme-commitment</span><span class="tag">theme-self-and-other</span><span class="tag">tradition-jewish</span><span class="id-tag">hillel-not-for-myself</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"My weight is my love."<span class="new-badge">New</span></p>
+  <div class="attribution">Augustine of Hippo</div>
+  <div class="source">Confessions, Book XIII (Pondus meum amor meus)</div>
+  <div class="meta"><span class="tag">surface-pact</span><span class="tag">theme-character</span><span class="tag">theme-direction</span><span class="tag">tradition-christian</span><span class="id-tag">augustine-weight-is-love</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"Dare to declare who you are. It is not far from the shores of silence to the boundaries of speech."<span class="new-badge">New</span></p>
+  <div class="attribution">Hildegard of Bingen</div>
+  <div class="source">Often attributed to Hildegard; provenance partially contested</div>
+  <div class="meta"><span class="tag">surface-pact</span><span class="tag">surface-consent</span><span class="tag">theme-declaration</span><span class="tag">theme-courage</span><span class="tag">tradition-mystical</span><span class="id-tag">hildegard-dare-to-declare</span></div>
+</div>
+
+<h3 id="recommitment">RECOMMITMENT</h3>
+<div class="group-meta">Surface &nbsp;·&nbsp; 2 entries</div>
+<div class="group-def">The moment of returning to a declared aspiration after time has passed.</div>
+
+<div class="quote">
+  <p class="quote-text">"Without change, something sleeps inside us, and seldom awakens. The sleeper must awaken."</p>
+  <div class="attribution">Frank Herbert</div>
+  <div class="source">Dune, 1965</div>
+  <div class="meta"><span class="tag">surface-recommitment</span><span class="tag">archetype-reviser</span><span class="tag">theme-awakening</span><span class="tag">tradition-sci-fi</span><span class="id-tag">herbert-sleeper-must-awaken</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"Be willing to be a beginner every single morning."<span class="new-badge">New</span></p>
+  <div class="attribution">Meister Eckhart</div>
+  <div class="source">Attributed via the German sermons</div>
+  <div class="meta"><span class="tag">surface-recommitment</span><span class="tag">archetype-reviser</span><span class="tag">theme-renewal</span><span class="tag">tradition-mystical</span><span class="id-tag">eckhart-beginner-every-morning</span></div>
+</div>
+
+<h2 id="pillars">By Six Pillars <span class="count">27 entries</span></h2>
+
+<h3 id="acuity">Acuity</h3>
+<div class="group-meta">Pillar &nbsp;·&nbsp; Substance &nbsp;·&nbsp; 3 entries</div>
+<div class="group-def">Precision and claimability of points.</div>
+
+<div class="quote">
+  <p class="quote-text">"It is the mark of an educated mind to be able to entertain a thought without accepting it."</p>
+  <div class="attribution">Aristotle</div>
+  <div class="source">Attributed to Aristotle</div>
+  <div class="meta"><span class="tag">pillar-acuity</span><span class="tag">theme-doubt</span><span class="tag">theme-judgment</span><span class="tag">tradition-classical</span><span class="id-tag">aristotle-educated-entertain</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"The first principle is that you must not fool yourself, and you are the easiest person to fool."</p>
+  <div class="attribution">Richard Feynman</div>
+  <div class="source">Caltech commencement address, 1974</div>
+  <div class="meta"><span class="tag">pillar-acuity</span><span class="tag">theme-self-deception</span><span class="tag">theme-rigor</span><span class="tag">tradition-modern</span><span class="id-tag">feynman-not-fool-yourself</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"It does not require many words to speak the truth."<span class="new-badge">New</span></p>
+  <div class="attribution">Chief Joseph (Nez Perce)</div>
+  <div class="source">Attributed to Chief Joseph</div>
+  <div class="meta"><span class="tag">pillar-acuity</span><span class="tag">pillar-calibration</span><span class="tag">theme-brevity</span><span class="tag">theme-honesty</span><span class="tag">tradition-indigenous</span><span class="id-tag">chief-joseph-many-words-truth</span></div>
+</div>
+
+<h3 id="calibration">Calibration</h3>
+<div class="group-meta">Pillar &nbsp;·&nbsp; Intellectual Honesty &nbsp;·&nbsp; 6 entries</div>
+<div class="group-def">Confidence matched to evidence strength.</div>
+
+<div class="quote">
+  <p class="quote-text">"Confidence is directionally accurate but dimensionally overconfident."</p>
+  <div class="attribution">Daniel Kahneman</div>
+  <div class="source">Paraphrased from Thinking, Fast and Slow</div>
+  <div class="meta"><span class="tag">pillar-calibration</span><span class="tag">theme-overconfidence</span><span class="tag">tradition-modern</span><span class="id-tag">kahneman-directionally-dimensionally</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"I know that I know nothing."</p>
+  <div class="attribution">Socrates</div>
+  <div class="source">Attributed to Socrates, via Plato, Apology</div>
+  <div class="meta"><span class="tag">pillar-calibration</span><span class="tag">theme-humility</span><span class="tag">tradition-classical</span><span class="id-tag">socrates-know-nothing</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Speak only if it improves upon the silence."</p>
+  <div class="attribution">Various Stoic sources</div>
+  <div class="source">Attributed to various Stoic sources</div>
+  <div class="meta"><span class="tag">pillar-calibration</span><span class="tag">theme-silence</span><span class="tag">tradition-stoic</span><span class="id-tag">stoic-improves-silence</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"Teach thy tongue to say 'I do not know,' and thou shalt progress."<span class="new-badge">New</span></p>
+  <div class="attribution">Maimonides</div>
+  <div class="source">Attributed to Maimonides</div>
+  <div class="meta"><span class="tag">pillar-calibration</span><span class="tag">theme-humility</span><span class="tag">theme-learning</span><span class="tag">tradition-jewish</span><span class="id-tag">maimonides-teach-tongue-i-do-not-know</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"Truth does not become more true by virtue of the fact that the entire world agrees with it, nor less so even if the whole world disagrees with it."<span class="new-badge">New</span></p>
+  <div class="attribution">Maimonides</div>
+  <div class="source">Paraphrased from Guide for the Perplexed</div>
+  <div class="meta"><span class="tag">pillar-calibration</span><span class="tag">archetype-skeptic</span><span class="tag">theme-anti-tribalism</span><span class="tag">tradition-jewish</span><span class="id-tag">maimonides-truth-not-by-consensus</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"Pride makes us artificial, and humility makes us real."<span class="new-badge">New</span></p>
+  <div class="attribution">Thomas Merton</div>
+  <div class="source">No Man Is an Island, 1955</div>
+  <div class="meta"><span class="tag">pillar-calibration</span><span class="tag">theme-humility</span><span class="tag">theme-authenticity</span><span class="tag">tradition-christian</span><span class="id-tag">merton-pride-humility</span></div>
+</div>
+
+<h3 id="magnanimity">Magnanimity</h3>
+<div class="group-meta">Pillar &nbsp;·&nbsp; Intellectual Honesty &nbsp;·&nbsp; 9 entries</div>
+<div class="group-def">Faithful representation of opposing views before engaging.</div>
+
+<div class="quote">
+  <p class="quote-text">"The magnanimous man... will be unable to make his life revolve around another person, unless it be a friend."</p>
+  <div class="attribution">Aristotle</div>
+  <div class="source">Nicomachean Ethics, Book IV</div>
+  <div class="meta"><span class="tag">pillar-magnanimity</span><span class="tag">theme-friendship</span><span class="tag">tradition-classical</span><span class="id-tag">aristotle-magnanimous-friend</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Seek first to understand, then to be understood."</p>
+  <div class="attribution">Stephen Covey</div>
+  <div class="source">Stephen Covey, drawing on classical rhetoric tradition</div>
+  <div class="meta"><span class="tag">pillar-magnanimity</span><span class="tag">theme-listening</span><span class="tag">tradition-modern</span><span class="id-tag">covey-understand-then-understood</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"The measure of intelligence is the ability to change."</p>
+  <div class="attribution">Albert Einstein</div>
+  <div class="source">Attributed to Albert Einstein</div>
+  <div class="meta"><span class="tag">pillar-magnanimity</span><span class="tag">theme-change</span><span class="tag">theme-revision</span><span class="tag">tradition-modern</span><span class="id-tag">einstein-intelligence-change</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Strong minds discuss ideas, average minds discuss events, weak minds discuss people."</p>
+  <div class="attribution">Socrates</div>
+  <div class="source">Attributed to Socrates</div>
+  <div class="meta"><span class="tag">pillar-magnanimity</span><span class="tag">theme-discourse-quality</span><span class="tag">tradition-classical</span><span class="id-tag">socrates-minds-discuss</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Infinite diversity in infinite combinations."</p>
+  <div class="attribution">Gene Roddenberry (Star Trek canon)</div>
+  <div class="source">Star Trek, 1968 (Vulcan IDIC philosophy)</div>
+  <div class="meta"><span class="tag">pillar-magnanimity</span><span class="tag">theme-pluralism</span><span class="tag">theme-diversity</span><span class="tag">tradition-sci-fi</span><span class="id-tag">roddenberry-idic</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"All real living is meeting."<span class="new-badge">New</span></p>
+  <div class="attribution">Martin Buber</div>
+  <div class="source">I and Thou (Ich und Du), 1923</div>
+  <div class="meta"><span class="tag">pillar-magnanimity</span><span class="tag">pillar-discourse</span><span class="tag">theme-relationism</span><span class="tag">tradition-jewish</span><span class="id-tag">buber-all-real-living-meeting</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"There is one skill that lies at the heart of any healthy person, family, school, community organization, or society: the ability to see another person deeply and make them feel seen."<span class="new-badge">New</span></p>
+  <div class="attribution">David Brooks</div>
+  <div class="source">How to Know a Person, 2023</div>
+  <div class="meta"><span class="tag">pillar-magnanimity</span><span class="tag">pillar-discourse</span><span class="tag">theme-attention</span><span class="tag">theme-relationism</span><span class="tag">tradition-civic-humanist</span><span class="id-tag">brooks-make-feel-seen</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"My humanity is bound up in yours, for we can only be human together."<span class="new-badge">New</span></p>
+  <div class="attribution">Desmond Tutu</div>
+  <div class="source">No Future Without Forgiveness, 1999</div>
+  <div class="meta"><span class="tag">pillar-magnanimity</span><span class="tag">theme-relationism</span><span class="tag">theme-ubuntu</span><span class="tag">tradition-african</span><span class="id-tag">tutu-humanity-bound-up</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"All flourishing is mutual."<span class="new-badge">New</span></p>
+  <div class="attribution">Robin Wall Kimmerer</div>
+  <div class="source">Braiding Sweetgrass, 2013</div>
+  <div class="meta"><span class="tag">pillar-magnanimity</span><span class="tag">theme-relationism</span><span class="tag">theme-ecology</span><span class="tag">tradition-indigenous</span><span class="id-tag">kimmerer-flourishing-mutual</span></div>
+</div>
+
+<h3 id="discourse">Discourse</h3>
+<div class="group-meta">Pillar &nbsp;·&nbsp; Engagement &nbsp;·&nbsp; 3 entries (plus Buber and Brooks dual-tagged in Magnanimity)</div>
+<div class="group-def">Sustained back-and-forth versus hit-and-run.</div>
+
+<div class="quote">
+  <p class="quote-text">"We have two ears and one mouth so that we can listen twice as much as we speak."</p>
+  <div class="attribution">Epictetus</div>
+  <div class="source">Enchiridion</div>
+  <div class="meta"><span class="tag">pillar-discourse</span><span class="tag">theme-listening</span><span class="tag">tradition-stoic</span><span class="id-tag">epictetus-two-ears-one-mouth</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"In the middle of every difficulty lies opportunity."</p>
+  <div class="attribution">Albert Einstein</div>
+  <div class="source">Attributed to Albert Einstein, on productive engagement</div>
+  <div class="meta"><span class="tag">pillar-discourse</span><span class="tag">theme-opportunity</span><span class="tag">tradition-modern</span><span class="id-tag">einstein-difficulty-opportunity</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Speech is silver, silence is golden, but the willingness to enter the argument is rarest of all."</p>
+  <div class="attribution">Editorial formulation, Dialecta</div>
+  <div class="source">Editorial formulation, Dialecta, 2026</div>
+  <div class="meta"><span class="tag">pillar-discourse</span><span class="tag">theme-courage</span><span class="tag">tradition-editorial</span><span class="id-tag">dialecta-speech-silver-argument</span></div>
+</div>
+
+<h3 id="consistency">Consistency</h3>
+<div class="group-meta">Pillar &nbsp;·&nbsp; Engagement &nbsp;·&nbsp; 2 entries</div>
+<div class="group-def">Regular presence over time.</div>
+
+<div class="quote">
+  <p class="quote-text">"We are what we repeatedly do. Excellence, then, is not an act but a habit."</p>
+  <div class="attribution">Will Durant</div>
+  <div class="source">Summarizing Aristotle's Nicomachean Ethics</div>
+  <div class="meta"><span class="tag">pillar-consistency</span><span class="tag">theme-habit</span><span class="tag">theme-excellence</span><span class="tag">tradition-classical</span><span class="id-tag">durant-aristotle-habit-full</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"We don't think ourselves into a new way of acting; we act ourselves into a new way of thinking."<span class="new-badge">New</span></p>
+  <div class="attribution">Richard Rohr</div>
+  <div class="source">Attributed to Richard Rohr (Franciscan); also widely cited by David Brooks</div>
+  <div class="meta"><span class="tag">pillar-consistency</span><span class="tag">archetype-builder</span><span class="tag">theme-action</span><span class="tag">theme-habit</span><span class="tag">tradition-christian</span><span class="id-tag">rohr-act-into-thinking</span></div>
+</div>
+
+<h3 id="reach">Reach</h3>
+<div class="group-meta">Pillar &nbsp;·&nbsp; Substance &nbsp;·&nbsp; 4 entries</div>
+<div class="group-def">Topic breadth across distinct areas.</div>
+
+<div class="quote">
+  <p class="quote-text">"Cultivate the habit of being grateful for every good thing that comes to you, and to give back in return."</p>
+  <div class="attribution">Ralph Waldo Emerson</div>
+  <div class="source">Attributed to Ralph Waldo Emerson</div>
+  <div class="meta"><span class="tag">pillar-reach</span><span class="tag">theme-gratitude</span><span class="tag">tradition-civic-humanist</span><span class="id-tag">emerson-cultivate-grateful</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"To know one thing, you must know the opposite."</p>
+  <div class="attribution">Henry Moore</div>
+  <div class="source">Attributed to Henry Moore</div>
+  <div class="meta"><span class="tag">pillar-reach</span><span class="tag">theme-opposition</span><span class="tag">tradition-modern</span><span class="id-tag">moore-know-opposite</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"To be whole is to be part."</p>
+  <div class="attribution">Ursula K. Le Guin</div>
+  <div class="source">The Dispossessed, 1974 (Odo)</div>
+  <div class="meta"><span class="tag">pillar-reach</span><span class="tag">theme-relationism</span><span class="tag">theme-belonging</span><span class="tag">tradition-sci-fi</span><span class="id-tag">leguin-whole-part</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"The world is like a Mask, dancing. If you want to see it well, you do not stand in one place."<span class="new-badge">New</span></p>
+  <div class="attribution">Chinua Achebe</div>
+  <div class="source">Arrow of God, 1964</div>
+  <div class="meta"><span class="tag">pillar-reach</span><span class="tag">archetype-synthesizer</span><span class="tag">theme-perspective</span><span class="tag">tradition-african</span><span class="id-tag">achebe-mask-dancing</span></div>
+</div>
+
+<h2 id="archetypes">By Eight Archetypes <span class="count">11 entries</span></h2>
+
+<h3 id="skeptic">The Skeptic</h3>
+<div class="group-meta">Archetype &nbsp;·&nbsp; 1 entry</div>
+<div class="group-def">Questions premises before accepting conclusions.</div>
+
+<div class="quote">
+  <p class="quote-text">"The first step towards philosophy is incredulity."</p>
+  <div class="attribution">Denis Diderot</div>
+  <div class="source">Attributed to Denis Diderot</div>
+  <div class="meta"><span class="tag">archetype-skeptic</span><span class="tag">theme-doubt</span><span class="tag">tradition-philosophical</span><span class="id-tag">diderot-philosophy-incredulity</span></div>
+</div>
+
+<h3 id="synthesizer">The Synthesizer</h3>
+<div class="group-meta">Archetype &nbsp;·&nbsp; 2 entries</div>
+<div class="group-def">Finds unexpected connections across domains.</div>
+
+<div class="quote">
+  <p class="quote-text">"The test of a first-rate intelligence is the ability to hold two opposing ideas in mind at the same time and still retain the ability to function."</p>
+  <div class="attribution">F. Scott Fitzgerald</div>
+  <div class="source">The Crack-Up, 1936</div>
+  <div class="meta"><span class="tag">archetype-synthesizer</span><span class="tag">theme-paradox</span><span class="tag">tradition-literary</span><span class="id-tag">fitzgerald-first-rate-intelligence</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Light is the left hand of darkness, and darkness the right hand of light."</p>
+  <div class="attribution">Ursula K. Le Guin</div>
+  <div class="source">The Left Hand of Darkness, 1969 (Tormer's Lay)</div>
+  <div class="meta"><span class="tag">archetype-synthesizer</span><span class="tag">theme-paradox</span><span class="tag">theme-interdependence</span><span class="tag">tradition-sci-fi</span><span class="id-tag">leguin-light-darkness-hands</span></div>
+</div>
+
+<h3 id="advocate">The Advocate</h3>
+<div class="group-meta">Archetype &nbsp;·&nbsp; 1 entry</div>
+<div class="group-def">Argues the strongest version of views they disagree with.</div>
+
+<div class="quote">
+  <p class="quote-text">"Before refuting an argument, be sure you understand it as well as its proponent does."</p>
+  <div class="attribution">Neil Wilson</div>
+  <div class="source">Principle of Charity, 1959</div>
+  <div class="meta"><span class="tag">archetype-advocate</span><span class="tag">theme-charity</span><span class="tag">tradition-philosophical</span><span class="id-tag">wilson-charity-before-refute</span></div>
+</div>
+
+<h3 id="builder">The Builder</h3>
+<div class="group-meta">Archetype &nbsp;·&nbsp; 2 entries</div>
+<div class="group-def">Extends ideas into practical frameworks.</div>
+
+<div class="quote">
+  <p class="quote-text">"In theory there is no difference between theory and practice. In practice there is."</p>
+  <div class="attribution">Various (Yogi Berra, Jan L. A. van de Snepscheut)</div>
+  <div class="source">Attributed to various</div>
+  <div class="meta"><span class="tag">archetype-builder</span><span class="tag">theme-practice</span><span class="tag">tradition-modern</span><span class="id-tag">berra-theory-practice</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"A tiger does not proclaim its tigritude; it acts."<span class="new-badge">New</span></p>
+  <div class="attribution">Wole Soyinka</div>
+  <div class="source">Attributed via Soyinka's debate with the Negritude movement</div>
+  <div class="meta"><span class="tag">archetype-builder</span><span class="tag">pillar-consistency</span><span class="tag">theme-action</span><span class="tag">theme-character-by-deed</span><span class="tag">tradition-african</span><span class="id-tag">soyinka-tiger-tigritude</span></div>
+</div>
+
+<h3 id="empiricist">The Empiricist</h3>
+<div class="group-meta">Archetype &nbsp;·&nbsp; 1 entry (plus PKD and Asimov dual-tagged in REFLECTING)</div>
+<div class="group-def">Grounds every claim in evidence and data.</div>
+
+<div class="quote">
+  <p class="quote-text">"The great tragedy of science: the slaying of a beautiful hypothesis by an ugly fact."</p>
+  <div class="attribution">Thomas Henry Huxley</div>
+  <div class="source">Biogenesis and Abiogenesis, 1870</div>
+  <div class="meta"><span class="tag">archetype-empiricist</span><span class="tag">theme-empiricism</span><span class="tag">tradition-scientific</span><span class="id-tag">huxley-beautiful-hypothesis-ugly-fact</span></div>
+</div>
+
+<h3 id="contextualist">The Contextualist</h3>
+<div class="group-meta">Archetype &nbsp;·&nbsp; 1 entry</div>
+<div class="group-def">Situates ideas in their historical and cultural frame.</div>
+
+<div class="quote">
+  <p class="quote-text">"Those who cannot remember the past are condemned to repeat it."</p>
+  <div class="attribution">George Santayana</div>
+  <div class="source">The Life of Reason, 1905</div>
+  <div class="meta"><span class="tag">archetype-contextualist</span><span class="tag">theme-history</span><span class="tag">tradition-civic-humanist</span><span class="id-tag">santayana-cannot-remember-past</span></div>
+</div>
+
+<h3 id="illuminator">The Illuminator</h3>
+<div class="group-meta">Archetype &nbsp;·&nbsp; 2 entries</div>
+<div class="group-def">Makes complex ideas accessible without losing nuance.</div>
+
+<div class="quote">
+  <p class="quote-text">"If you can't explain it simply, you don't understand it well enough."</p>
+  <div class="attribution">Albert Einstein</div>
+  <div class="source">Attributed to Albert Einstein and Ernest Rutherford</div>
+  <div class="meta"><span class="tag">archetype-illuminator</span><span class="tag">theme-clarity</span><span class="tag">tradition-modern</span><span class="id-tag">einstein-explain-simply</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"Better to illuminate than merely to shine; to deliver to others contemplated truths than merely to contemplate."<span class="new-badge">New</span></p>
+  <div class="attribution">Thomas Aquinas</div>
+  <div class="source">Summa Theologiae, II-II</div>
+  <div class="meta"><span class="tag">archetype-illuminator</span><span class="tag">theme-teaching</span><span class="tag">theme-contribution</span><span class="tag">tradition-christian</span><span class="id-tag">aquinas-illuminate-not-merely-shine</span></div>
+</div>
+
+<h3 id="reviser">The Reviser</h3>
+<div class="group-meta">Archetype &nbsp;·&nbsp; 1 entry (plus Butler and Herbert dual-tagged elsewhere)</div>
+<div class="group-def">Publicly updates their position when given good reasons.</div>
+
+<div class="quote">
+  <p class="quote-text">"When the facts change, I change my mind. What do you do, sir?"</p>
+  <div class="attribution">John Maynard Keynes</div>
+  <div class="source">Attributed to John Maynard Keynes</div>
+  <div class="meta"><span class="tag">archetype-reviser</span><span class="tag">theme-revision</span><span class="tag">theme-change</span><span class="tag">tradition-modern</span><span class="id-tag">keynes-facts-change-mind</span></div>
+</div>
+
+<h2 id="founding">Founding &amp; Thematic <span class="count">3 entries</span></h2>
+<div class="group-def">Entries without a single primary surface or pillar placement. Foundational thematic anchors.</div>
+
+<div class="quote">
+  <p class="quote-text">"We are what we repeatedly do."</p>
+  <div class="attribution">Will Durant</div>
+  <div class="source">Will Durant, summarizing Aristotle (truncated form, used as Six Pillars introduction)</div>
+  <div class="meta"><span class="tag">theme-habit</span><span class="tag">theme-character</span><span class="tag">tradition-classical</span><span class="id-tag">durant-aristotle-habit-short</span></div>
+</div>
+
+<div class="quote">
+  <p class="quote-text">"Violence is the last refuge of the incompetent."</p>
+  <div class="attribution">Isaac Asimov</div>
+  <div class="source">Foundation, 1951 (Salvor Hardin)</div>
+  <div class="meta"><span class="tag">theme-violence</span><span class="tag">theme-failure-mode</span><span class="tag">tradition-sci-fi</span><span class="id-tag">asimov-violence-incompetent</span></div>
+</div>
+
+<div class="quote new">
+  <p class="quote-text">"The first mountain is about acquiring. The second mountain is about contributing."<span class="new-badge">New</span></p>
+  <div class="attribution">David Brooks</div>
+  <div class="source">The Second Mountain, 2019</div>
+  <div class="meta"><span class="tag">theme-meaning</span><span class="tag">theme-purpose</span><span class="tag">theme-contribution</span><span class="tag">tradition-civic-humanist</span><span class="id-tag">brooks-second-mountain</span></div>
+</div>
+
+<footer>
+  Dialecta &nbsp;·&nbsp; Quote Library &nbsp;·&nbsp; 70 entries &nbsp;·&nbsp; Version 1.1 &nbsp;·&nbsp; April 2026
+</footer>
+
+</div>
+</div>
+</body>
+</html>

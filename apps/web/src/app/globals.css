@@ -1,0 +1,52 @@
+/*
+ * Global base styles. Colors, fonts, radii and shadows come from tokens.css,
+ * which is generated from design/dialecta-design-spec.html. Do not hard-code
+ * values here that a token already provides.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body, system-ui, sans-serif);
+  background: var(--page-background, var(--bg-primary, #f7f2e8));
+  color: var(--text-body, #3a342c);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display, Georgia, serif);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+a {
+  color: var(--gold-muted, inherit);
+}
+
+main {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+}
+
+.notice {
+  border: 1px solid var(--border-medium);
+  background: var(--bg-white);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}

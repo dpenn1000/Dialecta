@@ -1,0 +1,178 @@
+𝕏
+X
+
+f
+Facebook
+
+in
+LinkedIn
+
+r/
+Reddit
+
+✉
+Email
+
+⛓
+Copy link
+
+Articles
+
+›
+
+Environment & Energy
+
+The Conversation Communities Keep Having About Solar (And What the Evidence Actually Says)
+
+By Daniel Pennington. Community debates about solar are still driven by assumptions that no longer align with the evidence. The data has moved on cost, durability, and impact, but the conversation, in many places, has not.
+
+Daniel Pennington
+
+·
+
+April 8, 2026
+
+·
+
+10 min read
+
+⁂
+
+Discourse
+
+12 voices
+
+join the conversation →
+
+Every community solar debate seems to follow a similar pattern. A developer files a petition. Public hearings are scheduled. Neighbors begin raising concerns about the environment, the cost, the panels themselves. The conversation gets heated, and passionate opposition often becomes the loudest voice in the room. Someone mentions landfills. Someone else brings up property values. The project either advances or stalls, and fact-based discourse often becomes overshadowed by rising emotions.
+I've been watching this play out in my own town, Manchester, Connecticut, where a proposed 1.2-megawatt solar installation on Lake Street has been working through the Connecticut Siting Council since August 2025. The concerns I've heard in this community are, without exception, the same concerns I've seen documented in similar disputes in Wisconsin, Colorado, and across New England. They are understandable concerns. They deserve a close look, and an honest attempt to separate what the evidence shows from what we've assumed for a long time.
+That's what this article is about. Not whether any particular project should be approved. Not about undermining the value of community opinion. But whether the most common technical objections to community-scale solar are well-informed by what we actually know in 2026, so that members of these communities can think clearly and engage in productive, fact-based discourse.
+I'll try to address that gap today, with genuine respect for everyone who cares enough about their community to show up and push back. That passion is not the problem. The goal here is to make sure it has accurate information to work with.
+What the Objections Are, and Where They Come From
+The five concerns that appear most consistently in community solar disputes are:
+That solar development damages the local environment. That large-scale clearing, soil disruption, and stormwater runoff cause lasting ecological harm.
+That solar panels degrade quickly and become a liability. That a community is taking on a system that will fail within 15 years and leave someone holding the cleanup.
+That utility-scale solar is expensive and ratepayers absorb that cost. That the economics are worse than alternatives and that the public subsidy is hidden.
+That old panels end up in landfills. That the industry's sustainability promise falls apart at end of life when toxic materials leach into soil and water.
+That long-term Power Purchase Agreements lock communities into unfavorable contracts. That electricity prices could fall over a 25-year horizon, leaving the fixed rate looking expensive in hindsight.
+These are not frivolous concerns. Several of them were well-founded a decade ago. The problem is that the conversation is still being conducted as if the evidence and technology hasn't evolved. It has.
+The Environmental Question
+Construction is genuinely disruptive. Grading, earthwork, and stormwater runoff during the build phase are real risks that require real management. The EPA's stormwater standards exist precisely because large land disturbances near waterways need engineered controls. If those controls aren't in place, or aren't enforced, the concern is legitimate.
+The confusion enters when construction-phase risk gets conflated with operational risk.
+Once a solar array is installed and the ground stabilizes, its ecological footprint is modest by any reasonable comparison. The USDA Natural Resources Conservation Service identifies solar farms as compatible with many conservation goals when properly sited, with documented benefits to soil health and wildlife corridors that develop between and beneath panels over time.
+Pollinator habitat is a concrete and well-documented co-benefit. Native grasses and wildflower mixes planted beneath panel rows create low-disturbance environments that bees and butterflies actively prefer over conventionally farmed or maintained turf land. This approach, called agrivoltaics, is increasingly standard rather than exceptional.
+A 2026 study of the Gemini Solar Project in the Mojave Desert found something more surprising. Researchers documented that the three-corner milkvetch, a rare desert plant, was thriving beneath the array. Plants in the shaded zones grew taller and wider than open-field specimens, and produced more fruit. The shade cast by the panels reduced soil moisture evaporation enough to create near-optimal conditions for a species that was struggling in open land nearby.
+The alternative energy source doing most of New England's heavy lifting is natural gas, which provides roughly half the region's electricity.
+The environmental costs of that supply chain, well pads, compressor stations, methane leaks during extraction, pipeline infrastructure, and combustion emissions at point of use, don't appear on a local zoning map. They're distributed across other geographies and other communities. The comparison isn't between solar and some pristine baseline. It's between solar and what's already running.
+The Degradation Question
+Early solar panels, particularly those manufactured in the 1970s and 1980s, degraded much more quickly than the technology that followed.
+The concern does have some historical context.
+The first practical silicon solar cell was demonstrated at Bell Laboratories on April 25, 1954. Seventy years of engineering refinement have produced a product that performs very differently than its ancestors.
+Modern Tier 1 panels degrade at roughly 0.4 to 0.5 percent of output per year.
+Five years ago the industry average was around 0.7 percent. Premium manufacturers including Panasonic, Hanwha Awrospace (Q-Cells), and SunPower have achieved rates as low as 0.25 to 0.30 percent annually.
+What this means in practice: a panel installed today retains approximately 96 percent of its output at year ten, and roughly 91 percent at year twenty-five.
+Most manufacturers now back these figures with 25 to 30-year performance warranties, with some extending to 40 years. A National Renewable Energy Laboratory analysis of nearly 2,000 solar systems worldwide found that actual measured degradation was consistently better than the warranted rates.
+Panels installed in the early 1980s, the era that gave the degradation concern its teeth, are still generating electricity.
+The obsolescence question comes up separately: won't next-generation technology make current panels worthless?
+Perovskite-silicon tandem cells have achieved laboratory efficiencies exceeding 34 percent. But as of 2026, they remain 3 to 5 years from reliable commercial availability, and considerably further from being cost-accessible for most installations. Oxford PV, one of the leading manufacturers, currently offers only a 10-year warranty on its commercial tandem modules.
+More to the point: a more efficient panel developed ten years from now doesn't reduce what an existing installation produces.
+The argument that communities should wait for better technology is structurally equivalent to the argument for not purchasing a car because a better model will eventually exist.
+The Cost Question
+The cost comparison runs in the opposite direction from what most public debate assumes.
+Utility-scale and community-scale solar is among the least expensive forms of electricity generation currently available. A study by economists at The Brattle Group compared the per-kilowatt-hour generation costs of utility-scale solar against equivalent residential rooftop installations in a representative utility setting. The reference case finding: $0.083 per kWh for utility-scale versus $0.167 per kWh for residential-scale. The gap across their modeled scenarios ranges from $0.067 to $0.092 per kWh. The same study found that environmental reductions from utility-scale PV are approximately 1.5 times as large as for equivalent residential installations, owing to higher output per unit of installed capacity.
+Three factors drive the cost advantage: lower installed costs per watt at larger scale, greater output from optimized panel orientation and single-axis tracking, and economies in operations and maintenance that rooftop systems cannot replicate.
+Once operational, a solar facility has no fuel to purchase. No commodity exposure. No pipeline. Its primary cost is maintenance, a fraction of what gas, coal, or nuclear plants require. The structural benefit to all ratepayers is measurable and documented.
+Connecticut's solar fleet was projected to generate approximately 1,133 GWh in 2025. That production delivers four distinct cost reductions to every customer in the state, whether or not they have panels of their own.
+Wholesale price suppression. When large numbers of solar installations produce simultaneously during peak hours, they reduce total grid demand at the moments when wholesale electricity is most expensive to produce. This Demand Reduction Induced Price Effect (DRIPE) lowers the clearing price across the entire New England market.
+Summer peak reduction. In 2024, behind-the-meter solar reduced Connecticut's peak summer demand by 300 to 400 megawatts, blunting the most expensive hours on the grid.
+Infrastructure deferral. Distributed generation reduces load on transmission and distribution systems, allowing utilities to defer or cancel expensive upgrades. Transmission savings alone are estimated at $29.24 per kilowatt-year; distribution savings add $30.89 per kilowatt-year.
+Line loss reduction. Traditional generation loses roughly 11 percent of output as heat during long-distance transmission. Local solar avoids those losses entirely.
+The aggregate estimated avoided cost from Connecticut's residential solar generation in 2025: $151.6 million, distributed across all ratepayers.
+The Landfill Question
+Ten years ago this was the right concern to raise. The recycling infrastructure for photovoltaic panels was genuinely underdeveloped, and end-of-life disposal was a real gap in the industry's sustainability narrative.
+The economics of that gap have shifted.
+End-of-life panels contain materials with real recovery value: aluminum frames, tempered glass, silver, copper, and silicon.
+That value is beginning to drive private investment in recycling infrastructure. Hanwha Qcells, responsible for approximately one in three rooftop panels installed in the United States, launched its EcoRecycle program in 2025. It is the first U.S. initiative by a crystalline silicon solar manufacturer to manage the full panel lifecycle from sale through end-of-life recovery. Their Cartersville, Georgia facility is designed to process approximately 250 megawatts of panels annually, recovering materials for reuse in American manufacturing. In 2023, Qcells also launched an Extended Producer Responsibility program, taking direct responsibility for its panels at end of life.
+The Solar Energy Industries Association's National PV Recycling Program, founded in 2016, now networks recycling and refurbishment providers across the country. The total recovered value of end-of-life crystalline modules is projected to grow from approximately $122 million in 2025 to $12 billion by 2035, a trajectory that is pulling private capital into the infrastructure needed to make responsible disposal standard rather than exceptional.
+A project installed today reaches end of life in 25 to 30 years. The recycling economy that will exist in 2050 will not resemble the one critics were rightly describing five years ago.
+The PPA Question
+Power Purchase Agreements deserve careful scrutiny. A 20 to 25-year contract is a long commitment, and the legitimate risk is real: if wholesale electricity prices were to fall significantly over that period, a fixed rate could look expensive in hindsight.
+It's worth spending a moment with what falling electricity prices would actually require.
+Connecticut's average retail rate was 10.9 cents per kilowatt-hour in 2000. By 2020 it had reached 23.3 cents, a 114 percent increase in two decades. Between 2024 and 2025, U.S. electricity prices rose 5.1 percent in a single year, nearly double the general inflation rate. The average American household's monthly electric bill climbed from $121 in 2021 to $144 in 2024.
+The forces behind those increases are not stabilizing.
+Global electricity demand from data centers is projected to more than double by 2030, driven primarily by AI infrastructure. The International Energy Agency's Electricity 2025 report identified this as one of the most significant near-term demand drivers on record. Electric vehicles will add to grid demand on top of that.
+U.S. electricity consumption overall is projected to grow 25 percent by 2030 and 78 percent by 2050. Three major grid regions could face capacity shortfalls as soon as 2028 without significant new generation coming online.
+New England carries a structural vulnerability that compounds this. With roughly half its electricity supplied by natural gas, the region is exposed to pipeline constraints that produce sharp winter price spikes with regularity. A fixed-rate solar PPA has no fuel cost. No commodity exposure. No pipeline. Over a 25-year horizon, that predictability has a quantifiable value that the abstract risk of price decline needs to be weighed against.
+None of this means every PPA is good or that contract terms don't merit scrutiny. The Connecticut Siting Council review process for projects like Lake Street exists precisely to examine those terms in detail before any approval. That's the right venue for that analysis.
+What This Means for the Conversation
+The point isn't that solar is beyond criticism or that every proposed installation is well-sited or well-designed. Some aren't. Site selection matters. Construction management matters. Proximity to wetlands and water supplies is a legitimate concern that requires specific, engineered answers.
+The point is that the most common objections circulating in community solar debates in 2026 are largely disconnected from where the evidence currently sits. They were formed in response to a technology that existed 10 to 15 years ago, and they haven't been updated.
+That gap has consequences. Communities making decisions about energy infrastructure based on outdated assumptions about solar technology are making those decisions poorly, regardless of which direction they decide in.
+The conversation can be better. It requires the same thing any good argument requires: precise claims, honest engagement with what the evidence shows, and the willingness to update when the data moves.
+The data on solar has moved considerably. The conversation, in most communities, has not.
+Daniel E. Pennington is a Manchester, CT resident writing independently. The Lake Street Solar Project (Petition PE1688) is currently under review by the Connecticut Siting Council.
+Sources
+1.    Press Herald / ISO-NE, "Does New England Rely on Natural Gas for About Half of Its Electricity?" April 2026. CT retail rate history: U.S. EIA Connecticut Retail Average. Price inflation: Bipartisan Policy Center / EIA. Household bill data: EIA via Palmetto / Pew Research Center.
+2.   International Energy Agency, Electricity 2025 (April 2025).
+3.   ICF load growth forecast via Pew Charitable Trusts (September 2025); Utility Dive / ICF capacity shortfall analysis (May 2025).
+4.   Popular Science, "Solar Farm Construction and EPA Water Violations."
+5.   USDA Natural Resources Conservation Service, Conservation Considerations for Solar Farms (March 2024).
+6.   Clean Wisconsin, "Analysis Uncovers Local Environmental Impacts of Solar Farms in Wisconsin."
+7.   Desert Research Institute / Ecoportal, "Solar Panels Help Rare Plant Grow," April 2026.
+8.   National Renewable Energy Laboratory, Photovoltaic Degradation Rates: An Analytical Review.
+9.   SolarQuotes, "How Long Do Solar Panels Last? Degradation Rates Compared," February 2026.
+10.       Okon Recycling / NREL, premium manufacturer degradation rate data, July 2025.
+11. ReviewMySolar, "Solar Panel Degradation Rate Explained," August 2025.
+12.       American Physical Society / ETHW, Bell Laboratories first silicon solar cell, April 25, 1954.
+13.Shockley-Queisser limit: Cambridge Photon Technology / Wikipedia.
+14.       SurgePV, "Perovskite Solar Technology," 2026.
+15.Sunsave / pv-magazine, "Perovskite Solar Panels: Are They Worth Waiting For?" January 2026.
+16.       The Brattle Group, "Comparing the Costs of Utility-Scale and Residential-Scale PV."
+17. The Brattle Group (ibid.), environmental reduction comparison.
+18.       Hanwha Qcells, EcoRecycle Program (launched 2025); EPR Program (launched 2023).
+19.       Solar Energy Industries Association, National PV Recycling Program (founded 2016).
+20.      Okon Recycling, end-of-life crystalline module value projections.
+21.       Connecticut Siting Council, Petition PE1688.
+22.      Connecticut Solar Ratepayer Analysis (2025 projections).
+23.       Connecticut Senate Bill 4 (effective 2026), Solar Energy Adjustment.
+
+—
+
+Daniel Pennington
+
+Founder of Dialecta, created to address social media algorithms that amplify existing biases at scale. Aims to help people reconnect with their values through a more constructive reward system than current platforms offer.
+
+Visit Daniel Pennington's profile →
+
+⁂  Pass it on
+
+𝕏
+X
+
+f
+Facebook
+
+in
+LinkedIn
+
+r/
+Reddit
+
+✉
+Email
+
+⛓
+Copy link
+
+Share…
+
+The Conversation
+
+×
+
+⁂ The Author's Declaration
+
+What was committed;
+ what shifted
+
+Close

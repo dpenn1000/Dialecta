@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run typecheck
+
+      - run: npm test
+
+      - name: Voice check on changed prose
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch --no-tags origin main
+            range="origin/main..."
+          else
+            range="${{ github.event.before }}..${{ github.sha }}"
+            if ! git cat-file -e "${{ github.event.before }}" 2>/dev/null; then
+              range="${{ github.sha }}~1..${{ github.sha }}"
+            fi
+          fi
+          files=$(git diff --name-only --diff-filter=AM "$range" -- '*.md' 'apps/web/src/strings.ts' || true)
+          if [ -z "$files" ]; then
+            echo "No prose files changed; skipping voice check."
+            exit 0
+          fi
+          echo "$files"
+          # shellcheck disable=SC2086
+          python3 scripts/voice_check.py --strict $files

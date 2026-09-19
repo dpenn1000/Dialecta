@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dialecta — Icon + Mobile Nav Preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Serif+4:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1c1814;
+      --ink-soft: #2c2620;
+      --body: #3a342c;
+      --secondary: #5a5248;
+      --tertiary: #7a7068;
+      --cream: #f7f2e8;
+      --bg-white: #fffdf8;
+      --border-light: rgba(180,175,165,0.28);
+
+      --brass-deep:   #7a4a10;
+      --brass-mid:    #b8862e;
+      --brass-warm:   #d4a84a;
+      --brass-bright: #ecb438;
+      --brass-pale:   #f5dfa0;
+      --gold: #d4a84a;
+      --amber: #b8862e;
+
+      --brass-gradient: linear-gradient(95deg,
+        var(--brass-deep) 0%,
+        var(--brass-mid)  18%,
+        var(--brass-warm) 36%,
+        var(--brass-pale) 50%,
+        var(--brass-warm) 64%,
+        var(--brass-mid)  82%,
+        var(--brass-deep) 100%
+      );
+      --brass-shadow: drop-shadow(0 2px 0 rgba(28, 24, 20, 0.20));
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-reading: 'Source Serif 4', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+      --font-mono:    'DM Mono', monospace;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background: linear-gradient(135deg, #a8a398 0px, #8c8780 175px, var(--cream) 775px, var(--cream) 100%);
+      background-attachment: fixed;
+      color: var(--body);
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='4'/><feColorMatrix type='matrix' values='0 0 0 0 0.55  0 0 0 0 0.36  0 0 0 0 0.18  0 0 0 0.035 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 60px 32px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Page header */
+    .doc-header { text-align: center; margin-bottom: 56px; }
+    .doc-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 12px;
+    }
+    .doc-title {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(2.2rem, 1rem + 3vw, 4rem);
+      letter-spacing: 0.005em;
+      margin: 0 0 12px 0;
+      background: var(--brass-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      filter: var(--brass-shadow);
+    }
+    .doc-subtitle {
+      font-family: var(--font-reading);
+      font-style: italic;
+      font-size: 17px;
+      color: var(--secondary);
+      margin: 0;
+    }
+
+    .section {
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      box-shadow: 0 4px 24px rgba(28,24,20,0.08);
+      padding: 48px 56px;
+      margin-bottom: 40px;
+    }
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 2.2rem;
+      color: var(--ink);
+      margin: 0 0 12px 0;
+    }
+    .section-lede {
+      font-family: var(--font-reading);
+      font-size: 16px;
+      color: var(--body);
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 0 0 36px 0;
+    }
+    .section-divider {
+      text-align: center;
+      color: var(--brass-warm);
+      font-size: 16px;
+      letter-spacing: 0.4em;
+      margin: 32px 0;
+    }
+
+    /* ======================================================
+       SECTION 1 — Icon options (alternatives within the
+       printer's-mark family). Each row: one nav item, three
+       candidate icons.
+       ====================================================== */
+    .icon-comparison {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      margin-top: 24px;
+    }
+    .nav-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 28px;
+      align-items: center;
+      padding: 20px 0;
+      border-top: 1px solid var(--border-light);
+    }
+    .nav-row:first-child { border-top: none; padding-top: 0; }
+    .row-label {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.4rem;
+      color: var(--ink);
+    }
+    .row-label small {
+      display: block;
+      font-family: var(--font-mono);
+      font-style: normal;
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--tertiary);
+      margin-top: 2px;
+    }
+    .row-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 720px) {
+      .nav-row { grid-template-columns: 1fr; }
+      .row-options { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .option-card {
+      background: var(--cream);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 18px 12px 14px;
+      text-align: center;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      position: relative;
+    }
+    .option-card:hover {
+      border-color: var(--brass-warm);
+      box-shadow: 0 2px 12px rgba(184,134,46,0.16);
+    }
+    .option-card.recommended::before {
+      content: "PROPOSED";
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      color: var(--brass-warm);
+    }
+    /* User has confirmed this option for this row. Stronger highlight. */
+    .option-card.selected {
+      background: linear-gradient(135deg, rgba(212,168,74,0.10) 0%, rgba(212,168,74,0.04) 100%);
+      border-color: var(--brass-warm);
+      box-shadow: 0 2px 14px rgba(184,134,46,0.18);
+    }
+    .option-card.selected::before {
+      content: "✓ SELECTED";
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      color: var(--brass-deep);
+      font-weight: 600;
+    }
+    .option-card svg {
+      display: block;
+      margin: 4px auto 8px;
+      color: var(--brass-mid);
+    }
+    .option-name {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1rem;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .option-meta {
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--tertiary);
+    }
+
+    /* ======================================================
+       SECTION 2 — Mobile preview (Option 1: asterism strip)
+       ====================================================== */
+    .mock-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+      margin-top: 24px;
+    }
+    @media (max-width: 1100px) {
+      .mock-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 700px) {
+      .mock-row { grid-template-columns: 1fr; }
+    }
+    .mock-frame {
+      max-width: 100%;
+    }
+    .mock-card {
+      background: var(--cream);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 24px;
+    }
+    .mock-card-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--amber);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .mock-frame {
+      width: 100%;
+      max-width: 380px;
+      margin: 0 auto;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(28,24,20,0.18);
+      position: relative;
+      background: var(--cream);
+      height: 640px;
+    }
+
+    /* Brand bar (52px, ink gradient) */
+    .mock-brand {
+      height: 52px;
+      background: linear-gradient(135deg, var(--cream) 0%, var(--ink) 65%, var(--ink) 100%);
+      border-bottom: 1px solid rgba(184,115,42,0.22);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+    .mock-brand-logo {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 18px;
+      background: var(--brass-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      filter: var(--brass-shadow);
+    }
+    .mock-brand-right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    /* Brand-bar avatar: italic Cormorant initials over a 135° pillar
+       gradient derived from the member's top two fingerprint axes.
+       Daniel here is Calibration + Magnanimity dominant → blue to green. */
+    .mock-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2674d4 0%, #3aa564 100%);
+      border: 1px solid #2674d4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 15px;
+      letter-spacing: 0.01em;
+      color: var(--cream);
+    }
+    .mock-hamburger {
+      width: 40px;
+      height: 36px;
+      border: 1px solid rgba(184,115,42,0.35);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brass-warm);
+      font-size: 18px;
+      background: transparent;
+    }
+
+    /* Second bar — shared base (metallic strip with edge highlights). */
+    .mock-secondbar {
+      background: linear-gradient(to bottom, #eceae4 0%, #d8d4cc 48%, #eceae4 100%);
+      border-bottom: 1px solid rgba(140,135,128,0.28);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -1px 0 rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .mock-secondbar::before,
+    .mock-secondbar::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.96), transparent);
+    }
+    .mock-secondbar::before { top: 0; }
+    .mock-secondbar::after { bottom: 0; }
+
+    /* Option 1 — asterism: slim, decorative-only, with narrowing line
+       swipes on either side that taper from solid (next to the asterism)
+       to transparent (toward the page edges). Classic editorial flourish. */
+    .mock-secondbar.option1 {
+      height: 22px;
+      gap: 14px;
+      padding: 0 18px;
+    }
+    .mock-secondbar.option1 .swipe {
+      flex: 1 1 auto;
+      max-width: 110px;
+      height: 1px;
+    }
+    .mock-secondbar.option1 .swipe-left {
+      background: linear-gradient(to right, transparent 0%, var(--brass-mid) 95%);
+    }
+    .mock-secondbar.option1 .swipe-right {
+      background: linear-gradient(to left, transparent 0%, var(--brass-mid) 95%);
+    }
+    .mock-secondbar.option1 .asterism {
+      font-family: var(--font-display);
+      font-size: 13px;
+      color: var(--brass-mid);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+    .mock-secondbar.option1 .strip-mark {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      color: var(--brass-mid);
+      line-height: 1;
+    }
+    .mock-secondbar.option1 .strip-mark svg { display: block; }
+
+    /* Section 03 — strip center alternatives */
+    .strip-options {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      margin-top: 24px;
+    }
+    .strip-option {
+      background: var(--cream);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 18px 24px 22px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .strip-option:hover {
+      border-color: var(--brass-warm);
+      box-shadow: 0 2px 12px rgba(184,134,46,0.16);
+    }
+    .strip-option-label {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.05rem;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .strip-option-meta {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--tertiary);
+      margin-bottom: 14px;
+    }
+    .strip-option .mock-secondbar {
+      max-width: 380px;
+      margin: 0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    /* Option 2 — breadcrumb: page name + section, DM Mono uppercase */
+    .mock-secondbar.option2 {
+      height: 28px;
+      padding: 0 16px;
+    }
+    .mock-secondbar.option2 .crumb {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--brass-deep);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .mock-secondbar.option2 .crumb-section {
+      color: var(--brass-mid);
+      font-weight: 500;
+    }
+    .mock-secondbar.option2 .crumb-divider {
+      color: var(--tertiary);
+      margin: 0 8px;
+    }
+    .mock-secondbar.option2 .crumb-page {
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+
+    /* Article content placeholder */
+    .mock-content {
+      padding: 22px 20px;
+      height: calc(640px - 52px - 28px);
+      overflow: hidden;
+    }
+    .mock-content-tag {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    .mock-content-title {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 26px;
+      line-height: 1.15;
+      color: var(--ink);
+      background: var(--brass-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      filter: var(--brass-shadow);
+      font-style: italic;
+      margin: 0 0 16px 0;
+    }
+    .mock-content-meta {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.10em;
+      color: var(--tertiary);
+      margin-bottom: 18px;
+    }
+    .mock-content-body {
+      font-family: var(--font-reading);
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--body);
+    }
+    .mock-content-body p:first-of-type::first-letter {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 3.2rem;
+      float: left;
+      line-height: 0.9;
+      margin: 6px 6px 0 0;
+      color: var(--brass-mid);
+    }
+
+    /* Drawer overlay (State B: drawer open) */
+    .mock-scrim {
+      position: absolute;
+      inset: 0;
+      background: rgba(28,24,20,0.45);
+      z-index: 5;
+    }
+    .mock-drawer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 86%;
+      background:
+        radial-gradient(ellipse at top right, rgba(212,168,74,0.08), transparent 60%),
+        linear-gradient(180deg, var(--cream) 0%, #f3eddd 100%);
+      border-left: 1px solid rgba(184,115,42,0.20);
+      box-shadow: -16px 0 48px rgba(28,24,20,0.18);
+      z-index: 10;
+      overflow-y: auto;
+    }
+    .mock-drawer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='4'/><feColorMatrix type='matrix' values='0 0 0 0 0.55  0 0 0 0 0.36  0 0 0 0 0.18  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      opacity: 0.6;
+    }
+    .mock-drawer-inner { position: relative; z-index: 1; }
+    .mock-drawer-header {
+      padding: 24px 32px 18px;
+      border-bottom: 1px solid rgba(184,115,42,0.18);
+      text-align: center;
+    }
+    .mock-drawer-title {
+      display: block;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.5rem;
+      background: var(--brass-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      filter: var(--brass-shadow);
+    }
+    .mock-drawer-subtitle {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--tertiary);
+      margin-top: 4px;
+    }
+    .mock-drawer-links {
+      list-style: none;
+      margin: 0;
+      padding: 12px 0;
+    }
+    .mock-drawer-links li {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 12px 32px;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-style: italic;
+      font-weight: 500;
+      color: var(--ink-soft);
+      border-left: 3px solid transparent;
+    }
+    .mock-drawer-links li.active {
+      border-left-color: var(--brass-warm);
+      color: var(--brass-deep);
+      background: rgba(212,168,74,0.08);
+    }
+    .mock-drawer-links li svg {
+      flex-shrink: 0;
+      color: var(--brass-warm);
+    }
+    .mock-drawer-divider {
+      text-align: center;
+      margin: 12px 32px;
+      padding: 6px 0;
+      font-family: var(--font-display);
+      color: var(--brass-warm);
+      letter-spacing: 0.4em;
+    }
+    .mock-drawer-member {
+      padding: 12px 32px 28px;
+      text-align: center;
+    }
+    /* Drawer footer avatar: same pillar-gradient + italic Cormorant treatment,
+       larger size for the dedicated identity panel. */
+    .mock-drawer-avatar {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2674d4 0%, #3aa564 100%);
+      border: 1px solid #2674d4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.55rem;
+      letter-spacing: 0.01em;
+      color: var(--cream);
+    }
+    .mock-drawer-membername {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-style: italic;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .mock-drawer-memberorder {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-style: italic;
+      color: var(--brass-deep);
+      margin-bottom: 12px;
+    }
+    .mock-drawer-memberorder svg {
+      vertical-align: -2px;
+      margin-right: 4px;
+      color: var(--brass-warm);
+    }
+    .mock-drawer-memberlinks {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .mock-drawer-memberlinks a {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--tertiary);
+      text-decoration: none;
+      padding: 5px 9px;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+    }
+
+    /* Footer note */
+    .doc-footer {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border-light);
+      font-family: var(--font-reading);
+      font-style: italic;
+      font-size: 13px;
+      color: var(--tertiary);
+    }
+  </style>
+</head>
+<body>
+
+<!-- All icon options as SVG symbols. Iterated from user feedback. -->
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <defs>
+    <!-- ──── ARTICLES ──── -->
+    <!-- A: Feather quill (NEW — softer, plumey shape with central spine) -->
+    <symbol id="i-articles-feather" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Outer feather silhouette: broad at top, tapered to nib -->
+      <path d="M19 4 Q21 5 20 8 Q18 11 14 14 Q10 17 6.5 19 Q5.5 19.3 5.5 18.5 Q5.5 16.5 7 15 Q9.5 13 12 11 Q15 8.5 17.5 6 Q18.5 4.5 19 4 Z"/>
+      <!-- Central spine (rachis) -->
+      <path d="M19 4 Q12 12 5.8 18.6" stroke-width="0.85"/>
+      <!-- Soft barb hints -->
+      <path d="M16.5 7 Q15 7.5 13.5 8" stroke-width="0.55" stroke-dasharray="0.7 0.6"/>
+      <path d="M14 9.5 Q12 10.2 10.5 11" stroke-width="0.55" stroke-dasharray="0.7 0.6"/>
+      <path d="M11.5 12.5 Q9.5 13.3 8 14" stroke-width="0.55" stroke-dasharray="0.7 0.6"/>
+      <path d="M9 15.5 Q7.5 16.3 6.3 17" stroke-width="0.55" stroke-dasharray="0.7 0.6"/>
+      <!-- Tiny ink dot at the tip -->
+      <circle cx="5.6" cy="19" r="0.8" fill="currentColor" stroke="none"/>
+    </symbol>
+    <!-- B: Manuscript scroll -->
+    <symbol id="i-articles-scroll" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 6 Q5 4 7 4 L17 4 Q19 4 19 6 L19 7"/>
+      <path d="M5 7 L5 17"/>
+      <path d="M19 7 L19 17"/>
+      <path d="M5 17 Q5 19 7 19 L17 19 Q19 19 19 17"/>
+      <line x1="9" y1="9" x2="15" y2="9" stroke-width="0.9"/>
+      <line x1="9" y1="12" x2="16" y2="12" stroke-width="0.9"/>
+      <line x1="9" y1="15" x2="14" y2="15" stroke-width="0.9"/>
+    </symbol>
+    <!-- C: Open codex -->
+    <symbol id="i-articles-codex" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M12 7 L4 8 L4 19 L12 18 Z"/>
+      <path d="M12 7 L20 8 L20 19 L12 18 Z"/>
+      <line x1="12" y1="7" x2="12" y2="18"/>
+      <line x1="6" y1="11" x2="10" y2="10.5" stroke-width="0.7"/>
+      <line x1="6" y1="13.5" x2="10" y2="13" stroke-width="0.7"/>
+      <line x1="14" y1="10.5" x2="18" y2="11" stroke-width="0.7"/>
+      <line x1="14" y1="13" x2="18" y2="13.5" stroke-width="0.7"/>
+    </symbol>
+
+    <!-- ──── COMMUNITY ──── (variations on the big-dot theme) -->
+    <!-- A: Three-dot conversation triangle (proposed; user picked this) -->
+    <symbol id="i-community-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+      <circle cx="6" cy="8" r="2.4" fill="currentColor"/>
+      <circle cx="18" cy="8" r="2.4" fill="currentColor"/>
+      <circle cx="12" cy="17" r="2.4" fill="currentColor"/>
+      <path d="M8.2 8 Q12 5.5 15.8 8" stroke-linecap="round"/>
+      <path d="M7 10.2 Q9 14.5 10.6 15.5" stroke-linecap="round"/>
+      <path d="M17 10.2 Q15 14.5 13.4 15.5" stroke-linecap="round"/>
+    </symbol>
+    <!-- B: Three dots in a row with dialogue arcs (NEW — flow variation) -->
+    <symbol id="i-community-flow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+      <circle cx="5" cy="14" r="2.4" fill="currentColor"/>
+      <circle cx="12" cy="14" r="2.4" fill="currentColor"/>
+      <circle cx="19" cy="14" r="2.4" fill="currentColor"/>
+      <path d="M7 13 Q9 7 12 11.5" stroke-linecap="round" fill="none"/>
+      <path d="M12 11.5 Q15 7 17 13" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <!-- C: Three dots around a central focal dot (NEW — community around an idea) -->
+    <symbol id="i-community-focal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+      <circle cx="6" cy="9" r="2.2" fill="currentColor"/>
+      <circle cx="18" cy="9" r="2.2" fill="currentColor"/>
+      <circle cx="12" cy="19" r="2.2" fill="currentColor"/>
+      <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+      <line x1="10.7" y1="10.8" x2="7.5" y2="9.5" stroke-width="0.7" stroke-dasharray="0.8 0.8"/>
+      <line x1="13.3" y1="10.8" x2="16.5" y2="9.5" stroke-width="0.7" stroke-dasharray="0.8 0.8"/>
+      <line x1="12" y1="13.5" x2="12" y2="17" stroke-width="0.7" stroke-dasharray="0.8 0.8"/>
+    </symbol>
+
+    <!-- ──── STEWARDS ──── (entirely new directions) -->
+    <!-- A: Honor scroll with central seal + ribbons -->
+    <symbol id="i-stewards-scroll" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="12" cy="5" rx="6" ry="1.4" stroke-width="1.1"/>
+      <ellipse cx="12" cy="19" rx="6" ry="1.4" stroke-width="1.1"/>
+      <line x1="6" y1="5" x2="6" y2="19"/>
+      <line x1="18" y1="5" x2="18" y2="19"/>
+      <line x1="9" y1="9" x2="15" y2="9" stroke-width="0.7"/>
+      <line x1="9" y1="15" x2="15" y2="15" stroke-width="0.7"/>
+      <circle cx="12" cy="12" r="2.6" fill="currentColor"/>
+      <path d="M10.7 14.2 L9.3 17 L10.7 16 L12 17 L13.3 16 L14.7 17 L13.3 14.2" fill="currentColor" stroke="none"/>
+    </symbol>
+    <!-- B: Three stars constellation -->
+    <symbol id="i-stewards-triplestar" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <path d="M12 3.5 L12.7 5.1 L14.4 5.2 L13.1 6.2 L13.5 7.8 L12 7 L10.5 7.8 L10.9 6.2 L9.6 5.2 L11.3 5.1 Z"/>
+      <path d="M5.5 13 L6.2 14.6 L7.9 14.7 L6.6 15.7 L7 17.3 L5.5 16.5 L4 17.3 L4.4 15.7 L3.1 14.7 L4.8 14.6 Z"/>
+      <path d="M18.5 13 L19.2 14.6 L20.9 14.7 L19.6 15.7 L20 17.3 L18.5 16.5 L17 17.3 L17.4 15.7 L16.1 14.7 L17.8 14.6 Z"/>
+    </symbol>
+    <!-- C: Radiant star burst (star with surrounding rays) -->
+    <symbol id="i-stewards-burst" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+      <path d="M12 8 L13 10 L15.2 10.2 L13.6 11.5 L14 13.5 L12 12.5 L10 13.5 L10.4 11.5 L8.8 10.2 L11 10 Z" fill="currentColor"/>
+      <line x1="12" y1="3" x2="12" y2="5"/>
+      <line x1="12" y1="17" x2="12" y2="19"/>
+      <line x1="3" y1="12" x2="5" y2="12"/>
+      <line x1="19" y1="12" x2="21" y2="12"/>
+      <line x1="6" y1="6" x2="7.5" y2="7.5"/>
+      <line x1="16.5" y1="7.5" x2="18" y2="6"/>
+      <line x1="6" y1="18" x2="7.5" y2="16.5"/>
+      <line x1="16.5" y1="16.5" x2="18" y2="18"/>
+    </symbol>
+
+    <!-- ──── ABOUT ──── (flowing letters + new compass) -->
+    <!-- A: Flowing italic A (Cormorant) -->
+    <symbol id="i-about-flowingA" viewBox="0 0 24 24">
+      <text x="12.5" y="20" font-family="'Cormorant Garamond', Georgia, serif" font-style="italic" font-weight="600" font-size="22" text-anchor="middle" fill="currentColor">A</text>
+    </symbol>
+    <!-- B: Stylized italic i -->
+    <symbol id="i-about-italic-i" viewBox="0 0 24 24">
+      <text x="12" y="20" font-family="'Cormorant Garamond', Georgia, serif" font-style="italic" font-weight="500" font-size="26" text-anchor="middle" fill="currentColor">i</text>
+    </symbol>
+    <!-- C: 8-point compass rose (richer than 4-point) -->
+    <symbol id="i-about-compassrose" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 4 L13 11 L11 11 Z" fill="currentColor" stroke="none"/>
+      <path d="M12 20 L13 13 L11 13 Z" fill="currentColor" stroke="none"/>
+      <path d="M20 12 L13 13 L13 11 Z" fill="currentColor" stroke="none"/>
+      <path d="M4 12 L11 13 L11 11 Z" fill="currentColor" stroke="none"/>
+      <path d="M17.7 6.3 L13 12 L12 11 Z" stroke-width="1"/>
+      <path d="M6.3 6.3 L11 11 L12 12 Z" stroke-width="1"/>
+      <path d="M17.7 17.7 L13 12 L12 13 Z" stroke-width="1"/>
+      <path d="M6.3 17.7 L11 13 L12 12 Z" stroke-width="1"/>
+      <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>
+    </symbol>
+
+    <!-- ──── STEWARDS — additional burst variants ──── -->
+    <!-- Burst with 8-point Mariner's star (sharper, exploratory feel) -->
+    <symbol id="i-stewards-mariner" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <polygon points="12,3 12.8,12 11.2,12"/>
+      <polygon points="12,21 12.8,12 11.2,12"/>
+      <polygon points="3,12 12,12.8 12,11.2"/>
+      <polygon points="21,12 12,12.8 12,11.2"/>
+      <polygon points="6.5,6.5 11.5,11.5 12.5,12.5"/>
+      <polygon points="17.5,6.5 12.5,11.5 11.5,12.5"/>
+      <polygon points="6.5,17.5 11.5,12.5 12.5,11.5"/>
+      <polygon points="17.5,17.5 12.5,12.5 11.5,11.5"/>
+      <circle cx="12" cy="12" r="0.7"/>
+    </symbol>
+    <!-- Sunburst — concentric center with radiating rays of varied length -->
+    <symbol id="i-stewards-sunburst" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+      <circle cx="12" cy="12" r="2.4" fill="currentColor"/>
+      <circle cx="12" cy="12" r="3.6" stroke-width="0.6"/>
+      <line x1="12" y1="2.5" x2="12" y2="5.2"/>
+      <line x1="12" y1="18.8" x2="12" y2="21.5"/>
+      <line x1="2.5" y1="12" x2="5.2" y2="12"/>
+      <line x1="18.8" y1="12" x2="21.5" y2="12"/>
+      <line x1="5" y1="5" x2="6.8" y2="6.8"/>
+      <line x1="17.2" y1="6.8" x2="19" y2="5"/>
+      <line x1="5" y1="19" x2="6.8" y2="17.2"/>
+      <line x1="17.2" y1="17.2" x2="19" y2="19"/>
+      <line x1="12" y1="6" x2="12" y2="7" stroke-width="0.8"/>
+      <line x1="12" y1="17" x2="12" y2="18" stroke-width="0.8"/>
+      <line x1="6" y1="12" x2="7" y2="12" stroke-width="0.8"/>
+      <line x1="17" y1="12" x2="18" y2="12" stroke-width="0.8"/>
+      <line x1="7.8" y1="7.8" x2="8.5" y2="8.5" stroke-width="0.8"/>
+      <line x1="15.5" y1="8.5" x2="16.2" y2="7.8" stroke-width="0.8"/>
+      <line x1="7.8" y1="16.2" x2="8.5" y2="15.5" stroke-width="0.8"/>
+      <line x1="15.5" y1="15.5" x2="16.2" y2="16.2" stroke-width="0.8"/>
+    </symbol>
+
+    <!-- ──── PACT — compass option (the original 4-point compass, repurposed) ──── -->
+    <symbol id="i-pact-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 4 L13 11 L11 11 Z" fill="currentColor" stroke="none"/>
+      <path d="M12 20 L13 13 L11 13 Z" fill="currentColor" stroke="none"/>
+      <path d="M20 12 L13 13 L13 11 Z" fill="currentColor" stroke="none"/>
+      <path d="M4 12 L11 13 L11 11 Z" fill="currentColor" stroke="none"/>
+      <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>
+    </symbol>
+
+    <!-- ──── ASTERISM STRIP — alternative center marks ──── -->
+    <!-- A: ⁂ asterism (current, generic) -->
+    <symbol id="i-strip-asterism" viewBox="0 0 24 24">
+      <text x="12" y="17" font-family="'Cormorant Garamond', serif" font-size="14" text-anchor="middle" fill="currentColor">⁂</text>
+    </symbol>
+    <!-- B: Single fleuron ❦ — ornamental letterpress dingbat -->
+    <symbol id="i-strip-fleuron" viewBox="0 0 24 24">
+      <text x="12" y="19" font-family="'Cormorant Garamond', serif" font-size="20" text-anchor="middle" fill="currentColor">❦</text>
+    </symbol>
+    <!-- C: Mini Triangle — tiny version of the Community icon, ties strip to nav -->
+    <symbol id="i-strip-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+      <circle cx="6" cy="9" r="1.5" fill="currentColor"/>
+      <circle cx="18" cy="9" r="1.5" fill="currentColor"/>
+      <circle cx="12" cy="16" r="1.5" fill="currentColor"/>
+      <path d="M7.4 9 Q12 7 16.6 9" stroke-linecap="round"/>
+      <path d="M6.5 10.5 Q8.5 13.5 10.5 14.8" stroke-linecap="round"/>
+      <path d="M17.5 10.5 Q15.5 13.5 13.5 14.8" stroke-linecap="round"/>
+    </symbol>
+    <!-- D: Italic Dialecta D — masthead glyph as page mark -->
+    <symbol id="i-strip-Dmark" viewBox="0 0 24 24">
+      <text x="12" y="19" font-family="'Cormorant Garamond', serif" font-style="italic" font-weight="500" font-size="22" text-anchor="middle" fill="currentColor">D</text>
+    </symbol>
+    <!-- E: Asterism but redrawn with curves connecting (less rigid than ⁂) -->
+    <symbol id="i-strip-curve" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+      <circle cx="5" cy="11" r="1.3" fill="currentColor"/>
+      <circle cx="19" cy="11" r="1.3" fill="currentColor"/>
+      <circle cx="12" cy="15" r="1.3" fill="currentColor"/>
+      <path d="M6.3 11 Q12 8.5 17.7 11" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- ──── THE PACT ──── (three new seal directions) -->
+    <!-- A: Asterism seal — circle + ⁂ inside -->
+    <symbol id="i-pact-asterismseal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+      <circle cx="12" cy="12" r="9"/>
+      <circle cx="12" cy="12" r="6.5" stroke-width="0.7" stroke-dasharray="0.8 0.8"/>
+      <circle cx="9" cy="10.5" r="1.3" fill="currentColor"/>
+      <circle cx="15" cy="10.5" r="1.3" fill="currentColor"/>
+      <circle cx="12" cy="14.5" r="1.3" fill="currentColor"/>
+    </symbol>
+    <!-- B: Dripped wax seal — star inside, three drips below -->
+    <symbol id="i-pact-drippedseal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+      <circle cx="12" cy="10" r="6.5"/>
+      <circle cx="12" cy="10" r="4" stroke-width="0.7" stroke-dasharray="0.7 0.7"/>
+      <path d="M12 7 L12.7 8.6 L14.3 8.7 L13.1 9.7 L13.5 11.3 L12 10.5 L10.5 11.3 L10.9 9.7 L9.7 8.7 L11.3 8.6 Z" fill="currentColor" stroke="none"/>
+      <path d="M9 16 Q8.4 18 9 20 Q9.6 18 9 16 Z" fill="currentColor" stroke="none"/>
+      <path d="M15 16 Q14.4 18 15 20 Q15.6 18 15 16 Z" fill="currentColor" stroke="none"/>
+      <path d="M12 16.5 Q11.3 19 12 21 Q12.7 19 12 16.5 Z" fill="currentColor" stroke="none"/>
+    </symbol>
+    <!-- C: Crossed quills over seal — signing the pact -->
+    <symbol id="i-pact-quillseal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="6.5"/>
+      <circle cx="12" cy="12" r="4" stroke-width="0.7" stroke-dasharray="0.7 0.7"/>
+      <path d="M5 5 L19 19" stroke-width="1.2"/>
+      <path d="M19 5 L5 19" stroke-width="1.2"/>
+      <path d="M5 5 L7.5 5 L6 7.5 Z" fill="currentColor" stroke="none"/>
+      <path d="M19 5 L16.5 5 L18 7.5 Z" fill="currentColor" stroke="none"/>
+      <path d="M5 19 L4 20.5 L6.5 20 Z" fill="currentColor" stroke="none"/>
+      <path d="M19 19 L20 20.5 L17.5 20 Z" fill="currentColor" stroke="none"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+  <header class="doc-header">
+    <div class="doc-eyebrow">Dialecta · Design Preview</div>
+    <h1 class="doc-title">Mobile Nav &amp; Icon Family</h1>
+    <p class="doc-subtitle">Printer's-mark icons and the asterism second bar in context.</p>
+  </header>
+
+  <!-- ====================================================== -->
+  <!-- SECTION 1: Icon options — three alternatives per nav item -->
+  <!-- ====================================================== -->
+  <section class="section">
+    <div class="section-eyebrow">Section 01 · Icon options</div>
+    <h2 class="section-title">Three options for each, one vocabulary.</h2>
+    <p class="section-lede">
+      All within the printer's-mark family — same line weight, same abstraction level,
+      same brass treatment. Pick one per row, or mix-and-match. The "PROPOSED" marker
+      is what I'd ship if you greenlit without further iteration; the alternatives are
+      genuine candidates, not throwaways.
+    </p>
+
+    <div class="icon-comparison">
+
+      <!-- ARTICLES — user picked Codex -->
+      <div class="nav-row">
+        <div class="row-label">Articles<small>The piece itself</small></div>
+        <div class="row-options">
+          <div class="option-card selected">
+            <svg width="40" height="40"><use href="#i-articles-codex"/></svg>
+            <div class="option-name">Codex</div>
+            <div class="option-meta">Open book</div>
+          </div>
+          <div class="option-card">
+            <svg width="40" height="40"><use href="#i-articles-feather"/></svg>
+            <div class="option-name">Feather quill</div>
+            <div class="option-meta">Plumey shape</div>
+          </div>
+          <div class="option-card">
+            <svg width="40" height="40"><use href="#i-articles-scroll"/></svg>
+            <div class="option-name">Scroll</div>
+            <div class="option-meta">Manuscript</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMMUNITY — user picked Triangle -->
+      <div class="nav-row">
+        <div class="row-label">Community<small>Voices in dialogue</small></div>
+        <div class="row-options">
+          <div class="option-card selected">
+            <svg width="40" height="40"><use href="#i-community-triangle"/></svg>
+            <div class="option-name">Triangle</div>
+            <div class="option-meta">Three connected</div>
+          </div>
+          <div class="option-card">
+            <svg width="40" height="40"><use href="#i-community-flow"/></svg>
+            <div class="option-name">Flow</div>
+            <div class="option-meta">Row + dialogue arc</div>
+          </div>
+          <div class="option-card">
+            <svg width="40" height="40"><use href="#i-community-focal"/></svg>
+            <div class="option-name">Focal</div>
+            <div class="option-meta">Around an idea</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEWARDS — user picked Star Burst, three different star options -->
+      <div class="nav-row">
+        <div class="row-label">Stewards<small>Three star variants on the burst</small></div>
+        <div class="row-options">
+          <div class="option-card recommended">
+            <svg width="40" height="40"><use href="#i-stewards-burst"/></svg>
+            <div class="option-name">5-point burst</div>
+            <div class="option-meta">Sharp + 8 rays</div>
+          </div>
+          <div class="option-card">
+            <svg width="40" height="40"><use href="#i-stewards-mariner"/></svg>
+            <div class="option-name">Mariner's star</div>
+            <div class="option-meta">8-point compass</div>
+          </div>
+          <div class="option-card">
+            <svg width="40" height="40"><use href="#i-stewards-sunburst"/></svg>
+            <div class="option-name">Sunburst</div>
+            <div class="option-meta">Concentric center + rays</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABOUT — user picked italic i -->
+      <div class="nav-row">
+        <div class="row-label">About<small>What holds it together</small></div>
+        <div class="row-options">
+          <div class="option-card selected">
+            <svg width="40" height="40"><use href="#i-about-italic-i"/></svg>
+            <div class="option-name">Italic i</div>
+            <div class="option-meta">Information</div>
+          </div>
+          <div class="option-card">
+            <svg width="40" height="40"><use href="#i-about-flowingA"/></svg>
+            <div class="option-name">Flowing A</div>
+            <div class="option-meta">Italic Cormorant</div>
+          </div>
+          <div class="option-card">
+            <svg width="40" height="40"><use href="#i-about-compassrose"/></svg>
+            <div class="option-name">Compass rose</div>
+            <div class="option-meta">8-point</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THE PACT — user picked the original 4-point Compass -->
+      <div class="nav-row">
+        <div class="row-label">The Pact<small>Covenant made visible</small></div>
+        <div class="row-options">
+          <div class="option-card selected">
+            <svg width="40" height="40"><use href="#i-pact-compass"/></svg>
+            <div class="option-name">Compass</div>
+            <div class="option-meta">4-point cardinal</div>
+          </div>
+          <div class="option-card">
+            <svg width="40" height="40"><use href="#i-pact-asterismseal"/></svg>
+            <div class="option-name">Asterism seal</div>
+            <div class="option-meta">⁂ inside</div>
+          </div>
+          <div class="option-card">
+            <svg width="40" height="40"><use href="#i-pact-drippedseal"/></svg>
+            <div class="option-name">Dripped seal</div>
+            <div class="option-meta">Wax + drips</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!-- SECTION 2: Mobile second bar — Option 1 vs Option 2 -->
+  <!-- ====================================================== -->
+  <section class="section">
+    <div class="section-eyebrow">Section 02 · Mobile second bar</div>
+    <h2 class="section-title">Asterism vs breadcrumb.</h2>
+    <p class="section-lede">
+      Three frames at <strong>~380px</strong> wide. Left: Option 1 (asterism strip, 22px,
+      decorative-only). Middle: Option 2 (contextual breadcrumb, 28px, page name in DM Mono
+      uppercase). Right: drawer open with all five proposed icons and the member identity
+      footer including Settings — works identically with either second-bar option.
+    </p>
+
+    <div class="mock-row">
+
+      <!-- ─── OPTION 1: Asterism strip ─────────────────── -->
+      <div class="mock-card">
+        <div class="mock-card-title">Option 1 · Asterism strip</div>
+        <div class="mock-frame">
+          <div class="mock-brand">
+            <span class="mock-brand-logo">Dialecta</span>
+            <div class="mock-brand-right">
+              <div class="mock-avatar">DP</div>
+              <div class="mock-hamburger">☰</div>
+            </div>
+          </div>
+          <div class="mock-secondbar option1">
+            <span class="swipe swipe-left"></span>
+            <span class="asterism">⁂</span>
+            <span class="swipe swipe-right"></span>
+          </div>
+          <div class="mock-content">
+            <div class="mock-content-tag">Politics &amp; Governance</div>
+            <h1 class="mock-content-title">On the Far Shore of Fear</h1>
+            <div class="mock-content-meta">By Daniel Pennington · 9 min</div>
+            <div class="mock-content-body">
+              <p>
+                Long before the territory of fear became fashionable to map, a smaller and
+                quieter question waited at its boundary: what does it mean to live on the
+                far shore of it? The phrase itself is not mine. I borrowed it from a letter,
+                written in pencil on the back of a sermon I have never read in full.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── OPTION 2: Contextual breadcrumb ─────────────────── -->
+      <div class="mock-card">
+        <div class="mock-card-title">Option 2 · Contextual breadcrumb</div>
+        <div class="mock-frame">
+          <div class="mock-brand">
+            <span class="mock-brand-logo">Dialecta</span>
+            <div class="mock-brand-right">
+              <div class="mock-avatar">DP</div>
+              <div class="mock-hamburger">☰</div>
+            </div>
+          </div>
+          <div class="mock-secondbar option2">
+            <div class="crumb">
+              <span class="crumb-section">Articles</span><span class="crumb-divider">·</span><span class="crumb-page">On the Far Shore of Fear</span>
+            </div>
+          </div>
+          <div class="mock-content">
+            <div class="mock-content-tag">Politics &amp; Governance</div>
+            <h1 class="mock-content-title">On the Far Shore of Fear</h1>
+            <div class="mock-content-meta">By Daniel Pennington · 9 min</div>
+            <div class="mock-content-body">
+              <p>
+                Long before the territory of fear became fashionable to map, a smaller and
+                quieter question waited at its boundary: what does it mean to live on the
+                far shore of it? The phrase itself is not mine. I borrowed it from a letter,
+                written in pencil on the back of a sermon I have never read in full.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── DRAWER OPEN: shared between both options ─────────────────── -->
+      <div class="mock-card">
+        <div class="mock-card-title">Drawer · open · five icons</div>
+        <div class="mock-frame">
+          <div class="mock-brand">
+            <span class="mock-brand-logo">Dialecta</span>
+            <div class="mock-brand-right">
+              <div class="mock-avatar">DP</div>
+              <div class="mock-hamburger" style="background: rgba(212,168,74,0.12); border-color: var(--brass-bright); color: var(--brass-bright);">☰</div>
+            </div>
+          </div>
+          <div class="mock-secondbar option1">
+            <span class="swipe swipe-left"></span>
+            <span class="asterism">⁂</span>
+            <span class="swipe swipe-right"></span>
+          </div>
+          <div class="mock-content" style="filter: blur(0.5px);">
+            <div class="mock-content-tag">Politics &amp; Governance</div>
+            <h1 class="mock-content-title">On the Far Shore of Fear</h1>
+          </div>
+          <div class="mock-scrim"></div>
+          <aside class="mock-drawer">
+            <div class="mock-drawer-inner">
+              <header class="mock-drawer-header">
+                <span class="mock-drawer-title">Dialecta</span>
+                <span class="mock-drawer-subtitle">A publication</span>
+              </header>
+              <ul class="mock-drawer-links">
+                <li class="active">
+                  <svg width="22" height="22"><use href="#i-articles-codex"/></svg>
+                  Articles
+                </li>
+                <li>
+                  <svg width="22" height="22"><use href="#i-community-triangle"/></svg>
+                  Community
+                </li>
+                <li>
+                  <svg width="22" height="22"><use href="#i-stewards-burst"/></svg>
+                  Stewards
+                </li>
+                <li>
+                  <svg width="22" height="22"><use href="#i-about-italic-i"/></svg>
+                  About
+                </li>
+                <li>
+                  <svg width="22" height="22"><use href="#i-pact-compass"/></svg>
+                  The Pact
+                </li>
+              </ul>
+              <div class="mock-drawer-divider">⁂</div>
+              <div class="mock-drawer-member">
+                <div class="mock-drawer-avatar">DP</div>
+                <div class="mock-drawer-membername">Daniel Pennington</div>
+                <div class="mock-drawer-memberorder">
+                  <span style="color: var(--brass-warm); margin-right: 4px;">✤</span>
+                  The Provocateur
+                </div>
+                <div class="mock-drawer-memberlinks">
+                  <a href="#">Profile</a>
+                  <a href="#">Write</a>
+                  <a href="#">Settings</a>
+                  <a href="#">Account</a>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider">·&nbsp;&nbsp;⁂&nbsp;&nbsp;·</div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 880px; margin: 0 auto;">
+      <div>
+        <div class="option-meta" style="margin-bottom: 6px;">Option 1 · Asterism</div>
+        <p class="section-lede" style="margin: 0;">
+          22px metallic strip with a centered <strong>·&nbsp;⁂&nbsp;·</strong>. Decorative only,
+          no per-page logic, lowest implementation cost. Acknowledges the double-bar identity
+          without earning its space functionally.
+        </p>
+      </div>
+      <div>
+        <div class="option-meta" style="margin-bottom: 6px;">Option 2 · Breadcrumb</div>
+        <p class="section-lede" style="margin: 0;">
+          28px metallic strip with section + page name in DM Mono uppercase. Earns the space:
+          orients the reader to where they are. Article shown above; on home it's just
+          <strong>DIALECTA</strong>, on profile it's <strong>PROFILE · NAME</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!-- SECTION 3: Asterism strip center alternatives -->
+  <!-- ====================================================== -->
+  <section class="section">
+    <div class="section-eyebrow">Section 03 · Strip center alternatives</div>
+    <h2 class="section-title">Beyond ⁂.</h2>
+    <p class="section-lede">
+      Five candidates for the center mark on the second bar. Each rendered with the
+      narrowing line swipes on either side. The ⁂ asterism is shown for reference;
+      the others are the candidates worth your attention.
+    </p>
+
+    <div class="strip-options">
+
+      <div class="strip-option">
+        <div class="strip-option-label">A · Asterism (the generic baseline)</div>
+        <div class="strip-option-meta">⁂ · what we have now</div>
+        <div class="mock-secondbar option1">
+          <span class="swipe swipe-left"></span>
+          <span class="strip-mark"><svg width="22" height="22"><use href="#i-strip-asterism"/></svg></span>
+          <span class="swipe swipe-right"></span>
+        </div>
+      </div>
+
+      <div class="strip-option">
+        <div class="strip-option-label">B · Single fleuron</div>
+        <div class="strip-option-meta">❦ · letterpress dingbat, single ornamental glyph</div>
+        <div class="mock-secondbar option1">
+          <span class="swipe swipe-left"></span>
+          <span class="strip-mark"><svg width="22" height="22"><use href="#i-strip-fleuron"/></svg></span>
+          <span class="swipe swipe-right"></span>
+        </div>
+      </div>
+
+      <div class="strip-option">
+        <div class="strip-option-label">C · Mini Triangle</div>
+        <div class="strip-option-meta">Tiny version of the Community nav icon — design through-line</div>
+        <div class="mock-secondbar option1">
+          <span class="swipe swipe-left"></span>
+          <span class="strip-mark"><svg width="22" height="22"><use href="#i-strip-triangle"/></svg></span>
+          <span class="swipe swipe-right"></span>
+        </div>
+      </div>
+
+      <div class="strip-option">
+        <div class="strip-option-label">D · Italic D</div>
+        <div class="strip-option-meta">Cormorant italic D · masthead presence as a small mark</div>
+        <div class="mock-secondbar option1">
+          <span class="swipe swipe-left"></span>
+          <span class="strip-mark"><svg width="22" height="22"><use href="#i-strip-Dmark"/></svg></span>
+          <span class="swipe swipe-right"></span>
+        </div>
+      </div>
+
+      <div class="strip-option">
+        <div class="strip-option-label">E · Curved asterism</div>
+        <div class="strip-option-meta">3 dots with a connecting curve · less rigid than ⁂, still asterism-like</div>
+        <div class="mock-secondbar option1">
+          <span class="swipe swipe-left"></span>
+          <span class="strip-mark"><svg width="22" height="22"><use href="#i-strip-curve"/></svg></span>
+          <span class="swipe swipe-right"></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="doc-footer">
+    Dialecta · Design preview · drawn from the same brass tokens as the live theme · 2026
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,312 @@
+Dialecta
+
+MMXXVI
+
+Before you enter
+
+This is 
+the pact.
+
+      Not terms and conditions. Not rules imposed from above. A mutual agreement
+      between you and a place that intends to take your thinking seriously.
+
+      Read the charter below, try the tier-reading exercise, and decide whether
+      this is a place you want to contribute to. When you’re ready, sign at the bottom.
+
+§ I
+
+    Dialecta
+
+MMXXVI
+
+Why this exists
+
+Most platforms reward
+the 
+wrong thing.
+
+      The loudest voice wins. The most outraged post spreads furthest. Certainty is
+      rewarded; nuance is penalized. You’ve felt the pull toward simpler, sharper,
+      angrier. That pull isn’t your weakness. It’s the system working exactly as designed.
+
+Dialecta is built on a different design.
+ The mechanics that
+      elsewhere reward reflexive anger and tribal conformity are here reoriented
+      toward something else: curiosity, honest engagement, and the kind of thinking
+      that only happens when you slow down enough to actually think.
+
+The question isn’t whether social media influences us. It’s how much we’re willing to be shaped by it without noticing.
+
+From the essay that started this
+
+      This platform isn’t neutral. It’s 
+actively trying to make you a
+      clearer thinker
+, not by telling you what to think, but by showing
+      you how you think, and giving you the tools to do it better.
+
+§ III · The Classification
+
+The classification system
+
+Every voice finds
+its 
+place.
+
+      Comments are never hidden. They’re sorted into visible tiers based on what
+      they’re doing, not what they believe. Strong disagreement belongs in The Forum.
+      Vague outrage lives in The Heat. The system doesn’t silence you. It describes
+      you, and invites you to say more.
+
+Tier I
+
+The Forum
+
+Constructive, specific, fact-referenced or clearly reasoned. Strong disagreement belongs here, if it’s about something specific.
+
+Tier II
+
+The Spark
+
+A genuinely interesting idea, but underdeveloped. The seed of something good. Invites expansion rather than resolution.
+
+Tier III
+
+The Echo
+
+Restates the article or a prior comment without adding to it. Not harmful, just not propulsive.
+
+Tier IV
+
+The Fog
+
+Vague, unclear, or disconnected. The reader can’t tell what the person believes or what point they’re making.
+
+Tier V
+
+The Heat
+
+Emotionally charged without constructive specificity. The argument is often in there. It just hasn’t been separated from the feeling yet.
+
+Tier VI
+
+The Stance
+
+Heavy rhetoric, tribal framing, or coded language signaling team membership over idea engagement. More flag-planting than thinking.
+
+Tier VII
+
+The Breach
+
+Name-calling, slander, targeted personal attacks. Suppressed from default view, not deleted, with the reason shown transparently.
+
+§ IV · The Process
+
+The process
+
+How your words find
+their 
+tier.
+
+      Classification isn’t done to you. You participate in it, alongside an AI
+      engine and the community around you. Every stage is transparent. Every
+      decision is contestable.
+
+I
+
+You write freely
+
+No template, no prompt. Write what you actually think, the way you actually think it.
+
+II
+
+The engine reflects
+
+Before you post, an AI reads your submission, not to judge it but to describe what it’s doing. It identifies your 
+core claim
+, detects rhetorical patterns, and suggests a tier with a plain-language reason. It names the 
+strongest element in your writing
+ first.
+
+II.5
+
+You respond to the reflection
+
+You can 
+amend
+ your submission, 
+respond for the record
+, or 
+post as-is
+. None of these choices are wrong. Your response, if reasoned, carries weight in the final classification.
+
+III
+
+The community engages
+
+Readers can nominate your post for reclassification, up or down, and must give a reason. Their nominations are visible. The system is always contestable.
+
+§ V · The Wait Architecture
+
+The wait architecture
+
+Slowness is
+a 
+feature.
+
+      Every timer in this system is the platform saying: 
+this thought is
+      worth sitting with.
+ The waits are disclosed, not hidden. They are
+      not friction. They are ritual. The moment the platform makes your post
+      permanent is designed to feel earned.
+
+      Once your post hardens, it’s yours permanently. You can append to it at any
+      time. Your additions are visible and tracked. Public refinement of your
+      thinking is treated here as a strength, not a liability.
+
+After writing, before AI analysis appears
+8 sec
+
+After AI analysis, before Stage 2.5 options activate
+12 sec
+
+Full comment reflection window
+30 min
+
+Article submission reflection window
+24 hrs
+
+Community reclassification nomination
+20 sec
+
+§ VI · The Deeper Purpose
+
+The deeper purpose
+
+This platform is trying
+to 
+grow you.
+
+      The tier system isn’t the point. The point is what happens when you engage
+      with it over time. Every AI reflection that names a pattern in your thinking
+      is a chance to see something about yourself that most environments never show you.
+
+      When the engine detects a pattern, 
+emotional frontloading, tribal
+      reflex, certainty performance
+, it names it, explains why it
+      happens, and links you to a short, honest explainer. One pattern per
+      submission. Always framed as human, never as deficiency.
+
+Pattern
+Emotional Frontloading
+Leading with feeling rather than claim. The argument is in there. It just hasn’t been separated from the emotion carrying it.
+
+Pattern
+Tribal Reflex
+Evaluating arguments by who is making them, not what they contain. Agreement or disagreement before engagement.
+
+Pattern
+Certainty Performance
+Expressing more confidence than the evidence warrants, because uncertainty reads as weakness in social environments.
+
+Pattern
+False Binary
+Collapsing a spectrum into a choice. Team A or Team B, when the reality lives in the space between.
+
+      Your private profile tracks which patterns have appeared in your writing over
+      time, not as a score, not as a judgment, but as a 
+personal map of
+      your own tendencies.
+ The goal isn’t to correct you. It’s to make
+      you more legible to yourself.
+
+§ VII · Learn by Doing
+
+Learn by doing
+
+Can you read
+the 
+tier?
+
+Before you commit, try classifying three real comments. This is the fastest way to understand what the system actually sees, and what it misses.
+
+Comment 1 of 3
+
+"This entire piece ignores the fact that renewable energy simply doesn't work at scale. Anyone who believes otherwise hasn't looked at the actual numbers. Wake up."
+
+ The Forum
+
+ The Spark
+
+ The Heat
+
+ The Stance
+
+Next comment →
+
+Comment 2 of 3
+
+"I think the article makes a strong point about incentive structures, but it doesn't address the transition cost problem, which seems like a significant gap. What's the argument for why market signals alone would handle it?"
+
+ The Forum
+
+ The Echo
+
+ The Fog
+
+ The Heat
+
+Next comment →
+
+Comment 3 of 3
+
+"Something about this resonates with me, though I'm not sure I fully agree. There's probably more to it."
+
+ The Spark
+
+ The Echo
+
+ The Fog
+
+ The Heat
+
+See your result →
+
+0/3
+
+Comments correctly classified
+
+§ VIII · The Commitment
+
+The commitment
+
+I understand and want
+to 
+participate.
+
+        I am here to engage with ideas, not to signal my team. I understand that my
+        words carry weight and that the platform will hold them accountable, not to
+        punish me, but to take me seriously. I welcome the mirror. I am willing to
+        be surprised by what I find in my own thinking.
+
+        The Pact is a commitment, not a checkbox. Sign in to take it.
+
+Sign in to commit
+
+        Don't have an account yet?
+
+Join Dialecta
+.
+
+✦
+
+Welcome to 
+Dialecta.
+
+Your words are yours here. Use them well, and let the platform show you how to use them better.
+
+Enter the Forum →
+
+§ II–VIII

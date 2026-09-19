@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dialecta — Design Specification v1.3</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #f7f2e8;
+    --bg-secondary: #efe8da;
+    --bg-tertiary: #e8dfce;
+    --bg-white: #fffdf8;
+    --bg-dark: #1c1814;
+    --dark-card: #292b2d;        /* Editorial dark card — parchment cousin (R-B: −4) */
+
+    --text-primary: #1c1814;
+    --text-body: #3a342c;
+    --text-prose: #5e6066;       /* Long-form reading prose — slate-graphite */
+    --text-lede: #2c2620;        /* Article ledes / intros — deep warm brown */
+    --text-secondary: #5a5248;
+    --text-tertiary: #7a7068;
+    --text-muted: #9a8e80;
+    --text-on-dark: #f0ebe0;
+    --text-on-dark-secondary: #b8ae9e;
+
+    --gold: #d4a84a;
+    --gold-bright: #e8a830;
+    --gold-muted: #a07828;
+    --gold-pale: #f5e8d0;
+    --amber: #b8732a;
+    --terra: #8c4a2f;
+
+    --tier-forum-top: #FEFBF0; --tier-forum-bot: #F8F0D8; --tier-forum-border: #E8D080; --tier-forum-text: #6A5410;
+    --tier-spark-top: #FCF0D8; --tier-spark-bot: #F4D098; --tier-spark-border: #D89438; --tier-spark-text: #6A3C08;
+    --tier-echo-top: #EAF0E0; --tier-echo-bot: #C8D8B0; --tier-echo-border: #708848; --tier-echo-text: #38440C;
+    --tier-fog-top: #DCE0E4; --tier-fog-bot: #B0B8C4; --tier-fog-border: #687488; --tier-fog-text: #2C3848;
+    --tier-heat-top: #E89868; --tier-heat-bot: #C46028; --tier-heat-border: #7C2C08; --tier-heat-text: #FCEAD8;
+    --tier-stance-top: #A8483C; --tier-stance-bot: #783028; --tier-stance-border: #401818; --tier-stance-text: #F4D8D0;
+    --tier-breach-top: #6A1818; --tier-breach-bot: #380808; --tier-breach-border: #200404; --tier-breach-text: #F0C8C8;
+
+    --border-light: #e8e0d0; --border-medium: #d8ceb8; --border-dark: #c8bca4; --border-rule: #b8732a;
+    --shadow-sm: 0 1px 3px rgba(28,24,20,0.04);
+    --shadow-md: 0 2px 8px rgba(28,24,20,0.06), 0 0 0 1px rgba(28,24,20,0.02);
+    --shadow-lg: 0 4px 20px rgba(28,24,20,0.08), 0 0 0 1px rgba(28,24,20,0.02);
+
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-reading: 'Source Serif 4', Georgia, serif;
+    --font-mono: 'DM Mono', monospace;
+
+    --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+  /* Canonical page background — warm stone to cream diagonal */
+  body { font-family: var(--font-body); background: linear-gradient(135deg, #a8a398 0px, #8c8780 175px, #f7f2e8 775px, #f7f2e8 100%); color: var(--text-body); -webkit-font-smoothing: antialiased; }
+
+  /* ── Primary nav: logo bar (canonical two-bar system) ── */
+  .spec-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 101;
+    background: linear-gradient(135deg, #f7f2e8 0%, #1c1814 65%, #1c1814 100%);
+    border-bottom: 1px solid rgba(184,115,42,0.22);
+    display: flex; align-items: center; height: 52px;
+  }
+  .spec-nav .nav-inner { width: 100%; max-width: 1060px; margin: 0 auto; padding: 0 32px 0 20px; display: flex; align-items: center; }
+  .spec-nav .logo-wrap { display: flex; align-items: center; }
+  .spec-nav .logo-img { height: 40px; width: auto; mix-blend-mode: multiply; display: block; }
+
+  /* ── Sub-nav: section links ── */
+  .spec-sub-nav {
+    position: fixed; top: 52px; left: 0; right: 0; z-index: 100; height: 34px;
+    background: linear-gradient(to bottom, #eceae4 0%, #d8d4cc 48%, #eceae4 100%);
+    display: flex; align-items: center;
+  }
+  .spec-sub-nav::before, .spec-sub-nav::after {
+    content: ''; position: absolute; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.92) 8%, rgba(255,255,255,0.96) 50%, rgba(255,255,255,0.92) 92%, transparent 100%);
+  }
+  .spec-sub-nav::before { top: 0; } .spec-sub-nav::after { bottom: 0; }
+  .spec-sub-nav .nav-inner-sub { width: 100%; max-width: 1060px; margin: 0 auto; padding: 0 32px 0 20px; display: flex; align-items: center; position: relative; z-index: 1; height: 34px; }
+  .spec-sub-nav .nav-links { display: flex; align-items: center; height: 100%; }
+  .spec-sub-nav .nav-links a { font-family: var(--font-body); font-size: 0.82rem; font-weight: 400; letter-spacing: 0.01em; color: #3a342c; text-decoration: none; padding: 0 13px; height: 100%; display: flex; align-items: center; border-right: 1px solid rgba(180,175,165,0.28); transition: background 0.15s, color 0.15s; }
+  .spec-sub-nav .nav-links a:first-child { padding-left: 2px; } .spec-sub-nav .nav-links a:last-child { border-right: none; }
+  .spec-sub-nav .nav-links a:hover { background: rgba(255,255,255,0.35); color: #1c1814; }
+
+  .spec-page { max-width: 1060px; margin: 0 auto; padding: 96px 32px 64px; position: relative; z-index: 1; }
+  @media (max-width: 768px) { .spec-page { padding: 96px 16px 48px; } .spec-sub-nav .nav-links { display: none; } }
+
+  .spec-section { margin-bottom: 80px; padding-top: 32px; }
+  .spec-section-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    background: linear-gradient(to right, #ecb438 0%, #f5dfa0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 1px 0 rgba(28, 24, 20, 0.45));
+    display: inline-block;
+  }
+  .spec-section-title { font-family: var(--font-display); font-size: 2rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; line-height: 1.15; }
+  .spec-section-desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; font-weight: 300; max-width: 640px; margin-bottom: 32px; }
+  .spec-divider { height: 1px; background: linear-gradient(to right, var(--border-rule), transparent 60%); margin-bottom: 48px; opacity: 0.3; }
+
+  .token-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .token-card { background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; display: flex; align-items: center; gap: 12px; }
+  .token-swatch { width: 44px; height: 44px; border-radius: var(--radius-sm); border: 1px solid rgba(0,0,0,0.06); flex-shrink: 0; }
+  .token-info { min-width: 0; }
+  .token-name { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-primary); font-weight: 500; word-break: break-all; }
+  .token-value { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-secondary); margin-top: 2px; }
+  .token-group-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); margin: 24px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border-light); }
+
+  .type-sample { margin-bottom: 28px; padding: 20px 24px; background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius-md); }
+  .type-meta { font-family: var(--font-mono); font-size: 0.58rem; color: var(--text-secondary); letter-spacing: 0.08em; margin-bottom: 10px; display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .component-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-start; margin-bottom: 16px; }
+  .component-card { background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-sm); }
+  .component-card.full { width: 100%; }
+  .component-label { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 12px; }
+
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em; font-weight: 500; border: 1px solid; line-height: 1; white-space: nowrap; }
+  .badge-sm { padding: 3px 8px; font-size: 0.6rem; gap: 4px; }
+  .badge-lg { padding: 7px 16px; font-size: 0.8rem; gap: 8px; border-radius: 6px; }
+  .badge.forum { background: linear-gradient(180deg, var(--tier-forum-top), var(--tier-forum-bot)); border-color: var(--tier-forum-border); color: var(--tier-forum-text); }
+  .badge.spark { background: linear-gradient(180deg, var(--tier-spark-top), var(--tier-spark-bot)); border-color: var(--tier-spark-border); color: var(--tier-spark-text); }
+  .badge.echo { background: linear-gradient(180deg, var(--tier-echo-top), var(--tier-echo-bot)); border-color: var(--tier-echo-border); color: var(--tier-echo-text); }
+  .badge.fog { background: linear-gradient(180deg, var(--tier-fog-top), var(--tier-fog-bot)); border-color: var(--tier-fog-border); color: var(--tier-fog-text); }
+  .badge.heat { background: linear-gradient(180deg, var(--tier-heat-top), var(--tier-heat-bot)); border-color: var(--tier-heat-border); color: var(--tier-heat-text); }
+  .badge.stance { background: linear-gradient(180deg, var(--tier-stance-top), var(--tier-stance-bot)); border-color: var(--tier-stance-border); color: var(--tier-stance-text); }
+  .badge.breach { background: linear-gradient(180deg, var(--tier-breach-top), var(--tier-breach-bot)); border-color: var(--tier-breach-border); color: var(--tier-breach-text); }
+  .tier-icon { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 28px; border: none; border-radius: var(--radius-sm); font-family: var(--font-display); font-size: 1rem; font-weight: 500; cursor: pointer; letter-spacing: 0.03em; transition: all 0.2s ease; text-decoration: none; line-height: 1.2; }
+  .btn-primary { background: var(--bg-dark); color: var(--bg-primary); }
+  .btn-primary:hover { background: var(--dark-card); box-shadow: var(--shadow-md); }
+  .btn-accent { background: linear-gradient(180deg, #c98a3a, #a06320); color: var(--bg-white); border: 1px solid #8a5418; }
+  .btn-accent:hover { background: linear-gradient(180deg, #d49544, #8e5718); box-shadow: var(--shadow-md); }
+  .btn-outline { background: transparent; color: var(--text-primary); border: 1px solid var(--text-primary); }
+  .btn-outline:hover { background: var(--bg-dark); color: var(--bg-primary); }
+  .btn-ghost { background: transparent; color: var(--amber); padding: 10px 16px; }
+  .btn-ghost:hover { background: var(--gold-pale); }
+  .btn-sm { padding: 6px 16px; font-size: 0.85rem; }
+  .btn-lg { padding: 14px 36px; font-size: 1.1rem; }
+
+  .comment-card { background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 20px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s; }
+  .comment-card:hover { box-shadow: var(--shadow-md); }
+  .cc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .cc-author { font-family: var(--font-body); font-size: 0.85rem; font-weight: 500; color: var(--text-primary); }
+  .cc-time { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-tertiary); }
+  .cc-self-declared { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-tertiary); }
+  .cc-body { font-family: var(--font-reading); font-size: 0.92rem; line-height: 1.75; color: var(--text-body); margin-bottom: 14px; }
+  .cc-footer { display: flex; align-items: center; gap: 18px; font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-tertiary); }
+
+  .ai-card { background: var(--gold-pale); border: 1px solid var(--tier-forum-border); border-left: 3px solid var(--amber); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 20px 20px 20px 22px; }
+  .ai-card-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+  .ai-card-body { font-family: var(--font-reading); font-size: 0.9rem; line-height: 1.7; color: var(--text-body); margin-bottom: 12px; }
+  .ai-card-body em { color: var(--amber); font-style: italic; }
+  .ai-card-action { font-family: var(--font-body); font-size: 0.82rem; font-weight: 500; color: var(--amber); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(184,115,42,0.3); text-underline-offset: 3px; }
+
+  .input-field { width: 100%; padding: 12px 16px; background: var(--bg-white); border: 1px solid var(--border-medium); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 0.9rem; color: var(--text-primary); transition: border-color 0.2s, box-shadow 0.2s; outline: none; }
+  .input-field::placeholder { color: var(--text-muted); font-weight: 300; }
+  .input-field:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(184,115,42,0.08); }
+  .textarea-field { width: 100%; min-height: 120px; padding: 14px 16px; background: var(--bg-white); border: 1px solid var(--border-medium); border-radius: var(--radius-sm); font-family: var(--font-reading); font-size: 0.92rem; line-height: 1.7; color: var(--text-primary); resize: vertical; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  .textarea-field:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(184,115,42,0.08); }
+  .input-label { display: block; font-family: var(--font-body); font-size: 0.82rem; font-weight: 500; color: var(--text-primary); margin-bottom: 6px; }
+  .input-hint { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-secondary); margin-top: 4px; }
+
+  /* Canonical platform nav demo (Section 08) */
+  .nav-gradient { display: flex; align-items: center; background: linear-gradient(135deg, #f7f2e8 0%, #1c1814 65%, #1c1814 100%); border-radius: var(--radius-md); border-bottom: 1px solid rgba(184,115,42,0.22); overflow: hidden; }
+  .nav-gradient .ng-logo-bar { flex: 0 0 auto; padding: 6px 0 6px 20px; display: flex; align-items: center; height: 52px; }
+  .nav-gradient .ng-logo { height: 40px; width: auto; mix-blend-mode: multiply; display: block; }
+  .nav-gradient .ng-sub { flex: 1; height: 34px; background: linear-gradient(to bottom, #eceae4 0%, #d8d4cc 48%, #eceae4 100%); border-top: 1px solid rgba(184,115,42,0.22); display: flex; align-items: center; padding: 0 16px; margin-top: 52px; position: relative; }
+  /* Simplified demo: show both bars stacked */
+  .nav-demo-wrap { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-light); }
+  .nav-demo-bar1 { display: flex; align-items: center; height: 52px; background: linear-gradient(135deg, #f7f2e8 0%, #1c1814 65%, #1c1814 100%); border-bottom: 1px solid rgba(184,115,42,0.22); padding: 0 20px; }
+  .nav-demo-bar1 img { height: 36px; width: auto; mix-blend-mode: multiply; }
+  .nav-demo-bar2 { display: flex; align-items: center; height: 34px; background: linear-gradient(to bottom, #eceae4 0%, #d8d4cc 48%, #eceae4 100%); border-top: 1px solid rgba(255,255,255,0.9); border-bottom: 1px solid rgba(255,255,255,0.9); padding: 0 4px; position: relative; }
+  .nav-demo-bar2::before,.nav-demo-bar2::after { content: ''; position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(255,255,255,0.96), transparent); }
+  .nav-demo-bar2::before { top: 0; } .nav-demo-bar2::after { bottom: 0; }
+  .nav-demo-bar2 a { font-family: var(--font-body); font-size: 0.82rem; font-weight: 400; letter-spacing: 0.01em; color: #3a342c; text-decoration: none; padding: 0 13px; height: 34px; display: flex; align-items: center; border-right: 1px solid rgba(180,175,165,0.28); }
+  .nav-demo-bar2 a:last-child { border-right: none; }
+  .nav-demo-bar2 a:hover { background: rgba(255,255,255,0.35); }
+
+  /* Canonical page background demo */
+  .page-bg-demo { position: relative; min-height: 320px; border-radius: var(--radius-md); padding: 32px 28px; overflow: hidden; background: linear-gradient(135deg, #a8a398 0px, #8c8780 175px, #f7f2e8 775px, #f7f2e8 100%); }
+  .page-bg-demo::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.035'/%3E%3C/svg%3E"); }
+  .page-bg-demo .pbd-card { position: relative; max-width: 360px; background: var(--bg-white); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 18px 20px; box-shadow: var(--shadow-md); }
+  .page-bg-demo .pbd-card .pbd-title { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; line-height: 1.2; }
+  .page-bg-demo .pbd-card .pbd-body { font-family: var(--font-reading); font-size: 0.88rem; font-style: italic; color: var(--text-secondary); line-height: 1.55; }
+  .page-bg-demo .pbd-corner-label { position: absolute; top: 14px; right: 16px; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(28,24,20,0.4); }
+
+  .article-header { padding: 48px 0 32px; border-bottom: 2px solid var(--amber); margin-bottom: 32px; }
+  .article-meta { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; display: flex; gap: 16px; }
+  .article-title { font-family: var(--font-display); font-size: 2.6rem; font-weight: 600; color: var(--text-primary); line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .article-title em { color: var(--amber); font-weight: 400; }
+  .article-subtitle { font-family: var(--font-reading); font-size: 1.1rem; font-weight: 300; font-style: italic; color: var(--text-secondary); line-height: 1.6; }
+
+  .specificity { display: inline-flex; gap: 3px; align-items: center; }
+  .specificity-dot { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--border-medium); background: var(--bg-primary); }
+  .specificity-dot.filled { background: var(--amber); border-color: var(--amber); }
+
+  .dark-section { background: var(--bg-dark); border-radius: var(--radius-lg); padding: 40px 32px; color: var(--text-on-dark); margin-bottom: 24px; }
+  .dark-section .component-label { color: var(--text-on-dark-secondary); }
+  /* Editorial dark card — parchment cousin, used for featured comments / Advocate cards / Delta panels */
+  .editorial-dark-card { background: var(--dark-card); border-radius: var(--radius-md); padding: 28px 32px; color: var(--text-on-dark); border-left: 3px solid var(--gold); margin-bottom: 16px; }
+  .editorial-dark-card .component-label { color: var(--text-on-dark-secondary); }
+  /* Section 12 — Component Library helpers */
+  .stage-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stage-card { background: var(--bg-white); border-radius: var(--radius-md); padding: 24px; border-top: 2px solid var(--gold-bright); box-shadow: var(--shadow-sm); }
+  .stage-card .stage-num { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+  .stage-card .stage-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+  .stage-card .stage-body { font-family: var(--font-reading); font-size: 0.88rem; color: var(--text-prose); line-height: 1.65; }
+  .tease-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .tease-card { background: var(--bg-white); border-radius: var(--radius-md); padding: 24px; border-top: 2px solid var(--gold-bright); box-shadow: var(--shadow-sm); }
+  .tease-card .tease-kicker { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); margin-bottom: 6px; }
+  .tease-card .tease-head { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; color: var(--text-primary); line-height: 1.2; margin-bottom: 8px; }
+  .tease-card .tease-dek { font-family: var(--font-reading); font-size: 0.9rem; font-style: italic; color: var(--text-lede); line-height: 1.6; }
+  .pull-quote { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; font-style: italic; color: var(--text-primary); line-height: 1.4; max-width: 720px; padding: 24px 0 24px 24px; border-left: 3px solid var(--gold); margin: 24px 0; }
+
+  .ladder-strip { display: flex; height: 56px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-light); margin-bottom: 12px; }
+  .ladder-strip > div { flex: 1; }
+  .ladder-strip-labels { display: flex; font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-tertiary); letter-spacing: 0.05em; }
+  .ladder-strip-labels > div { flex: 1; text-align: center; }
+
+  .editorial-rule { height: 2px; background: var(--amber); width: 60px; margin: 16px 0; }
+
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; }
+</style>
+</head>
+<body>
+
+<nav class="spec-nav">
+  <div class="nav-inner">
+    <div class="logo-wrap"><img class="logo-img" alt="Dialecta" src="" data-note="logo blob scrubbed � see /Logos/"></div>
+  </div>
+</nav>
+<div class="spec-sub-nav">
+  <div class="nav-inner-sub">
+    <div class="nav-links">
+      <a href="#color">Color</a><a href="#type">Typography</a><a href="#tiers">Tiers</a><a href="#icons">Icons</a><a href="#cards">Cards</a><a href="#buttons">Buttons</a><a href="#forms">Forms</a><a href="#nav">Navigation</a><a href="#page-bg">Background</a><a href="#article">Article</a><a href="#ai">AI Engine</a><a href="#dark">Editorial Surfaces</a><a href="#components">Components</a>
+    </div>
+  </div>
+</div>
+
+<div class="spec-page">
+
+<div class="spec-section" style="margin-bottom:48px; padding-top:16px;">
+  <div class="spec-section-label" style="filter: drop-shadow(0 1px 3px rgba(28, 24, 20, 0.5));">Dialecta · Design Specification · v1.3</div>
+  <h1 style="font-family:var(--font-display); font-size:3rem; font-weight:600; color:var(--text-primary); line-height:1.1; margin-bottom:12px;">
+    The Letterpress<br><em style="background: linear-gradient(to right, #ecb438 0%, #f5dfa0 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter: drop-shadow(0 1px 6px rgba(28,24,20,0.45)) drop-shadow(0 2px 12px rgba(28,24,20,0.2)); font-weight:300; font-style:italic;">Dialecta's Visual Language</em>
+  </h1>
+  <p class="spec-section-desc" style="max-width:720px;">
+    Every color, typeface, spacing value, and component pattern used across the Dialecta platform originates in this document. Version 1.3 promotes three new color tokens to first-class status (parchment-cousin dark card, slate-graphite reading prose, deep warm brown lede), adds a Component Library section, and standardizes feature naming on the Advocate archetype across the spec. The aesthetic is editorial minimalism with classical undertones — warm cream surfaces, ink-tone text, gold as the semantic signal of quality, and a tier system whose visual hierarchy mirrors its psychological hierarchy.
+  </p>
+  <div class="editorial-rule"></div>
+</div>
+<div class="spec-section" id="color">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 01</div>
+  <h2 class="spec-section-title">Color Tokens</h2>
+  <p class="spec-section-desc">The palette is built on warm neutrals — cream, not white; ink, not black. Gold is the only chromatic accent on surfaces, used semantically to mean "this is the standard." Tier colors follow a brightness ladder that maps the platform's psychological hierarchy directly into luminosity.</p>
+
+  <div class="token-group-label">Surfaces</div>
+  <div class="token-grid">
+    <div class="token-card"><div class="token-swatch" style="background:var(--bg-primary);"></div><div class="token-info"><div class="token-name">--bg-primary</div><div class="token-value">#f7f2e8 · Page background</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--bg-secondary);"></div><div class="token-info"><div class="token-name">--bg-secondary</div><div class="token-value">#efe8da · Elevated cards</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--bg-tertiary);"></div><div class="token-info"><div class="token-name">--bg-tertiary</div><div class="token-value">#e8dfce · Recessed areas</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--bg-white);"></div><div class="token-info"><div class="token-name">--bg-white</div><div class="token-value">#fffdf8 · Brightest surface</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--bg-dark); border-color:rgba(255,255,255,0.1);"></div><div class="token-info"><div class="token-name">--bg-dark</div><div class="token-value">#1c1814 · Dark sections</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--dark-card); border-color:rgba(255,255,255,0.1);"></div><div class="token-info"><div class="token-name">--dark-card</div><div class="token-value">#292b2d · Editorial dark cards</div></div></div>
+  </div>
+
+  <div class="token-group-label">Text</div>
+  <div class="token-grid">
+    <div class="token-card"><div class="token-swatch" style="background:var(--text-primary);"></div><div class="token-info"><div class="token-name">--text-primary</div><div class="token-value">#1c1814 · Headlines</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--text-body);"></div><div class="token-info"><div class="token-name">--text-body</div><div class="token-value">#3a342c · Body / chrome</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--text-prose);"></div><div class="token-info"><div class="token-name">--text-prose</div><div class="token-value">#5e6066 · Reading prose</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--text-lede);"></div><div class="token-info"><div class="token-name">--text-lede</div><div class="token-value">#2c2620 · Lede / intro</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--text-secondary);"></div><div class="token-info"><div class="token-name">--text-secondary</div><div class="token-value">#5a5248 · Descriptions</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--text-tertiary);"></div><div class="token-info"><div class="token-name">--text-tertiary</div><div class="token-value">#7a7068 · Metadata</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--text-muted);"></div><div class="token-info"><div class="token-name">--text-muted</div><div class="token-value">#9a8e80 · Disabled</div></div></div>
+  </div>
+
+  <div class="token-group-label">Brand Accent</div>
+  <div class="token-grid">
+    <div class="token-card"><div class="token-swatch" style="background:var(--gold);"></div><div class="token-info"><div class="token-name">--gold</div><div class="token-value">#d4a84a · Brand / Forum</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--gold-bright);"></div><div class="token-info"><div class="token-name">--gold-bright</div><div class="token-value">#e8a830 · Hover / hero accents</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--amber);"></div><div class="token-info"><div class="token-name">--amber</div><div class="token-value">#b8732a · Secondary</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--terra);"></div><div class="token-info"><div class="token-name">--terra</div><div class="token-value">#8c4a2f · Tertiary</div></div></div>
+    <div class="token-card"><div class="token-swatch" style="background:var(--gold-pale);"></div><div class="token-info"><div class="token-name">--gold-pale</div><div class="token-value">#f5e8d0 · Tint bg</div></div></div>
+  </div>
+
+  <div class="token-group-label">Tier Brightness Ladder</div>
+  <p class="spec-section-desc" style="max-width:none;">The tiers descend from the lightest possible cream (Forum) to a near-black wine (Breach). Lightness encodes hierarchy — the brighter the badge, the higher the tier. Hue does secondary work, providing a calm cool-toned middle (Echo, Fog) between the warm aspirational top (Forum, Spark) and the warm boundary tiers (Heat, Stance, Breach).</p>
+  <div class="ladder-strip">
+    <div style="background: linear-gradient(180deg, var(--tier-forum-top), var(--tier-forum-bot));"></div>
+    <div style="background: linear-gradient(180deg, var(--tier-spark-top), var(--tier-spark-bot));"></div>
+    <div style="background: linear-gradient(180deg, var(--tier-echo-top), var(--tier-echo-bot));"></div>
+    <div style="background: linear-gradient(180deg, var(--tier-fog-top), var(--tier-fog-bot));"></div>
+    <div style="background: linear-gradient(180deg, var(--tier-heat-top), var(--tier-heat-bot));"></div>
+    <div style="background: linear-gradient(180deg, var(--tier-stance-top), var(--tier-stance-bot));"></div>
+    <div style="background: linear-gradient(180deg, var(--tier-breach-top), var(--tier-breach-bot));"></div>
+  </div>
+  <div class="ladder-strip-labels">
+    <div>Forum</div><div>Spark</div><div>Echo</div><div>Fog</div><div>Heat</div><div>Stance</div><div>Breach</div>
+  </div>
+</div>
+
+<div class="spec-section" id="type">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 02</div>
+  <h2 class="spec-section-title">Typography</h2>
+  <p class="spec-section-desc">Four typefaces, each with a distinct role. Cormorant Garamond carries editorial authority. Source Serif 4 is the reading face. DM Sans handles interface elements. DM Mono marks system output and data.</p>
+  <div class="type-sample">
+    <div class="type-meta"><span>Cormorant Garamond · Display</span><span>Headlines, article titles, brand wordmark</span></div>
+    <p style="font-family:var(--font-display); font-size:2.4rem; font-weight:600; color:var(--text-primary); line-height:1.12;">The Rewiring of <em style="color:var(--amber); font-weight:300;">Society</em></p>
+    <p style="font-family:var(--font-display); font-size:1.6rem; font-weight:500; color:var(--text-primary); line-height:1.2; margin-top:12px;">Behavioral Conditioning at Scale</p>
+    <p style="font-family:var(--font-display); font-size:1.15rem; font-weight:400; font-style:italic; color:var(--text-secondary); line-height:1.5; margin-top:10px;">The question is not whether social media influences us.</p>
+  </div>
+  <div class="type-sample">
+    <div class="type-meta"><span>Source Serif 4 · Reading</span><span>Article body, comment bodies, long-form</span></div>
+    <p style="font-family:var(--font-reading); font-size:1.05rem; font-weight:400; color:var(--text-prose); line-height:1.8; max-width:64ch;">Every interaction on social media is a form of conditioning. When a post receives attention, it reinforces the behavior that produced it. This creates a continuous feedback loop — the platform rewards certain behaviors, users unconsciously adapt, and the platform amplifies those behaviors further.</p>
+  </div>
+  <div class="type-sample">
+    <div class="type-meta"><span>Source Serif 4 · Lede</span><span>Article subtitles, opening italics, intro paragraphs</span></div>
+    <p style="font-family:var(--font-reading); font-size:1.2rem; font-weight:300; font-style:italic; color:var(--text-lede); line-height:1.6; max-width:50ch;">A platform where ideas are the protagonist, not identities or political teams. The mechanics of engagement reoriented toward curiosity and honest disagreement.</p>
+  </div>
+  <div class="type-sample" style="background:var(--gold-pale); border-left:3px solid var(--gold); padding:20px 24px;">
+    <div class="type-meta"><span>Italic Decision Rule</span><span>Where each italic treatment lives</span></div>
+    <p style="font-family:var(--font-reading); font-size:0.92rem; color:var(--text-body); line-height:1.7; margin-top:6px;">The hero gold-gradient italic (Cormorant + warm gold gradient + drop-shadow) is reserved for the top 250px gradient zone and dark surfaces only. The Section italic (terra → gold) is for editorial accent within cream reading territory. The lede italic (Source Serif 4, light weight, --text-lede) is for article subtitles and opening passages. Never mix them in the same eye-line.</p>
+  </div>
+  <div class="type-sample">
+    <div class="type-meta"><span>DM Sans · Interface</span><span>UI labels, buttons, navigation</span></div>
+    <p style="font-family:var(--font-body); font-size:0.92rem; font-weight:400; color:var(--text-body); line-height:1.65;">This comment has been classified as <strong>The Heat</strong> — it expresses strong feeling but doesn't identify a specific claim to support or challenge.</p>
+  </div>
+  <div class="type-sample">
+    <div class="type-meta"><span>DM Mono · System</span><span>Tier labels, timestamps, metadata</span></div>
+    <p style="font-family:var(--font-mono); font-size:0.75rem; font-weight:400; color:var(--text-secondary); line-height:1.6;">SPECIFICITY: 3 &nbsp;·&nbsp; EMOTION: Low &nbsp;·&nbsp; TRIBAL MARKERS: No &nbsp;·&nbsp; ARTICLE ENGAGEMENT: Specific</p>
+  </div>
+</div>
+<div class="spec-section" id="tiers">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 03</div>
+  <h2 class="spec-section-title">Tier Badges</h2>
+  <p class="spec-section-desc">The platform's signature visual element. Badges use a subtle top-to-bottom gradient sheen that gives each tier a hint of material depth. The brightness ladder communicates quality intuitively before any text is read.</p>
+
+  <div class="component-label">Standard Size</div>
+  <div class="component-row" style="margin-bottom:24px;">
+    <span class="badge forum"><svg class="tier-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 L12 3 L21 7"/><line x1="2" y1="7.5" x2="22" y2="7.5" stroke-width="2.4"/><line x1="6" y1="9" x2="6" y2="19"/><line x1="12" y1="9" x2="12" y2="19"/><line x1="18" y1="9" x2="18" y2="19"/><line x1="3" y1="20" x2="21" y2="20" stroke-width="2.4"/></svg> The Forum</span>
+    <span class="badge spark"><svg class="tier-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M13 2 L4 14 L11 14 L10 22 L20 9 L13 9 Z"/></svg> The Spark</span>
+    <span class="badge echo"><svg class="tier-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 a8 8 0 0 1 14 -5"/><path d="M18 3 L18 7 L14 7"/><path d="M20 12 a8 8 0 0 1 -14 5"/><path d="M6 21 L6 17 L10 17"/></svg> The Echo</span>
+    <span class="badge fog"><svg class="tier-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M6.5 18 C 3.5 18, 2 16, 2 13.5 C 2 11, 4 9.5, 6 9.8 C 6.5 6.5, 9 5, 11.5 5 C 14.5 5, 16.5 7, 17 9.5 C 19.5 9.5, 22 11, 22 14 C 22 16.5, 20 18, 17.5 18 Z"/></svg> The Fog</span>
+    <span class="badge heat"><svg class="tier-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M12 2 C 10 6, 7 8, 7 13 C 7 17.5, 9.5 21, 12.5 21 C 16 21, 18 17.8, 17.8 14.5 C 17.6 12, 15.8 10, 14 9 C 14.5 11, 13.5 12, 12.5 11.5 C 12 9, 13 6, 12 2 Z"/></svg> The Heat</span>
+    <span class="badge stance"><svg class="tier-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round" stroke-linecap="round"><line x1="6" y1="3" x2="6" y2="21" stroke-width="2.8"/><path d="M6 4 L18 8 L6 12 Z"/><line x1="3" y1="21" x2="9" y2="21" stroke-width="2.8"/></svg> The Stance</span>
+    <span class="badge breach"><svg class="tier-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M9 7 a3 3 0 0 0 -3 3 v2 a3 3 0 0 0 3 3 h1"/><path d="M15 17 a3 3 0 0 0 3 -3 v-2 a3 3 0 0 0 -3 -3 h-1"/><line x1="3" y1="3" x2="21" y2="21" stroke-width="3"/></svg> The Breach</span>
+  </div>
+
+  <div class="component-label">Small — inline with metadata</div>
+  <div class="component-row" style="margin-bottom:24px;">
+    <span class="badge badge-sm forum"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 L12 3 L21 7"/><line x1="2" y1="7.5" x2="22" y2="7.5" stroke-width="2.8"/><line x1="6" y1="9" x2="6" y2="19"/><line x1="12" y1="9" x2="12" y2="19"/><line x1="18" y1="9" x2="18" y2="19"/><line x1="3" y1="20" x2="21" y2="20" stroke-width="2.8"/></svg> Forum</span>
+    <span class="badge badge-sm spark"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M13 2 L4 14 L11 14 L10 22 L20 9 L13 9 Z"/></svg> Spark</span>
+    <span class="badge badge-sm echo"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 a8 8 0 0 1 14 -5"/><path d="M18 3 L18 7 L14 7"/><path d="M20 12 a8 8 0 0 1 -14 5"/><path d="M6 21 L6 17 L10 17"/></svg> Echo</span>
+    <span class="badge badge-sm fog"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M6.5 18 C 3.5 18, 2 16, 2 13.5 C 2 11, 4 9.5, 6 9.8 C 6.5 6.5, 9 5, 11.5 5 C 14.5 5, 16.5 7, 17 9.5 C 19.5 9.5, 22 11, 22 14 C 22 16.5, 20 18, 17.5 18 Z"/></svg> Fog</span>
+    <span class="badge badge-sm heat"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M12 2 C 10 6, 7 8, 7 13 C 7 17.5, 9.5 21, 12.5 21 C 16 21, 18 17.8, 17.8 14.5 C 17.6 12, 15.8 10, 14 9 C 14.5 11, 13.5 12, 12.5 11.5 C 12 9, 13 6, 12 2 Z"/></svg> Heat</span>
+    <span class="badge badge-sm stance"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round" stroke-linecap="round"><line x1="6" y1="3" x2="6" y2="21" stroke-width="3.2"/><path d="M6 4 L18 8 L6 12 Z"/><line x1="3" y1="21" x2="9" y2="21" stroke-width="3.2"/></svg> Stance</span>
+    <span class="badge badge-sm breach"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"><path d="M9 7 a3 3 0 0 0 -3 3 v2 a3 3 0 0 0 3 3 h1"/><path d="M15 17 a3 3 0 0 0 3 -3 v-2 a3 3 0 0 0 -3 -3 h-1"/><line x1="3" y1="3" x2="21" y2="21" stroke-width="3.4"/></svg> Breach</span>
+  </div>
+
+  <div class="component-label">Large — onboarding &amp; tier headers</div>
+  <div class="component-row" style="margin-bottom:24px;">
+    <span class="badge badge-lg forum"><svg class="tier-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 L12 3 L21 7"/><line x1="2" y1="7.5" x2="22" y2="7.5" stroke-width="2.2"/><line x1="6" y1="9" x2="6" y2="19"/><line x1="12" y1="9" x2="12" y2="19"/><line x1="18" y1="9" x2="18" y2="19"/><line x1="3" y1="20" x2="21" y2="20" stroke-width="2.2"/></svg> The Forum</span>
+    <span class="badge badge-lg spark"><svg class="tier-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M13 2 L4 14 L11 14 L10 22 L20 9 L13 9 Z"/></svg> The Spark</span>
+    <span class="badge badge-lg heat"><svg class="tier-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M12 2 C 10 6, 7 8, 7 13 C 7 17.5, 9.5 21, 12.5 21 C 16 21, 18 17.8, 17.8 14.5 C 17.6 12, 15.8 10, 14 9 C 14.5 11, 13.5 12, 12.5 11.5 C 12 9, 13 6, 12 2 Z"/></svg> The Heat</span>
+  </div>
+
+  <div class="component-label">Specificity Indicator (0–3)</div>
+  <div class="component-row">
+    <span style="font-family:var(--font-mono); font-size:0.65rem; color:var(--text-secondary); margin-right:8px;">Level 0</span>
+    <span class="specificity"><span class="specificity-dot"></span><span class="specificity-dot"></span><span class="specificity-dot"></span></span>
+    &nbsp;&nbsp;
+    <span style="font-family:var(--font-mono); font-size:0.65rem; color:var(--text-secondary); margin-right:8px;">Level 2</span>
+    <span class="specificity"><span class="specificity-dot filled"></span><span class="specificity-dot filled"></span><span class="specificity-dot"></span></span>
+    &nbsp;&nbsp;
+    <span style="font-family:var(--font-mono); font-size:0.65rem; color:var(--text-secondary); margin-right:8px;">Level 3</span>
+    <span class="specificity"><span class="specificity-dot filled"></span><span class="specificity-dot filled"></span><span class="specificity-dot filled"></span></span>
+  </div>
+</div>
+
+<div class="spec-section" id="icons">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 04</div>
+  <h2 class="spec-section-title">Tier Icons</h2>
+  <p class="spec-section-desc">Custom SVG icons replace emoji for cross-platform consistency, color inheritance, and crisp scaling. Each icon was chosen to be immediately recognizable at the smallest badge size, conceptually tied to its tier's meaning, and visually distinct from every other tier icon.</p>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px;">
+    <div class="component-card" style="text-align:center; padding:18px 12px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--tier-forum-text)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 L12 3 L21 7" fill="var(--tier-forum-bot)"/><line x1="2.5" y1="7.5" x2="21.5" y2="7.5" stroke-width="1.8"/><line x1="6" y1="9" x2="6" y2="19"/><line x1="12" y1="9" x2="12" y2="19"/><line x1="18" y1="9" x2="18" y2="19"/><line x1="3" y1="20" x2="21" y2="20" stroke-width="2"/></svg><div style="font-family:var(--font-display); font-size:0.95rem; font-weight:500; color:var(--tier-forum-text); margin-top:8px;">The Forum</div><div style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-tertiary); margin-top:2px;">Roman columns</div></div>
+    <div class="component-card" style="text-align:center; padding:18px 12px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="var(--tier-spark-bot)" stroke="var(--tier-spark-text)" stroke-width="1.8" stroke-linejoin="round"><path d="M13 2 L4 14 L11 14 L10 22 L20 9 L13 9 Z"/></svg><div style="font-family:var(--font-display); font-size:0.95rem; font-weight:500; color:var(--tier-spark-text); margin-top:8px;">The Spark</div><div style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-tertiary); margin-top:2px;">Lightning bolt</div></div>
+    <div class="component-card" style="text-align:center; padding:18px 12px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--tier-echo-text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 a8 8 0 0 1 14 -5"/><path d="M18 3 L18 7 L14 7"/><path d="M20 12 a8 8 0 0 1 -14 5"/><path d="M6 21 L6 17 L10 17"/></svg><div style="font-family:var(--font-display); font-size:0.95rem; font-weight:500; color:var(--tier-echo-text); margin-top:8px;">The Echo</div><div style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-tertiary); margin-top:2px;">Circular chase</div></div>
+    <div class="component-card" style="text-align:center; padding:18px 12px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="var(--tier-fog-bot)" stroke="var(--tier-fog-text)" stroke-width="1.6" stroke-linejoin="round"><path d="M6.5 18 C 3.5 18, 2 16, 2 13.5 C 2 11, 4 9.5, 6 9.8 C 6.5 6.5, 9 5, 11.5 5 C 14.5 5, 16.5 7, 17 9.5 C 19.5 9.5, 22 11, 22 14 C 22 16.5, 20 18, 17.5 18 Z"/></svg><div style="font-family:var(--font-display); font-size:0.95rem; font-weight:500; color:var(--tier-fog-text); margin-top:8px;">The Fog</div><div style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-tertiary); margin-top:2px;">Fluffy cloud</div></div>
+    <div class="component-card" style="text-align:center; padding:18px 12px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="var(--tier-heat-bot)" stroke="var(--tier-heat-border)" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2 C 10 6, 7 8, 7 13 C 7 17.5, 9.5 21, 12.5 21 C 16 21, 18 17.8, 17.8 14.5 C 17.6 12, 15.8 10, 14 9 C 14.5 11, 13.5 12, 12.5 11.5 C 12 9, 13 6, 12 2 Z"/></svg><div style="font-family:var(--font-display); font-size:0.95rem; font-weight:500; color:var(--tier-heat-border); margin-top:8px;">The Heat</div><div style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-tertiary); margin-top:2px;">Flame</div></div>
+    <div class="component-card" style="text-align:center; padding:18px 12px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="var(--tier-stance-top)" stroke="var(--tier-stance-border)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><line x1="6" y1="3" x2="6" y2="21" stroke-width="2"/><path d="M6 4 L18 8 L6 12 Z"/><line x1="3" y1="21" x2="9" y2="21" stroke-width="2"/></svg><div style="font-family:var(--font-display); font-size:0.95rem; font-weight:500; color:var(--tier-stance-border); margin-top:8px;">The Stance</div><div style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-tertiary); margin-top:2px;">Planted flag</div></div>
+    <div class="component-card" style="text-align:center; padding:18px 12px;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--tier-breach-border)" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M9 7 a3 3 0 0 0 -3 3 v2 a3 3 0 0 0 3 3 h1" fill="var(--tier-breach-top)"/><path d="M15 17 a3 3 0 0 0 3 -3 v-2 a3 3 0 0 0 -3 -3 h-1" fill="var(--tier-breach-top)"/><line x1="3" y1="3" x2="21" y2="21" stroke-width="2.4"/></svg><div style="font-family:var(--font-display); font-size:0.95rem; font-weight:500; color:var(--tier-breach-border); margin-top:8px;">The Breach</div><div style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-tertiary); margin-top:2px;">Broken chain</div></div>
+  </div>
+</div>
+<div class="spec-section" id="cards">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 05</div>
+  <h2 class="spec-section-title">Comment Cards</h2>
+  <p class="spec-section-desc">The primary interactive element. Every comment card shows its tier badge, author, timestamp, comment body in the reading typeface, and a footer with vote count, specificity score, and article reference.</p>
+  <div style="display:grid; gap:16px; margin-bottom:16px;">
+    <div class="comment-card">
+      <div class="cc-header"><span class="badge badge-sm forum"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 L12 3 L21 7"/><line x1="2" y1="7.5" x2="22" y2="7.5" stroke-width="2.8"/><line x1="6" y1="9" x2="6" y2="19"/><line x1="12" y1="9" x2="12" y2="19"/><line x1="18" y1="9" x2="18" y2="19"/><line x1="3" y1="20" x2="21" y2="20" stroke-width="2.8"/></svg> Forum</span><span class="cc-author">R. Vasquez</span><span class="cc-time">2h ago</span></div>
+      <div class="cc-body">The behavioral conditioning argument in Section II assumes users are passive recipients, but Pew Research (2024) shows the top 20% of social media users by time spent are also the heaviest active posters — suggesting the conditioning runs both ways.</div>
+      <div class="cc-footer"><span>▲ 14</span><span>Specificity: 3</span><span>↳ Re: Section II</span></div>
+    </div>
+    <div class="comment-card">
+      <div class="cc-header"><span class="badge badge-sm spark"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M13 2 L4 14 L11 14 L10 22 L20 9 L13 9 Z"/></svg> Spark</span><span class="cc-author">M. Chen</span><span class="cc-time">4h ago</span></div>
+      <div class="cc-body">I wonder whether the "fragmentation of reality" problem is actually new or just more visible now. Pre-internet communities had radically different information ecosystems too.</div>
+      <div class="cc-footer"><span>▲ 9</span><span>Specificity: 1</span><span>↳ Re: Section V</span></div>
+    </div>
+    <div class="comment-card">
+      <div class="cc-header"><span class="badge badge-sm heat"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M12 2 C 10 6, 7 8, 7 13 C 7 17.5, 9.5 21, 12.5 21 C 16 21, 18 17.8, 17.8 14.5 C 17.6 12, 15.8 10, 14 9 C 14.5 11, 13.5 12, 12.5 11.5 C 12 9, 13 6, 12 2 Z"/></svg> Heat</span><span class="cc-author">J. Pratt</span><span class="cc-time">5h ago</span><span class="cc-self-declared">self-declared: <span style="color:var(--tier-forum-text);">Forum</span></span></div>
+      <div class="cc-body">This is exactly the kind of thinking that's destroying discourse. The author clearly has never spent real time on these platforms or they'd know it's not this simple.</div>
+      <div class="cc-footer"><span>▲ 2</span><span>Specificity: 0</span><span>↳ General impression</span></div>
+    </div>
+    <div class="comment-card">
+      <div class="cc-header"><span class="badge badge-sm stance"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round" stroke-linecap="round"><line x1="6" y1="3" x2="6" y2="21" stroke-width="3.2"/><path d="M6 4 L18 8 L6 12 Z"/><line x1="3" y1="21" x2="9" y2="21" stroke-width="3.2"/></svg> Stance</span><span class="cc-author">D. Morris</span><span class="cc-time">6h ago</span></div>
+      <div class="cc-body">Anyone who thinks technology is the problem and not the solution has clearly never built anything. The real issue is that people who can't handle freedom want to control everyone else's information diet.</div>
+      <div class="cc-footer"><span>▲ 1</span><span>Specificity: 0</span><span>Tribal markers: Yes</span></div>
+    </div>
+    <div class="comment-card" style="opacity:0.75;">
+      <div class="cc-header"><span class="badge badge-sm breach"><svg class="tier-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"><path d="M9 7 a3 3 0 0 0 -3 3 v2 a3 3 0 0 0 3 3 h1"/><path d="M15 17 a3 3 0 0 0 3 -3 v-2 a3 3 0 0 0 -3 -3 h-1"/><line x1="3" y1="3" x2="21" y2="21" stroke-width="3.4"/></svg> Breach</span><span class="cc-author">Anonymous</span><span class="cc-time">9h ago</span></div>
+      <div class="cc-body" style="color:var(--text-tertiary); font-style:italic;">Content suppressed — targets a person, not an idea. Visible with explanation.</div>
+      <div class="cc-footer"><span>Pact violation</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section" id="buttons">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 06</div>
+  <h2 class="spec-section-title">Buttons</h2>
+  <p class="spec-section-desc">Four button styles, three sizes. Primary (dark ink) is the default action. Accent (amber) is for high-emphasis CTAs. Outline is secondary. Ghost is tertiary.</p>
+  <div class="component-label">Primary</div>
+  <div class="component-row" style="margin-bottom:20px;"><button class="btn btn-primary btn-lg">Post Comment</button><button class="btn btn-primary">Post Comment</button><button class="btn btn-primary btn-sm">Post</button></div>
+  <div class="component-label">Accent</div>
+  <div class="component-row" style="margin-bottom:20px;"><button class="btn btn-accent btn-lg">Enter the Forum</button><button class="btn btn-accent">Submit Article</button><button class="btn btn-accent btn-sm">Submit</button></div>
+  <div class="component-label">Outline</div>
+  <div class="component-row" style="margin-bottom:20px;"><button class="btn btn-outline">View All Tiers</button><button class="btn btn-outline btn-sm">Filter</button></div>
+  <div class="component-label">Ghost</div>
+  <div class="component-row"><button class="btn btn-ghost">Edit Comment</button><button class="btn btn-ghost btn-sm">Cancel</button></div>
+</div>
+
+<div class="spec-section" id="forms">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 07</div>
+  <h2 class="spec-section-title">Form Elements</h2>
+  <p class="spec-section-desc">Inputs use the brightest surface for maximum contrast. Focus states use the amber accent with a soft glow ring. The comment textarea uses the reading typeface to match how the comment will appear when published.</p>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+    <div><label class="input-label">Display Name</label><input class="input-field" type="text" placeholder="R. Vasquez" /><div class="input-hint">Visible on your comments and profile</div></div>
+    <div><label class="input-label">Email Address</label><input class="input-field" type="email" placeholder="reader@dialecta.com" /></div>
+  </div>
+  <div style="margin-bottom:16px;"><label class="input-label">Your Comment</label><textarea class="textarea-field" placeholder="What specific claim in the article do you want to engage with?"></textarea><div class="input-hint">The classification engine will analyze your comment before publishing. You can always post as-is.</div></div>
+  <div class="component-row"><button class="btn btn-primary">Analyze &amp; Post</button><button class="btn btn-ghost">Save Draft</button></div>
+</div>
+<div class="spec-section" id="nav">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 08</div>
+  <h2 class="spec-section-title">Navigation</h2>
+  <p class="spec-section-desc"><strong>This is the canonical Dialecta nav, primary for all platform builds.</strong> A two-bar system: the primary logo bar carries the cream-to-dark gradient with the wordmark at left (40px); a secondary sub-nav bar sits flush below with a warm metallic shimmer fill and white gradient rules at top and bottom. Section links live in the sub-nav in warm ink (#3a342c). A shared max-width inner container (1060px) aligns logo and links with the page content column. The amber hairline between bars is the canonical separator.</p>
+
+  <div class="nav-demo-wrap" style="margin-bottom:20px;">
+    <div class="nav-demo-bar1">
+      <!-- logo blob scrubbed — see /Logos/ for source -->
+    </div>
+    <div class="nav-demo-bar2">
+      <a href="#">Articles</a><a href="#">Community</a><a href="#">Stewards</a><a href="#">About</a><a href="#">The Pact</a>
+    </div>
+  </div>
+
+  <div style="margin-top:20px; padding:16px 20px; background:var(--bg-white); border:1px solid var(--border-light); border-left:3px solid var(--amber); border-radius:0 var(--radius-md) var(--radius-md) 0;">
+    <div style="font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--amber); margin-bottom:8px;">Canonical Values — v1.3</div>
+    <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-body); line-height:1.7;">
+      <div><strong>logo bar:</strong> linear-gradient(135deg, #f7f2e8 0%, #1c1814 65%, #1c1814 100%) · height: 52px · border-bottom: 1px solid rgba(184,115,42,0.22)</div>
+      <div><strong>sub-nav fill:</strong> linear-gradient(to bottom, #eceae4 0%, #d8d4cc 48%, #eceae4 100%) · height: 34px</div>
+      <div><strong>sub-nav rules:</strong> white gradient lines top &amp; bottom (transparent → rgba(255,255,255,0.96) → transparent)</div>
+      <div><strong>logo asset:</strong> Dialecta wordmark (webp, embedded data URI) · height: 40px · mix-blend-mode: multiply</div>
+      <div><strong>link font:</strong> DM Sans · 0.82rem · weight 400 · letter-spacing: 0.01em</div>
+      <div><strong>link color:</strong> #3a342c warm ink · hover: rgba(255,255,255,0.35) background wash</div>
+      <div><strong>content max-width:</strong> 1060px centered · nav-inner container matches page column</div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section" id="page-bg">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 08b</div>
+  <h2 class="spec-section-title">Page Background</h2>
+  <p class="spec-section-desc"><strong>This is the canonical Dialecta page background, primary for all platform builds.</strong> A diagonal gradient runs from the upper-left corner (warm stone) to the cream body. The gradient is lightened to 80% from earlier dark values, preserving atmospheric depth while keeping ink-tone text fully legible throughout the hero zone without color switching. A fixed SVG fractalNoise paper grain at opacity 0.035 overlays the entire body.</p>
+
+  <div class="page-bg-demo">
+    <div class="pbd-corner-label">Hero Zone</div>
+    <div class="pbd-card">
+      <div class="pbd-title">Cards lift off the lightened backdrop.</div>
+      <div class="pbd-body">The 80% lightened gradient maintains spatial depth without requiring on-dark text treatment — ink-tone headings and body copy remain fully readable throughout.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px; padding:16px 20px; background:var(--bg-white); border:1px solid var(--border-light); border-left:3px solid var(--amber); border-radius:0 var(--radius-md) var(--radius-md) 0;">
+    <div style="font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--amber); margin-bottom:8px;">Canonical Values — v1.3</div>
+    <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-body); line-height:1.7;">
+      <div><strong>page background:</strong> linear-gradient(135deg, #a8a398 0px, #8c8780 175px, #f7f2e8 775px, #f7f2e8 100%)</div>
+      <div><strong>grain overlay:</strong> fixed SVG fractalNoise, baseFrequency 0.85, opacity 0.035</div>
+      <div><strong>orientation:</strong> 135deg, warm stone upper-left, cream lower-right</div>
+      <div><strong>lightening:</strong> 80% interpolated from original ink values toward cream</div>
+      <div><strong>text treatment:</strong> ink-tone (--text-primary, --text-body) works throughout — no color switching needed</div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section" id="article">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 09</div>
+  <h2 class="spec-section-title">Article Header</h2>
+  <p class="spec-section-desc">The most typographically rich element. Title in Cormorant Garamond 600 weight, subtitle in Source Serif italic, metadata in DM Mono. The amber editorial rule signals the boundary between authored content and community response.</p>
+  <div class="component-card full">
+    <div class="article-header">
+      <div class="article-meta"><span>Daniel Pennington</span><span>April 2026</span><span>12 min read</span></div>
+      <h1 class="article-title">Social Media, Human Behavior, and the Rewiring of <em>Society</em></h1>
+      <p class="article-subtitle">What kind of human behavior does this system reward — and what kind of people does it produce over time?</p>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section" id="ai">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 10</div>
+  <h2 class="spec-section-title">AI Classification Card</h2>
+  <p class="spec-section-desc">The reflection prompt that appears between submission and publishing. Uses the gold-pale background with an amber left-bar to signal "system speaking." The tone is observational, never evaluative.</p>
+  <div style="display:grid; gap:16px;">
+    <div class="ai-card">
+      <div class="ai-card-label">Classification Engine</div>
+      <div class="ai-card-body">This reads as <em>The Heat</em> — the feeling is clear but there isn't a specific claim for others to engage with. Adding one sentence about what specifically you think is wrong would likely move this to Forum or Spark.</div>
+      <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;"><span class="ai-card-action">Add a specific claim →</span><span style="font-family:var(--font-mono); font-size:0.62rem; color:var(--text-muted);">or post as-is</span></div>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-label">Classification Engine</div>
+      <div class="ai-card-body">This engages directly with <em>Section II's conditioning claim</em> and introduces specific counter-evidence. Forum-level discourse.</div>
+      <div style="display:flex; gap:16px; align-items:center;"><span class="ai-card-action">Post to The Forum →</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="spec-section" id="dark">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 11</div>
+  <h2 class="spec-section-title">Editorial Surfaces</h2>
+  <p class="spec-section-desc">Two surface treatments carry editorial weight. <strong>The Covenant surface</strong> — warm antique paper — is canonical for The Pact, where the moment should feel like a printed charter rather than a CTA. <strong>Dark editorial cards</strong> (<code>--dark-card</code> parchment cousin) are canonical for Advocate cards, Delta panels, and featured comments. The solid <code>--bg-dark</code> surface is retired — it has no canonical use on the platform.</p>
+
+  <div class="component-label">The Covenant — Antique Paper Surface (canonical for The Pact)</div>
+  <p style="font-family:var(--font-reading); font-size:0.9rem; color:var(--text-secondary); line-height:1.7; max-width:640px; margin-bottom:16px;">Layered warm parchment with organic foxing, SVG-distorted crinkles, and edge wear. The full treatment lives in <code>dialecta-pact.html</code>. Below is a compact preview of the canonical surface.</p>
+
+  <div style="position:relative; background: radial-gradient(ellipse at 22% 18%, rgba(232,200,140,0.18) 0%, transparent 42%), radial-gradient(ellipse at 78% 78%, rgba(184,115,42,0.10) 0%, transparent 50%), radial-gradient(ellipse at 88% 12%, rgba(140,74,47,0.08) 0%, transparent 38%), radial-gradient(ellipse at 12% 92%, rgba(212,168,74,0.12) 0%, transparent 45%), linear-gradient(165deg, #efe2c4 0%, #ead7b3 35%, #f0e2bf 70%, #e8d3aa 100%); border-radius:6px; overflow:hidden; box-shadow: inset 0 0 0 1px rgba(140,74,47,0.18), inset 0 0 0 9px rgba(140,74,47,0.12), 0 2px 12px rgba(28,24,20,0.10), 0 12px 48px rgba(28,24,20,0.08); margin-bottom:32px; padding:72px 80px;">
+    <div style="position:absolute; inset:0; background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22240%22 height=%22240%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%222%22 seed=%224%22/><feColorMatrix type=%22matrix%22 values=%220 0 0 0 0.55  0 0 0 0 0.36  0 0 0 0 0.18  0 0 0 0.55 0%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>'); opacity:0.18; mix-blend-mode:multiply; pointer-events:none; border-radius:6px;"></div>
+    <div style="position:absolute; inset:0; background: radial-gradient(circle at 8% 14%, rgba(140,74,47,0.16) 0%, transparent 1.2%), radial-gradient(circle at 92% 22%, rgba(140,74,47,0.12) 0%, transparent 0.8%), radial-gradient(circle at 14% 88%, rgba(140,74,47,0.18) 0%, transparent 1.0%), radial-gradient(circle at 78% 92%, rgba(140,74,47,0.14) 0%, transparent 1.1%), radial-gradient(circle at 56% 8%, rgba(140,74,47,0.10) 0%, transparent 0.7%), radial-gradient(circle at 88% 52%, rgba(140,74,47,0.13) 0%, transparent 0.9%), radial-gradient(ellipse 14px 3px at 70% 30%, rgba(140,74,47,0.14) 0%, transparent 100%); pointer-events:none; border-radius:6px;"></div>
+    <svg viewBox="0 0 1000 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:0.28; mix-blend-mode:multiply; border-radius:6px;">
+      <defs>
+        <filter id="sw1" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="18"/></filter>
+        <filter id="sb1"><feGaussianBlur stdDeviation="0.6"/></filter>
+      </defs>
+      <g filter="url(#sw1)" opacity="0.65">
+        <path d="M 80 120 Q 260 180, 430 210 T 780 260" fill="none" stroke="#8c4a2f" stroke-width="0.6" stroke-linecap="round" filter="url(#sb1)"/>
+        <path d="M 200 360 Q 380 400, 560 380 T 860 420" fill="none" stroke="#5a2410" stroke-width="0.4" stroke-linecap="round" filter="url(#sb1)"/>
+      </g>
+    </svg>
+    <div style="position:relative; z-index:2; text-align:center;">
+      <div style="font-family:var(--font-mono); font-size:12px; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; margin-bottom:22px; background:linear-gradient(125deg, #5a3a10 0%, #a07828 35%, #d4a84a 55%, #7a5218 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 1px 0 rgba(28,24,20,0.55)); display:inline-block;">Before you enter</div>
+      <h2 style="font-family:var(--font-display); font-size:3.8rem; font-weight:600; color:#1c1814; line-height:1.02; letter-spacing:-0.012em; margin:0 auto 28px;">This is<br><em style="font-weight:400; font-style:italic; background:linear-gradient(180deg, #6f4e1a 0%, #a07828 10%, #d4a84a 24%, #f0d07a 42%, #e8c366 54%, #c99438 72%, #8c5e1e 88%, #5a3a10 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; filter:drop-shadow(0 1px 0 rgba(28,24,20,0.55)) drop-shadow(0 2px 0 rgba(90,36,16,0.22));">the pact.</em></h2>
+      <p style="font-family:var(--font-reading); font-size:1.1rem; font-weight:300; font-style:italic; color:#2c2620; line-height:1.65; max-width:52ch; margin:0 auto 28px;">Not terms and conditions. Not rules imposed from above. A mutual agreement between you and a place that intends to take your thinking seriously.</p>
+      <button style="position:relative; font-family:var(--font-display); font-size:1.1rem; font-weight:600; letter-spacing:0.04em; color:#3a2410; padding:16px 40px; cursor:pointer; border:none; border-radius:3px; background:linear-gradient(180deg, #6f4e1a 0%, #a07828 6%, #d4a84a 18%, #f0d07a 34%, #e8c366 50%, #c99438 66%, #8c5e1e 84%, #5a3a10 100%); box-shadow:inset 0 1px 0 rgba(255,240,180,0.65), inset 0 -1px 0 rgba(60,36,10,0.55), inset 1px 0 0 rgba(255,220,140,0.35), inset -1px 0 0 rgba(60,36,10,0.35), 0 2px 4px rgba(28,24,20,0.28), 0 6px 14px rgba(28,24,20,0.22); text-shadow:0 1px 0 rgba(255,236,176,0.55), 0 -1px 0 rgba(60,36,10,0.35);">I Understand — Enter</button>
+    </div>
+    <div style="position:absolute; top:24px; right:32px; font-family:var(--font-display); font-size:0.6rem; font-weight:500; letter-spacing:0.32em; text-transform:uppercase; color:#8c4a2f; z-index:2; text-align:right; line-height:1.6;">Dialecta<span style="display:block; width:32px; height:1px; background:#8c4a2f; margin:6px 0 6px auto; opacity:0.5;"></span><span style="font-family:var(--font-mono); font-size:0.52rem; color:#b8732a; letter-spacing:0.22em;">MMXXVI</span></div>
+    <div style="position:absolute; bottom:22px; right:32px; font-family:var(--font-display); font-size:0.7rem; font-style:italic; color:rgba(140,74,47,0.55); z-index:2; letter-spacing:0.08em;">§ I</div>
+  </div>
+
+  <div class="component-label">Editorial Dark Card — parchment cousin (#292b2d)</div>
+  <p style="font-family:var(--font-reading); font-size:0.9rem; color:var(--text-secondary); line-height:1.7; max-width:640px; margin-bottom:16px;"><code>--dark-card</code> (#292b2d, the parchment cousin) is for editorial emphasis — featured comments, Advocate cards, Delta panels. It is the only dark surface the platform uses. The warmth differential (R-B: −4) keeps it sympathetic to the cream page without feeling like a hole punched through the paper.</p>
+  <div class="editorial-dark-card">
+    <div class="component-label">Forum Tier · Featured</div>
+    <p style="font-family:var(--font-reading); font-size:1.05rem; font-style:italic; color:var(--text-on-dark); line-height:1.6; margin-bottom:16px;">The thing nobody quite says out loud about renewable energy economics is that the discount rate is doing all the work.</p>
+    <p style="font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-on-dark-secondary);">Marina Vásquez · The Cartographer · From a thread on Pricing the Future</p>
+  </div>
+  <div class="editorial-dark-card">
+    <div class="component-label">Advocate Card</div>
+    <p style="font-family:var(--font-reading); font-size:0.95rem; color:var(--text-on-dark); line-height:1.65; margin-bottom:8px;">Before posting, the Advocate Engine surfaces the strongest version of the position you appear to be challenging. The reader sees that counter-argument in this surface, framed as a card the Advocate archetype would author. Acknowledging it is not agreement — it is the proof-of-engagement that distinguishes Forum-tier disagreement from Heat.</p>
+    <p style="font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-on-dark-secondary);">Surfaces in: compose flow · pre-publish reflection · Advocate archetype profile</p>
+  </div>
+</div>
+
+<div class="spec-section" id="components">
+  <div class="spec-divider"></div>
+  <div class="spec-section-label">Section 12</div>
+  <h2 class="spec-section-title">Component Library</h2>
+  <p class="spec-section-desc">Layout components used across articles, contributor profiles, and the home page. All use the cream card base with a gold-bright top rule. These are the recurring building blocks the platform composes pages out of.</p>
+
+  <div class="component-label">Stage Cards (3-up) — used on the home page How It Works section</div>
+  <div class="stage-grid">
+    <div class="stage-card"><div class="stage-num">Stage 01</div><div class="stage-title">AI Pre-Analysis</div><div class="stage-body">Instant classification on submit. Suggests a tier with a plain-language reason shown to the commenter.</div></div>
+    <div class="stage-card"><div class="stage-num">Stage 02</div><div class="stage-title">Self-Declaration</div><div class="stage-body">Commenter accepts or overrides. That declaration is visible on the comment permanently.</div></div>
+    <div class="stage-card"><div class="stage-num">Stage 03</div><div class="stage-title">Community Voting</div><div class="stage-body">Enough nominations trigger a re-review event. A living, self-correcting system.</div></div>
+  </div>
+
+  <div class="component-label">Tease Grid (2-up) — used on home and section landing pages</div>
+  <div class="tease-grid">
+    <div class="tease-card"><div class="tease-kicker">Economics</div><div class="tease-head">Why Interest Rates and Solar Panels Are the Same Argument</div><div class="tease-dek">Capital costs determine renewable economics more than any other variable. The discount rate is doing all the work.</div></div>
+    <div class="tease-card"><div class="tease-kicker">Political Science</div><div class="tease-head">The Permitting Problem Is Not What You Think</div><div class="tease-dek">Environmental review timelines now exceed those for fossil fuel projects in the US.</div></div>
+  </div>
+
+  <div class="component-label">Pull Quote — used inside long-form articles</div>
+  <p class="pull-quote">Ideas stripped of tribal labels and evaluated on their own merits.</p>
+</div>
+
+<div style="padding:48px 0; text-align:center; border-top:2px solid var(--amber); margin-top:48px;">
+  <p style="font-family:var(--font-display); font-size:1rem; letter-spacing:0.2em; color:var(--amber); margin-bottom:6px;">Dialecta</p>
+  <p style="font-family:var(--font-mono); font-size:0.6rem; color:var(--text-secondary); letter-spacing:0.1em; text-transform:uppercase;">Design Specification · The Letterpress · v1.3 · April 2026</p>
+  <p style="font-family:var(--font-reading); font-size:0.85rem; font-style:italic; color:var(--text-tertiary); margin-top:12px;">Ideas are the protagonist.</p>
+</div>
+
+</div>
+</body>
+</html>

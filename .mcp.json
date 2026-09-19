@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "dialecta-local-research": {
+      "command": "node",
+      "args": ["tools/local-research/server.mjs"],
+      "env": {}
+    }
+  }
+}
