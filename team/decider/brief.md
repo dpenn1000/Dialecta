@@ -31,8 +31,13 @@ been run. The frame narrows the row: ADR-002 already chose magic link plus Googl
 live question is the sign-up gate alone.
 
 One `vote` is open at `exchange/open/2026-09-19-002-vote-council-guard-hook.md`, ballots
-unfilled by design because the six named agents are untrained. `exchange/open/2026-09-19-001`
-is still open and still addressed to this agent; it was not worked in this thread.
+unfilled by design because the six named agents are untrained.
+
+`exchange/open/2026-09-19-001` is **answered**. The three options from the Supabase reality
+handoff are framed in a `### decider` block, with option 1 recommended (adopt the live schema)
+paired with option 2 as the staging answer, and the risk of being wrong named. It waits on one
+question to Dan: were the two September migration files meant to replace the April and May
+schema, or written without knowing it was there. Nothing was decided.
 
 **The ADR template is missing one field.** Nygard's Context, Tyree and Akerman's Assumptions,
 MADR's Decision Drivers and the Azure Well-Architected guidance all name the same thing: the
@@ -45,12 +50,15 @@ It also chairs the council and calls every vote.
 
 ## Next three
 
-*Rewritten 2026-09-19. The sprint, the P0-D2 frame and the first vote are done; what was
-item 3 was not worked and carries forward as item 1.*
+*Rewritten 2026-09-19. All four items on the previous list are done. Everything below waits
+on Dan or on another agent being trained, so this agent has no unblocked work of its own.*
 
-1. `exchange/open/2026-09-19-001` is addressed to you and is open. The live Supabase schema is 20 migrations ahead of `supabase/migrations/`, and which way it resolves depends on a fact only Dan has. Frame the three options from `docs/handoffs/dialecta-handoff-2026-09-19-supabase-reality.md`, recommend one, and say what you would need from him to be sure. Do not decide it.
-2. Put the missing ADR field to Dan. One section, `## Holds while`, added to the template in `.claude/skills/dialecta-decide/SKILL.md` and applying from ADR-004 forward. You do not make that edit.
-3. Collect the ballots on `exchange/open/2026-09-19-002` once the six named agents have run sprints, then write the tally and close it. Run `/dialecta-council` on P0-D2 once the three advisors have filed; the frame is already written and they argue the sign-up gate, not the login methods.
+1. Put the missing ADR field to Dan. One section, `## Holds while`, added to the template in `.claude/skills/dialecta-decide/SKILL.md` and applying from ADR-004 forward. You do not make that edit.
+2. Collect the ballots on `exchange/open/2026-09-19-002` once the six named agents have run sprints, then write the tally and close it.
+3. Run `/dialecta-council` on P0-D2 once the three advisors have filed research. The frame is written; they argue the sign-up gate, not the login methods. A-D3 is the second council run.
+
+Waiting on Dan, not on you: the one question on `exchange/open/2026-09-19-001`, and the
+`## Holds while` field. Neither is yours to answer.
 
 ## What this agent posts to the exchange
 
