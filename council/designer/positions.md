@@ -1,8 +1,13 @@
 # Standing positions
 
-Sprint 1, 2026-09-19. Nine sources filed in `research/`. Nothing here has been argued in council yet,
-and nothing here is measured: Dialecta has no first-comment completion metric, so every confidence
-below is a confidence about evidence from other platforms, not about this one.
+Sprints 1 and 2, 2026-09-19. Sixteen sources filed in `research/`. Nothing here has been argued in
+council yet.
+
+Two halves, and they carry different kinds of evidence. D-1 through D-10 are about behaviour, and
+none of it is measured here: Dialecta has no first-comment completion metric, so those confidences
+are confidences about evidence from other platforms. D-11 through D-18 are about craft, and most of
+them are measured directly off this repo's own tokens, so the numbers are about Dialecta and
+reproducible from `research/tier-palette-audit.py`.
 
 | # | Position | Confidence | Evidence | Last changed |
 | --- | --- | --- | --- | --- |
@@ -16,6 +21,14 @@ below is a confidence about evidence from other platforms, not about this one.
 | D-8 | P0-D2: Google OAuth primary at cutover, email one-time password second, magic link only once custom SMTP exists, passkeys later | Medium to high | `2026-supabase-auth-email-limits`, `2025-fido-passkey-index` | 2026-09-19 |
 | D-9 | P0-4 is blocked on a custom SMTP decision that is not in the backlog and not in ADR-002 | High | `2026-supabase-auth-email-limits` | 2026-09-19 |
 | D-10 | If sign-up needs a filter at cutover, a read-first waiting period is a better one than invite-only | Low | `2014-pileggi-metafilter-barriers`, abstract only | 2026-09-19 |
+| D-11 | The tier palette asks one channel to carry both an ordinal quality ladder and a seven way categorical identity. Every measured failure below traces back to that | High | `2026-dialecta-tier-palette-audit`, `1996-healey-effective-colours` | 2026-09-19 |
+| D-12 | Heat badge text at 1.96:1 against its own chip is a measured defect in the locked palette, not a matter of taste. Raised for Dan; I do not propose the fix | High | `2026-dialecta-tier-palette-audit`, `2023-w3c-wcag22-colour-criteria` (SC 1.4.3) | 2026-09-19 |
+| D-13 | The topology bar needs a second, non-colour channel. Stance and Breach are one colour under normal vision and under all three CVD types. The tier icons already exist | High | `2026-dialecta-tier-palette-audit`, `2023-w3c-wcag22-colour-criteria` (SC 1.4.1) | 2026-09-19 |
+| D-14 | The Forum border at 1.50:1 on the card surface is the least visible of the seven, which undercuts the locked decision in A-9 to surface Forum counts | Medium to high | `2026-dialecta-tier-palette-audit`, `2023-w3c-wcag22-colour-criteria` (SC 1.4.11) | 2026-09-19 |
+| D-15 | The token set needs a spacing scale and a type scale. Space is the channel that carries grouping and it is the only channel with no tokens at all | High | `2026-dialecta-space-and-scale-audit`, `2012-wagemans-gestalt-grouping` | 2026-09-19 |
+| D-16 | Article prose in `apps/web` renders in the sans at roughly 85 characters per line. P0-5 is where both get fixed | Medium to high | `2001-dyson-haselgrove-line-length`, `2026-dialecta-space-and-scale-audit` | 2026-09-19 |
+| D-17 | The brightness ladder is right and I am not asking to re-pick the gold, the grain or the nav gradient. Every craft position above is additive or a measured defect | High | charter, "Constraints I argue inside"; `.claude/agents/designer.md` | 2026-09-19 |
+| D-18 | A contrast check belongs in CI beside `npm run tokens -- --check`, which guards colour drift and cannot see contrast | Medium | `2026-dialecta-tier-palette-audit`, `2021-somers-apca-contrast-whitepaper` | 2026-09-19 |
 
 ---
 
@@ -96,6 +109,51 @@ with the 63%, so it does not compare passkeys to Sign in with Google at all.
 **What I want instrumented with `/login` rather than after it.** Sign-in completion split by method,
 and seven day return split by method. The passkey report is built entirely on the first of those.
 Dialecta has neither, and without them D-8 stays a borrowed prior.
+
+---
+
+## Position: the visual system
+
+**Where I stand and where I stop.** The visual language is locked and it should be. I am not asking
+to re-pick the gold, the page background, the grain or the nav gradient, and nothing below requires
+it. What follows is either additive, or a number that is wrong against a normative standard. Both
+are inside the mandate; iterating on the gradient is not.
+
+**The palette is doing two jobs with one channel.** The seven tiers run as a brightness ladder from
+cream to near black, and the design spec is right that this "communicates quality intuitively before
+any text is read". That is an ordinal encoding and it works. The same seven values are then asked to
+carry a categorical identity: which tier is this, told apart from six others at a glance, on a
+topology segment with no text on it. One channel cannot do both well, and the measurements say it
+does not.
+
+Six results, all reproducible from `research/tier-palette-audit.py`. Heat badge text measures
+**1.96:1** against the top of its own gradient, where body text needs 4.5:1, and the icon inherits it
+through `currentColor`. Stance measures 4.26:1. Stance and Breach borders sit **9.22 CIEDE2000**
+apart against a median of 38.91, and close to 6.25 under protanopia, so the two most serious tiers
+are one colour. Forum's border measures **1.50:1** against the card surface, against a 3:1 floor,
+which makes the tier the Quality sort exists to surface the least visible of the seven. Spark is
+2.52:1. And the one contrast fix already in the spec, rendering the Forum icon in `--text-primary`,
+was applied to a tier measuring 6.39:1 while Heat at 1.96:1 was left alone.
+
+**Most of it is fixable without touching a locked value.** The tier icons already exist in the spec.
+Carrying one into each topology segment satisfies SC 1.4.1 and separates Stance from Breach using a
+channel colour blindness does not touch. A visible divider between segments handles Forum and Spark.
+Only the Heat and Stance text colours need a token change, and that is Dan's, which is why it is an
+advice record rather than a proposal.
+
+**Space is the channel with no tokens at all.** The set locks nine surfaces, nine text colours,
+twenty-eight tier values, four borders, three shadows, four families and three radii, and defines no
+spacing value, no type size, no line height and no measure. In their place the spec uses 29 font
+sizes, 14 of them inside the band from 0.52rem to 0.95rem, six of those inside two pixels of each
+other. Seventeen padding values, six of which are off any grid. Fourteen line heights. Nothing
+distinguishes a deliberate number from an accident, because there is no scale to be off.
+
+That matters more than it sounds. Proximity is the grouping cue that fires first and usually wins,
+so spacing is what tells a reader whether the Contrast Strip belongs to the comment above it. In
+`apps/web` the whole layout system is `main { max-width: 44rem; padding: 3rem 1rem; }`, which renders
+article prose in DM Sans at roughly 85 characters per line when the token set defines a reading face
+and the spec elsewhere uses `ch`. Adding the two scales takes nothing away and gives every island
+built from A-1 onward something to be checked against.
 
 ---
 

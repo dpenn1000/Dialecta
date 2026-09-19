@@ -37,3 +37,26 @@
 | todo | Discourse `newuser` rate limit settings, meta.discourse.org | The per-account caps that do the spam work a character minimum is being asked to do | Found while filing `2018-atwood-discourse-trust-levels.md` |
 | todo | Atwood (2013), "Civilized Discourse Construction Kit", Coding Horror, February 2013 | The founding argument for the whole Discourse design, including reading as the unit of trust | Split out of the seed row after the domain in the seed turned out wrong |
 | todo | Custom SMTP providers for Supabase Auth: deliverability, domain warmup, monthly cost | P0-4 cannot ship magic links without one. The choice has a price and belongs in front of the treasurer | Found while filing `2026-supabase-auth-email-limits.md` |
+
+## Added in sprint 2: the craft half
+
+*Sprint 1 read entirely about behaviour and filed nothing on colour, space, type or layout. The
+charter names mobile, five nav items and copy a busy adult can read once, and the tier palette is the
+platform's signature visual element. This half of the tree starts here.*
+
+| State | Lead | Why it matters here | Note |
+| --- | --- | --- | --- |
+| filed | W3C, WCAG 2.2 Understanding SC 1.4.1 Use of Color and SC 1.4.11 Non-text Contrast | The two normative criteria that govern the seven tier system, the topology bar and every badge | `2023-w3c-wcag22-colour-criteria.md` |
+| filed | Somers, "Visual Contrast of Text Subgroup Whitepaper", W3C Silver wiki | Why the WCAG 2.x number is least reliable exactly where Stance and Breach sit | `2021-somers-apca-contrast-whitepaper.md`. Explicitly not a W3C recommendation. Direction sound, thresholds contested |
+| filed | Healey (1996), "Choosing effective colours for data visualization", IEEE Vis | How a categorical palette should be chosen: colour distance, linear separation and colour category, all controlled | `1996-healey-effective-colours.md`. Citation verified against Crossref; read from the author's summary page, not the IEEE full text |
+| filed | Wagemans et al. (2012), "A century of Gestalt psychology in visual perception: I", Psychological Bulletin | Proximity is the grouping cue that fires first. It is the mechanism by which spacing carries meaning | `2012-wagemans-gestalt-grouping.md` |
+| filed | Dyson and Haselgrove (2001), line length and reading from screen, IJHCS 54 | 55 characters per line beat 100 on comprehension. Bears on the article measure in `apps/web` | `2001-dyson-haselgrove-line-length.md`. Paywalled; finding read from secondary summaries, citation verified against Crossref |
+| filed | Own measurement: the seven tier palette | Six measured failures against WCAG, CIEDE2000 and CVD simulation | `2026-dialecta-tier-palette-audit.md`, reproducible via `tier-palette-audit.py` |
+| filed | Own measurement: space and scale in the token set | No spacing token, no type scale, no measure. 29 font sizes, 17 paddings, 14 line heights in their place | `2026-dialecta-space-and-scale-audit.md` |
+| todo | Machado, Oliveira and Fernandes (2009), "A physiologically-based model for simulation of color vision deficiency", IEEE TVCG | The CVD matrices the palette audit runs on. Read the primary before defending the simulated numbers | Used in `tier-palette-audit.py` at severity 1.0. Citation not yet verified |
+| todo | Brewer, ColorBrewer and the qualitative palette method | The working method for a categorical palette that survives CVD and print. The nearest thing to a recipe for D-11 | |
+| todo | Material Design 3 and the Apple HIG on type scales and spacing grids | Two shipped systems that solve D-15. Read for the shape of the scale, never for the look | |
+| todo | Nielsen Norman Group, research on icon comprehension without labels | D-13 proposes carrying tier icons into topology segments. An icon nobody can read is not a second channel | |
+| todo | WCAG 2.2 SC 1.4.10 Reflow and SC 1.4.4 Resize Text | The normative half of the Responsive Foundations debt the charter says is mine to keep raising | |
+| todo | The `ch` unit and the measure: how the design spec's own `50ch` / `52ch` / `64ch` rules were chosen | The spec already knows about `ch` and `apps/web` does not. Find out which rule was deliberate | Found while filing `2001-dyson-haselgrove-line-length.md` |
+| todo | Tufte, data-ink ratio, applied to the topology bar | The topology bar is a data visualisation and has never been read as one | |
