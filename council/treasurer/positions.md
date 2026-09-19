@@ -1,5 +1,55 @@
 # Standing positions
 
+*Sprint 1, 2026-09-19. Fourteen sources filed in `research/`. Every price carries a fetch date of 2026-09-19 and every one was read from the vendor's own page unless the row says otherwise. Revenue figures are models, not measurements: Dialecta has no membership revenue yet. The charter says this advisor's numbers are estimates until Dan supplies current spend and member count, and they still are.*
+
+*Full arguments: `positions/monetization.md`, `positions/p0-d2-signup.md`. Nothing here has been argued in council yet; none of these has survived a rebuttal.*
+
+## Monetization
+
 | Position | Confidence | Evidence | Last changed |
 | --- | --- | --- | --- |
-| (none yet; first council run fills this) | | | |
+| Dialecta's fixed floor is about $47 a month after Ghost cutover, $62 before. Annualised, about $564 and $744 | High | `research/2026-supabase-pricing.md`, `research/2026-vercel-pricing.md`, `research/2026-ghost-magicpages-hosting.md`, `research/2026-resend-pricing.md` | 2026-09-19 |
+| Fund the platform with a voluntary annual membership plus a patronage line, gating nothing, and rule grants out of the operating base | Medium | `positions/monetization.md`, `research/2026-wikimedia-fundraising.md`, `research/2025-inn-index-revenue-mix.md` | 2026-09-19 |
+| Bill annually, never monthly. Stripe's fixed 30 cents makes a $5 monthly membership cost 9.6 percent in fees against 4.2 percent for $50 a year | High | `research/2026-stripe-processing-fees.md` | 2026-09-19 |
+| Never price a single charge below about $5. At $3 the processor takes 13.6 percent, at $1 it takes a third | High | `research/2026-stripe-processing-fees.md` | 2026-09-19 |
+| Do not gate commenting behind payment. One $50 member covers 25,000 classified comments, so the contributor is never the cost problem, and the classified corpus is the Tier 3 moat | Medium | `positions/monetization.md`, `research/2026-anthropic-api-pricing.md` | 2026-09-19 |
+| Advertising stays vetoed. MetaFilter lost 40 percent of traffic and nearly half its ad revenue in weeks on a Google ranking change, having changed nothing | High | `research/2014-metafilter-ad-collapse.md` | 2026-09-19 |
+| Never pay contributors from a pooled subscription. Pooled payout makes contributor cost scale with contributors while revenue scales with paying members | High | `research/2026-medium-partner-program.md` | 2026-09-19 |
+| A grant may fund a discrete build with an end date. It may never fund the monthly floor. INN's members take 49 percent from foundations and the sector calls that mix unbalanced | High | `research/2025-inn-index-revenue-mix.md` | 2026-09-19 |
+| Do not route payments through Patreon or Substack. Both take 10 percent for a payment page and discovery that Dialecta does not need | High | `research/2026-substack-platform-fee.md`, `research/2026-patreon-kofi-patronage-fees.md` | 2026-09-19 |
+| Self-hosting is not the frugal choice. Against Substack it needs over a hundred members to break even on cash. It is the right choice anyway, because Substack cannot run the tier engine | Medium-high | `positions/monetization.md`, `research/2026-substack-platform-fee.md` | 2026-09-19 |
+| Deciding monetization now is free and deciding it late already costs. Vercel Hobby is non-commercial use only, so the first membership changes which plans are legal | High | `research/2026-vercel-pricing.md` | 2026-09-19 |
+
+## Unit cost and the AI spend
+
+| Position | Confidence | Evidence | Last changed |
+| --- | --- | --- | --- |
+| One Stage 1 classification costs about $0.002, ceiling $0.004, at Haiku 4.5 against the live prompt in `api/classify.js` | Medium-high | `research/2026-anthropic-api-pricing.md` | 2026-09-19 |
+| AI is not the budget problem and will not become one. At 10,000 comments a month it is $20 against a $47 fixed floor | High | `research/2026-anthropic-api-pricing.md` | 2026-09-19 |
+| Do not plan a prompt-caching discount for the classifier. Haiku 4.5 needs a 4,096-token prefix, the live prompt is about 670, and caching is skipped silently | High | `research/2026-anthropic-caching-batch-limits.md` | 2026-09-19 |
+| The Batch API's 50 percent discount cannot serve Stage 1, because the Project Brief specifies pre-analysis as instant and on submit. Use it for backfill, re-scoring and fine-tuning prep | High | `research/2026-anthropic-caching-batch-limits.md` | 2026-09-19 |
+| Supabase Pro at $25 is a floor, not a choice: Free projects pause after a week of inactivity | High | `research/2026-supabase-pricing.md` | 2026-09-19 |
+| Supabase Team at $599 buys nothing Dialecta needs. Its quotas are identical to Pro | High | `research/2026-supabase-pricing.md` | 2026-09-19 |
+| Cancelling Ghost saves $15 a month at best, and the saving turns negative once the mailing list passes 100 sends a day. ADR-001 is right for non-financial reasons and should not be defended on cost | Medium-high | `research/2026-ghost-magicpages-hosting.md`, `research/2026-resend-pricing.md` | 2026-09-19 |
+
+## P0-D2, sign-up
+
+| Position | Confidence | Evidence | Last changed |
+| --- | --- | --- | --- |
+| On cost alone there is no case for invite-only. Nothing in Supabase, Vercel or Anthropic bends with user count at any volume Dialecta will reach | High | `positions/p0-d2-signup.md`, `research/2026-supabase-pricing.md`, `research/2026-vercel-pricing.md` | 2026-09-19 |
+| The email cost curve bends at about 100 members, where Resend's 100-a-day free cap binds. The comment cost curve bends on comments, not accounts | High | `research/2026-resend-pricing.md`, `research/2026-anthropic-api-pricing.md` | 2026-09-19 |
+| Open sign-up needs a per-account rate limit, email verification and the A-1 composer gate. Without them every spam comment is a paid API call with no ceiling, and it contaminates the Tier 3 corpus | Medium | `positions/p0-d2-signup.md` | 2026-09-19 |
+| Invite-only spreads a fixed cost across the fewest possible people, which is the worst version of this platform's cost structure | Medium | `positions/p0-d2-signup.md` | 2026-09-19 |
+| Notifications should default to a digest rather than per-event sends. Per-event email scales with users multiplied by activity and crosses the free cap first | Medium | `research/2026-resend-pricing.md` | 2026-09-19 |
+
+## Where this advisor agrees with another, which is worth recording
+
+| Position | Confidence | Evidence | Last changed |
+| --- | --- | --- | --- |
+| Pooled contributor payouts are vetoed twice over: on cost by this advisor, and on the thesis by the philosopher, since paying for reading time rewards performed thinking and gives the fingerprint a cash value | High | `research/2026-medium-partner-program.md` | 2026-09-19 |
+
+## Open against this advisor
+
+| What | Where |
+| --- | --- |
+| Whether asking contributors for money changes what they do. The monetization position assumes it does not and has no evidence either way | `exchange/open/2026-09-19-002-blindspot-membership-intrinsic-motivation.md` |
