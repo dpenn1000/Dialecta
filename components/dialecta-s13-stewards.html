@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Stewards of Dialecta</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #f7f2e8;
+    --bg-secondary: #efe8da;
+    --bg-tertiary: #e8dfce;
+    --bg-white: #fffdf8;
+    --bg-dark: #1c1814;
+    --bg-dark-elevated: #28231a;
+
+    --text-primary: #1c1814;
+    --text-body: #3a342c;
+    --text-secondary: #5a5248;
+    --text-tertiary: #7a7068;
+    --text-muted: #9a8e80;
+    --text-on-dark: #f0ebe0;
+
+    --gold: #d4a84a;
+    --gold-bright: #e8a830;
+    --gold-muted: #a07828;
+    --gold-pale: #f5e8d0;
+    --amber: #b8732a;
+    --terra: #8c4a2f;
+
+    --border-light: #e8e0d0;
+    --border-medium: #d8ceb8;
+    --border-dark: #c8bca4;
+    --border-rule: #b8732a;
+
+    --shadow-sm: 0 1px 3px rgba(28,24,20,0.04);
+    --shadow-md: 0 2px 8px rgba(28,24,20,0.06), 0 0 0 1px rgba(28,24,20,0.02);
+    --shadow-lg: 0 4px 20px rgba(28,24,20,0.08), 0 0 0 1px rgba(28,24,20,0.02);
+
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-reading: 'Source Serif 4', Georgia, serif;
+    --font-mono: 'DM Mono', monospace;
+
+    --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: linear-gradient(135deg, #a8a398 0px, #8c8780 175px, #f7f2e8 775px, #f7f2e8 100%);
+    color: var(--text-body);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* Paper grain overlay (canonical) */
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+    opacity: 0.035;
+  }
+
+  /* ── Primary nav: logo bar (v1.2 two-bar system) ── */
+  .spec-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 101;
+    background: linear-gradient(135deg, #f7f2e8 0%, #1c1814 65%, #1c1814 100%);
+    border-bottom: 1px solid rgba(184,115,42,0.22);
+    display: flex; align-items: center; height: 52px;
+  }
+  .spec-nav .nav-inner { width: 100%; max-width: 1060px; margin: 0 auto; padding: 0 32px 0 20px; display: flex; align-items: center; }
+  .spec-nav .logo-img { height: 40px; width: auto; mix-blend-mode: multiply; display: block; }
+
+  /* ── Sub-nav: section links ── */
+  .spec-sub-nav {
+    position: fixed; top: 52px; left: 0; right: 0; z-index: 100; height: 34px;
+    background: linear-gradient(to bottom, #eceae4 0%, #d8d4cc 48%, #eceae4 100%);
+    display: flex; align-items: center;
+  }
+  .spec-sub-nav::before, .spec-sub-nav::after {
+    content: ''; position: absolute; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.92) 8%, rgba(255,255,255,0.96) 50%, rgba(255,255,255,0.92) 92%, transparent 100%);
+  }
+  .spec-sub-nav::before { top: 0; } .spec-sub-nav::after { bottom: 0; }
+  .spec-sub-nav .nav-inner-sub { width: 100%; max-width: 1060px; margin: 0 auto; padding: 0 32px 0 20px; display: flex; align-items: center; position: relative; z-index: 1; height: 34px; }
+  .spec-sub-nav .nav-links { display: flex; align-items: center; height: 100%; }
+  .spec-sub-nav .nav-links a { font-family: var(--font-body); font-size: 0.82rem; font-weight: 400; letter-spacing: 0.01em; color: #3a342c; text-decoration: none; padding: 0 13px; height: 100%; display: flex; align-items: center; border-right: 1px solid rgba(180,175,165,0.28); transition: background 0.15s, color 0.15s; }
+  .spec-sub-nav .nav-links a:first-child { padding-left: 2px; }
+  .spec-sub-nav .nav-links a:last-child { border-right: none; }
+  .spec-sub-nav .nav-links a:hover { background: rgba(255,255,255,0.35); color: #1c1814; }
+
+  /* ── Page container ── */
+  .page { max-width: 1060px; margin: 0 auto; padding: 110px 32px 80px; position: relative; z-index: 1; }
+  @media (max-width: 768px) { .page { padding: 110px 18px 56px; } .spec-sub-nav .nav-links { display: none; } }
+
+  /* ── Masthead ── */
+  .masthead {
+    text-align: center;
+    padding: 56px 24px 64px;
+    margin-bottom: 64px;
+    position: relative;
+  }
+  .masthead-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 32px;
+  }
+  .masthead-prefix {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+    color: var(--text-secondary);
+    line-height: 1;
+    margin-bottom: 18px;
+    letter-spacing: 0.005em;
+  }
+  .masthead-logo {
+    display: block;
+    margin: 0 auto 18px;
+    height: clamp(72px, 11vw, 128px);
+    width: auto;
+  }
+  .masthead-pair {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .masthead-pair-line {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+    line-height: 1.25;
+    background: linear-gradient(135deg, #ecb438 0%, #d4a84a 50%, #f5dfa0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 1px 2px rgba(28,24,20,0.45)) drop-shadow(0 0 1px rgba(28,24,20,0.3));
+    letter-spacing: 0.005em;
+  }
+
+  /* ── Opening prose ── */
+  .opening {
+    max-width: 680px;
+    margin: 0 auto 80px;
+    text-align: center;
+  }
+  .opening p {
+    font-family: var(--font-reading);
+    font-size: 1.12rem;
+    line-height: 1.75;
+    color: var(--text-body);
+    font-weight: 400;
+    margin-bottom: 18px;
+  }
+  .opening p:last-child { margin-bottom: 0; }
+  .opening p .lede {
+    font-style: italic;
+    color: var(--text-primary);
+  }
+
+  /* ── Section headers ── */
+  .section { margin-bottom: 88px; scroll-margin-top: 110px; }
+  .section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 2.1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    line-height: 1.15;
+  }
+  .section-lede {
+    font-family: var(--font-reading);
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin-bottom: 32px;
+    font-weight: 400;
+  }
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, var(--border-rule), transparent 55%);
+    margin-bottom: 40px;
+    opacity: 0.32;
+  }
+
+  /* ── Trust loop callout ── */
+  .trust-loop {
+    background: var(--bg-white);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    padding: 36px 40px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .trust-loop p {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    font-weight: 400;
+  }
+  .trust-loop .trust-divider {
+    width: 80px;
+    height: 1px;
+    background: var(--gold);
+    margin: 18px auto;
+    opacity: 0.6;
+  }
+
+  /* ── Cadence strip ── */
+  .cadence-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+  }
+  .cadence-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 18px 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .cadence-name {
+    font-family: var(--font-display);
+    font-size: 1.18rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .cadence-desc {
+    font-family: var(--font-reading);
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* ── Family blocks ── */
+  .family { margin-bottom: 64px; scroll-margin-top: 110px; }
+  .family-header {
+    margin-bottom: 28px;
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+  }
+  .family-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .family-name {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-style: italic;
+  }
+  .family-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border-rule), transparent 70%);
+    opacity: 0.3;
+  }
+
+  /* ── Order grid + cards ── */
+  .order-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .order-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 28px 26px 24px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .order-ornament {
+    font-size: 1.4rem;
+    color: var(--gold-muted);
+    margin-bottom: 6px;
+    line-height: 1;
+    font-family: var(--font-display);
+  }
+  .order-name {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    line-height: 1.15;
+  }
+  .order-essence {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.02rem;
+    color: var(--gold-muted);
+    margin-bottom: 14px;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+  .order-definition {
+    font-family: var(--font-reading);
+    font-size: 0.94rem;
+    line-height: 1.65;
+    color: var(--text-body);
+    margin-bottom: 14px;
+    font-weight: 400;
+  }
+  .order-tell {
+    font-family: var(--font-reading);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+  }
+  .order-tell-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 500;
+    margin-right: 4px;
+  }
+
+  /* Declared (Satirist) special treatment */
+  .order-card-declared {
+    background: linear-gradient(180deg, #fffdf8 0%, #f9f0d8 100%);
+    border-color: var(--gold);
+    border-width: 1px;
+    box-shadow: 0 4px 24px rgba(212,168,74,0.15), 0 0 0 1px rgba(212,168,74,0.18);
+  }
+  .order-card-declared .order-ornament { color: var(--gold-bright); }
+  .order-card-declared .order-name { color: var(--text-primary); }
+
+  /* ── The door is open section ── */
+  .doorway {
+    background: var(--bg-dark);
+    color: var(--text-on-dark);
+    border-radius: var(--radius-lg);
+    padding: 56px 48px;
+    margin: 88px 0 56px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+  }
+  .doorway-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .doorway-title {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: var(--text-on-dark);
+    margin-bottom: 8px;
+    line-height: 1.15;
+  }
+  .doorway-title em {
+    font-style: italic;
+    background: linear-gradient(135deg, #ecb438 0%, #f5dfa0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .doorway-motto {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--gold);
+    margin-bottom: 28px;
+    letter-spacing: 0.01em;
+  }
+  .doorway-body {
+    max-width: 580px;
+    margin: 0 auto;
+  }
+  .doorway-body p {
+    font-family: var(--font-reading);
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(240,235,224,0.88);
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .doorway-body p:last-child { margin-bottom: 0; }
+
+  /* ── Footer note ── */
+  .footer-note {
+    text-align: center;
+    padding: 40px 20px 0;
+    border-top: 1px solid var(--border-light);
+    margin-top: 48px;
+  }
+  .footer-note p {
+    font-family: var(--font-reading);
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--text-tertiary);
+    line-height: 1.7;
+    max-width: 580px;
+    margin: 0 auto 8px;
+  }
+  .footer-note .footer-meta {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-style: normal;
+    margin-top: 14px;
+  }
+
+  /* ── Mobile refinements ── */
+  @media (max-width: 600px) {
+    .masthead { padding: 32px 12px 44px; margin-bottom: 44px; }
+    .masthead-prefix { font-size: 1.3rem; }
+    .masthead-logo { height: 64px; margin-bottom: 14px; }
+    .masthead-pair-line { font-size: 1.5rem; }
+    .opening p { font-size: 1rem; }
+    .trust-loop { padding: 28px 22px; }
+    .trust-loop p { font-size: 1.2rem; }
+    .doorway { padding: 40px 24px; }
+    .doorway-title { font-size: 1.9rem; }
+    .order-grid { grid-template-columns: 1fr; }
+    .family-header { flex-wrap: wrap; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="spec-nav">
+  <div class="nav-inner">
+    <div class="logo-wrap">
+      <!-- logo blob scrubbed � see /Logos/ for source -->
+    </div>
+  </div>
+</nav>
+
+<nav class="spec-sub-nav">
+  <div class="nav-inner-sub">
+    <div class="nav-links">
+      <a href="#opening">The Stewards</a>
+      <a href="#trust">The Trust</a>
+      <a href="#cadence">Cadence</a>
+      <a href="#orders">The Orders</a>
+      <a href="#satirist">The Satirist</a>
+      <a href="#doorway">The Door</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- ── Masthead ── -->
+  <header class="masthead" id="opening">
+    <div class="masthead-eyebrow">A Foundational Page of Dialecta</div>
+    <div class="masthead-prefix">The Stewards of</div>
+    <!-- logo blob scrubbed � see /Logos/ for source -->
+    <div class="masthead-pair">
+      <div class="masthead-pair-line">Trusted by their readers</div>
+      <div class="masthead-pair-line">chosen by their work</div>
+    </div>
+  </header>
+
+  <!-- ── Opening prose ── -->
+  <section class="opening">
+    <p><span class="lede">The Stewards are Dialecta's writers</span> — recognized not by appointment, but by readers who have come to trust their work over time.</p>
+    <p>The Orders below are not a closed circle. They are a portrait of the kinds of writing this place wants to make possible — and a path for anyone who wants to grow toward them. There is no committee to impress, no credential to claim, no follower count to accrue. There is only the work, and the readers who read it, and time.</p>
+  </section>
+
+  <!-- ── Trust loop ── -->
+  <section class="section" id="trust">
+    <div class="section-eyebrow">The Premise</div>
+    <h2 class="section-title">The trust between writer and reader</h2>
+    <p class="section-lede">Dialecta runs on a single relationship, which the platform protects above all others. Every other system here exists to serve it, or to refuse to interfere with it.</p>
+    <div class="section-divider"></div>
+    <div class="trust-loop">
+      <p>The writers' work earns the trust.</p>
+      <div class="trust-divider"></div>
+      <p>The readers' trust confers the recognition.</p>
+    </div>
+  </section>
+
+  <!-- ── Cadence ── -->
+  <section class="section" id="cadence">
+    <div class="section-eyebrow">The Modifier</div>
+    <h2 class="section-title">Cadence — the rhythm of contribution</h2>
+    <p class="section-lede">Frequency is not its own Order. A once-a-year writer and a weekly writer can share an identity — they are doing the same kind of intellectual work at different rhythms. Every Steward's Order is paired with a cadence, drawn from the language of publishing. Dialecta refuses to reward volume over depth: a Magnum Opus Steward who publishes four times a year carries as much weight as a Serial Steward who publishes weekly.</p>
+    <div class="section-divider"></div>
+    <div class="cadence-grid">
+        <div class="cadence-card">
+          <div class="cadence-name">Daily</div>
+          <div class="cadence-desc">Newspaper-cadence. Writes most days.</div>
+        </div>
+        <div class="cadence-card">
+          <div class="cadence-name">Serial</div>
+          <div class="cadence-desc">Regular columnist's rhythm. Weekly to fortnightly.</div>
+        </div>
+        <div class="cadence-card">
+          <div class="cadence-name">Periodical</div>
+          <div class="cadence-desc">Monthly-ish. Considered, scheduled.</div>
+        </div>
+        <div class="cadence-card">
+          <div class="cadence-name">Quarterly</div>
+          <div class="cadence-desc">Long gestation. Fewer, larger pieces.</div>
+        </div>
+        <div class="cadence-card">
+          <div class="cadence-name">Occasional</div>
+          <div class="cadence-desc">Writes when there is something to say.</div>
+        </div>
+        <div class="cadence-card">
+          <div class="cadence-name">Magnum Opus</div>
+          <div class="cadence-desc">Rare-but-major. One piece a year that lands like a book.</div>
+        </div>
+    </div>
+  </section>
+
+  <!-- ── The Orders ── -->
+  <section class="section" id="orders">
+    <div class="section-eyebrow">The Stewardship</div>
+    <h2 class="section-title">The Orders</h2>
+    <p class="section-lede">More than thirty distinct kinds of writing, drawn from the full literary, scholarly, journalistic, and practitioner traditions. The Orders are not a hierarchy. They are a portrait of the many ways a person can write well — and a doorway for any reader who wants to grow toward becoming one. New Orders may be added editorially as Dialecta grows and recognizes kinds of writers it did not anticipate.</p>
+    <div class="section-divider"></div>
+
+      <section class="family" id="family-essayistic">
+        <div class="family-header">
+          <span class="family-label">Family</span>
+          <h2 class="family-name">Essayistic</h2>
+          <div class="family-rule"></div>
+        </div>
+        <div class="order-grid">
+        <article class="order-card">
+          <div class="order-ornament">❦</div>
+          <h3 class="order-name">The Essayist</h3>
+          <p class="order-essence">Thinks in essays the way other people think in conversations.</p>
+          <p class="order-definition">Personal voice, exploratory structure, willing to circle a question rather than spear it. Montaigne's children — comfortable not knowing the answer at the start of the piece, comfortable still uncertain at the end if the uncertainty has been earned.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“I've been turning this over for a while…”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✦</div>
+          <h3 class="order-name">The Aphorist</h3>
+          <p class="order-essence">Compresses. Where others need a thousand words, this writer needs forty.</p>
+          <p class="order-definition">Sentences you remember after you've forgotten the piece they came from. The hardest of the literary forms to do well, because every word has to carry what an essay would distribute across paragraphs.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Pieces shorter than the comments they generate.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✥</div>
+          <h3 class="order-name">The Memoirist</h3>
+          <p class="order-essence">Mines personal experience for what it can teach beyond itself.</p>
+          <p class="order-definition">Not navel-gazing. The self as case study, the life as evidence. The reader leaves with something that turns out to be about them, not about the writer.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“I didn't understand this until it happened to me.”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">❧</div>
+          <h3 class="order-name">The Diarist</h3>
+          <p class="order-essence">Writes in real time, in installments, thinking out loud across weeks or months.</p>
+          <p class="order-definition">The reader watches the idea form. Conclusions evolve in public. The form trades certainty for honesty about how thinking actually works.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Dated entries, evolving conclusions.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✜</div>
+          <h3 class="order-name">The Blogger</h3>
+          <p class="order-essence">Reclaiming the word — the honest, frequent, personal-voice writer who built the open web.</p>
+          <p class="order-definition">Conversational, linkable, generous with the reader's time. The descendant of the early bloggers who treated the form as correspondence with strangers, before the platforms ate it.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Feels like a letter from a smart friend.</em></p>
+        </article>
+        </div>
+      </section>
+      <section class="family" id="family-argumentative">
+        <div class="family-header">
+          <span class="family-label">Family</span>
+          <h2 class="family-name">Argumentative</h2>
+          <div class="family-rule"></div>
+        </div>
+        <div class="order-grid">
+        <article class="order-card">
+          <div class="order-ornament">❖</div>
+          <h3 class="order-name">The Pamphleteer</h3>
+          <p class="order-essence">Writes to move you. Argument-forward, unafraid of a position.</p>
+          <p class="order-definition">The honorable descendant of Paine and Swift. Not a ranter — a persuader with a thesis and a spine. Pieces you could hand someone and say *read this.*</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Titles you remember, claims you can repeat from memory.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">❂</div>
+          <h3 class="order-name">The Polemicist</h3>
+          <p class="order-essence">Sharper cousin of the Pamphleteer. Names opponents, doesn't pretend to neutrality.</p>
+          <p class="order-definition">Welcome here *if* the work meets Forum-level standards: specific claims, named counter-arguments, no Heat. The form is honorable when it is honest about being a fight.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Titles that take a side — and earn it.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✺</div>
+          <h3 class="order-name">The Dialectician</h3>
+          <p class="order-essence">Thinks by staging the argument on the page itself.</p>
+          <p class="order-definition">Sets thesis against antithesis, lets them grapple, finds the synthesis honestly. Reads like a Platonic dialogue in modern dress. The strongest version of the opposing view is presented before the critique — every time.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“The strongest version of the opposing view is this…” — and means it.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✤</div>
+          <h3 class="order-name">The Provocateur</h3>
+          <p class="order-essence">Asks the question nobody wanted asked, in good faith.</p>
+          <p class="order-definition">Not contrarian for sport — genuinely curious about the unexamined assumption. The Provocateur's value is measured by whether the question they raised was worth raising, not by how much it stung.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Pieces that begin “What if we're wrong about…”</em></p>
+        </article>
+        </div>
+      </section>
+      <section class="family" id="family-synthetic">
+        <div class="family-header">
+          <span class="family-label">Family</span>
+          <h2 class="family-name">Synthetic</h2>
+          <div class="family-rule"></div>
+        </div>
+        <div class="order-grid">
+        <article class="order-card">
+          <div class="order-ornament">✧</div>
+          <h3 class="order-name">The Cartographer</h3>
+          <p class="order-essence">Maps the intellectual terrain of a topic.</p>
+          <p class="order-definition">Shows you the camps, the fault lines, the unexplored country. Doesn't tell you where to stand — shows you where standing is *possible*. The reader leaves knowing where everything sits in relation to everything else.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“There are at least four ways to read this…”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">❀</div>
+          <h3 class="order-name">The Anthologist</h3>
+          <p class="order-essence">Curates and connects. Surfaces work, threads it together.</p>
+          <p class="order-definition">Part-writer, part-editor in spirit. Makes the longer conversation legible by gathering pieces that, read together, tell a story nobody told on purpose.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“Five pieces from the last year that, read together…”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✠</div>
+          <h3 class="order-name">The Translator</h3>
+          <p class="order-essence">Moves ideas across languages, traditions, or disciplines.</p>
+          <p class="order-definition">Makes the economist legible to the theologian and vice versa, without flattening either. The Translator's authority is in *fidelity to both sides* of whatever divide they're crossing.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“What [field A] calls X, [field B] has been calling Y for a hundred years.”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✪</div>
+          <h3 class="order-name">The Theorist</h3>
+          <p class="order-essence">Builds frameworks. Less interested in any single question than in the architecture that lets you ask better questions.</p>
+          <p class="order-definition">Philosophers, systems thinkers, the scaffolding-builders. Introduces vocabulary the reader ends up using afterward, often without remembering where they got it.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Coins the term you find yourself repeating.</em></p>
+        </article>
+        </div>
+      </section>
+      <section class="family" id="family-scholarly">
+        <div class="family-header">
+          <span class="family-label">Family</span>
+          <h2 class="family-name">Scholarly</h2>
+          <div class="family-rule"></div>
+        </div>
+        <div class="order-grid">
+        <article class="order-card">
+          <div class="order-ornament">✦</div>
+          <h3 class="order-name">The Philologist</h3>
+          <p class="order-essence">Deep reader. Goes to the primary text, the original language, the footnote nobody followed.</p>
+          <p class="order-definition">Scholarly without being inaccessible. The kind of writer who can show you that the translation everyone quotes has been quietly softening the thing it translates for two hundred years.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“The translation we usually quote actually softens what the original says.”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✜</div>
+          <h3 class="order-name">The Lexicographer</h3>
+          <p class="order-essence">Obsessed with definitions.</p>
+          <p class="order-definition">Believes most arguments are really about words people haven't agreed on yet, and sets out to fix that. The Lexicographer's pieces tend to clarify whole conversations that had been going in circles for years.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“Before we go further, what do we actually mean by…”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">❦</div>
+          <h3 class="order-name">The Historian</h3>
+          <p class="order-essence">Long view. Connects today's question to the centuries-long version of itself.</p>
+          <p class="order-definition">Refuses presentism without being nostalgic. Shows that arguments we think are new have been had before — sometimes well, sometimes badly — and that knowing which is which changes how we have them now.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“This argument is older than you think.”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✤</div>
+          <h3 class="order-name">The Empiricist</h3>
+          <p class="order-essence">Data-forward. Brings the numbers, the studies, the meta-analyses.</p>
+          <p class="order-definition">And — crucially — brings the *humility about what data can and can't tell you* that separates good empiricism from scientism. The best Empiricists are the most honest about what their evidence does not show.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“Three studies say X. Here's why I only half-believe them.”</em></p>
+        </article>
+        </div>
+      </section>
+      <section class="family" id="family-narrative">
+        <div class="family-header">
+          <span class="family-label">Family</span>
+          <h2 class="family-name">Narrative</h2>
+          <div class="family-rule"></div>
+        </div>
+        <div class="order-grid">
+        <article class="order-card">
+          <div class="order-ornament">✿</div>
+          <h3 class="order-name">The Fabulist</h3>
+          <p class="order-essence">Teaches through story. Parables, scenes, characters who carry the idea on their backs.</p>
+          <p class="order-definition">The argument arrives sideways and stays longer for it. The reader remembers the character, and the idea rides along in the memory of the character.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Opens with a person, not a premise.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✥</div>
+          <h3 class="order-name">The Playwright</h3>
+          <p class="order-essence">Thinks in scenes and voices.</p>
+          <p class="order-definition">Stages ideas as encounters between people who actually disagree, and lets the friction do the teaching. When dialogue appears on the page, it earns its place there — every voice is doing intellectual work.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Dialogue on the page, and it earns its place there.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">❂</div>
+          <h3 class="order-name">The Screenwriter</h3>
+          <p class="order-essence">Visual thinker. Pieces move like shots — economy, pacing, the cut.</p>
+          <p class="order-definition">Knows that what you don't show matters as much as what you do. The reader can see the piece while reading it, which makes the argument harder to forget.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>You can *see* the piece while reading it.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">❀</div>
+          <h3 class="order-name">The Biographer</h3>
+          <p class="order-essence">Writes lives.</p>
+          <p class="order-definition">Believes you understand an idea best by understanding the person who carried it. Pieces are structured around a single human and the world they moved through — the idea is the by-product of attending closely to the life.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Structured around a single human and the world they moved through.</em></p>
+        </article>
+        </div>
+      </section>
+      <section class="family" id="family-practitioner">
+        <div class="family-header">
+          <span class="family-label">Family</span>
+          <h2 class="family-name">Practitioner</h2>
+          <div class="family-rule"></div>
+        </div>
+        <div class="order-grid">
+        <article class="order-card">
+          <div class="order-ornament">✚</div>
+          <h3 class="order-name">The Clinician</h3>
+          <p class="order-essence">Writes from practice. Doctor, therapist, counselor, nurse, social worker.</p>
+          <p class="order-definition">Authority is grounded in working directly with people and their suffering. The voice is careful, ethically alert, never reduces a person to a case. What follows the words *“in twenty years of practice”* is neither anecdote nor data, but the pattern that lives between them.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“In twenty years of practice, I've noticed…”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✦</div>
+          <h3 class="order-name">The Diagnostician</h3>
+          <p class="order-essence">Sharper, more analytical cousin of the Clinician.</p>
+          <p class="order-definition">Less interested in the bedside and more interested in the *reasoning* — why we think what we think about a condition, where the diagnostic categories came from, what they get right and wrong. A meta-practitioner.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“The DSM calls this X, but the phenomenon is older and stranger than the label.”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">❧</div>
+          <h3 class="order-name">The Naturalist</h3>
+          <p class="order-essence">Patient observer. Reports what's actually there in a system, a community, a phenomenon.</p>
+          <p class="order-definition">Resists the urge to moralize. Field-notes voice. The Naturalist's piece often refuses to draw the conclusion the reader expects, and the refusal is the point.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“Here's what I saw. Make of it what you will.”</em></p>
+        </article>
+        </div>
+      </section>
+      <section class="family" id="family-journalistic">
+        <div class="family-header">
+          <span class="family-label">Family</span>
+          <h2 class="family-name">Journalistic</h2>
+          <div class="family-rule"></div>
+        </div>
+        <div class="order-grid">
+        <article class="order-card">
+          <div class="order-ornament">✠</div>
+          <h3 class="order-name">The Correspondent</h3>
+          <p class="order-essence">Field writer. Reports from somewhere — a place, a community, a subculture, a personal experience the reader doesn't have access to.</p>
+          <p class="order-definition">Earned authority through presence. The Correspondent's credibility comes from having been in the room, and the writing has to earn its right to the reader's trust by showing the room.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“I spent six weeks with…”</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">❖</div>
+          <h3 class="order-name">The Annalist</h3>
+          <p class="order-essence">Chronicler. Records what happened, in order, with fidelity.</p>
+          <p class="order-definition">Less interested in the hot take than in the durable account. The Annalist's pieces are the ones future writers will cite when they want to know what actually happened.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Dates, sequence, receipts.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✜</div>
+          <h3 class="order-name">The Reportorial</h3>
+          <p class="order-essence">Old-school journalist instincts. Who, what, when, where, why — verified.</p>
+          <p class="order-definition">Sources named, claims checked, opinion clearly fenced from fact. The Reportorial Order is one of Dialecta's quietest and most important — these are the writers whose work the rest of the platform is allowed to build on.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>A methods note at the bottom.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✺</div>
+          <h3 class="order-name">The Critic</h3>
+          <p class="order-essence">In the literary sense: reads other work carefully and writes about it with authority.</p>
+          <p class="order-definition">Reviews, close readings, the considered judgment. The Critic takes other writers seriously enough to disagree in detail, which is the highest form of attention one writer can pay another.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>Takes other writers seriously enough to disagree in detail.</em></p>
+        </article>
+        <article class="order-card">
+          <div class="order-ornament">✥</div>
+          <h3 class="order-name">The Marginalia</h3>
+          <p class="order-essence">Writes in response.</p>
+          <p class="order-definition">Best work happens in dialogue with other pieces, other writers, the long argument. The platform's connective tissue. The Marginalia keeps the conversation a conversation rather than a series of monologues.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“[Writer] made a case last month that deserves a closer look.”</em></p>
+        </article>
+        </div>
+      </section>
+      <section class="family" id="family-pedagogical">
+        <div class="family-header">
+          <span class="family-label">Family</span>
+          <h2 class="family-name">Pedagogical</h2>
+          <div class="family-rule"></div>
+        </div>
+        <div class="order-grid">
+        <article class="order-card">
+          <div class="order-ornament">❦</div>
+          <h3 class="order-name">The Glossator</h3>
+          <p class="order-essence">Explainer in the medieval-monk tradition.</p>
+          <p class="order-definition">Takes a difficult text or idea and writes the patient, line-by-line gloss that makes it walkable for everyone else. The platform's best teacher, and one of the most generous Orders in the Stewardship.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“Let's go through this carefully.”</em></p>
+        </article>
+        </div>
+      </section>
+      <section class="family" id="family-speculative">
+        <div class="family-header">
+          <span class="family-label">Family</span>
+          <h2 class="family-name">Speculative</h2>
+          <div class="family-rule"></div>
+        </div>
+        <div class="order-grid">
+        <article class="order-card">
+          <div class="order-ornament">✪</div>
+          <h3 class="order-name">The Futurist</h3>
+          <p class="order-essence">Disciplined speculation.</p>
+          <p class="order-definition">Not prediction-as-entertainment — careful extrapolation with the assumptions made visible. The honest Futurist tells you exactly which premises their forecast depends on, so you can disagree with the right ones.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“If these three things hold, then…”</em></p>
+        </article>
+        </div>
+      </section>
+      <section class="family" id="family-declared">
+        <div class="family-header">
+          <span class="family-label">Family</span>
+          <h2 class="family-name">Declared</h2>
+          <div class="family-rule"></div>
+        </div>
+        <div class="order-grid">
+        <article class="order-card order-card-declared">
+          <div class="order-ornament">✦</div>
+          <h3 class="order-name">The Satirist</h3>
+          <p class="order-essence">The platform's only declared Order. Held to its own charter.</p>
+          <p class="order-definition">Satire is one of the oldest tools for critiquing ideas without attacking people. The Satirist of Dialecta accepts heightened scrutiny: the target must be an idea, a system, a claim, or an absurdity — never an identifiable individual or group defined by identity. The form must reward careful reading. A piece tagged as satire is read in a different register by both the engine and the readership. The Satirist's badge is one of the proofs that Dialecta's principles are real.</p>
+          <p class="order-tell"><span class="order-tell-label">Tell —</span> <em>“The strongest version of this argument is so absurd it survives only in writing.”</em></p>
+        </article>
+        </div>
+      </section>
+  </section>
+
+  <!-- ── Satirist note ── -->
+  <section class="section" id="satirist">
+    <div class="section-eyebrow">A Note on the Declared Order</div>
+    <h2 class="section-title">On the Satirist</h2>
+    <p class="section-lede">Most Orders are recognized by the platform from observed patterns of writing over time. Writers do not choose; they are seen. The Satirist is the exception — the Order's writers must declare themselves, accepting heightened scrutiny under a charter specific to the form. A platform that allows only earnest discourse looks afraid of its own rules. A platform that allows satire — and holds it to the same standard of substance — demonstrates that the rules are about substance, not tone. The Satirist's badge is one of the proofs that Dialecta's principles are real. The full Satirist's Charter will be published as a companion document.</p>
+  </section>
+
+  <!-- ── The door is open ── -->
+  <section class="doorway" id="doorway">
+    <div class="doorway-eyebrow">How a Steward is recognized</div>
+    <h2 class="doorway-title">The door is <em>open</em></h2>
+    <div class="doorway-motto">Chosen by their work.</div>
+    <div class="doorway-body">
+      <p>No one applies to be a Steward of Dialecta. No one is appointed. The Republic recognizes its Stewards the way it recognizes its best ideas — by reading what they have written, and by watching how they have written it over time.</p>
+      <p>The path is open to any reader who chooses to walk it. Write seriously, write specifically, write with care for the reader on the other side. The work does the rest.</p>
+      <p>This is the only credential the platform issues, and the only one it asks of you.</p>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="footer-note">
+    <p>The Stewards page is a living document. New Orders will be added as Dialecta grows and recognizes kinds of writers it has not yet anticipated. The principles that govern recognition will not change.</p>
+    <div class="footer-meta">Dialecta · Session 13 · Stewards · v1</div>
+  </footer>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dialecta — System Reference v1.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #b8862e;
+    --gold-light: #d4a84a;
+    --gold-pale: #f0dca0;
+    --cream: #f7f2e8;
+    --ink: #1c1814;
+    --ink-mid: #3a3028;
+    --ink-light: #6b5f50;
+    --warm-gray: #8c8780;
+    --rule: rgba(184,134,46,0.2);
+
+    /* Tier colors */
+    --forum-bg: #faf6ec;
+    --forum-border: #d4a84a;
+    --spark-bg: #fef3d0;
+    --spark-border: #e8a830;
+    --echo-bg: #edf3ec;
+    --echo-border: #7aaa78;
+    --fog-bg: #eef1f5;
+    --fog-border: #8fa3b8;
+    --heat-bg: #fdeee4;
+    --heat-border: #d4733a;
+    --stance-bg: #f5ede6;
+    --stance-border: #a0593a;
+    --breach-bg: #f5e8e8;
+    --breach-border: #8b2a2a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, #a8a398 0px, #8c8780 175px, #f7f2e8 775px, #f7f2e8 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* ── NAV ── */
+  .nav-logo-bar {
+    height: 52px;
+    background: rgba(28,24,20,0.96);
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(184,134,46,0.3);
+  }
+  .nav-wordmark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--gold-light);
+    letter-spacing: 0.04em;
+  }
+  .nav-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--warm-gray);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-left: 16px;
+    padding-left: 16px;
+    border-left: 1px solid rgba(255,255,255,0.12);
+  }
+
+  /* ── PAGE LAYOUT ── */
+  .page {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 56px 0 40px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .hero p {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    max-width: 640px;
+    line-height: 1.6;
+  }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-section {
+    margin-bottom: 52px;
+  }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: rgba(247,242,232,0.7);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .flow-node {
+    flex-shrink: 0;
+    text-align: center;
+    min-width: 110px;
+  }
+  .flow-node-box {
+    background: white;
+    border: 1px solid rgba(184,134,46,0.3);
+    border-radius: 5px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--ink-mid);
+    line-height: 1.3;
+  }
+  .flow-node-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .flow-arrow {
+    flex-shrink: 0;
+    color: var(--gold);
+    font-size: 1.1rem;
+    padding: 0 8px;
+    opacity: 0.6;
+  }
+  .flow-multi {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .flow-multi .flow-node-box {
+    font-size: 0.68rem;
+    padding: 6px 10px;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    margin-bottom: 20px;
+  }
+  .section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.55rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .section-header p {
+    font-size: 0.82rem;
+    color: var(--ink-light);
+    line-height: 1.5;
+  }
+
+  /* ── STAGE A GRID ── */
+  .stage-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 52px;
+  }
+  .stage-card {
+    background: white;
+    border: 1px solid rgba(184,134,46,0.2);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .stage-card-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .stage-card-q {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink-mid);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .stage-card-values {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .val-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    background: var(--cream);
+    border: 1px solid rgba(184,134,46,0.25);
+    border-radius: 3px;
+    padding: 2px 7px;
+    color: var(--ink-light);
+  }
+  .val-pill.gold {
+    background: #fef3d0;
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ── SPECIFICITY SPECTRUM ── */
+  .spectrum-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 52px;
+    background: white;
+    border: 1px solid rgba(184,134,46,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .spectrum-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 10px 16px;
+    text-align: left;
+    background: #faf6ec;
+    border-bottom: 1px solid rgba(184,134,46,0.2);
+  }
+  .spectrum-table td {
+    padding: 12px 16px;
+    font-size: 0.78rem;
+    color: var(--ink-mid);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  .spectrum-table tr:last-child td { border-bottom: none; }
+  .level-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .l0 { background: #f0f0f0; color: #888; }
+  .l1 { background: #fdeee4; color: #c0603a; }
+  .l2 { background: #fef3d0; color: #b8862e; }
+  .l3 { background: #faf6ec; color: #7a9a60; border: 1px solid #7a9a60; }
+
+  .spectrum-table .level-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tier-map-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+
+  /* ── TIER GRID ── */
+  .tier-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 52px;
+  }
+  .tier-card {
+    border-radius: 6px;
+    border: 1px solid;
+    padding: 16px 18px;
+    position: relative;
+  }
+  .tier-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .tier-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .tier-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  .tier-zone {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+  .tier-criteria {
+    font-size: 0.75rem;
+    line-height: 1.45;
+    margin-bottom: 8px;
+    opacity: 0.85;
+  }
+  .tier-tags {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .tier-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.57rem;
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid currentColor;
+    opacity: 0.7;
+  }
+  .tier-divider {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: var(--rule);
+    margin: 4px 0;
+  }
+
+  /* forum */
+  .tc-forum { background: var(--forum-bg); border-color: var(--forum-border); color: #7a6020; }
+  /* spark */
+  .tc-spark { background: var(--spark-bg); border-color: var(--spark-border); color: #8a6010; }
+  /* echo */
+  .tc-echo { background: var(--echo-bg); border-color: var(--echo-border); color: #3a6a38; }
+  /* fog */
+  .tc-fog { background: var(--fog-bg); border-color: var(--fog-border); color: #3a5268; }
+  /* heat */
+  .tc-heat { background: var(--heat-bg); border-color: var(--heat-border); color: #8a4020; }
+  /* stance */
+  .tc-stance { background: var(--stance-bg); border-color: var(--stance-border); color: #6a3018; }
+  /* breach */
+  .tc-breach { background: var(--breach-bg); border-color: var(--breach-border); color: #6a1010; }
+
+  /* breach full-width */
+  .tier-card.full { grid-column: 1 / -1; }
+
+  /* ── AXES ── */
+  .axes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 52px;
+  }
+  .axis-pair-label {
+    grid-column: 1 / -1;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+    margin-top: 8px;
+  }
+  .axis-card {
+    background: white;
+    border: 1px solid rgba(184,134,46,0.2);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .axis-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .axis-pair-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.57rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .axis-desc {
+    font-size: 0.76rem;
+    color: var(--ink-light);
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+  .axis-tradeoff {
+    font-size: 0.7rem;
+    color: var(--ink-light);
+    line-height: 1.4;
+    padding: 6px 10px;
+    background: #faf6ec;
+    border-left: 2px solid var(--gold-pale);
+    border-radius: 0 3px 3px 0;
+    font-style: italic;
+  }
+
+  /* ── ARCHETYPES ── */
+  .archetype-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 52px;
+  }
+  .archetype-card {
+    background: white;
+    border: 1px solid rgba(184,134,46,0.2);
+    border-radius: 6px;
+    padding: 16px;
+    position: relative;
+  }
+  .archetype-card.special {
+    border-color: var(--gold);
+    background: #faf6ec;
+  }
+  .arch-icon {
+    font-size: 1.3rem;
+    margin-bottom: 6px;
+  }
+  .arch-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .arch-category {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .arch-pattern {
+    font-size: 0.73rem;
+    color: var(--ink-light);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .arch-sig {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--ink-light);
+    line-height: 1.5;
+  }
+  .arch-sig span {
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .arch-feature {
+    margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.57rem;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    padding: 3px 7px;
+    background: rgba(184,134,46,0.08);
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  /* ── EDGE CASES TABLE ── */
+  .edge-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 52px;
+    background: white;
+    border: 1px solid rgba(184,134,46,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .edge-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 10px 16px;
+    text-align: left;
+    background: #faf6ec;
+    border-bottom: 1px solid rgba(184,134,46,0.2);
+  }
+  .edge-table td {
+    padding: 11px 16px;
+    font-size: 0.76rem;
+    color: var(--ink-mid);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  .edge-table tr:last-child td { border-bottom: none; }
+  .edge-pair {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .ep { font-family: 'DM Mono', monospace; font-size: 0.7rem; font-weight: 500; }
+  .ep-vs { color: var(--ink-light); font-size: 0.65rem; }
+
+  /* ── ZONE SUMMARY ── */
+  .zone-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 52px;
+  }
+  .zone-card {
+    border-radius: 6px;
+    padding: 18px;
+    border: 1px solid;
+  }
+  .zone-1 { background: #faf3d8; border-color: #d4a84a; color: #7a6020; }
+  .zone-2 { background: #f2f4f6; border-color: #aab8c8; color: #3a5060; }
+  .zone-3 { background: #f5eae8; border-color: #b06040; color: #6a3020; }
+  .zone-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    opacity: 0.7;
+  }
+  .zone-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .zone-desc {
+    font-size: 0.74rem;
+    line-height: 1.4;
+    opacity: 0.85;
+    margin-bottom: 10px;
+  }
+  .zone-tiers {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .zone-tier-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid currentColor;
+    opacity: 0.8;
+  }
+
+  /* ── GROWTH ENGINE INPUTS TABLE ── */
+  .growth-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 52px;
+    background: white;
+    border: 1px solid rgba(184,134,46,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .growth-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 10px 16px;
+    text-align: left;
+    background: #faf6ec;
+    border-bottom: 1px solid rgba(184,134,46,0.2);
+  }
+  .growth-table td {
+    padding: 12px 16px;
+    font-size: 0.77rem;
+    color: var(--ink-mid);
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  .growth-table tr:last-child td { border-bottom: none; }
+  .source-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.57rem;
+    padding: 2px 7px;
+    background: #fef3d0;
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* ── FOOTNOTE ── */
+  .footnote {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--warm-gray);
+    letter-spacing: 0.06em;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    text-align: right;
+  }
+
+  @media (max-width: 760px) {
+    .tier-grid, .stage-grid, .axes-grid, .archetype-grid, .zone-row { grid-template-columns: 1fr; }
+    .tier-card.full { grid-column: 1; }
+    .archetype-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-logo-bar">
+  <span class="nav-wordmark">Dialecta</span>
+  <span class="nav-tag">System Reference — v1.1</span>
+</div>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-eyebrow">Internal Reference Document</div>
+    <h1>The Complete System Map</h1>
+    <p>Every classification field, tier, pillar, and archetype in one view. From a single comment's Stage A analysis through to the Growth Layer inputs that shape contributor identity over time.</p>
+  </div>
+
+  <!-- FLOW DIAGRAM -->
+  <div class="flow-section">
+    <div class="section-label">System Architecture — How the Layers Connect</div>
+    <div class="flow-diagram">
+      <div class="flow-node">
+        <div class="flow-node-box">Comment<br>Submitted</div>
+        <div class="flow-node-label">Input</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-node-box">Stage A<br>Analysis<br><span style="font-size:0.65rem;opacity:0.7">6 fields extracted</span></div>
+        <div class="flow-node-label">AI Engine</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-node-box">Stage B<br>Tier Assignment<br><span style="font-size:0.65rem;opacity:0.7">1 of 7 tiers</span></div>
+        <div class="flow-node-label">AI Engine</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-multi">
+          <div class="flow-node-box">Self-Declaration</div>
+          <div class="flow-node-box">Community Vote</div>
+        </div>
+        <div class="flow-node-label">Social Layer</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-node-box">Axis Score<br>Update<br><span style="font-size:0.65rem;opacity:0.7">6 axes</span></div>
+        <div class="flow-node-label">Identity Layer</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-node-box">Fingerprint<br>Petal Growth<br><span style="font-size:0.65rem;opacity:0.7">shape + texture</span></div>
+        <div class="flow-node-label">Identity Layer</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-node-box">Archetype<br>Assignment<br><span style="font-size:0.65rem;opacity:0.7">1 of 8</span></div>
+        <div class="flow-node-label">Identity Layer</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-node-box">Growth<br>Engine<br><span style="font-size:0.65rem;opacity:0.7">aspiration + coaching</span></div>
+        <div class="flow-node-label">Growth Layer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE A: ANALYSIS FIELDS -->
+  <div class="section-header">
+    <div class="section-label">Layer 1 — Per-Comment Analysis</div>
+    <h2>Stage A: What the Engine Extracts</h2>
+    <p>Before any tier is assigned, the AI extracts six structured observations from every comment. These fields are the raw data for both classification and the contributor identity layer.</p>
+  </div>
+
+  <div class="stage-grid">
+    <div class="stage-card">
+      <div class="stage-card-title">Field 1 — Claim</div>
+      <div class="stage-card-q">What claim is the commenter making, if any?</div>
+      <div style="font-size:0.73rem;color:var(--ink-light);line-height:1.4;">Quote or paraphrase the core proposition. If none exists, state explicitly. This field drives everything else.</div>
+    </div>
+    <div class="stage-card">
+      <div class="stage-card-title">Field 2 — Specificity</div>
+      <div class="stage-card-q">How developed is the claim?</div>
+      <div class="stage-card-values">
+        <span class="val-pill">0 — None</span>
+        <span class="val-pill">1 — Vague</span>
+        <span class="val-pill">2 — Specific</span>
+        <span class="val-pill gold">3 — Developed</span>
+      </div>
+    </div>
+    <div class="stage-card">
+      <div class="stage-card-title">Field 3 — Emotional Register</div>
+      <div class="stage-card-q">What is the intensity of emotion present?</div>
+      <div class="stage-card-values">
+        <span class="val-pill">Low</span>
+        <span class="val-pill">Medium</span>
+        <span class="val-pill">High</span>
+      </div>
+      <div style="font-size:0.7rem;color:var(--ink-light);margin-top:8px;font-style:italic;">High emotion alone does not determine tier. A passionate comment with a Level 3 claim is Forum.</div>
+    </div>
+    <div class="stage-card">
+      <div class="stage-card-title">Field 4 — Tribal Markers</div>
+      <div class="stage-card-q">Are identity-signaling or rhetorical patterns present?</div>
+      <div class="stage-card-values">
+        <span class="val-pill">Yes</span>
+        <span class="val-pill">No</span>
+      </div>
+      <div style="font-size:0.7rem;color:var(--ink-light);margin-top:8px;">If Yes: cite a brief example from the comment. Three types: tribal identity signaling, rhetorical performance, coded in-group language.</div>
+    </div>
+    <div class="stage-card">
+      <div class="stage-card-title">Field 5 — Article Engagement</div>
+      <div class="stage-card-q">Does the comment engage something specific in the article?</div>
+      <div class="stage-card-values">
+        <span class="val-pill gold">Specific</span>
+        <span class="val-pill">General</span>
+      </div>
+      <div style="font-size:0.7rem;color:var(--ink-light);margin-top:8px;">Requires author key claims (3–5 per article) as engine input. General engagement against a specific article raises the quality bar.</div>
+    </div>
+    <div class="stage-card">
+      <div class="stage-card-title">Field 6 — Opposing View Engaged</div>
+      <div class="stage-card-q">Does the commenter acknowledge the strongest counterargument?</div>
+      <div class="stage-card-values">
+        <span class="val-pill gold">Yes</span>
+        <span class="val-pill">Partially</span>
+        <span class="val-pill">No</span>
+      </div>
+      <div style="font-size:0.7rem;color:var(--ink-light);margin-top:8px;">Not required for Forum. Feeds the Magnanimity axis. The Advocate archetype requires consistent "Yes" here.</div>
+    </div>
+  </div>
+
+  <!-- CLAIM SPECIFICITY SPECTRUM -->
+  <div class="section-header">
+    <div class="section-label">Layer 1 — Claim Threshold</div>
+    <h2>The Claim Specificity Spectrum</h2>
+    <p>Claim specificity is the primary discriminator between tiers. The engine assesses level 0–3 on every comment. Levels 2 and 3 are the threshold for Forum consideration.</p>
+  </div>
+
+  <table class="spectrum-table">
+    <thead>
+      <tr>
+        <th style="width:60px">Level</th>
+        <th style="width:120px">Name</th>
+        <th>Description</th>
+        <th>Example</th>
+        <th>Maps to Tiers</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="level-cell"><div class="level-badge l0">0</div></div></td>
+        <td style="font-weight:500;">No Claim</td>
+        <td>Pure feeling, label, or tribal signal. Nothing to engage with on substance.</td>
+        <td style="font-style:italic;color:var(--ink-light);">"This is exactly the kind of thinking that's destroying discourse."</td>
+        <td>
+          <span class="tier-map-pill" style="background:var(--fog-bg);border-color:var(--fog-border);color:#3a5268">Fog</span>
+          <span class="tier-map-pill" style="background:var(--heat-bg);border-color:var(--heat-border);color:#8a4020">Heat</span>
+          <span class="tier-map-pill" style="background:var(--stance-bg);border-color:var(--stance-border);color:#6a3018">Stance</span>
+        </td>
+      </tr>
+      <tr>
+        <td><div class="level-cell"><div class="level-badge l1">1</div></div></td>
+        <td style="font-weight:500;">Vague Claim</td>
+        <td>An assertion exists but is too general to engage specifically. You know which side they're on, not what they think.</td>
+        <td style="font-style:italic;color:var(--ink-light);">"The author way overstates how much algorithms control us."</td>
+        <td>
+          <span class="tier-map-pill" style="background:var(--spark-bg);border-color:var(--spark-border);color:#8a6010">Spark</span>
+          <span class="tier-map-pill" style="background:var(--echo-bg);border-color:var(--echo-border);color:#3a6a38">Echo</span>
+        </td>
+      </tr>
+      <tr>
+        <td><div class="level-cell"><div class="level-badge l2">2</div></div></td>
+        <td style="font-weight:500;">Specific Claim</td>
+        <td>An identifiable proposition. Someone could directly agree or disagree with it on substance.</td>
+        <td style="font-style:italic;color:var(--ink-light);">"The author overstates algorithmic control because he ignores that heavy users actively seek out the content they receive."</td>
+        <td>
+          <span class="tier-map-pill" style="background:var(--forum-bg);border-color:var(--forum-border);color:#7a6020">Forum</span>
+          <span class="tier-map-pill" style="background:var(--spark-bg);border-color:var(--spark-border);color:#8a6010">Spark</span>
+        </td>
+      </tr>
+      <tr>
+        <td><div class="level-cell"><div class="level-badge l3">3</div></div></td>
+        <td style="font-weight:500;">Developed Claim</td>
+        <td>A specific proposition with supporting reasoning, evidence, or a named counter-argument. Full engagement.</td>
+        <td style="font-style:italic;color:var(--ink-light);">"...Pew Research (2024) shows the top 20% of social media users by time spent are also the heaviest active posters — suggesting the conditioning runs both ways."</td>
+        <td>
+          <span class="tier-map-pill" style="background:var(--forum-bg);border-color:var(--forum-border);color:#7a6020">Forum (preferred)</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- TIER ZONES SUMMARY -->
+  <div class="section-label">Layer 2 — Tier Classification</div>
+  <div class="zone-row">
+    <div class="zone-card zone-1">
+      <div class="zone-title">Zone 1</div>
+      <div class="zone-name">Aspiration</div>
+      <div class="zone-desc">Contributing to discourse. Question is degree of development. Both tiers use positive metaphors.</div>
+      <div class="zone-tiers">
+        <span class="zone-tier-pill">🥇 Forum</span>
+        <span class="zone-tier-pill">💡 Spark</span>
+      </div>
+    </div>
+    <div class="zone-card zone-2">
+      <div class="zone-title">Zone 2</div>
+      <div class="zone-name">Description</div>
+      <div class="zone-desc">A structural characteristic limits usefulness. Sensory/atmospheric metaphors. Person is observed, not judged.</div>
+      <div class="zone-tiers">
+        <span class="zone-tier-pill">🪞 Echo</span>
+        <span class="zone-tier-pill">🌫️ Fog</span>
+        <span class="zone-tier-pill">🔥 Heat</span>
+      </div>
+    </div>
+    <div class="zone-card zone-3">
+      <div class="zone-title">Zone 3</div>
+      <div class="zone-name">Boundary</div>
+      <div class="zone-desc">Comment has crossed from individual expression into a pattern the platform considers structurally harmful.</div>
+      <div class="zone-tiers">
+        <span class="zone-tier-pill">⚡ Stance</span>
+        <span class="zone-tier-pill">🚫 Breach</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIER CARDS -->
+  <div class="section-header">
+    <h2>The Seven Tiers</h2>
+    <p>Each tier is assigned by the engine in Stage B, using Stage A observations. Tiers are descriptions of comment behavior, never verdicts on the person.</p>
+  </div>
+
+  <div class="tier-grid">
+    <!-- Forum -->
+    <div class="tier-card tc-forum">
+      <div class="tier-card-header">
+        <div class="tier-icon">🥇</div>
+        <div>
+          <div class="tier-name">The Forum</div>
+          <div class="tier-zone">Zone 1 — Aspiration · Lightest color (cream/gold)</div>
+        </div>
+      </div>
+      <div class="tier-criteria">Specific claim (Level 2 minimum, 3 preferred), engaged with article content, reasoning present. Strong disagreement fully welcome — the claim is what elevates the comment, not the tone.</div>
+      <div class="tier-tags">
+        <span class="tier-tag">Claim: 2–3</span>
+        <span class="tier-tag">Emotion: Any</span>
+        <span class="tier-tag">Tribal: No</span>
+        <span class="tier-tag">Icon: Roman columns</span>
+      </div>
+    </div>
+
+    <!-- Spark -->
+    <div class="tier-card tc-spark">
+      <div class="tier-card-header">
+        <div class="tier-icon">💡</div>
+        <div>
+          <div class="tier-name">The Spark</div>
+          <div class="tier-zone">Zone 1 — Aspiration · Warm amber</div>
+        </div>
+      </div>
+      <div class="tier-criteria">Claim Level 1–2, underdeveloped. The idea has potential but stops short. The comment invites "say more." Most psychologically important tier — the behavior-change moment lives here.</div>
+      <div class="tier-tags">
+        <span class="tier-tag">Claim: 1–2</span>
+        <span class="tier-tag">Underdeveloped</span>
+        <span class="tier-tag">Tribal: No</span>
+        <span class="tier-tag">Icon: Lightning bolt</span>
+      </div>
+    </div>
+
+    <!-- Echo -->
+    <div class="tier-card tc-echo">
+      <div class="tier-card-header">
+        <div class="tier-icon">🪞</div>
+        <div>
+          <div class="tier-name">The Echo</div>
+          <div class="tier-zone">Zone 2 — Description · Cool sage</div>
+        </div>
+      </div>
+      <div class="tier-criteria">Claim Level 0–1, restating. Mirrors what's already in the article or a prior comment without adding to it. Clear but unoriginal. Neutral tier — not harmful, not propulsive.</div>
+      <div class="tier-tags">
+        <span class="tier-tag">Claim: 0–1</span>
+        <span class="tier-tag">Clear + Unoriginal</span>
+        <span class="tier-tag">Icon: Circular arrows</span>
+      </div>
+    </div>
+
+    <!-- Fog -->
+    <div class="tier-card tc-fog">
+      <div class="tier-card-header">
+        <div class="tier-icon">🌫️</div>
+        <div>
+          <div class="tier-name">The Fog</div>
+          <div class="tier-zone">Zone 2 — Description · Cool slate-blue</div>
+        </div>
+      </div>
+      <div class="tier-criteria">Claim Level 0, unclear. The reader cannot determine what the person believes or what point they're making. Different from Echo: Fog is unclear; Echo is clear but unoriginal.</div>
+      <div class="tier-tags">
+        <span class="tier-tag">Claim: 0</span>
+        <span class="tier-tag">Unclear intent</span>
+        <span class="tier-tag">Icon: Fluffy cloud</span>
+      </div>
+    </div>
+
+    <!-- Heat -->
+    <div class="tier-card tc-heat">
+      <div class="tier-card-header">
+        <div class="tier-icon">🔥</div>
+        <div>
+          <div class="tier-name">The Heat</div>
+          <div class="tier-zone">Zone 2 — Description · Burnt orange</div>
+        </div>
+      </div>
+      <div class="tier-criteria">Claim Level 0–1, emotion dominant. Passion without a point. More heat than light. The emotion is the content. Distinguished from Forum: Forum has heat applied to something; Heat has heat floating free.</div>
+      <div class="tier-tags">
+        <span class="tier-tag">Claim: 0–1</span>
+        <span class="tier-tag">Emotion: High</span>
+        <span class="tier-tag">Icon: Asymmetric flame</span>
+      </div>
+    </div>
+
+    <!-- Stance -->
+    <div class="tier-card tc-stance">
+      <div class="tier-card-header">
+        <div class="tier-icon">⚡</div>
+        <div>
+          <div class="tier-name">The Stance</div>
+          <div class="tier-zone">Zone 3 — Boundary · Dark rust</div>
+        </div>
+      </div>
+      <div class="tier-criteria">Any claim level, but tribal/rhetorical/identity-signaling markers dominate. The comment is performing for an implied audience that already agrees rather than engaging with ideas. Three subtypes: tribal identity signaling, rhetorical performance, coded language.</div>
+      <div class="tier-tags">
+        <span class="tier-tag">Claim: Any level</span>
+        <span class="tier-tag">Tribal: Yes (dominant)</span>
+        <span class="tier-tag">Icon: Planted pennant flag</span>
+      </div>
+    </div>
+
+    <!-- Breach full width -->
+    <div class="tier-card tc-breach full">
+      <div class="tier-card-header">
+        <div class="tier-icon">🚫</div>
+        <div>
+          <div class="tier-name">The Breach</div>
+          <div class="tier-zone">Zone 3 — Boundary · Deepest color (wine/near-black red) · ONLY tier where content is suppressed from default view</div>
+        </div>
+      </div>
+      <div class="tier-criteria">Content targets a person rather than an idea. Name-calling, slander, or targeted personal attack. The Pact has been broken. Not deleted — suppressed from default view with transparent reason shown. The only tier where posting is blocked pending review.</div>
+      <div class="tier-tags">
+        <span class="tier-tag">Personal attack</span>
+        <span class="tier-tag">Pact broken</span>
+        <span class="tier-tag">Suppressed (not deleted)</span>
+        <span class="tier-tag">Icon: Broken chain links</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HARD BOUNDARIES -->
+  <div class="section-header">
+    <div class="section-label">Layer 2 — Edge Cases</div>
+    <h2>The Hardest Tier Boundaries</h2>
+    <p>These four pairs are the classification calls most likely to be inconsistent. Each has a single discriminating rule.</p>
+  </div>
+
+  <table class="edge-table">
+    <thead>
+      <tr>
+        <th>Boundary</th>
+        <th>What they share</th>
+        <th>The discriminator</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="edge-pair">
+            <span class="ep" style="color:#7a6020">Forum</span>
+            <span class="ep-vs">vs</span>
+            <span class="ep" style="color:#8a4020">Heat</span>
+          </div>
+        </td>
+        <td>Both can be intense, passionate, and sharp.</td>
+        <td>Is the emotion attached to a specific arguable proposition? If yes: Forum. If the emotion is the content: Heat.</td>
+      </tr>
+      <tr>
+        <td>
+          <div class="edge-pair">
+            <span class="ep" style="color:#6a3018">Stance</span>
+            <span class="ep-vs">vs</span>
+            <span class="ep" style="color:#8a4020">Heat</span>
+          </div>
+        </td>
+        <td>Both are emotionally charged.</td>
+        <td>Primary function: expressing feeling = Heat. Signaling group membership = Stance. Assign to the dominant function. Comments can have elements of both.</td>
+      </tr>
+      <tr>
+        <td>
+          <div class="edge-pair">
+            <span class="ep" style="color:#8a6010">Spark</span>
+            <span class="ep-vs">vs</span>
+            <span class="ep" style="color:#3a6a38">Echo</span>
+          </div>
+        </td>
+        <td>Both lack full development.</td>
+        <td>Does the comment add something new? Echo restates; Spark gestures toward something not yet in the article or prior comments.</td>
+      </tr>
+      <tr>
+        <td>
+          <div class="edge-pair">
+            <span class="ep" style="color:#3a5268">Fog</span>
+            <span class="ep-vs">vs</span>
+            <span class="ep" style="color:#3a6a38">Echo</span>
+          </div>
+        </td>
+        <td>Both lack substance.</td>
+        <td>Clarity: Echo is clear but unoriginal. Fog is unclear regardless of originality.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SIX PILLARS -->
+  <div class="section-header">
+    <div class="section-label">Layer 3 — Contributor Identity</div>
+    <h2>The Six Pillars of Intellectual Character</h2>
+    <p>Aggregated across a contributor's full comment history. Each pillar is built from two pieces: graduation count (quality-gated) and tier-mix texture (the historical tier distribution behind those graduations). Together they measure not what someone believes, but how someone does the work of thinking in public.</p>
+  </div>
+
+  <div class="axes-grid">
+    <div class="axis-pair-label">Pair 1 — Substance</div>
+    <div class="axis-card">
+      <div class="axis-name">Acuity</div>
+      <div class="axis-pair-tag">Substance Pair</div>
+      <div class="axis-desc">How precise and claimable the contributor's points tend to be. Driven primarily by Claim Specificity (Field 2) across all comments. The sharpness of intellectual vision.</div>
+      <div class="axis-tradeoff">Trades against Reach — going deep on one topic competes with going wide across many.</div>
+    </div>
+    <div class="axis-card">
+      <div class="axis-name">Reach</div>
+      <div class="axis-pair-tag">Substance Pair</div>
+      <div class="axis-desc">How many distinct topic areas the contributor has engaged across. A wide Fingerprint here is rare when Acuity is also tall.</div>
+      <div class="axis-tradeoff">Trades against Acuity. High Reach + High Acuity is rare and visible.</div>
+    </div>
+
+    <div class="axis-pair-label">Pair 2 — Intellectual Honesty</div>
+    <div class="axis-card">
+      <div class="axis-name">Calibration</div>
+      <div class="axis-pair-tag">Intellectual Honesty Pair</div>
+      <div class="axis-desc">How well the contributor's confidence matches the strength of their evidence. Fed by Field 6 (Opposing View) and Stage A claim quality relative to evidence cited.</div>
+      <div class="axis-tradeoff">Trades against Discourse — high-volume back-and-forth tends to outrun careful position-holding.</div>
+    </div>
+    <div class="axis-card">
+      <div class="axis-name">Magnanimity</div>
+      <div class="axis-pair-tag">Intellectual Honesty Pair</div>
+      <div class="axis-desc">How faithfully the contributor represents views they disagree with before engaging. The Principle of Charity enacted as behavior. Driven by Field 6 (Opposing View Engaged). The Advocate archetype is its fullest expression.</div>
+      <div class="axis-tradeoff">Rarest high-scoring pillar. Directly attacks the tribal default of strawmanning. From Aristotle: greatness of soul engaging with the strongest version of opposition.</div>
+    </div>
+
+    <div class="axis-pair-label">Pair 3 — Engagement</div>
+    <div class="axis-card">
+      <div class="axis-name">Discourse</div>
+      <div class="axis-pair-tag">Engagement Pair</div>
+      <div class="axis-desc">How often the contributor engages in sustained back-and-forth rather than hit-and-run. Measures the overall discussion, not a single exchange. Participation in threads, not comment volume.</div>
+      <div class="axis-tradeoff">Trades against Calibration and Magnanimity — replying to everything accumulates some Heat in Discourse history.</div>
+    </div>
+    <div class="axis-card">
+      <div class="axis-name">Consistency</div>
+      <div class="axis-pair-tag">Engagement Pair</div>
+      <div class="axis-desc">How regularly the contributor shows up over time. The temporal pillar — the only one that can't be gamed by a single intense session. Pattern, not endurance.</div>
+      <div class="axis-tradeoff">Trades against quality pillars early on. Regular early-career posting produces noisier history.</div>
+    </div>
+  </div>
+
+  <!-- EIGHT ARCHETYPES -->
+  <div class="section-header">
+    <h2>The Eight Archetypes</h2>
+    <p>Platform-assigned from observed pillar patterns. Never user-declared. A contributor can declare an <em>aspirational</em> archetype — the platform then surfaces the exact pillar behaviors required and tracks progress quietly. Three epistemic, three constructive, one magnanimous, one temporal.</p>
+  </div>
+
+  <div class="archetype-grid">
+    <!-- Epistemic group -->
+    <div class="archetype-card">
+      <div class="arch-icon">🔎</div>
+      <div class="arch-name">The Skeptic</div>
+      <div class="arch-category">Epistemic stance</div>
+      <div class="arch-pattern">Questions premises before accepting conclusions. Tests the foundation of an argument before engaging with its superstructure.</div>
+      <div class="arch-sig">Primary: <span>High Calibration</span><br>Secondary: <span>High Acuity</span></div>
+    </div>
+    <div class="archetype-card">
+      <div class="arch-icon">🔬</div>
+      <div class="arch-name">The Empiricist</div>
+      <div class="arch-category">Epistemic stance</div>
+      <div class="arch-pattern">Grounds every claim in evidence and data. Has the highest Acuity requirement of any archetype — claims must be claimable and evidenced.</div>
+      <div class="arch-sig">Primary: <span>Maxed Acuity</span><br>Secondary: <span>High Calibration</span></div>
+    </div>
+    <div class="archetype-card">
+      <div class="arch-icon">🗺</div>
+      <div class="arch-name">The Contextualist</div>
+      <div class="arch-category">Epistemic stance</div>
+      <div class="arch-pattern">Situates ideas in their historical and cultural frame. Goes wide rather than deep — the only epistemic archetype that privileges Reach over depth.</div>
+      <div class="arch-sig">Primary: <span>High Reach</span><br>Secondary: <span>High Calibration</span></div>
+    </div>
+
+    <!-- Constructive group -->
+    <div class="archetype-card">
+      <div class="arch-icon">🌀</div>
+      <div class="arch-name">The Synthesizer</div>
+      <div class="arch-category">Constructive move</div>
+      <div class="arch-pattern">Finds unexpected connections across domains. The constructive archetype most dependent on Reach — you can't synthesize what you haven't explored.</div>
+      <div class="arch-sig">Primary: <span>High Reach</span><br>Secondary: <span>High Acuity</span></div>
+    </div>
+    <div class="archetype-card">
+      <div class="arch-icon">🏗</div>
+      <div class="arch-name">The Builder</div>
+      <div class="arch-category">Constructive move</div>
+      <div class="arch-pattern">Extends ideas into practical frameworks. The most discourse-intensive archetype — building requires sustained back-and-forth to stress-test the framework.</div>
+      <div class="arch-sig">Primary: <span>High Acuity</span><br>Secondary: <span>High Discourse</span></div>
+    </div>
+    <div class="archetype-card">
+      <div class="arch-icon">💡</div>
+      <div class="arch-name">The Illuminator</div>
+      <div class="arch-category">Constructive move</div>
+      <div class="arch-pattern">Makes complex ideas accessible without losing nuance. The hardest constructive archetype to earn — requires all three non-temporal pairs at meaningful levels simultaneously.</div>
+      <div class="arch-sig">Primary: <span>High Acuity</span><br>+ <span>High Magnanimity</span> + <span>High Discourse</span></div>
+    </div>
+
+    <!-- Special archetypes -->
+    <div class="archetype-card special">
+      <div class="arch-icon">⚖</div>
+      <div class="arch-name">The Advocate</div>
+      <div class="arch-category">Magnanimous engagement move</div>
+      <div class="arch-pattern">Argues the strongest version of views they disagree with. The fullest expression of the Magnanimity pillar. The rarest archetype. Directly attacks the tribal default of strawmanning opposition.</div>
+      <div class="arch-sig">Primary: <span>High Magnanimity</span><br>Secondary: <span>High Acuity</span></div>
+      <div class="arch-feature">Advocate Engine feature</div>
+    </div>
+    <div class="archetype-card special">
+      <div class="arch-icon">↻</div>
+      <div class="arch-name">The Reviser</div>
+      <div class="arch-category">Temporal move (change)</div>
+      <div class="arch-pattern">Publicly updates their position when given good reasons. The only archetype defined by change rather than a static pattern. Requires visible wave texture in early rings resolving into Forum — history of growth made legible.</div>
+      <div class="arch-sig">Primary: <span>High Calibration</span><br>+ <span>High Consistency</span><br>+ visible early-tier wave texture</div>
+      <div class="arch-feature">Delta mechanic — Phase 1</div>
+    </div>
+  </div>
+
+  <!-- GROWTH ENGINE INPUTS -->
+  <div class="section-header">
+    <div class="section-label">Layer 4 — Growth Engine</div>
+    <h2>Growth Engine Inputs</h2>
+    <p>The Growth Layer operates on data from all prior layers plus user-authored aspiration inputs. These are the inputs that enable pillar-level coaching and fingerprint delta tracking.</p>
+  </div>
+
+  <table class="growth-table">
+    <thead>
+      <tr>
+        <th>Input</th>
+        <th>Source</th>
+        <th>What it enables</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight:500;">Stage A analysis fields (per comment)</td>
+        <td><span class="source-tag">Classification Engine</span></td>
+        <td>Raw material for all six pillar scores. Acuity (claim specificity), Emotion, Tribal Markers, Article Engagement, Opposing View (Magnanimity) feed directly into pillar computation.</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;">Assigned tier (per comment)</td>
+        <td><span class="source-tag">Classification Engine</span></td>
+        <td>Drives tier-mix texture in each petal. High-Forum histories produce smooth curves; earlier Heat/Stance produces visible wave texture in inner rings.</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;">AI suggestion vs. self-declaration delta</td>
+        <td><span class="source-tag">Classification Engine + User</span></td>
+        <td>Underused signal: tracks whether a contributor's self-assessment is aligned with the engine's read. Feeds Calibration pillar over time.</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;">Six pillar scores + fingerprint shape</td>
+        <td><span class="source-tag">Identity Layer</span></td>
+        <td>Current state and trajectory. Stored at aspiration declaration to create a "from" baseline. Stored at each recommitment to show movement.</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;">Aspiration statement (verbatim)</td>
+        <td><span class="source-tag">User-authored</span></td>
+        <td>Must be stored verbatim. Surfaced back to the user verbatim in Consent Renewal Loop prompts. Never paraphrased by the platform.</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;">Pillar commitments (user-named)</td>
+        <td><span class="source-tag">User-authored</span></td>
+        <td>The critical specificity layer the aspiration alone lacks. "I want to deepen Acuity while growing Magnanimity" gives the engine a ranked pillar target list for coaching prioritization.</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;">Target archetype (if aspiration-anchored)</td>
+        <td><span class="source-tag">User-authored</span></td>
+        <td>Translates to specific pillar movement requirements. Engine maps archetype signature to coaching priority order.</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;">Declaration fingerprint (snapshot at declaration)</td>
+        <td><span class="source-tag">Identity Layer + Growth Layer</span></td>
+        <td>The "from" in the growth arc. Delta computation compares current fingerprint to this baseline — the only honest measure of whether growth happened.</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;">Recommitment events + revised snapshots</td>
+        <td><span class="source-tag">Growth Layer</span></td>
+        <td>Each recommitment stores a new fingerprint snapshot. 90-day cycle or meaningful fingerprint shift, whichever comes first. Over time these become the visualization data — the arc of movement made visible.</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;">Practice Layer engagement (opt-in)</td>
+        <td><span class="source-tag">Growth Layer</span></td>
+        <td>Sparse supplementary data. Which exercises were engaged, deferred, or declined. Treated as signal, not structure — many contributors grow without touching the Practice Layer.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footnote">
+    Dialecta System Reference — compiled April 2026 · v1.1 · Internal use
+  </div>
+
+</div>
+</body>
+</html>

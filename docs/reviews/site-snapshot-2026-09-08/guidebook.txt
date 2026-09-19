@@ -1,0 +1,293 @@
+Dialecta  ·  Reference
+
+The 
+Living
+ Guidebook
+
+How Dialecta works: the philosophy, the tier system, the AI classification engine, and the opinion mapping tools. This document updates as the platform evolves. Nothing is hidden from view.
+
+01  ·  Mission
+
+Philosophy & Core Rules
+
+What Dialecta is, why it was built, and what it asks of you.
+
+Dialecta is a platform where 
+ideas are the protagonist
+, not identities or political teams. The goal isn’t to make people agree. It’s to make disagreement more honest, more specific, and more interesting. Ideas arrive stripped of tribal labels and are evaluated on their own merits.
+
+Reward loops are extraordinarily powerful shapers of human behavior. Dialecta doesn’t reject that insight. It redirects it. The mechanics that elsewhere reward reflexive anger and group conformity are here reoriented toward curiosity, independent reasoning, and honest engagement. 
+The goal: make thinking well the most satisfying thing you can do here.
+
+This works not by asking people to be better but by engineering an environment where thoughtful engagement is the path of least resistance. Empty polarized statements are discouraged not by censorship but by classification. Passionate disagreement is welcome. Vague outrage is not.
+
+No name-calling, slander, or targeted personal attacks.
+
+No binary left/right labeling of ideas. Ideas stand on their own merits.
+
+Empty polarized statements are discouraged, not deleted.
+
+Passionate disagreement is welcome. Vague outrage is not.
+
+Full platform transparency: how the engine works is always visible to you.
+
+User-submitted improvement ideas are welcome and publicly voteable.
+
+02  ·  Classification
+
+The Seven Tiers
+
+Comments are never hidden. They’re sorted into visible tiers. The default view surfaces the highest-quality commentary; every tier is browseable. Lighter badges signal higher-quality discourse, and the brightness ladder makes the value system visible at a glance.
+
+The Forum
+Zone 1  ·  Aspiration
+
+Constructive, specific, fact-referenced or clearly reasoned. Engages with actual content. Strong disagreement is welcome here, if it’s about something specific. Requires a Level 2 or 3 claim: a falsifiable proposition someone else could engage with on substance.
+
+Example
+
+"The author overstates algorithmic control because he ignores that heavy users actively seek out the content they receive. It's not imposed on them. Pew Research 2024 shows the top 20% of users by time are also the heaviest active posters."
+
+The Spark
+Zone 1  ·  Aspiration
+
+A genuinely interesting idea, but underdeveloped. Invites expansion. The seed of something good. Level 1–2 claim that hasn’t yet been developed with reasoning or evidence. One more paragraph and this would likely be Forum.
+
+Example
+
+"The real issue isn't the algorithm. It's that we've stopped expecting social media to be boring sometimes. Tolerance for dull moments might be the missing variable here."
+
+The Echo
+Zone 2  ·  Description
+
+Restates the article or a prior comment without adding to it. Not harmful, just not propulsive. May contain a claim, but it mirrors what already exists rather than advancing the discussion. The person should feel observed, not judged.
+
+Example
+
+"I agree completely. Social media really has changed how we communicate and it's not for the better."
+
+The Fog
+Zone 2  ·  Description
+
+Vague, unclear, or disconnected. The reader can’t tell what the person believes or what point they’re making. Level 0 claim. Nothing to engage with on substance. A single concrete sentence about what they actually think would change this classification.
+
+Example
+
+"There's a lot going on here and I think we all need to think more carefully about these things, because it's complicated and nobody really understands it."
+
+The Heat
+Zone 2  ·  Description
+
+Emotionally charged without constructive specificity. Passion without a point. A comment can be angry, sharp, or contemptuous and still qualify for Forum, if it’s anchored to a specific claim. The emotional register is never the disqualifier. The absence of a claim is.
+
+Example
+
+"This article is absolutely outrageous. I can't believe this is being published. Anyone who buys this argument has clearly never thought seriously about any of it."
+
+The Stance
+Zone 3  ·  Boundary
+
+Heavy rhetoric, tribal framing, or coded language that signals team membership over idea engagement. A position planted rather than a conversation joined. Categorically different from Zone 2: the comment has crossed from individual expression into structural territory the platform cannot reward.
+
+Example
+
+"Only someone who has never lived in the real world and gets all their news from the mainstream media would write something like this. This is what the elites want you to believe."
+
+The Breach
+Zone 3  ·  Boundary
+
+Name-calling, slander, or targeted personal attacks. Content is suppressed from the default view (not deleted), with a transparent reason shown. The only tier where posting is blocked pending review. Nothing on Dialecta is ever permanently deleted; the boundary exists to protect discourse, not to punish people.
+
+What this means
+
+Content targeting an individual rather than engaging with their idea. The Pact has been broken. You may still amend before the review window closes.
+
+The brightness ladder:
+ Lightness equals honor. The highest tier is the lightest, almost paper itself. Each tier steps down in luminosity until Breach arrives at a deep, near-black red. Gold to amber to sage to slate to orange to rust to wine. The neutral middle is a calm pause between the warmth of aspiration and the warmth of warning. The gradient is not arbitrary. It makes the value system visible before you read a single word.
+
+03  ·  How It Works
+
+The Classification Engine
+
+Classification is a combination of AI pre-analysis, commenter self-declaration, and community voting. All three signals are visible to everyone. Transparency is the feature, not a disclaimer.
+
+1
+AI Pre-Analysis: instant, on submit
+
+Before a comment is published, the engine analyzes it. It identifies the core claim being made, flags counter-arguments present or absent, detects rhetorical patterns (tribal signaling, ad hominem, specificity level), and assigns a suggested tier with a plain-language reason shown to the commenter.
+
+Sample message: “This reads as The Heat: it expresses strong feeling but doesn’t identify a specific claim to support or challenge. Want to add one before posting? Or post as-is.” The AI is a mirror, not a gatekeeper. This moment of friction, not blocking, just reflecting, is where behavior change happens.
+
+2
+Commenter Self-Declaration
+
+The commenter can accept the AI’s suggestion or override it with their own declared tier. That declaration is visible on the comment. If they claim Forum-level and the community disagrees, the contrast itself becomes interesting data, and the algorithm tracks it. Self-declaration isn’t just metadata. It’s a commitment, and articulate self-awareness counts.
+
+3
+Community Voting
+
+Readers can upvote or downvote comments within their current tier, and nominate a comment for reclassification. Enough nominations trigger a re-review event. Because tier placement is public and contestable, people want to land in The Forum. This is accountability without censorship.
+
+Algorithm weights: AI suggestion 40% · Community voting 35% · Self-declaration 15% · Stage 2.5 response quality 10%.
+
+How the Engine Reads a Comment
+
+Classification Standard, Dialecta v1.0
+
+Read the comment against the article it is responding to. Work through the questions below in order. Don't skip ahead to a tier until you've answered them. The answer usually follows naturally from the analysis.
+
+─────────────────────────────────────────
+STEP 1: FIND THE CLAIM
+─────────────────────────────────────────
+Is the commenter actually saying something specific? Quote or paraphrase it. If there’s no identifiable claim, note it. It matters for what comes next.
+
+If a claim exists, how developed is it?
+
+  · Just an assertion: you know which side they’re on, but not why. (“The author overstates this.”)
+  · Specific enough to argue with. Someone could push back on the substance.
+  · Fully supported: reasoning, evidence, or a named counter-argument is present.
+
+─────────────────────────────────────────
+STEP 2: READ THE TEMPERATURE
+─────────────────────────────────────────
+How charged is the language? Emotion alone doesn’t place a comment. A furious comment with a specific claim can still land in Forum. What you’re listening for is whether the heat is carrying something substantive, or whether it’s standing in for it.
+
+─────────────────────────────────────────
+STEP 3: CHECK FOR TRIBAL SIGNALS
+─────────────────────────────────────────
+Is the comment engaging with the article’s actual argument, or is it performing group membership? Watch for coded language, sweeping in-group/out-group frames, and rhetoric that signals a team rather than a position.
+
+─────────────────────────────────────────
+STEP 4: PLACE IT
+─────────────────────────────────────────
+Forum:   Has a specific claim. Engages with the article. Reasoning is present. Emotion is fine here.
+Spark:   The seed of something good. Say more.
+Echo:    Agrees or restates without adding anything new.
+Fog:     Can’t tell what they actually think.
+Heat:    Feeling is loud; the point is buried or absent.
+Stance:  Group signaling is doing the work, not argument.
+Breach:  Targets a person, not an idea.
+
+─────────────────────────────────────────
+STEP 5: WRITE THE NOTE
+─────────────────────────────────────────
+One or two sentences. Say what the comment is doing, not what it should be. Name something specific. If there’s one move that would change the placement, name it plainly.
+
+Don’t lecture. Don’t appeal to their better nature. Always leave the door open to post as-is.
+
+Tone standard:
+ Name what 
+is
+ there before noting what isn’t. Say “reads as” rather than “has been classified as”, the difference between an observation and a verdict. One suggestion per note, never a list. The only exception is Breach, where posting is held. Every other tier ends with an implicit invitation to post anyway.
+
+04  ·  The Standard
+
+The Claim Specificity Spectrum
+
+A claim is a falsifiable or arguable proposition specific enough that another person could engage with it on substance. Claim presence isn’t binary. The engine assesses specificity level from 0 to 3. This is the primary discriminator between tiers.
+
+Level 0
+
+No Claim
+
+Pure feeling, label, or tribal signal. Nothing to engage with on substance. Maps to: Fog, Heat, or Stance depending on register.
+
+“This is exactly the kind of thinking that’s destroying discourse.”
+
+Level 1
+
+Vague Claim
+
+An assertion exists but is too general to engage specifically. You know which side they’re on, not what they think. Maps to: Spark or Echo.
+
+“The author way overstates how much algorithms control us.”
+
+Level 2
+
+Specific Claim
+
+An identifiable proposition. Someone could directly agree or disagree with it on substance. Minimum threshold for Forum.
+
+“The author overstates algorithmic control because he ignores that heavy users actively seek out the content they receive.”
+
+Level 3
+
+Developed Claim
+
+A specific proposition with supporting reasoning, evidence, or a named counter-argument. Full engagement. Strong Forum placement.
+
+“Pew Research (2024) shows the top 20% of users by time are also the heaviest active posters, suggesting the conditioning runs both ways, not one-directionally.”
+
+05  ·  Spatial Representation
+
+Opinion Mapping Tools
+
+Replace binary agree/disagree with dimensional, spatial representations of where readers stand. No scores. No sides. Positions as landscapes. Axes and poles are defined per-article by the AI and editors based on the actual debate a piece opens up.
+
+Launch Default
+
+2-Axis Cartesian Plot
+
+Two independent dimensions. Reader places a dot. The aggregate creates a heat map cloud. Visual, intuitive, works on mobile. Clusters reveal real community topology without collapsing to a score.
+
+Example: Renewable Energy
+X: Cost-first <--------> Planet-first
+Y: Market-driven <--------> Policy-driven
+
+Signature Feature
+
+Ternary Plot
+
+A triangular plot where a point represents a simultaneous blend of three positions. All values sum to 100%. Moving toward one pole pulls from the others. Academic credibility in political science and economics.
+
+Example: Mental Health
+Pole A: Individual responsibility
+Pole B: Community / social systems
+Pole C: Medical / institutional
+
+Multi-Axis
+
+Radar / Spider Chart
+
+5–7 independent axes, each rated 0–10. Reader adjusts sliders and sees their shape. Aggregate shows the community's average shape. Best for rich articles with many independent dimensions.
+
+Example axes, Economics
+Evidence quality · Moral weight
+Practical feasibility · Historical precedent
+Personal relevance
+
+Advanced
+
+Barycentric Multi-Pole
+
+Extends ternary to 4+ poles. Editorial analysis view rather than reader-facing interactive. The AI may suggest this automatically when an article's analysis detects four or more genuinely independent axes of disagreement.
+
+Triggered automatically when AI detects 4+
+independent dimensions of genuine reader
+disagreement within the article.
+
+The 
+delta mechanic
+ tracks opinion shift before and after reading. The delta is often as interesting as the position itself: it reveals what the article actually moved, and how far. Phase 2 functionality; current tools support single-moment placement. Authors can suggest axes in their editorial template; the AI and editors refine them before publication.
+
+06  ·  Platform Governance
+
+How to Submit Improvements
+
+User-submitted improvement ideas are publicly visible and community-voteable. Platform governance is itself a demonstration of Dialecta’s values. If you think something should work differently, say so, specifically.
+
+Every improvement proposal is subject to the same quality bar as a comment. The most useful proposals identify a specific problem, name what they think would be better, and explain why the current approach falls short. Vague frustration is noted but doesn’t move the dial. A well-reasoned proposal with a specific mechanism can.
+
+Submit a Platform Idea
+
+Be specific. Name the problem, propose the change, say why it matters. Proposals are publicly visible and community-voteable.
+
+Your proposal in one sentence
+
+The problem this solves
+
+Why this approach (and not another)
+
+Submit Proposal
+
+All proposals are reviewed by the Stewards: contributors who have earned elevated trust through sustained high-quality engagement. The Stewards don’t control outcomes; they curate visibility. Final decisions are made transparently, with reasoning published alongside each outcome.

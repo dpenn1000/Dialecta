@@ -2,6 +2,24 @@
   "name": "dialecta",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "tools/*"
+  ],
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10"
+  },
+  "scripts": {
+    "dev": "npm -w apps/web run dev",
+    "build": "npm -w packages/core run build && npm -w apps/web run build",
+    "test": "npm -ws --if-present run test",
+    "typecheck": "npm -ws --if-present run typecheck",
+    "lint": "npm -ws --if-present run lint",
+    "tokens": "node scripts/extract-tokens.mjs",
+    "types": "supabase gen types typescript --local > supabase/types.ts"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0"
   }

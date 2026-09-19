@@ -1,0 +1,57 @@
+# Files exempt from the CI voice gate.
+#
+# Every path below is part of the April to May 2026 import: canonical specs, write-once
+# session handoffs, and review snapshots that predate Editorial Voice v1.2. They carry
+# 1,667 hard-rule hits between them, all dashes.
+#
+# They are exempt rather than fixed for two reasons. guard-docs.mjs blocks agents from
+# editing docs/*.md specs at all, so an agent cannot launder them. And handoffs and
+# reviews are write-once records; rewriting them changes what the record says happened.
+#
+# This is a list of paths, not a pattern. A new file anywhere, including a new handoff
+# or a new review, is gated normally. Clean a doc's dashes by hand and delete its line.
+#
+# Nothing outside docs/ appears here. The gate is green on everything this project authored.
+docs/Dialecta_Activity_Rhythm_View.md
+docs/Dialecta_Article_Editorial_Template.md
+docs/Dialecta_Axis_Mapping_v1.md
+docs/Dialecta_Classification_Engine_Specification.md
+docs/Dialecta_Cleanup_Continuation.md
+docs/Dialecta_Contributor_Identity.md
+docs/Dialecta_Data_Architecture.md
+docs/Dialecta_Delta_Mechanic_Spec.md
+docs/Dialecta_Discourse_Layer_UX.md
+docs/Dialecta_Editorial_Voice.md
+docs/Dialecta_Founding_Philosophy.md
+docs/Dialecta_Growth_Layer_Principles.md
+docs/Dialecta_Growth_Scroll.md
+docs/Dialecta_Project_Brief.md
+docs/Dialecta_Project_Index.md
+docs/Dialecta_Relationship_Types.md
+docs/Dialecta_Self_Snapshot_Engine.md
+docs/Dialecta_Social_UX_Architecture.md
+docs/Dialecta_Supabase_Scaling.md
+docs/Dialecta_Tier_Psychology.md
+docs/Dialecta_Tuning_Engine_Spec_v1.md
+docs/articles/How_to_Use_Dialecta.md
+docs/articles/Invitation_to_First_Users.md
+docs/articles/Social_Media__Human_Behavior__and_the_Rewiring_of_Society.md
+docs/articles/Welcome_to_Dialecta.md
+docs/dialecta-profile-ghost-integration.md
+docs/drafts/Theme_System_Phase0_DRAFT.md
+docs/handoffs/Dialecta_Codebase_Audit_Brief.md
+docs/handoffs/Dialecta_Session_Handoff_OpinionMaps_Delta.md
+docs/handoffs/dialecta-coherence-audit.md
+docs/handoffs/dialecta-foundation-state.md
+docs/handoffs/dialecta-handoff-2026-04-27-evening.md
+docs/handoffs/dialecta-handoff-2026-04-27.md
+docs/handoffs/dialecta-handoff-2026-04-28-community-feed-kickoff.md
+docs/handoffs/dialecta-handoff-2026-04-28-evening.md
+docs/handoffs/dialecta-handoff-2026-04-29-community-author-view.md
+docs/handoffs/dialecta-handoff-2026-04-29-engines-build.md
+docs/handoffs/dialecta-handoff-2026-04-29-evening-rollup.md
+docs/handoffs/dialecta-handoff-2026-04-29-feed-architecture.md
+docs/handoffs/dialecta-handoff-2026-05-05-share-architecture.md
+docs/handoffs/dialecta-session-context.md
+docs/handoffs/dialecta-workflow-reference.md
+docs/reviews/2026-09-08-site-review.md

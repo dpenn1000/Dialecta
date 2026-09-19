@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.vercel/
+.DS_Store
+Thumbs.db
+.next/
+supabase/.temp/
+*.tsbuildinfo
+.turbo/
+tools/local-research/.index/
+_to_delete/
+council/log/sprints/*.log
