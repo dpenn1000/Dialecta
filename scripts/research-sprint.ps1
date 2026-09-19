@@ -11,7 +11,7 @@
     scripts\research-sprint.ps1 -Advisor all -MaxSources 8
 
   Schedule it (Task Scheduler, nightly at 02:00):
-    schtasks /Create /SC DAILY /ST 02:00 /TN "Dialecta research sprint" /TR "powershell -ExecutionPolicy Bypass -File C:\Dialecta\scripts\research-sprint.ps1 -Advisor all"
+    schtasks /Create /SC DAILY /ST 02:00 /TN "Dialecta research sprint" /TR "powershell -NoProfile -ExecutionPolicy Bypass -File C:\Dialecta\scripts\research-sprint.ps1 -Advisor all"
 
   Cost: roughly one Sonnet or Opus session per advisor per run, plus local GPU time.
   Logs land in council\log\sprints\.
@@ -19,6 +19,7 @@
 param(
   [ValidateSet('treasurer', 'designer', 'philosopher', 'all')][string]$Advisor = 'all',
   [int]$MaxSources = 6,
+  [string]$Model = 'sonnet',
   [string]$Root = 'C:\Dialecta'
 )
 $ErrorActionPreference = 'Stop'
@@ -29,9 +30,9 @@ $list = if ($Advisor -eq 'all') { 'treasurer', 'designer', 'philosopher' } else 
 foreach ($a in $list) {
   $stamp = Get-Date -Format 'yyyy-MM-dd-HHmm'
   $log = Join-Path $logDir "$stamp-$a.log"
-  Write-Host "== sprint: $a (max $MaxSources sources) -> $log"
+  Write-Host "== sprint: $a (model $Model, max $MaxSources sources) -> $log"
   $prompt = "/dialecta-research $a --max $MaxSources"
-  claude -p $prompt --permission-mode acceptEdits --max-turns 60 2>&1 | Tee-Object -FilePath $log
+  claude -p $prompt --model $Model --permission-mode acceptEdits --max-turns 60 2>&1 | Tee-Object -FilePath $log
 }
 npm run index -w tools/local-research | Out-Null
 Write-Host '== index rebuilt'
