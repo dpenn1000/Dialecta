@@ -51,6 +51,20 @@ and both go to `decider`: `2026-09-19-001` asks whether the September migrations
 were written knowing live existed, and `2026-09-19-002` asks whether seven repo
 deviations from the spec are drift to revert or design to record.
 
+**`2026-09-19-001` now has its answer, appended as evidence on the record.** Dan was
+asked and did not remember, and pointed out the work was done on studio-pc. It was.
+The scaffold arrived as `dialecta-scaffold.zip` from a Cowork chat, per
+`docs/handoffs/dialecta-handoff-2026-09-19-studio-pc.md`, whose install instructions
+tell Dan to create `dialecta-staging` and `db push` into it. Root `CLAUDE.md` at
+commit `96b26b8` described Supabase as four tables and Live, and the migration
+issues `create table` for all four. No session on this machine wrote the SQL, and
+the live project was first read at 19:07:49Z on 2026-09-19, 35 minutes after the
+scaffold was committed, only because Dan asked for help with the Supabase npx.
+
+So the migrations were written without knowledge of the live schema, which is the
+branch the record itself maps to adopting live. The record stays open because
+closing it is `decider`'s, and Dan has not confirmed the finding.
+
 Read `docs/handoffs/dialecta-handoff-2026-09-19-supabase-reality.md` first if you
 are new to this. `supabase/types.ts` is generated from the live project and is the
 real shape, with the limits set out in

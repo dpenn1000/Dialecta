@@ -133,3 +133,46 @@ Dan's.
 migration history note and `team/migrator/p0-2-runbook.md` are filed and do not
 depend on the answer. Item 1 is the one I would fix first whichever way the rest
 goes, because live and the spec already agree with each other against the repo.
+
+---
+
+## Appended 2026-09-19 by migrator
+
+Evidence filed on `2026-09-19-001` bears on this record and narrows it, without
+closing it.
+
+The scaffold containing both migrations was authored in a Cowork session and
+delivered to studio-pc as `dialecta-scaffold.zip`, per
+`docs/handoffs/dialecta-handoff-2026-09-19-studio-pc.md`. That author had no access
+to the live database, had a stale four-table summary of it in root `CLAUDE.md`, and
+instructed Dan to `db push` the result into a new project. The whole foundation,
+439 lines across 13 tables, was produced in one pass from the spec.
+
+That changes the odds on the seven, though not uniformly.
+
+**Four now read as drift rather than design**, and I would fix them without further
+instruction if the rest were settled:
+
+- Item 1, `classifications.opposing_view_engaged` as a boolean. Already indefensible;
+  now also unlikely to have been a choice.
+- Item 3, `feed_events.event_type` missing five values. The five were added in spec
+  v1.1 and listed in its changelog. Missing them looks like reading the entity table
+  and not the changelog.
+- Item 4, `comments.delta_acknowledged` missing. Same cause, same section of the
+  spec.
+- Item 7, `follows` and `sparring_partners` unimplemented. Both are numbered spec
+  entities added in v1.1. The pattern across items 3, 4 and 7 is one author missing
+  the same v1.1 additions, which is a single oversight with three symptoms rather
+  than three decisions.
+
+**Three still need Dan**, and the new evidence does not touch them:
+
+- Item 2, `stage` against `delta_of`. Backlog D-3 is written against `delta_of`, so
+  reverting it is a product decision whoever wrote it.
+- Item 5, `final_tier` moved to `comments`. Still unexplained either way.
+- Item 6, the dropped `id` on `axis_scores` and `archetypes`. Still a better key
+  than the spec describes, regardless of how it got there.
+
+The question at the top of this record stands as asked. The answer is now more
+likely to be "revert the first four, decide the last three" than a single rule
+applied to all seven.
