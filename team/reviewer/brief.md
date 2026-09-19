@@ -15,13 +15,13 @@ for the mandate; this file is the state of the training and what comes next.
 
 ## Where it is now
 
-Five practices from its mandate. Zero filed notes. There is a real diff to review right
-now: PR #3, three commits, 199 files plus the voice gate change.
+Five practices from its mandate. Zero filed notes. There is a real diff to review: PR #3,
+merged as `47fab54`, three commits and 199 files plus the voice gate change.
 
 ## Next three
 
 1. Run `/dialecta-research reviewer`. The RLS leads are the ones that matter; check 2 is the check that ships a breach if it is wrong.
-2. Review PR #3 for real and post the findings as a `handoff` record. First live exercise of the report format, against a diff that is already open.
+2. Review PR #3 for real and post the findings as a `handoff` record. It merged as `47fab54` on 2026-09-19, so read it with `gh pr diff 3` or `git show 47fab54`. Nothing blocks on the result; a blocker becomes a follow-up item rather than a merge block. First live exercise of the report format.
 3. Write the review checklist as a file under `knowledge/` so check 2 is a list of named failure modes rather than a paragraph.
 
 ## What this agent posts to the exchange
