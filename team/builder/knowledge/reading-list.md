@@ -8,9 +8,15 @@ States: `todo`, `filed`, `dead`.
 
 | State | Lead | Why this agent needs it |
 | --- | --- | --- |
-| todo | Next.js App Router: server and client components, and the cost of the `use client` boundary | The island list in the brief is a rule with no reasoning behind it yet. A-1, A-3 and A-5 all hinge on where the boundary sits |
-| todo | React 19: Actions, `useOptimistic`, `useFormStatus` | The composer submits and waits for classification. Optimistic state is the difference between a 12 character gate that feels alive and one that feels broken |
-| todo | `@supabase/ssr`: server-side auth for the Next.js App Router, and cookie handling | P0-4 is magic link plus Google. The cookie plumbing in App Router is the part that bites |
-| todo | TipTap 3 and ProseMirror: schema, the JSON document model, server-side HTML generation | A-10 stores `body_json`; A-11 renders `body_html` on the server. Both need the schema decided once |
-| todo | Next.js caching and revalidation semantics in the App Router | A-5 and A-6 render threads on the server. A stale thread after a vote is a caching question, not a data question |
-| todo | Supabase Storage from a Next.js route handler, and the bucket policy for `article-media` | A-10 uploads images. The bucket exists in migration 0002 and nothing has written to it yet |
+| filed | Next.js App Router: server and client components, and the cost of the `use client` boundary | Filed 2026-09-19. Source held. The cost is the module graph, not the component, and it does not follow `children` |
+| filed | React 19: Actions, `useOptimistic`, `useFormStatus` | Filed 2026-09-19. Source held, reasoning corrected: the Action is the insert, so optimistic state cannot cover a tier that arrives later |
+| filed | `@supabase/ssr`: server-side auth for the Next.js App Router, and cookie handling | Filed 2026-09-19. Source held, guidance moved: `getClaims()` replaces the `getUser` and `getSession` framing, and `setAll` now takes two arguments |
+| filed | TipTap 3 and ProseMirror: schema, the JSON document model, server-side HTML generation | Filed 2026-09-19. Source held and named a missing dependency: server generation needs `@tiptap/html`, which `apps/web` does not have |
+| filed | Next.js caching and revalidation semantics in the App Router | Filed 2026-09-19. Source held, premise corrected: on 15 nothing is cached by default, so a stale thread is a missing revalidate rather than a cache |
+| filed | Supabase Storage from a Next.js route handler, and the bucket policy for `article-media` | Filed 2026-09-19. Source held, pointer corrected: there is no migration 0002. The bucket is in `20260919000100_articles_native.sql` with a select policy only |
+| todo | `docs/Dialecta_Discourse_Layer_UX.md` has no Stage 2.5 section, though A-3, the Delta Mechanic spec and the locked 10 percent weighting all assume one | A-3 cites a section that does not exist. Read the Article Editorial Template's Stage 2.5 and establish whether the comment flow inherits it or needs its own |
+| todo | Next.js 16 Cache Components and the `cacheComponents` flag | The caching docs split in two for 16 and `apps/web` is on 15.5.25. Worth knowing which model the repo is committing to before A-5 and A-6 add cache config |
+| todo | Supabase `getClaims()`, asymmetric JWT signing keys, and what verifying locally costs per request | Found while reading the SSR guide. It replaces the `getSession` advice P0-4 was going to follow, and every gated route handler will call it |
+| todo | `@supabase/ssr` 0.12.x source: the installed `setAll` signature and whether it takes the `headers` argument | The docs show a two-argument `setAll`. `apps/web` pins `^0.12.7`, and a mismatch drops cache headers silently rather than failing |
+| todo | React `useActionState` | Named in the React 19 post and absent from this list. It is the hook that carries a server action's return value back into the composer island for A-1 |
+| todo | Supabase resumable TUS uploads above 6MB | Standard uploads are recommended only to 6MB and A-10 accepts article images, so the ceiling decides whether one upload path is enough |
