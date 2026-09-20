@@ -1,0 +1,78 @@
+# Standing position: P0-D2, open sign-up against invite-only
+
+*Written 2026-09-19, sprint 1. Backlog P0-D2 asks Dan to settle login methods and whether sign-up is open or invite-only at cutover. This note answers only the cost half. Login method choice is a designer and security question and this advisor has nothing to add to it.*
+
+**Confidence: high on where the cost curve bends, medium on the abuse arithmetic.** The infrastructure quotas below are vendor pages fetched 2026-09-19 and filed. The spam reasoning is from first principles and has no source behind it yet; the lead is open in `../research/reading-list.md`.
+
+---
+
+## The position
+
+> **Hardened 2026-09-20.** The abuse argument below was written from first principles. It now has a source and the finding is worse: the live profile API creates identity rows without authentication, so the gates have to cover unauthenticated writes, not just accounts. See `../research/2026-ghost-native-analytics-all-time.md` for the traffic context and `exchange/open/2026-09-20-005` for the defect.
+
+**Open sign-up, on the condition that three cheap gates ship with it.** Invite-only is not the cheaper option, it is the option that hides the cost. If the gates cannot ship at cutover, invite-only until they can.
+
+The gates: email verification before a comment can be submitted, a per-account rate limit on comment submission, and the 12-character composer gate already specified in backlog A-1. All three are client and server work with no recurring vendor cost.
+
+## Cost per user, and where it does not bend
+
+*Corrected 2026-09-19, same day. The first version of this section claimed almost nothing in the stack bends with user count, and named egress as the first quota crossed. Both were wrong, because this advisor took a position on Dialecta's cost curve without reading `docs/Dialecta_Supabase_Scaling.md`, which is the spec about Dialecta's cost curve. The conclusion below survives. The reasoning that reached it did not, and the corrected version is weaker in a way worth seeing.*
+
+The vendor quotas, which is where sprint 1 stopped:
+
+| Line | Included | Where it runs out | Cost after |
+| --- | --- | --- | --- |
+| Supabase monthly active users | 100,000 on Pro | 100,000 MAU | $0.00325/MAU |
+| Supabase database | 8 GB on Pro | roughly 1.6 to 2.7 million comment rows | $0.125/GB |
+| Supabase egress | 250 GB on Pro | roughly 500,000 page loads a month | $0.09/GB |
+| Vercel function invocations | 1M on Pro | 1M a month | $0.60 per 1M |
+| Vercel data transfer | 1 TB on Pro | 1 TB a month | $0.15/GB |
+
+Against 14 live Ghost members the MAU allowance alone is five orders of magnitude of headroom, and none of those lines is reached soon. But the quotas are not what breaks first, and the Scaling spec says so in its opening principle: **"Storage is not the first wall. Connection saturation and `axis_scores` recompute cost are."**
+
+**There is a per-user cost curve, and it is a step function on the database compute tier.** Supabase Pro ships a Micro instance; the spec's pre-launch checklist requires Small. Its sizing guidance then reads Small to about 10,000 active users, Medium at $60 from 10,000 to 50,000, Large at $110 past that.
+
+| Active users | Compute | Monthly |
+| --- | --- | --- |
+| Launch to ~10,000 | Small | $15 |
+| ~10,000 to 50,000 | Medium | $60 |
+| Past 50,000 | Large | $110 |
+
+So the earlier claim was too strong. Cost does track user count. It tracks it in three steps, the first arrives at roughly 10,000 active users, and it costs $45 more a month to climb. **At 10,000 active users, $45 a month is a rounding error against any membership revenue that user count implies, which is why the conclusion holds.** The spec also warns against planning off the user number at all: "The signal for jumping a tier is sustained p95 query time creeping above ~200ms on profile loads, not a specific user count. Watch the dashboard, not the calendar."
+
+The two genuine first walls are latency, not billing, and both cost nothing recurring to fix. Connection saturation is solved by the Supavisor transaction pooler, which is a connection-string change. The `axis_scores` replay pattern, which "does not scale past roughly 800 to 1,200 lifetime comments per contributor on a small Supabase compute instance", is solved by incremental update with a nightly reconcile. **Dialecta's scaling risk is engineering attention, not vendor spend**, and engineering attention is Dan's time, which is the one input this advisor cannot price.
+
+Two further places it bends, and only one of them is about users:
+
+**1. Email, at about 100 members.** Resend's free tier allows 3,000 emails a month but only 100 a day. Those are different constraints and the daily one binds first. The first announcement to 101 members fails, and the line goes to $20 a month. Notification email crosses it sooner than the newsletter does, because notifications scale with users multiplied by activity rather than with users alone. `../research/2026-resend-pricing.md`.
+
+**2. Comments, not users.** The Stage 1 classification call is the only variable cost in the platform, at about $0.002 a comment. It is indexed to comments submitted, not to accounts created. Ten thousand accounts that never comment cost nothing. `../research/2026-anthropic-api-pricing.md`.
+
+## The actual argument, which is about abuse rather than scale
+
+The second bend is where open sign-up becomes a treasurer question, and it is not a gradual curve. **Every comment submitted is a paid API call, so an automated sign-up and posting run converts somebody else's botnet into a line on Dan's Anthropic bill.** Ten thousand junk comments costs about $20 and arrives in an afternoon. A hundred thousand costs about $200. There is no natural ceiling on that number, which is the property that matters: an unbounded downside on a solo founder's card.
+
+The second cost is worse than the first and does not show up on any bill. Junk comments enter `comments` and `classifications`, and the Project Brief's Tier 3 names that classified corpus as the platform's eventual moat. **Spam does not just cost money, it contaminates the asset.** Cleaning a poisoned training corpus later costs far more than gating it now.
+
+Invite-only reduces both to near zero. That is a genuine advantage and this advisor will not pretend otherwise.
+
+But invite-only also costs something the balance sheet does not show. The platform's unit economics improve with contributors, because the fixed floor is $47 a month whether five people use the site or five thousand, and the marginal contributor costs two tenths of a cent per comment. A site with thirty contributors pays the same $564 a year as a site with three thousand. **Invite-only spreads a fixed cost across the smallest possible number of people, which is the worst version of this platform's cost structure.** It also caps the corpus that Tier 3 depends on.
+
+So the comparison is not "cheap against expensive". It is a bounded, certain cost against an unbounded, unlikely one, and the standard answer to an unbounded downside is to bound it rather than to avoid the activity.
+
+The three gates bound it. Email verification defeats scripted mass sign-up at almost no cost. A per-account rate limit converts the unbounded spend into a known maximum: at ten comments an account a day, a thousand malicious accounts is $20 a day rather than unlimited. The A-1 composer gate is already specified and already funded.
+
+## What this does not settle
+
+- Whether open sign-up is right on the designer's terms, meaning whether an invite creates the commitment that a Pact page is supposed to create. That is a real argument and it is not this advisor's.
+- Whether open sign-up is right on the philosopher's terms, meaning what the composition of the first hundred contributors does to a platform whose thesis is about environments shaping behaviour. A community's founding cohort is not a cost variable.
+- The login methods half of P0-D2.
+
+This advisor's claim is narrow and firm: **on cost alone, invite-only cannot be justified, and open sign-up cannot be justified without the rate limit.**
+
+## What would move this position
+
+- ~~A source on comment spam economics.~~ **Partly answered 2026-09-20, and worse than this position assumed.** `GET /api/profile/:id` on the deployed API upserts: it creates a `profiles` row for any arbitrary string, unauthenticated, from anywhere. **An attacker does not need to sign up at all**, so the rate limit this position asks for is necessary but not sufficient. Found by accident while probing whether the database was paused, which wrote a junk row to production. Posted as `exchange/open/2026-09-20-005`. The economics lead stays open; the mechanism no longer does.
+- A decision on A-2 that moves classification off the submit path. If classification becomes asynchronous, it can be batched at a 50 percent discount and it can be deferred for unverified accounts, which changes the abuse arithmetic considerably. `../research/2026-anthropic-caching-batch-limits.md`.
+- Dan's reader count. The case for open sign-up rests on contributors spreading a fixed cost, and that argument is only as good as the number of people who might sign up.
+- Whether the `axis_scores` incremental-update fix actually ships. Pure replay degrades at 800 to 1,200 lifetime comments per contributor, which a single prolific contributor reaches without any help from open sign-up. If the fix is deferred, the first cost of opening the doors is a compute upgrade bought to paper over a query pattern, which is the worst money on this list. `../research/2026-dialecta-supabase-scaling-spec.md`.
