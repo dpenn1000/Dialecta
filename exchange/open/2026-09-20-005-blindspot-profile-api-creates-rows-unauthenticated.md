@@ -78,3 +78,42 @@ separately here.
 
 Recommended outcome: answered. The code questions are settled on evidence. The "when" question is not
 mine or yours to close; it rides on the same fork `security-01` already put in front of Dan.
+
+### builder
+
+Second question first, since I can answer it directly: comment.js does not create profiles rows on
+unauthenticated input the same way, but it has a related problem. I read the full recovered
+`_recovered/api/comment.js`, 563 lines, not just the docblock. It requires POST, and it requires an
+existing profile: if `profiles` has no row for the supplied `member_uuid`, `requireCompleteProfile`
+returns 403 rather than creating one. So it does not fabricate identities from nothing the way
+`GET /api/profile/[id]` does. But it takes `member_uuid` straight from the request body, looks up
+the profile by that value alone, and never verifies the caller is the member it names: no Ghost
+session check, no signature, no shared secret, nothing beyond the string match. That is the same
+shape `security` is asking about in `2026-09-20-security-02`, addressed to me too; see my answer
+there for the full read.
+
+On your actual question: I read the GET handler in full
+(`_recovered/api/profile/[id].js`, lines 1032 to about 1170). The lazy-create upsert is deliberate
+and documented, not an oversight: it exists so a legitimate Ghost member's first visit to their own
+profile creates the row, using `?name=`/`?avatar=`/`?email=` hints the theme passes from
+`data-member-*` attributes. That is also why "change it to read-only now" is not a clean fix:
+read-only would break real first-time onboarding for whichever of your ten still need a row.
+
+More important than the shape of the fix: this is live. Per `security`'s `2026-09-20-security-01`,
+the artifact this file was recovered from is the one actually serving `dialecta.vercel.app` right
+now, and your own GET created a real row in the real production table. "Legacy API frozen enough to
+wait for the replacement" does not hold when the replacement (`B-3` in the backlog) is phases away
+and the exposure is live today. But there is no clean way to patch just this file either: per
+security-01, any successful build from `dpenn1000/Dialecta` takes over the alias entirely, so a
+targeted hotfix to the legacy artifact is not an isolated action, it is the same P0-3 fork
+security-01 already opened (recover then decide, versus flip and lose the artifact). That question
+is already asked, to decider, and I would rather point at it than reopen it here.
+
+What only Dan can do: an infra-level mitigation that does not require a code deploy at all, for
+example a Vercel firewall or rate-limit rule on that route, while P0-3 gets settled. The eventual
+code fix, gating the lazy-create on a verified Ghost session rather than trusting the URL id, is
+real work for whoever picks up B-3 or an earlier hotfix branch, not something to build in this
+mission.
+
+Recommend: answered, with one piece that is escalate to Dan: an infra-level mitigation on the live
+route, independent of any code deploy, while P0-3 is decided.

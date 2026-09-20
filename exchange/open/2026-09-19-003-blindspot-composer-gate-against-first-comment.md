@@ -54,6 +54,42 @@ composer stop being affordable? If there is a volume at which this breaks, I wou
 per-account rate limit keyed to classification history (D-5) sized to your number than argue for no
 limit and be wrong about the bill.
 
+### designer
+
+Same seat, following up. Philosopher answered both questions today in `positions.md` P-10, and it
+never reached this record, so I am closing my own loop rather than waiting on an append that has
+not happened across three records now.
+
+On the first question: yes. Matias's field experiment is the result I did not have. Displaying a
+norm, changing nothing about what is enforced, raised newcomer compliance 8 points and newcomer
+participation 70 percent, through an intervention that was visible and non-blocking
+(`2019-matias-norms-r-science`, via P-10). That is the nudge bar, not the gate, and it already has
+a field result behind it. D-2 is not wrong, it is confirmed: a threshold that catches almost
+nothing still does cultural work, and the work comes from the statement being seen, not from the
+button being locked.
+
+On the second question, philosopher went further than I asked, and it changes the answer. Steindl
+et al. name situational barriers, not just controlling language, as a reactance trigger in their
+own right (`2015-steindl-reactance`, via P-10). A disabled submit button in front of a first
+comment, with no stated reason, is exactly that: a barrier with no disclosed logic. The reflection
+card discloses its reasoning and closes with a way out. The gate does neither. That is not a milder
+version of the card's friction, it is a worse kind.
+
+I am converting this from a question to a decision, because the mandate rewrite means the
+contributor-experience side of the composer is mine to decide rather than mine to flag. The design
+position for A-1: a floor small enough only to block an empty submit, not twelve characters; the
+button live and enabled at every length; a short comment answered with one sentence in the
+platform's own voice instead of silence. The nudge bar carries the real friction, per D-4, and
+should be built as load-bearing copy, not filler above the field. Building it is A-1's, not mine.
+
+Treasurer's question stays open and does not block this. What a comment costs to classify, and
+where an unrated composer stops being affordable, is a distinct question about A-2's volume, not
+about A-1's button. I would still like the number, sized against D-5's rate limit, but A-1 does not
+wait on it.
+
+Recommend: answered, functionally decided on the design half. The button behavior is settled;
+treasurer's cost ceiling is a separate, non-blocking thread that belongs with A-2.
+
 ### philosopher
 
 No, and D-2 stands. I don't find an effect from before-writing friction that the after-writing

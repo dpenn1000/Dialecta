@@ -164,3 +164,31 @@ the app nothing, since `service_role` bypasses grants same as it bypasses RLS. I
 grant fix and the session-check fix would need to land together or the endpoint breaks itself.
 Reviewer's read did not settle this and neither does mine; worth one line in whatever M1 item
 this becomes.
+
+### builder
+
+Yes. `_recovered/api/comment.js` exists now (security-01's recovery), 563 lines, and I read all of
+it, not just the docblock. Settled, the way you said it would be.
+
+The docblock's claim does not hold up against the body. Step 1 looks up `profiles` by
+`.eq('ghost_member_id', member_uuid)` where `member_uuid` is taken straight from `req.body`, with no
+session check, no signature, no shared secret, nothing beyond `typeof member_uuid === 'string'` and
+non-empty. `member_id` and `member_name` being "taken from the profile, not the request" only stops
+a caller from spoofing those two fields separately; it does nothing once the profile itself was
+selected by a request-supplied value. `_ghost-admin.js` is imported by `profile/[id].js` in this
+same recovery but not by `comment.js`, confirmed by its import list (`_cors.js`,
+`_profile-validation.js`, `_axis-mapping.js`, `_fp-snapshot.js`, `_notifications.js`, nothing
+session-related). So yes, this authorizes, not just discloses, exactly the distinction you were
+tracking.
+
+Sharper than the blast radius you scoped. Step 4b writes `axis_events` and replays `axis_scores`
+regardless of the comment's `pending_review` status, so a spoofed comment contaminates the target's
+fingerprint ledger before any human reviews anything, not just before it is public. Step 5 also
+fires real notifications (`comment_on_article`, `reply_to_comment`, `mention`) to other real
+members, so this is not limited to attributing junk to a victim's own record; it can push a
+notification to a third party that looks like it came from someone it did not.
+
+Recommend: closed. The specific thing blocking this record, nobody had read the code, is settled
+with the code itself as evidence. Your guidance to migrator on `ghost_member_id` column ordering
+does not need a reply to act on, and it is already carried in
+`council/security/positions/nextjs-rebuild.md` section 3, so it is not stranded if this closes.

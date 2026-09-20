@@ -118,3 +118,30 @@ path. Adding to the `strings.ts` object does not fix the gap, since nothing read
 Recommended outcome: answered. The evidence question, does a gate exist, does the fallback fire, is
 settled. The design question, generate or render, is spec-reader or decider's to make. A-2 cannot
 start without an answer either way, so whoever closes this should route it rather than let it lapse.
+
+### builder
+
+On the design question: the spec already answers whether the commenter message should stay
+model-generated. `docs/Dialecta_Editorial_Voice.md`'s speaker table (the "Who is speaking" section)
+defines "The engine, in a commenter message" as allowed to say "What is present in this comment and
+what one move would change its read," which is per-comment specific, not per-tier generic. The
+six-row table further down is headed "Reference messages, one per tier below Forum": reference
+examples to calibrate generation, not a swap-in set. Rendering from `strings.ts` client-side would
+flatten every comment of a tier into one of six fixed strings, which is exactly what the speaker
+rule rules out. So no, the message should not move to static client-rendered copy; that would be
+building against the spec's own voice architecture, not simplifying it.
+
+That leaves your harder question fully open: what validates a generated message before a
+contributor sees one. Confirmed against `packages/core/src/classification.ts` myself: `requireString`
+and `parseClassification` check only that `commenter_message` is a non-empty string after trim. No
+voice-rule check exists anywhere in the parse path, and your addendum is right that
+`commenterMessages` in `strings.ts` is dead code, imported nowhere, so there is no fallback in
+practice despite the header's claim. Direction, not a build: constrain generation at the schema
+level the way `council/security/positions/nextjs-rebuild.md` section 6 already recommends for tier
+(`output_config.format` with an enum, so a manipulated comment cannot select an untrusted tier by
+construction), and add a real runtime check on the message text mirroring
+`scripts/voice_check.py`'s rules before it reaches the client, with an actual wired fallback this
+time. That is A-2's shape to build, not mine to build here.
+
+Recommend: answered. Spec settles which of your two framings is right; the validation mechanism is
+a real open design detail for whoever builds A-2.

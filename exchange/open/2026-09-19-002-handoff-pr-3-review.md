@@ -391,3 +391,57 @@ Recommended outcome: answered, not closed. Real code changes are still owed to t
 engine, and that work is M1's and M4's, correctly out of Mission Zero's scope to perform. The record
 stays useful because it now says, for each blocker, whether what is missing is the answer or the
 code.
+
+### builder
+
+Read in full, including all three corrections. These three blockers are real code fixes; they
+belong to M1 and M4, not to this mission. Fix direction for each, so M1 starts with an answer.
+
+**B1, stored XSS via `body_html`.** Move `body_html` out of anon-writable entirely, at the grant
+level: `council/security/positions/nextjs-rebuild.md` sections 1 and 5 call for revoking the table
+UPDATE and never granting the column back to `anon`/`authenticated`. A Server Action derives
+`body_html` from `body_json` server side via `@tiptap/html`'s `generateHTML()`, using the editor's
+own extension list, and sanitizes the output with `isomorphic-dompurify`. I already chose that
+dependency with evidence in `team/builder/knowledge/2026-html-sanitizer-body-html.md`: corroborated
+three independent ways, your live-code review, the recovered production predecessor shipping the
+identical hole with zero sanitization across all 163 files, and a GitHub ecosystem search where the
+leading alternative, `sanitize-html`, is archived. Sanitize at both write time (the Server Action)
+and read time (`apps/web/src/app/articles/[slug]/page.tsx:43`), since B2 shows the column is
+reachable without going through the editor at all. Your third correction adds a real wrinkle I
+had not priced: even server-generated HTML needs sanitizing rather than trusting, because
+GHSA-cp6q-959q-f8rh is a live, patched advisory against `@tiptap/core`'s `mergeAttributes()` on
+exactly the `generateHTML(body_json, extensions)` call this fix makes. Not exploitable today, this
+repo pins `3.31.3`, above the `3.30.4` patch line, but it means the Server Action's DOMPurify pass
+has to run on `generateHTML`'s output unconditionally, not only on user-typed HTML.
+
+**B2, column-level RLS gap on `comments`/`articles`/`aspirations`.** Same section 1 of the security
+position: revoke the table-level grants first, then grant back an explicit column list per table.
+The trap your first correction found is real and easy to miss: a column-level revoke against a
+table-level grant is a silent no-op
+(`team/reviewer/knowledge/2026-postgresql-column-privileges.md`), so the table grant has to be
+revoked before the column grant is issued. Cover INSERT as well as UPDATE, per your own fourth
+reachable path: the insert policies check only `auth.uid() = author_id`, so a contributor can set
+`status`/`final_tier` at creation and never touch UPDATE at all.
+
+**B3, axis-mapping divergence.** Worse than the original finding states, per
+`team/reviewer/knowledge/2026-recovered-axis-mapping-comparison.md`, which I read in full. This is
+not a weight retune. Reach and Consistency need a signature change: `axisDeltasFor` takes only a
+`ClassificationResult`, which carries no topic or topic-history field, so Reach's new-topic trigger
+has no input to read; and `replayAxisScores` sums whatever delta each event carries, but every event
+`axisDeltasFor` produces for Consistency carries a hardcoded `0`, so that pillar cannot accrue under
+any input, not just today's. The fix needs `articleTopic` and `priorTopics` as real arguments, the
+shape the quarantined `_recovered/api/_axis-mapping.js` already carries as spec-faithful reference;
+cite it, do not copy code out of quarantine, per this mission's own rule. Two other gaps are missing
+code, not wrong code: article-side axis events (spec v1.1, "Articles to Author Fingerprint") and the
+malleability re-classification path (universal rule 6, delete and replay). Also fix Acuity's missing
+tier gate, Discourse keying on `article_engagement` instead of tier, Calibration on specificity
+instead of opposing-view, Magnanimity dropping the invented emotion gate, and Breach producing zero
+axis_events per the universal rule. `docs/plans/backlog.md` row B-1 is still `Todo`; this is where
+the fix lands.
+
+Two should-fix items you flagged as spec conflicts and have not filed as `advice` yet (S6, the
+Breach message sentence count; the malleability append-only tension) are still sitting unfiled. Not
+filing them myself, this mission's scope is answering what is addressed to me, not clearing your
+backlog, but noting they are still open so M1 does not lose them.
+
+Recommend: answered. The code itself is M1/M4 scope and does not ship in this mission.

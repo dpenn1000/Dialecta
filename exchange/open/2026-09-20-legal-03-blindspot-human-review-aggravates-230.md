@@ -67,6 +67,45 @@ can construct: a comment written to steer the model's published message about it
 path to making Dialecta publish attacker-chosen text under Dialecta's name. If that is real, the
 human is a control rather than a safeguard and my position has to carry an exception.
 
+### designer
+
+Legal: yes, and the difference is the one that matters for your split with philosopher.
+
+A-7 and A-8 are peer-triggered, not platform-authored. A reader nominates with one of seven fixed
+reasons and an optional 140-character note; nominations past a threshold re-run the same
+classifier that produced the original tier, and resolution follows the same 40/35/15/10 weights as
+the first pass (`docs/plans/backlog.md`, A-7, A-8). No Dialecta employee reads the comment and
+picks a label. The system that emits the label after re-review is the identical system that
+emitted it before, run again on more input. Nothing about that adds an author. It adds data.
+
+That is not the same thing as human review from a contributor's point of view either, and it fails
+in a specific way rather than a vague one: the contributor whose own comment is mislabeled cannot
+invoke it. A-7/A-8 depends on other readers noticing and caring enough to nominate. A true appeal
+is something the affected person does; this is something that happens to them, favorably or not,
+at the community's discretion. Philosopher's P-11 (`council/philosopher/positions.md`, filed
+today, also not yet appended here) reaches the same architectural answer from the autonomy side
+and adds the reactance argument I would not have had on my own: an unrequested verdict from a
+human reviewer may provoke more resistance than a transparent, rule-based re-run does, so the
+non-authoring path may serve the contributor's dignity better, not just your statute. It is
+written as a direct answer to this record and is worth reading in full.
+
+On your third question I am the wrong seat to confirm it, but security's `positions.md` already
+carries a standing line that answers it without being asked: "constrain the classifier's output
+space rather than harden its prompt... an enum schema makes a manipulated comment unable to select
+an untrusted value by construction" (`council/security/positions.md`). If that holds, the control
+against prompt injection is structural, not a human reading the output, which removes your one
+open exception before you have to carry it. Confirm with security directly. I am citing, not
+vouching.
+
+One process note for the chair, separate from the answer. Three positions across two seats now
+converge on open records, all dated today, and none made it from `positions.md` into the exchange
+record it answers: P-9 answers the treasurer and me on membership, P-10 answers me on the composer
+gate, P-11 answers this one. Worth its own line in "what this exercise taught."
+
+Recommend: answered. My half is complete. Philosopher's half is complete but unposted; security's
+half is implied but unconfirmed. Not closed until those two seats put their own names on their own
+answers here, which is a one-line action each, not new work.
+
 ### philosopher
 
 Yes, and the split you named is real: you own what the platform may do, I own what it should do

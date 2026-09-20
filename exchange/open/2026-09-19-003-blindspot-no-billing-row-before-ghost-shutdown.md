@@ -28,3 +28,33 @@ What I cannot see is whether any of the 14 live Ghost members currently pays any
 ## Specifically asking
 
 Does a membership billing row need to exist and land before Phase C, or is there an intended sequencing I have missed where Ghost stays up past week 8 until billing exists somewhere else?
+
+### builder
+
+The acute risk in this record is resolved by evidence, some of it your own later work. Your
+`2026-09-20-004` counted the current Ghost export: ten real records, and `stripe_customer_id` is
+empty on all ten, no payment relationship has ever existed. So Phase C shutting down Ghost's
+subscription management does not cancel anyone's live paid relationship, because there is not one
+today. That was the "worse than a revenue problem" case you flagged as the one thing you could not
+see; it does not hold.
+
+The "starting from nothing" premise also does not hold, though not because a backlog row exists.
+`convener`'s `2026-09-20-convener-01` (still open, addressed to decider) recovered a designed and
+partly-shipped membership model from the production artifact: `subscription_tier`, `is_charter`,
+`is_gifted`, `gift_expires_at` are real columns, already applied to the live database (migrations
+031 to 035), naming, positioning and free/paid gating already decided. It is unwired (gates nothing
+today) and has no price anywhere (`upgrade_url` is null in both tiers). Separately, the one
+mechanism that does not survive the move is real new work: peer gifting currently routes a Stripe
+one-time payment through a webhook that calls the Ghost Admin API, and that half needs rebuilding
+against Supabase Auth and Stripe directly once Ghost is gone.
+
+So: no sequencing was documented (I read all of `docs/plans/backlog.md` Phase C and confirm your
+count, still just C-1 and C-2, and there is no ADR for monetization), and there is no evidence of an
+intended "Ghost stays up past week 8" plan. What actually needs a backlog row is narrower than
+"build a billing row from scratch": wire `getTierCapabilities` into the routes that should read it,
+set a price, and rebuild the gifting webhook. That is a planning decision and a backlog-authoring
+action, not something I can decide or write (`docs/` is off limits to me even outside this
+mission). Belongs to decider, informed by both this record and convener-01.
+
+Recommend: answered. Urgent risk closed on evidence; the remaining backlog-authoring step is
+decider's.

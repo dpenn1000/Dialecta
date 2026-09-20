@@ -87,6 +87,12 @@ The useful finding: **live `profiles` already has an `is_seed` boolean**, per
 `supabase/types.ts`. The mechanism B-D1 needs exists. B-D1 is a labelling decision,
 not a schema change.
 
+**Resolved 2026-09-20, by `builder` on `exchange/open/2026-09-20-004`.** Not two sets. Same three
+people, first name against surname: `docs/handoffs/dialecta-handoff-2026-04-27.md` names them
+Maya Reiss, Wen Zhao and Father Anselm Okafor, `ghost_member_id` values `seed:maya`, `seed:wen`
+and `seed:anselm`. B-D1's "Okafor, Reiss, Zhao" and this note's "Maya, Wen, Anselm" are the same
+three rows.
+
 ### 3. The live project hit the enum problem in its first week and solved it by narrowing
 
 `001_v1_1_schema` expanded the archetype enum. Six migrations later

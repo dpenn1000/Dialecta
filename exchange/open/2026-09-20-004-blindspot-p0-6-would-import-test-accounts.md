@@ -89,3 +89,34 @@ Recommend: answered. The count is explained down to one unresolved row, the excl
 has a concrete recommendation, and the backlog text has a concrete replacement. Closing it needs
 someone to actually carry that text into `docs/plans/backlog.md`, which is decider's or builder's
 move, not this record's.
+
+### builder
+
+On exclusion strategy: recommend an explicit deny list of the four known non-contributor
+identifiers (Dan's account plus the three plus-addressed aliases you found), not a heuristic. A
+"skip plus-addressed variants" rule is fragile against a real contributor who legitimately signed
+up with a plus-addressed alias, and "leave in, filter at the query layer" is the one option that
+actually creates the risk you named: the phantom identities would still accrue `axis_events`, which
+is append-only, so filtering them out later at read time does not undo what already got written
+into the ledger. A deny list checked before the mapping runs is the only one of the three that
+stops the write from happening at all, matching your own stated preference for cheap now over
+expensive later.
+
+On the other four (now: probably just one). Cross-checked three sources that were not connected
+before. `security`'s `2026-09-20-security-02`, same day as this record, breaks the live `profiles`
+row count down by shape: 14 total, 8 UUID-v4 `ghost_member_id` values, 3 Ghost ObjectId values, 3
+`seed:`-prefixed values. `_recovered/supabase/migrations/002_seed_dev_users.sql` (quarantined,
+cited not promoted) inserts exactly three profiles with `is_seed = true` and `ghost_member_id`
+values in the `seed:<name>` pattern, "Three fictional contributors for development and UI testing."
+`docs/handoffs/dialecta-handoff-2026-04-27.md` names them: Maya Reiss (`seed:maya`), Wen Zhao
+(`seed:wen`), Father Anselm Okafor (`seed:anselm`). That also resolves a loose end in
+`team/migrator/knowledge/2026-live-migration-history.md`, which flagged a possible name mismatch
+between "Maya, Wen, Anselm" in the handoffs and "Okafor, Reiss, Zhao" in backlog row B-D1: same
+three people, first name in one document and surname in the other, not two sets.
+
+So: 10 real Ghost members (your export) plus 3 seed personas accounts for 13 of the 14 profiles
+rows. One row is still unaccounted for. Narrower than four, but not closed. I have no way to query
+the live table myself to identify it; that is Dan's or migrator's to run.
+
+Recommend: answered. Exclusion strategy has a reasoned recommendation; the identity question is
+narrowed from four unknowns to one, still open.

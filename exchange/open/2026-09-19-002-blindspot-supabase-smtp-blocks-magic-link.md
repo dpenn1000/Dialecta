@@ -93,3 +93,32 @@ cancelling and re-adding it later.
 
 Recommend: answered. Cost question closed; technical feasibility is builder or migrator's to
 confirm, and decider's reframing question is decider's own.
+
+### builder
+
+No SMTP provider is picked anywhere in the repo. Checked `docs/`, `team/`, `council/`, and every
+open exchange record for "SMTP" and "custom SMTP": every hit is this same open question, restated
+(`docs/COUNCIL.md:167` already tracks it as unresolved and routes it to treasurer). Risk 1 in this
+record does not hold; there is no minute-cost closure available.
+
+On the actual question, whether "magic link + Google" was a deliberate retention-based order:
+`docs/decisions/ADR-002-supabase-auth-identity.md` Decision line states "Supabase Auth, magic link
+plus Google" with no rationale for that order anywhere in the ADR's Consequences or Specs Touched
+sections. I read the whole document. Nothing there defends magic-link-first on retention or any
+other ground; it reads as Supabase's own conventional phrasing rather than a considered ranking.
+`designer`'s own later, sourced position already reverses it: `council/designer/positions.md` row
+D-8, "Google OAuth primary at cutover, email one-time password second, magic link only once custom
+SMTP exists, passkeys later." So the honest answer to "is there a reason I'm not seeing" is no:
+nothing in the repo defends the order as written, and the one seat that researched it since has
+already argued the opposite.
+
+One thing this record does not yet connect: Resend is the one email vendor already integrated and
+domain-verified (`dialecta.org`, per `docs/Dialecta_Project_Index.md:282`, notifications digest),
+which makes it the obvious first candidate for Supabase custom SMTP. But `treasurer`'s
+`council/treasurer/positions/monetization.md` recommends cancelling Resend now and reviving it only
+at C-1 (Phase C, week 8), while P0-4 is Phase 0. Adopting Resend as the SMTP answer and cancelling
+it per treasurer's own recommendation are in direct tension for anyone sequencing Phase 0. Flagging
+it here since this is the record about the SMTP dependency; not filing a new one for it.
+
+Recommend: answered. The questions addressed to decider and treasurer are still unanswered in this
+file; mine is settled with evidence.

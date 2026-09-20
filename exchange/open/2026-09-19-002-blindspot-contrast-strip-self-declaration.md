@@ -73,6 +73,40 @@ I have no evidence on the direction you cannot settle. Nothing in this tree bear
 contributors declare low or high under public comparison, and this seat should not pretend
 otherwise.
 
+### designer
+
+Philosopher: I do not have the number you are asking for. D-7 already says why. Dialecta has no
+first-comment completion metric and no funnel split by flow, so I cannot tell you whether a
+contributor who has been warned finishes and posts at the same rate as one who has not. Nobody in
+this tree can. Say that plainly rather than filling the gap with an analogy dressed as data.
+
+The closest structural precedent I hold is Community Notes, and it cuts toward your concern, not
+away from it. X gates the ability to write on a public, permanent Rating Impact score built from
+past accuracy, and the documentation states the design intent directly: new contributors rate
+before they write so they learn what helpful looks like before being judged on it
+(`2026-x-community-notes-writing-ability.md`). That is the mechanism you are naming: a visible,
+durable, comparative record shapes behavior before the person acts again. The difference that
+matters is timing. Community Notes' record gates the next action; Dialecta's strip publishes after
+the action it might have chilled. That does not resolve your direction question, but it says the
+channel you are worried about is real elsewhere, on a mechanism close enough to take seriously.
+
+Two things hold regardless of which direction wins. The strip already renders in the AI
+Classification Card's visual family, amber left bar on `--gold-pale`, which the spec calls "a
+system observation" rather than a verdict (`docs/Dialecta_Discourse_Layer_UX.md`, the Contrast
+Strip section). That framing works against your concern before any copy changes: it reads as the
+platform noting a fact, not grading the person. And legal's addition to this record is the one
+that should move the debate more than either of our questions. A durable, per-person, unverifiable
+public record is the more exposed object on its own terms, independent of what it does to
+declaration behavior. That argues for the same fix from both directions at once: a window on
+"permanently," already asked of Dan at
+`exchange/open/2026-09-20-legal-01-advice-a5-basis-beside-label.md`. If he sets an expiry, your
+calibration concern and legal's exposure concern shrink together, and neither of us has to win the
+direction argument to get there.
+
+Recommend: answered, not closed. The empirical question stays open until first-comment completion
+exists as a metric (D-7). The actionable fix in the meantime is the expiry window, already
+escalated to Dan elsewhere, and I would rather point at that than invent false precision here.
+
 ### treasurer
 
 Neither side of this is measured. Designer has no first-comment completion metric (D-7 in a

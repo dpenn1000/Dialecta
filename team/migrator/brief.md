@@ -79,9 +79,40 @@ found: every column on `profiles` is readable without authentication, including
 
 ## Next three
 
-1. Fix the `profiles` column exposure, as soon as `2026-09-19-001` closes and a migration is allowed. Either column grants or a public-profile view. This is the highest-value small migration available and it is independent of which option wins.
-2. Run Part 1 of `p0-2-runbook.md` once Dan has logged in. Steps 1 to 8 are read-only. Two of the three questions it was written to answer are now answered, so what remains is the authoritative 20 migration names and the **policy text** behind the RLS map, which row counts cannot give. Step 6 is the one that matters.
-3. Do NOT write a migration until `2026-09-19-001` closes. When it does, three more are already scoped and are needed under all three options: `classifications.model` and `.prompt_version` (backlog A-2), `comments.delta_acknowledged` (spec entity 1), and `aspirations.visibility` plus `.research_consent_at` (spec entity 7). Write them against whichever schema wins.
+**Updated 2026-09-20, Mission Zero.** `2026-09-19-001` closed 2026-09-20 on option 1, adopt live,
+paired with option 2, branch for staging. The gate item 3 below was written against is cleared. A
+migration is now allowed; none was written this session, because Mission Zero's own scope is
+answering the exchange, not building. The four migrations below are scoped and unblocked, and are
+the actual next work for the first non-Mission-Zero thread:
+
+1. Fix the `profiles` column exposure. Column grants, revoke SELECT from `anon`/`authenticated`
+   and grant back an explicit list, `ghost_member_id` first: `2026-09-20-security-02` confirmed
+   (reviewer, reading the recovered `/api/comment` handler in full) that it is not just disclosure
+   there, it is the entire auth check on a write path. Still the highest-value small migration
+   available.
+2. The B2 grant-revoke, alongside whichever migration first adds an owner-writes-own-row policy on
+   `comments`, `articles` or `aspirations`. Both verbs, INSERT and UPDATE, not UPDATE alone. Must
+   land in the same migration as the policy or before it, never after: detail and the reasoning in
+   `2026-09-20-security-03-handoff-grants-measured-b2-holds.md` and now in `practices.md`. No
+   backlog row owns this yet; recommended into P0-2, pending decider.
+3. `classifications.opposing_view_engaged` as the three-value enum, never a boolean, when P0-2's
+   rewrite carries the `classifications` table forward from live. Not a decision, a defect; see
+   `2026-09-19-002`'s 2026-09-20 appendix.
+4. `classifications.model` and `.prompt_version` (backlog A-2), `comments.delta_acknowledged`
+   (spec entity 1), and `aspirations.visibility` plus `.research_consent_at` (spec entity 7).
+   Write them against live's shape, which is now the settled destination rather than one of three
+   options.
+
+Run Part 1 of `p0-2-runbook.md` once Dan has logged in. Steps 1 to 8 are read-only. Two of the
+three questions it was written to answer are now answered, so what remains is the authoritative 20
+migration names and the **policy text** behind the RLS map, which row counts cannot give. Step 6
+is the one that matters.
+
+`2026-09-19-002` (the seven spec deviations) is not fully closed. Item 1 is settled (see above).
+Items 2 and 5 are restated as one-sentence questions for Dan in that record's 2026-09-20 appendix.
+Item 6 has a recommendation, a `UNIQUE (contributor_id, axis)` constraint on live's `axis_scores`
+beside its existing `id`, that does not require picking a side and does not touch a populated
+primary key; it still wants Dan's yes.
 
 ## What this agent posts to the exchange
 

@@ -43,11 +43,11 @@ sentence like B, and it is listed because the hook it extends already handles on
 
 | Agent | Choice | Reason, one line |
 | --- | --- | --- |
-| builder | | |
+| builder | B | Checked all nine agents' tool grants (`.claude/agents/*.md`) and `.claude/settings.json` myself: `Write` is unscoped by path for every advisor, so the gap is real, but nothing in this drain shows an actual cross-folder write, including a case (security's deployment-recovery script) where the seat routed around its own fence on its own rather than being stopped by one; fix the false claim now, build the hook if a violation ever lands |
 | reviewer | B | The failure actually seen is a doc overclaiming enforcement, not a real cross-folder write; every checklist row I own assumes a hostile anon-key caller and there is none inside the council, so fix the sentence now and revisit A only if a real violation happens |
 | spec-reader | B | The failure mode actually seen in this repo is a doc claiming enforcement that is not there, not an advisor writing outside its folder; fix the sentence now, revisit A or C if the folder violation actually happens |
 | treasurer | B | No violation of the folder rule has ever been observed here; a fourth hook is standing engineering cost against a hypothetical, the exact spend-with-no-evidenced-return this seat vetoes. Drop the claim now, revisit A or C if a real violation happens |
-| designer | | |
+| designer | B | The failure actually seen is a doc overclaiming, not a folder violation; fix the sentence now. A hook is real standing enforcement and deserves its own considered design later, not a bolt-on under a different mission's clock |
 | philosopher | B | A doc claiming a hook enforces something no hook enforces is the same overstatement P-3 already found in the Classification Spec: fix the sentence now, since no folder violation has actually happened yet to build against |
 
 Each named agent writes only its own row. `decider` writes the question, the options and
