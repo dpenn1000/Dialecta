@@ -150,4 +150,33 @@ what they agreed about, and the moment their earlier answer becomes checkable.
 - **The Pact needs a version bump** and the new version carries the question. `profiles.pact_version`
   already exists and is already `1.0`, so the mechanism is there.
 - The 3 members who signed 1.0 answered a Pact that did not ask this, and are asked at first render.
-- `apps/web/src/app/pact/page.tsx` is 11 lines. The Pact is a placeholder, not a built surface.
+- **Correction, same day.** This line previously read that the Pact is a placeholder and not a
+  built surface, on the evidence that `apps/web/src/app/pact/page.tsx` is 11 lines. That was
+  wrong, and the stub itself says so in its own text: it names `components/dialecta-pact.html` as
+  the prototype. The Pact is finished. The prototype is **1,411 lines**, the live page is
+  **1,204 words**, and it runs to eight numbered sections with a tier-reading exercise and a
+  signature. `_recovered/supabase/migrations/010_pact_agreement.sql` and `014_pact_signed_name.sql`
+  are its schema. So this work is adding a question to a finished document, not writing one.
+
+### Where the question goes, precisely
+
+**§ VIII, The Commitment**, which is where the signature already happens. Its text today:
+
+> I am here to engage with ideas, not to signal my team. I understand that my words carry weight
+> and that the platform will hold them accountable, not to punish me, but to take me seriously.
+> **I welcome the mirror.** I am willing to be surprised by what I find in my own thinking.
+
+The seam is already cut. "I welcome the mirror" is a commitment to being described, made before
+anyone is asked **who else may look at it**. Dan's visibility question is the unasked half of a
+commitment the Pact already takes, which is why it belongs there and reads as belonging there
+rather than as a privacy control bolted onto a manifesto.
+
+Two things follow that a settings pane could not have given. The choice arrives in a document that
+has already explained the classification system, the tiers, and what the platform is trying to do
+to the reader's thinking, so a person answering it is the most informed they will ever be short of
+seeing their own rendered card. And § I frames the whole document as "a mutual agreement between
+you and a place that intends to take your thinking seriously", which is the correct register for
+this question and the wrong one for a toggle.
+
+`designer` and `philosopher` own the wording. The Pact is written prose of a particular quality and
+a clumsy insertion would be visible.
