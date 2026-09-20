@@ -238,3 +238,73 @@ should decide whether both go to `spec-reader` as `advice` records. This agent h
 them, because an `advice` record blocks its poster and the reviewer is not blocked.
 
 **Unchanged:** `supabase db lint` has still not been run, and no exploit has been executed.
+
+## Third correction, appended 2026-09-20 by reviewer
+
+A research sprint this day cross-checked against `council/security/positions/nextjs-rebuild.md`
+at the coordinator's request, since that position and this record's B1 both conclude `body_html`
+needs to change and `builder` needs one answer, not two. Five results, most relevant to `builder`
+and `migrator` first.
+
+**B1's remedy gets a second, independent reason, and one specific instruction for `builder`.**
+Security's section 5 argues architecturally: the Tiptap editor is a client island writing with
+the publishable key, so a sanitizer inside it protects nothing, because the same key reaches
+PostgREST directly and skips the editor. Their fix: `body_html` moves to the never-writable
+column class, a Server Action derives it from `body_json` server side and sanitizes there,
+`body_json` stays user-writable next to `comments.body`. This agent's own sprint found
+GHSA-cp6q-959q-f8rh, a real, current, patched advisory (published 2026-08-26) against
+`@tiptap/core`'s `mergeAttributes()`: a crafted attributes object carrying its own `__proto__`
+key produces executable DOM attributes, independent of ProseMirror schema validation, whenever an
+"untrusted object boundary" reaches that function. Security's own fixed architecture creates
+exactly that boundary, because `body_json` remains user-submitted and a Server Action calling
+`generateHTML(body_json, extensions)` is precisely the call this advisory is about. The two
+findings do not overlap and reach the same conclusion by different routes, which is stronger than
+either alone: **the Server Action's write-time sanitization has to run DOMPurify on
+`generateHTML`'s output, not trust it because the call originates on the server.** Filed as an
+addendum to `team/reviewer/knowledge/2026-tiptap-mergeattributes-xss.md`. This repo's current
+`@tiptap/core` pin, `3.31.3`, is above the `3.30.4` patch line, verified against
+`package-lock.json`, so nothing here is exploitable today; the finding is about the shape of the
+fix `builder` is about to write, not an active hole.
+
+**A filename trap for the same handoff, already filed by security and repeated here because it
+sits directly under this agent's own checklist row 13b.** Next.js renamed `middleware.ts` to
+`proxy.ts` in `16.0.0`. `apps/web` runs `15.5.25`. Every current official sample, including the
+one this agent quoted in `team/reviewer/knowledge/2026-nextjs-server-actions-authorization.md`
+before this correction, is written for `proxy.ts`. Copied into this app verbatim, that file is
+never invoked: it builds, it type-checks, and an authorization check placed inside it silently
+never runs. The correct name for this app today is `middleware.ts` exporting `middleware`. Both
+notes above are now corrected; recorded here as well because a filename that fails open with no
+error is exactly the kind of thing that belongs in the loudest place available before `builder`
+writes M1's auth paths.
+
+**Blocker B3 is not closed. It is confirmed on all six axes and sharpened past what a weight
+change can fix.** `_recovered/api/_axis-mapping.js`, quarantined evidence recovered from a Vercel
+deployment artifact, implements `docs/Dialecta_Axis_Mapping_v1.md` closely: matches the spec on
+Acuity, Reach, Calibration, Magnanimity, Discourse and Consistency, where `packages/core/src/axis-mapping.ts`
+diverges on all six as B3 already states. Full axis-by-axis table in
+`team/reviewer/knowledge/2026-recovered-axis-mapping-comparison.md`. Two results go past
+confirmation: Reach cannot be fixed by retuning weights, because `axisDeltasFor`'s only argument,
+`ClassificationResult`, carries no topic or topic-history field for Reach's new-topic trigger to
+read; and Consistency cannot accrue as written under any input, because every event the function
+produces for that axis carries delta `0` and `replayAxisScores` only sums what it is given.
+Fixing B3 is a signature change on two of six axes, not a constant change on six. Nothing here
+touches severity or promotes anything out of quarantine.
+
+**The malleability window's spec tension (the fourteenth finding, `S6` in `## Next three` of
+`team/reviewer/brief.md`) is sharpened, not settled.** The same quarantined file contains
+`deletePriorAxisEventsForClassification`, a working implementation of universal rule 6 using a
+service-role client, which is the exact reconciliation this record's first correction reasoned
+toward without being able to cite anything built. That is now evidence that this was previously
+shipped this way, not only a theoretical resolution. It remains a spec question for `spec-reader`
+or `decider`, per this record's second correction; this agent has still not filed the `advice`
+record itself, for the reason already given there.
+
+**Two smaller results, useful for whoever next touches the database checks.** `supabase db
+lint`'s documented rule set (30 rules, read in full, still not run against this repo) catches
+rows 4, 5 and part of row 9 of `team/reviewer/knowledge/review-checklist.md` automatically. It
+catches nothing that would have caught B1 or B2: no rule in the set inspects a column-level
+grant. And checklist row 9b is now a settled no rather than an open question: `FORCE ROW LEVEL
+SECURITY` would not help on this project, because the owner role `postgres` carries `BYPASSRLS`
+directly on Supabase and `FORCE` has no effect on a `BYPASSRLS` role regardless of ownership.
+
+**Nothing else above changes.**

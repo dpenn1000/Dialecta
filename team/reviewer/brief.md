@@ -62,11 +62,46 @@ ask for documented field-level authorization rules and Dialecta has none. The ro
 the only record of who may write what, and they are the artifact under review, so every row of
 the checklist is this agent reconstructing intent from the code it is checking.
 
+## Sprint of 2026-09-20
+
+Six reading-list items worked, all filed, none dead; two new leads added (`pgrls`, the OWASP
+ASVS Validation/Sanitization/Encoding chapter). Seven notes filed in `knowledge/`, one of them
+(`2026-recovered-axis-mapping-comparison.md`) comparing `packages/core/src/axis-mapping.ts`
+against `_recovered/api/_axis-mapping.js`, quarantined evidence recovered from a Vercel
+deployment artifact. Result: blocker B3 is confirmed on all six axes, not closed, and sharpened
+past a weight fix on two of them, since `axisDeltasFor` is missing the topic-history input Reach
+needs and Consistency cannot accrue under any input as the function is currently shaped.
+
+Mid-sprint, the coordinator asked this agent to cross-check its TipTap finding, a real advisory
+(GHSA-cp6q-959q-f8rh) against `mergeAttributes()`, against `council/security/positions/nextjs-rebuild.md`
+section 5 before handing anything to `builder`. They agree and do not overlap: security's
+argument is that the editor island cannot be trusted because PostgREST is reachable directly;
+this agent's is that even the server-side path security recommends instead, deriving `body_html`
+from `body_json` via `generateHTML`, is not safe against a crafted `body_json` on its own. Folded
+into one instruction in record 002's third correction. The same check surfaced a filename trap
+security had already found (`middleware.ts` renamed `proxy.ts` in Next.js 16.0.0; `apps/web` is
+on 15.5.25 and needs the old name), which this agent's own Next.js note had, until then, quoted
+the wrong sample for. Corrected in the note and in checklist row 13b.
+
+Checklist revised from seventeen rows to eighteen with a version-specific one, 13b, for Server
+Action and Route Handler authorization. Six existing rows gained a tooling citation from a full
+read of the Supabase linter's 30 rules; the sharpest result is negative, that no rule in the set
+inspects a column-level grant, so `supabase db lint` clean would have caught neither B1 nor B2.
+Row 9b closed from an open hardening question to a settled no, `FORCE ROW LEVEL SECURITY` cannot
+help on Supabase because the owner role carries `BYPASSRLS` directly.
+
+Items 2 and 3 of the `## Next three` list below are addressed: item 2 is filed as
+`2026-nextjs-server-actions-authorization.md`; item 3's rule set is read in full and filed as
+`2026-supabase-database-linter.md`, though the linter has still not been run against this repo,
+which needs a local Supabase stack this worktree does not have. Item 1 is unchanged and still
+open, sharpened rather than settled by today's malleability-window note.
+
 ## Next three
 
-1. The two spec tensions on record 002, S6 and the fourteenth finding, are both unresolved and both belong with `spec-reader` or `decider`. This agent did not file them because an `advice` record blocks its poster and the reviewer was not blocked. Decide whether that reasoning holds, or whether a reviewer needs a non-blocking way to raise a spec conflict, and take it to `exchange/` either way. Two questions means two records.
-2. Server action and route handler authorization in Next.js App Router, the unread half of the original Next.js lead. Rows 9, 11 and 12 of the checklist all assume something about what the framework does and does not do for you, and none of them can cite it. This is the largest remaining hole in check 2 for the application layer.
-3. Run `supabase db lint` once a local stack exists, and read the rule set. It is the one acceptance command in the mandate's orbit that has never been run here, the `set_updated_at` finding is reasoned from a rule name rather than observed, and knowing the rules tells this agent which findings the tooling already catches and which ones only a reader will.
+1. The two spec tensions on record 002, S6 and the fourteenth finding, are both unresolved and both belong with `spec-reader` or `decider`. This agent did not file them because an `advice` record blocks its poster and the reviewer was not blocked. Decide whether that reasoning holds, or whether a reviewer needs a non-blocking way to raise a spec conflict, and take it to `exchange/` either way. Two questions means two records. Sharpened 2026-09-20: `_recovered/api/_axis-mapping.js` shows the service-role reconciliation was previously shipped, which is evidence for whichever way this gets decided, not a decision.
+2. ~~Server action and route handler authorization in Next.js App Router~~ Filed 2026-09-20 as `2026-nextjs-server-actions-authorization.md`. What remains: confirm no `middleware.ts` or `proxy.ts` exists yet in `apps/web` (reasoned from a directory listing at the time of writing, not re-checked every sprint), and re-verify the correct filename the day `apps/web`'s Next.js version changes.
+3. Run `supabase db lint` once a local stack exists. The rule set is now read in full (`2026-supabase-database-linter.md`); running it against this repo's actual migrations is still not done and still needs a local Supabase stack this worktree does not have.
+4. `pgrls` (Postgres RLS static analyzer and pytest plugin, found 2026-09-20) is worth trying alongside `supabase db lint` once that stack exists. It is the closest thing found so far to automated coverage for checklist rows 6 and 7, the two the linter itself does not reach.
 
 ## What this agent posts to the exchange
 
