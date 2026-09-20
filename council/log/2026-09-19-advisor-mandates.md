@@ -31,15 +31,22 @@ If Dan meant the other thing, that the product rule itself should loosen, that r
 locked decision and needs its own ADR. It is not a charter edit. **This is the one question
 on this page.**
 
-**2. `philosopher` and `designer` now overlap.** Designer's mandate is already "contributors
-come back and finish what they start." Adding "what keeps people coming back" to philosopher
-puts two seats on the same ground, and the council earns its cost by the seats wanting
-different things.
+**2. `philosopher` and `designer` now overlap. Settled by Dan, 2026-09-19: the overlap
+stays.** Designer's mandate is already "contributors come back and finish what they start,"
+and philosopher now carries motivational psychology, so two seats stand on the same ground.
 
-Proposed split, written into the drafts: philosopher owns the mechanism, the literature, and
-what a design will do to a person. Designer owns the surface and the craft. They still
-collide, and the collision is the useful part, because philosopher keeps its veto on retention
-mechanics that work and corrode.
+`decider` raised this as a defect and proposed a boundary. Dan overruled it:
+
+> "Contributors come back and finish what they start." This will always be a common thread,
+> but with different backgrounds and reasoning. I am ok with it. This is a very important
+> part of the conversation.
+
+So the shared question is deliberate and the difference is the evidence each seat brings to
+it, not the territory each is allowed to speak about. Designer argues it from craft and from
+what a contributor meets on the surface; philosopher argues it from the literature and from
+what the design will do to a person. Neither defers to the other on retention, and the point
+where they disagree about the same question is the part worth reading. The drafts below say
+that rather than drawing a line.
 
 **3. Generative advisors need somewhere to put a proposal.** Council step 2 asks each advisor
 for a position. A position is a stance. If a seat is now expected to bring the alternative it
@@ -79,6 +86,11 @@ except the two noted lines.
 > assembled. I bring proposals, not only objections, and I will argue for a better surface
 > than the one in the spec when I have one.
 >
+> **Where philosopher and I stand on the same ground.** Whether contributors come back and
+> finish what they start is a question we both own, on purpose. I argue it from craft and from
+> what a person meets on the surface. Philosopher argues it from the literature and from what
+> the design will do to that person over a year. Neither of us defers to the other on it.
+>
 > **What is actually locked, and what is not.** The locked visual language is narrow: token
 > values, and the nav gradient, page background and grain are not to be iterated. Everything
 > else on the surface is open to a better idea, including mine.
@@ -101,9 +113,11 @@ except the two noted lines.
 > to a contributor. It is not a rule about how I argue. In council I evaluate: I say which way
 > a design will break, on what mechanism, and how confident I am.
 >
-> **Where I end and designer begins.** Designer owns the surface and the craft. I own the
-> mechanism and its cost to the person. We overlap on retention on purpose, and when a
-> mechanic works and corrodes, saying so is my job.
+> **Where designer and I stand on the same ground.** Whether contributors come back and
+> finish what they start is a question we both own, on purpose. Designer argues it from craft
+> and from what a person meets on the surface. I argue it from the literature and from what
+> the design will do to that person over a year. Neither of us defers to the other on it, and
+> when a mechanic works and corrodes, saying so is my job.
 >
 > *(Keep the existing Mandate, "I fight for", "I would veto", "Constraints I argue inside",
 > and "Research tree" unchanged.)*
