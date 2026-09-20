@@ -30,11 +30,11 @@ because it is more persuasive.
 
 ## Where it is now
 
-**First sprint run 2026-09-20, then corrected the same day.** Twenty sources read and filed in
-`research/`. Twenty-five standing positions in `positions.md`, grouped into four sections. Four
-per-debate positions in `positions/`. Four records posted to the exchange and one block appended
-to `philosopher`'s open blindspot on the Contrast Strip. Still has not argued anything in
-council; every position is a starting point rather than a tested one.
+**First sprint run 2026-09-20, then corrected and extended the same day.** Twenty-one sources
+read and filed in `research/`. Thirty-one standing positions in `positions.md`, grouped into four
+sections. Five per-debate positions in `positions/`. Five records posted to the exchange and one
+block appended to `philosopher`'s open blindspot on the Contrast Strip. Still has not argued
+anything in council; every position is a starting point rather than a tested one.
 
 The Arizona correction reshaped the tree. What the two halves of the day found:
 
@@ -52,7 +52,7 @@ From the first pass, and surviving the correction:
 - **Human review of a label does not recover Section 230; it aggravates it.** Opposite to the
   GDPR Article 22 instinct, and the seat expects to have to defend that.
 
-What the correction added:
+What Dan's two questions in session added:
 
 - **Arizona has no comprehensive privacy law and never has.** No home-state controller duty. The
   live privacy question changes in kind, from "does my state's law reach me" to "do any of the
@@ -68,6 +68,13 @@ What the correction added:
   platform unusually well, because a contributor submits a comment knowing the result will be
   published. The Pact is the best consent artifact on the platform and almost none of it was
   designed for legal reasons.
+- **The moment-in-time sign-offs Dan asked for mostly already exist,** in the article pre-publish
+  pause and in Stage 2. Transparency and defensibility point the same way here, which is unusual:
+  what protects the platform is what a person actually read at the moment it mattered, so plain
+  language beats legal register on both counts. What is missing is four sentences and one
+  append-only table that records which version of the text each person saw.
+- **Breach admits no sign-off and never will,** which is worth stating rather than papering over.
+  Every other surface gets stronger from this and that one gets nothing.
 
 What it still cannot answer, and will not guess at: whether a tier name is capable of defamatory
 meaning under Arizona law and whether the opinion privilege carries where the basis is published
@@ -116,12 +123,17 @@ which makes it worth answering before more is built on top of it.
    reports and a law professor's blog. That is the same standard of sourcing that produced the
    jurisdiction error. Doe 1 v. Meta is the highest value of the three because it is five months
    old and it is the decision that makes the forum friendly.
-3. **Answer the privacy question that replaced the Connecticut one:** whether any of the twenty
+3. **Carry the consent moments to a conclusion.** `positions/2026-09-20-consent-at-the-moment.md`
+   proposes four sentences and one append-only table, and it is waiting on four agents at
+   `exchange/open/2026-09-20-legal-05`. The open calls are whether it is three moments or four,
+   and whether the live project already has somewhere to record them.
+
+4. **Answer the privacy question that replaced the Connecticut one:** whether any of the twenty
    states with comprehensive laws reaches a site that does not target its residents. The IAPP
    tracker is already a `todo` row. This is the question the first sprint would have asked if it
    had known where the operator lives.
 
-4. **Write the Breach routing rule.** No US law requires reporting a credible threat, so this is
+5. **Write the Breach routing rule.** No US law requires reporting a credible threat, so this is
    owed to the person being threatened rather than to a regulator, and the charter says the
    response to a credible threat is decided before one arrives rather than during one. Write it
    against the Stored Communications Act emergency disclosure wording, which is now a `todo` row,
