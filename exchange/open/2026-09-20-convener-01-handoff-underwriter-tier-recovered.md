@@ -98,3 +98,35 @@ answers `.gitignore:23`.
 `_recovered/` is quarantine. Read it, cite it, promote nothing from it without `reviewer`.
 `council/treasurer/positions/monetization.md` belongs to `treasurer`; this record asks for a
 revision, it does not make one.
+
+---
+
+## Amendment, 2026-09-20, from Dan
+
+Two corrections from Dan after this record was filed, both of which narrow what the chair should
+dispatch.
+
+**None of it was ever built.** Dan confirms the model was designed and never shipped. That
+matches the code: `getTierCapabilities` has no caller, so the capability matrix gates nothing
+today. Read the whole find as a design artifact, not as a running system. The five migrations are
+the exception and are genuinely applied, so the columns exist and five endpoints already read
+them.
+
+**Ghost is being retired for the Next.js build, so the gifting mechanism is dead.** Migration 033
+routes peer gifting through a Stripe one-time payment whose webhook calls the **Ghost Admin API**
+to comp the recipient. The Ghost half of that has no future. What survives the move and what does
+not:
+
+| Part | Survives the move to Next.js |
+| --- | --- |
+| The Underwriter name, the copy rule, the positioning line | Yes. None of it depends on Ghost |
+| What free is gated on: editor limits, archive depth, not reading | Yes. It is a product decision, not a mechanism |
+| `is_charter`, the first-hundred founding badge | Yes. A `profiles` column and a theme badge |
+| `subscription_tier` and its touch trigger | Yes. Postgres, not Ghost |
+| `is_gifted` and `gift_expires_at` as columns | Yes |
+| **The gifting flow itself: Stripe SKU to Ghost Admin comp** | **No. Rebuild against Supabase Auth and Stripe directly** |
+| **The daily downgrade cron, if it ran on Ghost** | **Unknown. Needs checking before it is assumed to exist** |
+
+So the design survives and one mechanism does not. That is a smaller gap than designing a
+membership model from nothing, which is what `treasurer` believed it was facing this morning.
+

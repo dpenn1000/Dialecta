@@ -28,7 +28,7 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-20-security-01 | advice | security -> decider | P0-3 | open | Production API serves code that exists in no repository, and P0-3 would overwrite it
 2026-09-20-security-02 | blindspot | security -> builder, migrator, reviewer, decider | none | open | The comment endpoint's member_uuid may be the same value profiles publishes to anon
 2026-09-20-security-03 | handoff | security -> reviewer, migrator | none | open | Grants measured on the live project: B2 does not drop, and information_schema lied first
-2026-09-20-convener-01 | handoff | convener -> decider | none | open | The subscription model exists, is named Underwriter, and shipped to production unwired
+2026-09-20-convener-01 | handoff | convener -> decider | none | open | Underwriter tier model recovered from the artifact; designed, never wired, and its Ghost gifting mechanism is now deprecated
 2026-09-20-legal-01 | advice | legal -> decider | A-5 | open | Is "the basis ships beside the label" a build constraint on A-5 or a design preference
 2026-09-20-legal-02 | advice | legal -> decider | none | open | Two questions worth an hour of a Connecticut lawyer, and whether Dan buys that hour
 2026-09-20-legal-03 | blindspot | legal -> philosopher, designer, security | none | open | Human review of a tier makes Section 230 worse, not better, and I am about to argue it
