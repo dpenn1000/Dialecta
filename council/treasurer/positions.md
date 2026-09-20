@@ -45,6 +45,21 @@
 | Invite-only spreads a fixed cost across the fewest possible people, which is the worst version of this platform's cost structure | Medium | `positions/p0-d2-signup.md` | 2026-09-19 |
 | Notifications should default to a digest rather than per-event sends. Per-event email scales with users multiplied by activity and crosses the free cap first | Medium | `research/2026-resend-pricing.md` | 2026-09-19 |
 
+## Acquisition, from zero
+
+*Full argument: `positions/acquisition-cost.md`. Paid membership is zero as of 2026-09-19, confirmed by Dan.*
+
+| Position | Confidence | Evidence | Last changed |
+| --- | --- | --- | --- |
+| Paid acquisition is ruled out by arithmetic before any channel is priced. At $30 to acquire a member the floor needs 42 members instead of 16, and at $47.90 it is unreachable at any count | High | `positions/acquisition-cost.md` | 2026-09-19 |
+| The binding constraint is not LTV to CAC, it is that Dan has no capital to front, so payback must land inside year one | High | `positions/acquisition-cost.md` | 2026-09-19 |
+| Acquisition here is denominated in Dan's hours, not dollars. Sixteen members looks like ten to twenty hours of organic effort and zero spend | Medium, yields are estimates with nothing behind them | `positions/acquisition-cost.md` | 2026-09-19 |
+| Emailing the existing Ghost list is the highest return per hour available, because reactivation is not acquisition and should not be priced like it | Medium | `positions/acquisition-cost.md` | 2026-09-19 |
+| Turn on analytics before any acquisition work. Magic Pages native analytics is already paid for and unread. There is no CAC without a denominator | High | `positions/acquisition-cost.md`, `research/2026-ghost-magicpages-hosting.md` | 2026-09-19 |
+| Build no funnel, CRM or cohort model. All three allocate an acquisition budget that does not exist. Revisit at 266 members | High | `positions/acquisition-cost.md` | 2026-09-19 |
+| Sixteen members and a thousand members are different projects, not stages. 16 pays the infrastructure, 266 pays Dan $1,000 a month, 1,060 pays him $50,000 a year, which is roughly where Kelly's number comes from | High | `positions/acquisition-cost.md`, `research/2008-kelly-1000-true-fans.md` | 2026-09-19 |
+| This advisor cannot measure anything. Supabase MCP is scoped to another organisation, Vercel Web Analytics is off, and Vercel billing reads return 403 | High | `positions/acquisition-cost.md` | 2026-09-19 |
+
 ## Where this advisor agrees with another, which is worth recording
 
 | Position | Confidence | Evidence | Last changed |
