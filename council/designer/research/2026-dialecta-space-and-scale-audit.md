@@ -23,3 +23,11 @@ This is a count, not a judgement. A design spec is allowed more values than a to
 - Type sizes six deep inside two pixels are a hierarchy nobody can perceive. A person reads three or four levels of size, not fourteen. Collapsing the 0.52 to 0.95 band to four steps would lose nothing a reader can see.
 
 *Filed 2026-09-19*
+
+## Addendum, 2026-09-20
+
+This belongs in M3 (`docs/plans/backlog.md` calls M3 "Platform, pages and presentation review,"
+designer-owned, and already names this file as required reading). The numbers do not need to wait
+for M3's entry gate. Proposed: 8 / 16 / 24 / 48px, holding Trinity's direction rule, space blocks
+downward through `margin-bottom`, a section head owns the space above it. Full reasoning and the
+comment card's four ungrouped rows in `positions.md`, D-25 and the addendum below it.

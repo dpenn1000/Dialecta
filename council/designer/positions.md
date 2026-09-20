@@ -34,6 +34,9 @@ reproducible from `research/tier-palette-audit.py`.
 | D-21 | The article editor should carry an aesthetic pass, and it already exists at `dialecta-api/api/article/aesthetic-suggest.js`. A-10 is written as though it does not | Medium to high | exchange 2026-09-19-005 | 2026-09-19 |
 | D-22 | The Contrast Strip is the most distinctive element on a comment card and is given the least visual weight. It is the reclassification story made visible, styled as a footnote | Medium | Discourse Layer UX, "Contrast Strip"; Social UX Architecture, "Viral Mechanics"; `2026-trinity-apex-design-system` | 2026-09-19 |
 | D-23 | This advisor's charter is written entirely in defensive terms and should carry a generative clause. Raised for Dan; `guard-docs.mjs` correctly blocks me from editing it | Medium | charter.md; `.claude/agents/designer.md` | 2026-09-19 |
+| D-24 | Heat and Stance ink tokens have computed replacements, not just a flagged failure. `--tier-heat-text` needs to change direction (dark ink, not light); `--tier-stance-text` needs to go lighter within the direction it already has. Both verified against both ends of the fill, which corrects D-19's wording, not just its values | High | Own computation extending `research/tier-palette-audit.py`, 2026-09-20 | 2026-09-20 |
+| D-25 | Dialecta's four-number spacing scale: 8 / 16 / 24 / 48px, plus Trinity's direction rule unchanged. Proposed with numbers, not just shape; D-20 committed the shape and left the numbers to Dan, these are a starting answer for him to react to, not a decision | High | `2026-dialecta-space-and-scale-audit.md`, `2026-trinity-apex-design-system.md`, own count of existing usage | 2026-09-20 |
+| D-26 | D-23 is resolved. The charter rewritten 2026-09-20 carries a generative mandate in its own voice, not a defensive one, and every position filed since has used the room it gives | High | `.claude/agents/designer.md`, `council/designer/charter.md` | 2026-09-20 |
 
 ---
 
@@ -230,3 +233,66 @@ puts them. I would veto replacing any of that with a counter, a streak or a volu
 I would equally veto a gate nobody gets through. A disabled button with no message, in front of the
 one action the whole platform exists to produce, is the second kind of veto and it is live in A-1
 today.
+
+---
+
+## Addendum, 2026-09-20: the Heat and Stance ink tokens, computed
+
+D-19 proposed a contract, ink clears 4.5:1 against the lightest point of its own fill, without
+testing it against real values. Computing it against all seven tiers, both ends of each gradient,
+corrects the contract before it corrects any token.
+
+For a dark ink (Forum, Spark, Echo, Fog, and the fix below for Heat), the binding constraint is the
+darker stop, not the lighter one. A fixed dark ink loses contrast fastest against whichever
+background sits closest to it in luminance, and that is the bottom of the gradient, not the top.
+For a light ink (Stance, Breach), the binding constraint really is the lighter, top stop, for the
+same reason run the other direction. "Check both ends, keep the worse number" replaces "check the
+lightest point" as the actual rule. The four tiers that already pass do so at their bottom stop,
+not their top: Fog's worst case is 5.94:1 against `--tier-fog-bot`, not its top.
+
+**Heat.** `--tier-heat-text` is `#FCEAD8`, a light cream, against a fill that never gets past
+mid-tone (`#E89868` to `#C46028`). Light ink cannot work here at all: pure white against the top
+stop reaches 2.30:1, nowhere near 4.5. Pure black against the same stop reaches 9.12:1, so the fix
+is a direction change, not a shade change. Holding Heat's own border hue (18.6 degrees, 88 percent
+saturation) and darkening it to L=0.06 gives `#1D0A02`: 8.32:1 against the top stop, 4.61:1 against
+the bottom, both clear with margin. This moves Heat onto the pattern the four passing tiers already
+use, dark hue-tinted ink, rather than inventing a new one.
+
+**Stance.** `--tier-stance-text` is `#F4D8D0`, already the right direction. A dark ink is
+mathematically impossible against Stance's fill: pure black caps at 3.66:1 against the top stop and
+2.25:1 against the bottom, both short of 4.5 regardless of hue. The current value is simply not
+light enough. Holding Stance's own text hue (13.3 degrees, 62 percent saturation) and lightening it
+to L=0.94 gives `#F9EAE6`: 4.91:1 against the top stop, 7.97:1 against the bottom.
+
+I did not edit `design/dialecta-design-spec.html`; that value change is Dan's per the charter. What
+changes today is that it is a specific pair of hex values and ratios to react to, not a direction to
+research. The working reproduces with `tier-palette-audit.py`'s own `ratio()` function, tested
+against candidate inks instead of the current ones, against both `top` and `bot` instead of one.
+
+## Addendum, 2026-09-20: the spacing scale, numbered
+
+D-20 committed to Trinity's shape, four numbers and a direction rule, and left the numbers to Dan.
+Proposing them anyway, because "Dan picks the numbers" should not mean the seat that measured the
+gap arrives with nothing for him to react to.
+
+The comment card (A-5) is the clearest live case of the cost. Header row, body, footer row, and the
+conditional Contrast Strip are four groups told apart today by gap size alone, and no token exists
+behind any of the gaps between them (`docs/Dialecta_Discourse_Layer_UX.md`, comment card section).
+That is a live defect against the mandate as written today, not a future one: consistency and
+grouping are named in the charter as mine to hold, and this component has neither underneath it.
+
+Eleven of the audit's seventeen observed padding values already sit on a 4px grid, clustering near
+16, 24, 32 and 48. That is closer to a doubling rhythm than Trinity's 12/18/24/48, and it fits a
+reading platform better: 16px is 1rem, already the root size the spec's `ch`-based measure assumes
+elsewhere (D-16). Proposed: **8px** inside a component, chip padding, icon to label. **16px**
+between siblings, paragraph rhythm, list gaps, the base unit. **24px** for card and component
+padding, the comment card's own groups among them. **48px** before a section head. Same direction
+rule as Trinity: space blocks downward through `margin-bottom`; a section head owns the space above
+it through `margin-top`, so two adjacent blocks never double their gap.
+
+This is additive and touches no locked value. It does not need M1's login pages to exist, only
+Dan's sign-off on the four numbers, so it does not need to wait for M3's entry gate to be decided,
+only to be applied. M3 is where it gets checked page by page against its own "Done" line, a
+per-page verdict and a ranked change list, and it should not spend that budget re-deriving numbers
+that are already measured and proposed here. Belongs in M3 for the application; the decision is
+ready now.
