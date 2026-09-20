@@ -52,6 +52,21 @@ in the same sprint that produced this file. Every position below cites a filed n
 | Neither a share-card generator nor a sitemap tool needs to be adopted from outside. Both already ship inside the Next.js version apps/web runs, unused, at zero new dependency cost. This is a scheduling gap, not a tooling gap | High | `research/2026-nextjs-native-share-and-sitemap-tooling.md` | 2026-09-20 |
 | No new RSS/newsletter tool is needed. Resend Broadcasts, already paid for, already does the job the reading list asked about; the blocker was never tooling | High | `research/2026-resend-broadcasts-tool.md` | 2026-09-20 |
 
+## Login methods (P0-D2)
+
+*Sprint 2, 2026-09-20. Written against the convener's reframe of P0-D2, which asked this seat
+whether a familiar login measurably increases arrival or whether that is assumed. Full position:
+`positions/2026-09-19-p0-d2-login-methods.md`.*
+
+| Position | Confidence | Evidence | Filed |
+| --- | --- | --- | --- |
+| **No independent evidence shows social login increases signup completion.** The figure repeated industry-wide traces to a single 2011 vendor-commissioned stated-preference survey (Janrain/Blue Research), and the one peer-reviewed study found (Gafni & Nissim) measures attitude, not behavior | High | `research/2026-social-login-conversion-evidence-review.md` | 2026-09-20 |
+| Real company results are thin and cut both ways. The one closest to Dialecta's actual business, paid conversion rather than raw signups, shows social login raising signups while lowering the signup-to-paid rate | Medium-high | `research/2026-social-login-conversion-evidence-review.md` | 2026-09-20 |
+| Dialecta has zero signups ever, so there is no funnel here to correct, only one to build and measure honestly once P0-4 ships. Any claim that social login will lift Dialecta's conversion is a hypothesis, not a banked benefit | High | `brief.md`, `positions/2026-09-19-p0-d2-login-methods.md` | 2026-09-20 |
+| Facebook being 100 percent of non-direct arrival argues for testing Facebook login, not for assuming it converts. Arrival and authentication are separate decisions, and pairing both to the one channel already carrying this seat's largest concentration risk doubles that platform's leverage over Dialecta rather than diversifying it | Medium-high | `research/2014-metafilter-acquisition-concentration.md`, `positions/2026-09-19-p0-d2-login-methods.md` | 2026-09-20 |
+| Reddit fails as a login provider on this seat's own terms before any other seat's: zero measured Dialecta arrivals from it against Facebook's 54, and it is not a native Supabase Auth provider, so it would need a custom OAuth build for a channel that has never sent this site a single visitor | High | `research/2026-supabase-native-oauth-providers.md` | 2026-09-20 |
+| Every added login provider is a consent screen between a stranger and their first comment. Choice at that specific decision point is a cost this seat owns, not a free benefit that offsets the arrival question | (unsourced, this seat's own reasoning from its funnel-step mandate) | `positions/2026-09-19-p0-d2-login-methods.md` | 2026-09-20 |
+
 ## Where this seat agrees with treasurer, and is now the owner of record
 
 *Treasurer covered acquisition territory in `positions/acquisition-cost.md` on 2026-09-19, the day
