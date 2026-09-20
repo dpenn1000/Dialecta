@@ -308,3 +308,50 @@ SECURITY` would not help on this project, because the owner role `postgres` carr
 directly on Supabase and `FORCE` has no effect on a `BYPASSRLS` role regardless of ownership.
 
 **Nothing else above changes.**
+
+## Fourth correction, appended 2026-09-20 by reviewer
+
+Mission Zero asked this record to state plainly, for M1, which of the three blockers are answered
+and which are not. Plainly:
+
+**B1 (stored XSS, `body_html`) is answered.** Two independent remedies converge on one instruction
+for `builder`, recorded in the third correction above: derive `body_html` server side from
+`body_json` via a Server Action, make `body_html` never client-writable, and run DOMPurify on
+`generateHTML`'s output rather than trusting it because the call originates on the server, because
+GHSA-cp6q-959q-f8rh shows `mergeAttributes()` can produce executable attributes from a crafted
+`body_json` independent of ProseMirror's own schema validation. Nothing here is exploitable today;
+`@tiptap/core` is pinned above the patch line. What M1 inherits is a remedy shape, not open research.
+
+**B2 (an owner can write `final_tier`, `status`, `amend_until`, and `aspirations.expires_at`
+through RLS that is row level only) is answered.** Remedy: a table-level revoke, then a column-list
+grant back, covering both `UPDATE` and the `INSERT`-time path the first correction found. The one
+premise that was reasoned rather than measured, that this project's tables carry Supabase's open
+default grants, is now measured directly against the live project in
+`2026-09-20-security-03-handoff-grants-measured-b2-holds.md`: true on all 30 tables,
+`has_table_privilege` queried directly rather than through `information_schema`, which that record
+found reports the opposite. B2 holds at blocker on the strongest evidence this review has had. What
+M1 inherits is a remedy and a confirmed premise, not open research.
+
+**B3 (axis mapping diverges from spec on all six axes) is answered as a diagnosis and not yet as a
+remedy.** Confirmed on all six axes against `_recovered/api/_axis-mapping.js`, quarantined evidence
+recovered from the deployed artifact, and sharpened past what a weight change can fix: Reach needs a
+topic-history input `axisDeltasFor` is never given, and Consistency cannot accrue under any input as
+the function is currently shaped, since every event it produces for that axis carries delta zero.
+What M1 inherits here is a diagnosis precise enough to design from, a signature change on two of six
+axes rather than a constant change on six, but not a worked fix the way B1 and B2 have one. Whoever
+picks this up should expect to design the new signature, not port one.
+
+Two sub-items are still genuinely unresolved and are not among the three blockers. S6, the
+two-sentence-versus-three-sentence Breach message conflict between root `CLAUDE.md` and
+`Dialecta_Editorial_Voice.md`'s own reference table, and the malleability-window tension between
+universal rule 6 and `axis_events` being append-only. Both need `spec-reader` or `decider` to read
+the two documents against each other and say which wins. Sharpened, not settled, across three
+corrections now, and this agent still has not routed either to a seat that can rule on it. Naming
+that plainly rather than routing it, again, is this record's own honest limit: neither S6 nor the
+malleability window is addressed to anyone, so nobody owes either an answer. Whoever next holds this
+record should treat that absence as the finding, not the silence as agreement.
+
+Recommended outcome: answered, not closed. Real code changes are still owed to the schema and the
+engine, and that work is M1's and M4's, correctly out of Mission Zero's scope to perform. The record
+stays useful because it now says, for each blocker, whether what is missing is the answer or the
+code.

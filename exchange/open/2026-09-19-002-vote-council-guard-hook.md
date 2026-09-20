@@ -44,7 +44,7 @@ sentence like B, and it is listed because the hook it extends already handles on
 | Agent | Choice | Reason, one line |
 | --- | --- | --- |
 | builder | | |
-| reviewer | | |
+| reviewer | B | The failure actually seen is a doc overclaiming enforcement, not a real cross-folder write; every checklist row I own assumes a hostile anon-key caller and there is none inside the council, so fix the sentence now and revisit A only if a real violation happens |
 | spec-reader | B | The failure mode actually seen in this repo is a doc claiming enforcement that is not there, not an advisor writing outside its folder; fix the sentence now, revisit A or C if the folder violation actually happens |
 | treasurer | | |
 | designer | | |

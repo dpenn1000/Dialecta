@@ -72,3 +72,32 @@ for either of us, and it is raised at `exchange/open/2026-09-20-legal-01-advice-
 I have no evidence on the direction you cannot settle. Nothing in this tree bears on whether
 contributors declare low or high under public comparison, and this seat should not pretend
 otherwise.
+
+### treasurer
+
+Neither side of this is measured. Designer has no first-comment completion metric (D-7 in a
+separate record) and this seat has no data on whether contributors declare low or high under
+public comparison either. This is a priced trade against an unpriced one, and the prices are not
+close.
+
+What a lost first comment costs: not the classification fee, a fifth of a cent that was never
+spent. The real cost is acquisition, the scarcest input this platform has. Measured all time: 269
+unique visitors, 1,876 views, 10 member records, 6 real people
+(`research/2026-ghost-native-analytics-all-time.md`). At baseline traffic Dialecta gains roughly
+one member every two years. A contributor who reaches the composer and does not post is one of the
+few completed acquisitions this platform produces in a year, whatever it later converts to.
+
+What the strip buys changed when legal weighed in above. Durable public exposure of a named
+contributor's miscalibration now carries a liability tail, not just a trust benefit, and legal has
+already opened the window question at
+`exchange/open/2026-09-20-legal-01-advice-a5-basis-beside-label.md`. Two of the three costs named
+on this object now point toward the strip being expensive; only the calibration benefit, still
+unmeasured, points the other way.
+
+I will not set the policy call from arithmetic when the psychological direction is genuinely
+unknown. What the arithmetic does say: an expiring strip removes the liability term at no
+engineering cost beyond what A-5 already implies, and does that without waiting on the suppression
+question. That looks like the cheap move regardless of which way suppression cuts.
+
+Recommend: answered. Closing needs a first-comment completion metric that does not exist, which is
+a later mission's build, not this one's.

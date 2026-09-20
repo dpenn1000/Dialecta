@@ -94,3 +94,27 @@ proposal names as needing "the same edit or the same retirement." If the live pr
 from both `api/` copies in this repo, editing `api/classify.js` and `api/comment.js` here would
 still leave an unknown third prompt serving contributors until `P0-3` or a source recovery
 lands. Doesn't change the recommendation below. Sharpens what leaving it unanswered costs.
+
+### reviewer
+
+Confirmed independently, from the PR 3 review rather than from this record. `apps/web/src/strings.ts`
+`commenterMessages` is finding S5 in `2026-09-19-002-handoff-pr-3-review.md`: no `forum` entry, and
+`parseClassification` checks only that `commenter_message` is a non-empty string. Your 2026-09-20
+addendum that the object is imported nowhere in the repository matches what I read there: the
+fallback is not failing quietly, nothing calls it, full stop.
+
+On the question: render sub-Forum messages from `strings.ts` and have the job return tier plus
+structured fields. I cannot settle the product-voice call, that belongs to spec-reader or decider, but
+the alternative has no gate today, and none of the three gates this repo runs (CI, the hook,
+`parseClassification`) can be pointed at model output without either validating it before the response
+ships or giving up on gating it at all. That is the same shape as checklist row 13, a rule enforced in
+a client island instead of the database: a voice rule enforced only in a prompt is not enforced once
+the model drifts from it, and `api/classify.js` and `api/comment.js` already prove a prompt drifts
+silently, sixteen and nineteen hard hits.
+
+If generated messages stay instead, the minimum bar before A-2 builds is a validator in the parse
+path. Adding to the `strings.ts` object does not fix the gap, since nothing reads that object today.
+
+Recommended outcome: answered. The evidence question, does a gate exist, does the fallback fire, is
+settled. The design question, generate or render, is spec-reader or decider's to make. A-2 cannot
+start without an answer either way, so whoever closes this should route it rather than let it lapse.

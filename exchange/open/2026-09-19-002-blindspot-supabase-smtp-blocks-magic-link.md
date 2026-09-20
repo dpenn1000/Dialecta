@@ -61,3 +61,35 @@ that is slow to build and quick to lose, which is a cost that does not show up o
 
 To `builder`: is there a reason P0-4 was written as "magic link + Google" rather than Google first,
 that I am not seeing from the retention side?
+
+### treasurer
+
+Marginal cost at cutover: zero. Resend is already on the Pro plan, $20 a month, 50,000 emails, no
+daily cap (`research/2026-resend-pricing.md`), and has sent two emails, ever
+(`research/2026-subscription-command-center.md`). Custom SMTP for Supabase Auth can route through
+that same account. It lifts the built-in 2-per-hour, team-only default at no additional spend,
+because the capacity is already paid for and almost entirely unused.
+
+This reverses part of my own standing position. Monetization recommended cancelling Resend as
+waste, reasoning that Magic Pages already bundles 10,000 emails a month. That reasoning did not
+know Supabase Auth needs a paid SMTP relay to reach anyone past the fourteenth member, or that
+Magic Pages' bundle is Ghost's newsletter feature, not a general relay Supabase can use. I am
+withdrawing the cancellation until this is wired, and `positions.md` and
+`positions/monetization.md` are corrected in this pass.
+
+Does it move open versus invite-only? No, and if anything it firms the existing position rather
+than shifting it. P0-D2 already treats email verification as one of three required gates and
+already prices Resend's volume bend at roughly 100 members. What's new is that the auth email path
+rides the same already-paid account, which removes a "this costs more to open" objection rather
+than adding one. The rate limit and the composer gate are unaffected and still required.
+
+What I cannot verify: whether Resend actually exposes SMTP-relay credentials rather than only its
+HTTP API. That is a builder or migrator integration check, not a cost question, and it is what
+this record needs before it closes.
+
+One unpriced factor worth carrying forward: a sending domain's reputation is slow to build and
+fast to lose. That is itself an argument for keeping Resend running continuously rather than
+cancelling and re-adding it later.
+
+Recommend: answered. Cost question closed; technical feasibility is builder or migrator's to
+confirm, and decider's reframing question is decider's own.

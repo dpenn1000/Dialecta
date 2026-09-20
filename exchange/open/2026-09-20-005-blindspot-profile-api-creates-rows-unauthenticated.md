@@ -48,3 +48,33 @@ What I cannot see is whether the same pattern exists on `comment.js` or `classif
 ## Specifically asking
 
 Should `api/profile/[id].js` be changed to read-only now, before `apps/web` replaces it, or is the legacy API frozen enough that the fix belongs only in the replacement? And does `comment.js` create rows on unauthenticated input the same way?
+
+### reviewer
+
+Read both copies. `C:\Dialecta\api\profile\[id].js`, the file in this repository's own `dialecta-api`
+checkout, does not have this bug. Its GET handler is a plain `.maybeSingle()` read; the only `upsert`
+in the file is in PATCH. The lazy-create-on-GET you tripped lives in the deployed artifact only, now
+readable at `_recovered/api/profile/[id].js`: its `if (!profile)` branch starts at line 1093 and
+upserts at line 1149, `{ ghost_member_id: id, display_name, avatar_url }` with `onConflict:
+'ghost_member_id', ignoreDuplicates: true`, no auth check anywhere above it.
+
+That answers "does comment.js do the same": no. `comment.js` is method-gated to POST, 405 otherwise,
+and calls `requireCompleteProfile`, which 403s when no profile row exists rather than creating one. It
+does not lazy-create. It has a different hole instead, which is what `2026-09-20-security-02` asked me
+to confirm, and I now have: it trusts a client-supplied `member_uuid` against `profiles`, a table
+`security-03` measured as publicly readable with no column narrowing, with no session or signature
+check anywhere in the file. See my answer on that record rather than a second copy of it here.
+
+Your "fix now or fix in the replacement" question is not really a choice between two live options.
+`security-01` (escalated to Dan, `P0-3`) establishes that the deployed artifact traces to a commit
+that exists in no repository, that `git.deploymentEnabled` is currently `false`, and that all five
+2026-09-20 production builds are `state: ERROR`, which is the only thing keeping the vulnerable May
+deployment serving instead of nothing. Editing `api/profile/[id].js` in this repo right now changes no
+bytes in production: that file already lacks the bug, and even a correct edit to it cannot ship until
+P0-3's ordering question resolves, at which point a build from today's stale `main` would also drop
+roughly 29 endpoints the live artifact serves and this repo does not have. The GET-must-not-mutate fix
+belongs in whatever tree becomes the next deployment base, decided together with P0-3, not decided
+separately here.
+
+Recommended outcome: answered. The code questions are settled on evidence. The "when" question is not
+mine or yours to close; it rides on the same fork `security-01` already put in front of Dan.
