@@ -33,7 +33,7 @@ Env vars (see `.env.example`): `ANTHROPIC_API_KEY`, `SUPABASE_URL`, `SUPABASE_SE
 4. `docs/plans/build-plan.md`: the architecture.
 
 **End every session with `node scripts/land.mjs --agent <you>`.** It commits inside your folder, runs the gates, rebases and pushes to main. Work that stays on a branch is work nobody else can see; on 2026-09-19 nine sessions left nine branches and all of them had to be merged by hand. `docs/decisions/`: the ADRs it rests on (001 leave Ghost, 002 Supabase Auth, 003 own editor).
-Delegate with `/dialecta-brief` to `builder`; review with `reviewer`; prose with `voice-editor`; schema with `migrator`; spec questions to `spec-reader`; any `-D` backlog row or "should we" question to `decider` (`/dialecta-decide`), or to the full council (`/dialecta-council`: `treasurer`, `designer`, `philosopher` argue it, `decider` chairs, Dan decides). Hooks in `.claude/settings.json` block spec edits and voice hard-rule failures.
+Delegate with `/dialecta-brief` to `builder`; review with `reviewer`; prose with `voice-editor`; schema with `migrator`; spec questions to `spec-reader`; anything already deployed and reachable to `security`; any `-D` backlog row or "should we" question to `decider` (`/dialecta-decide`), or to the full council (`/dialecta-council`: `treasurer`, `designer`, `philosopher` argue it, `decider` chairs, Dan decides). Hooks in `.claude/settings.json` block spec edits and voice hard-rule failures.
 
 ## Repo layout
 
