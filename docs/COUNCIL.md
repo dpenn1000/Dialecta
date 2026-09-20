@@ -6,18 +6,19 @@
 
 | Seat | Bench | Model | Web | Writes | Notes | Sourced | Standing | Raised | Addressed |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `treasurer` | advisory | sonnet | yes | yes | 20 | 18 (13w/5r) | 60 | 4 | 4 |
-| `designer` | advisory | sonnet | yes | yes | 19 | 19 (16w/3r) | 28 | 4 | 4 |
-| `philosopher` | advisory | opus | yes | yes | 11 | 11 (11w/0r) | 8 | 1 | 4 |
-| `security` | advisory | opus | yes | yes | 40 | 39 (36w/3r) | 31 | 3 | 1 |
-| `legal` | advisory | opus | yes | yes | 14 | 14 (14w/0r) | 17 | 3 | 0 |
+| `treasurer` | advisory | sonnet | yes | yes | 20 | 18 (13w/5r) | 64 | 4 | 4 |
+| `designer` | advisory | sonnet | yes | yes | 19 | 19 (16w/3r) | 31 | 4 | 5 |
+| `philosopher` | advisory | opus | yes | yes | 13 | 13 (13w/0r) | 11 | 1 | 5 |
+| `security` | advisory | opus | yes | yes | 50 | 49 (46w/3r) | 32 | 4 | 3 |
+| `legal` | advisory | opus | yes | yes | 25 | 24 (23w/1r) | 35 | 7 | 1 |
+| `circulation` | advisory | sonnet | yes | yes | 0 | 0 (0w/0r) | 0 | 0 | 0 |
 | `builder` | working | sonnet | yes | yes | 15 | 15 (10w/5r) | 21 | 2 | 9 |
 | `reviewer` | working | opus | yes | yes | 17 | 17 (13w/4r) | 26 | 1 | 5 |
-| `voice-editor` | working | sonnet | yes | yes | 11 | 11 (1w/10r) | 17 | 2 | 0 |
-| `migrator` | working | sonnet | yes | yes | 14 | 13 (8w/5r) | 17 | 1 | 4 |
-| `spec-reader` | working | haiku | yes | yes | 10 | 9 (0w/9r) | 19 | 1 | 4 |
-| `decider` | working | opus | yes | yes | 9 | 9 (7w/2r) | 22 | 2 | 14 |
-| **total** | 11 seats | | | | **180** | **175** | **266** | | |
+| `voice-editor` | working | sonnet | yes | yes | 11 | 11 (1w/10r) | 17 | 2 | 1 |
+| `migrator` | working | sonnet | yes | yes | 14 | 13 (8w/5r) | 19 | 1 | 6 |
+| `spec-reader` | working | haiku | yes | yes | 11 | 10 (0w/10r) | 22 | 1 | 4 |
+| `decider` | working | opus | yes | yes | 9 | 9 (7w/2r) | 22 | 2 | 18 |
+| **total** | 11 seats | | | | **204** | **198** | **300** | | |
 
 `Notes` is filed sources. `Sourced` is how many name a source it can be checked against, split into `w` for an external URL and `r` for a file in this repository cited with a version, a date or a commit. Both count: a seat whose job is spec conformance cites specs, and doing that with a commit SHA is stricter provenance than a link, not weaker. `Standing` is positions for an advisor, practices for a practitioner. `Raised` and `Addressed` count exchange records in each direction.
 
@@ -41,7 +42,7 @@
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
 | Research | 20 filed, 18 sourced (13 external, 5 from this repo), 2 unsourced |
 | Reading list | 18 todo, 12 filed, 3 dead |
-| Positions | 60 |
+| Positions | 64 |
 | Charter | `council/treasurer/charter.md` |
 | Brief | `council/treasurer/brief.md` |
 | Exchange | raised 4, addressed 4 |
@@ -117,10 +118,10 @@
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
 | Research | 19 filed, 19 sourced (16 external, 3 from this repo) |
 | Reading list | 32 todo, 19 filed, 0 dead |
-| Positions | 28 |
+| Positions | 31 |
 | Charter | `council/designer/charter.md` |
 | Brief | `council/designer/brief.md` |
-| Exchange | raised 4, addressed 4 |
+| Exchange | raised 4, addressed 5 |
 
 **What it has read.** 19 filed in `council/designer/research/`.
 
@@ -195,30 +196,32 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 11 filed, 11 sourced (11 external, 0 from this repo) |
-| Reading list | 18 todo, 10 filed, 0 dead |
-| Positions | 8 |
+| Research | 13 filed, 13 sourced (13 external, 0 from this repo) |
+| Reading list | 17 todo, 11 filed, 0 dead |
+| Positions | 11 |
 | Charter | `council/philosopher/charter.md` |
 | Brief | `council/philosopher/brief.md` |
-| Exchange | raised 1, addressed 4 |
+| Exchange | raised 1, addressed 5 |
 
-**What it has read.** 11 filed in `council/philosopher/research/`.
+**What it has read.** 13 filed in `council/philosopher/research/`.
 
 | Source | What it changes here |
 | --- | --- |
+| [Effort for Payment: A Tale of Two Markets](https://journals.sagepub.com/doi/abs/10.1111/j.0956-7976.2004.00757.x) | Directly answers the mechanism half of `treasurer`'s blindspot (`exchange/open/2026-09-19-002-blindspot-membership-intrinsic-motivation.md`): paying for a Dialecta membership, even $50 a ... |
 | [Psychological Reactance and Promotional Health Messages: The Effects of Controlling Language, Lexical Concreteness, and the Restoration of Freedom](https://doi.org/10.1111/j.1468-2958.2007.00297.x) | Dialecta's rule that every commenter message below Breach ends with the door open (Founding Philosophy Article 4, Editorial Voice v1.2) is a restoration postscript. This is the study behi... |
 | [Broadcasting and Narrowcasting: How Audience Size Affects What People Share](https://doi.org/10.1509/jmr.13.0238) | The charter names "the audience effect" as a bias the classification card triggers. On this evidence it does not, and the effect belongs somewhere else. The card is a narrowcast: the engi... |
 | [Understanding Psychological Reactance: New Developments and Findings](https://pmc.ncbi.nlm.nih.gov/articles/PMC4675534/) | Reactance is the best supported of the four biases the charter names for the classification card, and the card is a textbook trigger: an unrequested judgment of a person's own words, deli... |
 | [Digital Social Norm Enforcement: Online Firestorms in Social Media](https://doi.org/10.1371/journal.pone.0155923) | Bears directly on P0-D2, which asks about login methods and whether sign-up is open or invite-only at cutover. Any argument that identity verification will lift discourse quality has this... |
 | [Emotion shapes the diffusion of moralized content in social networks](https://doi.org/10.1073/pnas.1618923114) | This is the mechanism the Founding Philosophy describes when it says the dominant platforms reward outrage, measured rather than asserted. The Heat and Stance tiers name the behavior this... |
 | [The Loss of Loss Aversion: Will It Loom Larger Than Its Gain?](https://doi.org/10.1002/jcpy.1047) | The charter names "loss aversion around tier" as a bias the classification card triggers. This source says that cannot be assumed. Of the four candidates the charter lists, this is the we... |
+| [Preventing harassment and increasing group participation through social norms in 2,190 online science discussions](https://www.pnas.org/doi/10.1073/pnas.1813486116) | This is the evidence `designer` asked for in `exchange/open/2026-09-19-003-blindspot-composer-gate-against-first-comment.md`: a low-friction signal of what is expected can do real cultura... |
 | [How behavioural sciences can promote truth, autonomy and democratic discourse online](https://doi.org/10.1038/s41562-020-0889-7) | The nudge and boost distinction is the sharpest tool this council has for testing a Dialecta feature against Article 2 of the Founding Philosophy, which says the AI must reflect, describe... |
 | [How Accurate Are Accuracy-Nudge Interventions? A Preregistered Direct Replication of Pennycook et al. (2020)](https://doi.org/10.1177/09567976211024535) | The Classification Engine Specification calls the commenter message "the primary behavior-change mechanism of the platform." The nearest tested analogue moves discernment from d = 0.10 to... |
 | [Out-group animosity drives engagement on social media](https://doi.org/10.1073/pnas.2024292118) | The charter names "in-group signaling" as a bias the classification card triggers. This study says the stronger and better measured driver is out-group animosity, by roughly 4.8 times ove... |
 | [Shifting attention to accuracy can reduce misinformation online](https://doi.org/10.1038/s41586-021-03344-2) | This is the closest published analogue to the classification card, and it locates the mechanism precisely. The card works, to the extent it works, by putting attention on quality at the m... |
 | [Birdwatch: Crowd Wisdom and Bridging Algorithms can Inform Understanding and Reduce the Spread of Misinformation](https://arxiv.org/abs/2210.15723) | This is the answer to the hole that Brady et al. (2017) opens in community voting. Bridging-based ranking is built for the exact failure where one faction can carry a vote internally, bec... |
 
-<details><summary>Still to read: 18 lead(s)</summary>
+<details><summary>Still to read: 17 lead(s)</summary>
 
 - Vosoughi, Roy, Aral (2018), "The spread of true and false news online", Science — Novelty and emotion drive spread more than truth; bears on what the front page rewards
 - Bail et al. (2018), "Exposure to opposing views on social media can increase political polarization", PNAS — Cross-cutting exposure backfires without structure; bears on the Advocate mechanic and opinion maps
@@ -237,7 +240,6 @@
 - Dietvorst, Simmons, Massey (2015), "Algorithm aversion: people erroneously avoid algorithms after seeing them err", Journal of Experimental Psychology: General — Unverified lead. If it holds, one visibly wrong classification costs more trust than many right ones earn, which would make the borderline flag and the community re-review path load bearing rather than nice to have
 - Pennycook, Bear, Collins, Rand (2020), the implied truth effect, Management Science — Unverified lead. If attaching a warning to some items makes the unlabelled ones look more credible, then tiering every comment rather than only the poor ones is an advantage Dialecta already has and has never named
 - Cho, Kim, Acquisti (2012), empirical analysis of the Korean real name policy — Unverified lead. The natural experiment counterpart to Rost et al. (2016). Bears on P0-D2 and on any future argument for verified identity
-- Matias (2019), "Preventing harassment and increasing group participation through social norms in 2,190 online science discussions", PNAS — Unverified lead. A field experiment on publishing the rules before people comment. Direct precedent for the Pact and for the Stage 1 nudge bar
 
 </details>
 
@@ -259,14 +261,14 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Bash`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 40 filed, 39 sourced (36 external, 3 from this repo), 1 unsourced |
-| Reading list | 14 todo, 6 filed, 0 dead |
-| Positions | 31 |
+| Research | 50 filed, 49 sourced (46 external, 3 from this repo), 1 unsourced |
+| Reading list | 19 todo, 6 filed, 0 dead |
+| Positions | 32 |
 | Charter | `council/security/charter.md` |
 | Brief | `council/security/brief.md` |
-| Exchange | raised 3, addressed 1 |
+| Exchange | raised 4, addressed 3 |
 
-**What it has read.** 40 filed in `council/security/research/`.
+**What it has read.** 50 filed in `council/security/research/`.
 
 | Source | What it changes here |
 | --- | --- |
@@ -277,31 +279,41 @@
 | [Denial of wallet](https://arxiv.org/abs/2104.08031) | `api/comment.js` calling `api/classify.js` on every public submission matches this paper's own definition of the DoW precondition: an unauthenticated, autoscaling, metered call with no ca... |
 | [Cyber insurance MFA misrepresentation: Travelers v. ICS](https://global.lockton.com/us/en/news-insights/travelers-v-ics-underscores-need-to-respond-carefully-to-cyber-insurance) | When Dialecta applies for cyber or technology errors-and-omissions coverage, any MFA question on the application should be answered against what is actually enforced today across every ad... |
 | [PCI DSS SAQ A: what keeps a merchant in the smallest questionnaire](https://listings.pcisecuritystandards.org/documents/PCI-DSS-v4-0-SAQ-A.pdf) | If Dialecta's paid membership checkout uses a fully hosted redirect or a vendor-hosted iframe, such as Stripe Checkout or Stripe Elements in hosted mode, and Dialecta's own pages never re... |
+| [Pre-hijacked accounts, the paper behind the attack class](https://www.usenix.org/conference/usenixsecurity22/presentation/sudhodanan) | P0-D2 is exactly the configuration this paper studies: password signup alongside federated |
 | [Connecticut Data Privacy Act: who it covers, and the 2026 threshold rewrite](https://law.justia.com/codes/connecticut/title-42/chapter-743jj/section-42-516/) | Fourteen members is far under the new 35,000-consumer general threshold, but that threshold is no longer the only door in. If the AI fingerprint or any future field touches a category the... |
 | [Data minimization as a liability reducer: the regulatory language](https://codes.findlaw.com/ct/title-42-business-selling-trading-and-collection-practices/ct-gen-st-sect-42-520/) | The AI fingerprint is the natural test case: write down what the fingerprint's stated purpose actually is, then check whether Dialecta needs to retain raw inputs, such as full comment tex... |
 | [LLM01: Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) | `api/classify.js` takes a commenter's raw text as the thing being classified, which is OWASP's indirect-injection shape. Treat every comment body as data the classifier reads, never as te... |
 | [LLM10: Unbounded Consumption](https://genai.owasp.org/llmrisk/llm102025-unbounded-consumption/) | `api/comment.js` and `api/classify.js` currently have no request size cap and no rate limit, which is the literal precondition OWASP names for Variable-Length Input Flood and Denial of Wa... |
 | [Prompt injection design patterns](https://simonwillison.net/2025/Jun/13/prompt-injection-design-patterns/) | `api/classify.js` never calls tools or takes actions, so it is a narrower case than the agent patterns above, but the underlying lesson holds: the fix is not a better instruction in the c... |
 | [Anthropic API spend and rate limits](https://platform.claude.com/docs/en/api/rate-limits) | The treasurer agent's $0.002-per-classification estimate means an organization on the Start tier's $500 monthly cap absorbs roughly 250,000 unbounded classification calls before Anthropic... |
+| [Automatic Identity Linking in Supabase Auth](https://github.com/supabase/auth) | P0-D2 (login methods): enabling Google, Facebook, and X together makes Facebook's and X's own account policy the entire "is this email real" check between them. Supabase does not verify e... |
 | [Column level security under row level RLS](https://supabase.com/docs/guides/database/postgres/column-level-security) | This is the documented shape of the fix already named, but not sourced, in three places: root `CLAUDE.md` ("The fix is column grants or a public-profile view"), `team/migrator/knowledge/2... |
 | [CSP nonces, strict-dynamic, and the dynamic rendering cost](https://nextjs.org/docs/app/guides/content-security-policy) | `apps/web/next.config.ts` has no `headers()` function today (confirmed 2026-09-20, same reading as `2026-nextjs-security-headers-csp.md`), and there is no `middleware.ts` or `proxy.ts` in... |
 | [CVE-2025-29927, the Next.js middleware authorization bypass](https://vercel.com/blog/postmortem-on-next-js-middleware-bypass) | `apps/web` has no `middleware.ts` today (confirmed absent from `apps/web` on 2026-09-20), so there is nothing yet for this CVE to bypass. The finding is about the file Dialecta is about t... |
+| [Facebook Login: an unverified email field behind a real Business Verification gate](https://developers.facebook.com/docs/development/release/business-verification/) | Code the missing-email path as first-class for a Facebook sign-in; Meta's own field description |
 | [getClaims, getUser, getSession, and the cookie handoff](https://supabase.com/docs/guides/auth/server-side/nextjs) | `apps/web/src/lib/supabase/server.ts` already has this right, read against the primary source rather than assumed. Its `createClient` wraps `createServerClient` with `getAll` returning `c... |
 | [GitHub Dependabot](https://docs.github.com/en/code-security/dependabot) | No `.github/dependabot.yml` exists in this repo (confirmed by listing `.github/`, which holds only `workflows/ci.yml`). Dependabot alerts may already be silently active for `dpenn1000/Dia... |
+| [GitHub, LinkedIn and Discord as alternative providers, a quick check](https://docs.github.com/en/rest/users/emails.) | If P0-D2 ever considers a fifth provider aimed at a technical audience, GitHub is the cleanest |
 | [Gitleaks and TruffleHog, secret scanning](https://github.com/gitleaks/gitleaks) | `vercel.tolken` at the repo root is the live example. A full history search (`git log --all`, scoped to that filename) turns up no commits, so it was never committed, and it currently mat... |
 | [Google OAuth in Supabase Auth](https://supabase.com/docs/guides/auth/social-login/auth-google) | P0-D2 needs a decision on automatic linking, not only on which providers to offer. If Google is added alongside a password option, a contributor who signs up by password with an address a... |
+| [Google Sign-In: verified email and the cost of app verification](https://developers.google.com/identity/openid-connect/openid-connect) | Google is the low-cost, low-friction option among the four for P0-D2: no App Review, no |
+| [identity_data Contents and email_confirmed_at Gating](https://github.com/supabase/auth) | Check `auth.users.email_confirmed_at`, never `auth.identities.identity_data->>'email_verified'`, for any control that needs to know whether a sign in's email was treated as verified. The ... |
 | Live grant and policy surface | The reviewer's load bearing assumption is confirmed, and **blocker B2 does not drop**. Record |
 | Live storage surface | Exposure today is zero, because the bucket is empty. Rank this as a note rather than a blocker, |
+| [NIST 800-63C: what a relying party owes a federated identity](https://pages.nist.gov/800-63-4/sp800-63c/Federation) | Scope minimization for P0-D2: request only `openid email profile`, or each provider's equivalent |
 | [NIST SP 800-63B-4](https://csrc.nist.gov/pubs/sp/800/63/b/4/final) | The 15-character password floor is the one to build to if P0-D2 includes a password option without mandatory MFA. Eight characters is permitted only when a second factor is also required ... |
 | [OSSF Scorecard, Allstar, and Harden Runner](https://github.com/ossf/scorecard) | `dpenn1000/Dialecta` is public (confirmed via `gh repo view`), so `harden-runner` fits here and `allstar` does not. Allstar's org-level GitHub App model is built for a company running one... |
 | [OWASP ASVS V6 Authentication](https://github.com/OWASP/ASVS/blob/master/5.0/en/0x15-V6-Authentication.md) | Requirement IDs 6.2.1, 6.2.5, 6.2.9, 6.2.10, and 6.3.3 are the citation to use in an advice record about login design, in place of re-explaining the same rules in prose each time. |
 | [OWASP ASVS, Cheat Sheet Series, and the LLM Top 10](https://github.com/OWASP/ASVS) | `Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.md` and `Mass_Assignment_Cheat_Sheet.md` name exactly two shapes already found live: an ID-keyed endpoint with no ownership check ... |
 | [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html) | There is no login yet, so this is a pre-build checklist. Whatever P0-D2 ships with a password option should default to a 15-character minimum, drop to 8 only where MFA is also required on... |
+| [RFC 9700: the OAuth 2.0 security floor, and it is final, not a draft](https://www.rfc-editor.org/rfc/rfc9700.html) | `2026-supabase-ssr-server-auth-methods.md` already confirms Supabase drives PKCE server side. |
 | [Secret and artifact hygiene across this estate](https://mcp.supabase.com/mcp?read_only=false`.) | Add `.vercelignore` to whatever repository becomes the API's source, covering at least `docs/`, |
 | [Security headers and CSP for Next.js](https://nextjs.org/docs/app/guides/content-security-policy) | `apps/web` has no inline third-party scripts today, as read (no analytics, no tag manager in the codebase), which points at the simpler `next.config.js` `headers()` path first, not the no... |
 | [Semgrep and CodeQL, static analysis for JavaScript and TypeScript](https://github.com/semgrep/semgrep) | `apps/web`'s `eslint.config.mjs` runs `next/core-web-vitals` and `next/typescript` only, and `npm run lint` is not even called in `.github/workflows/ci.yml` today (the workflow runs typec... |
 | [Server Actions as a public HTTP endpoint](https://nextjs.org/docs/app/guides/data-security) | No file in `apps/web` currently has a `'use server'` directive (confirmed by search across `apps/web/src` on 2026-09-20), so this is a standard to build to from the start rather than a re... |
 | [server-only and the React Taint API](https://react.dev/reference/react/experimental_taintObjectReference) | `apps/web` has no `server-only` imports yet. Neither `apps/web/src/lib/supabase/server.ts` nor `client.ts` uses it (confirmed by reading both files 2026-09-20). Any new module that querie... |
+| [Sign in with Apple: private relay, and a guideline that stops at the App Store door](https://developer.apple.com/app-store/review/guidelines/) | Dialecta is a website. Guideline 4.8 does not force Sign in with Apple onto P0-D2 even if |
+| [Sign in with X: email retrieval returned, then priced by the read](https://devcommunity.x.com/t/announcing-support-for-email-address-retrieval-with-oauth-2-0-in-the-x-api-v2/240555) | Of the four providers, X carries the least defined verification guarantee: `confirmed_email` has |
 | [Structured outputs and strict tool use](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) | `api/classify.js` should define its output schema as an object with an `enum` field naming the discourse tiers Dialecta actually has, and pass it through `output_config.format`. A manipul... |
 | [Supabase MFA and Assurance Levels](https://supabase.com/docs/guides/auth/auth-mfa) | Turning on MFA enrollment in the `mguulnibvzusfvyuowwh` project's Auth settings does nothing to `profiles` or any other table by itself. A policy that requires a second factor has to be w... |
 | [Supabase Passkey Authentication](https://supabase.com/docs/guides/auth/passkeys) | Passkeys are a legitimate option to name in the P0-D2 decision, alongside Google and password/email, but they shipped in beta only months before this read. Treat them as new for a launch,... |
@@ -311,7 +323,7 @@
 | The deployed API has no source repository | This is the reason the `security` mandate says to read the deployed source and name which copy |
 | [Vercel Firewall and Spend Management](https://vercel.com/docs/vercel-firewall/ddos-mitigation) | Dialecta's actual threat, individual comments carrying injection text rather than a traffic spike, is exactly the case Vercel's own docs flag as unbilled-but-uncaught by DDoS mitigation a... |
 
-<details><summary>Still to read: 14 lead(s)</summary>
+<details><summary>Still to read: 19 lead(s)</summary>
 
 - The deployed `dpenn1000/dialecta-api`: every endpoint, its method branches, and what each one writes — Half done and blocked on access rather than on effort. The route list exists in `live-surface-inventory.md`, 38 routes against the 11 files the named repository holds, and the provenance is in `2026-vercel-deployed-api-provenance.md`. Method branches and writes are unread for 30 of them, because the Vercel file reader truncates at roughly two thousand characters and these handlers run to tens of kilobytes. Needs the source pulled with a Vercel token. Tracked as record 2026-09-20-security-01
 - Stored XSS and HTML sanitisation at write time against read time — Untouched this sprint. `team/reviewer/knowledge/2026-cure53-dompurify.md` covers the remedy from the reviewer's side, so read that before duplicating it. What is still wanted is the read time half reasoned out in a filed note rather than in a commit message
@@ -327,10 +339,15 @@
 - NIST AI 100-2e2025, the exact taxonomy text for direct against indirect prompt injection — Metadata confirmed, PDF would not extract through two fetch attempts. Willison's post covers the same ground and is filed, so this is only worth a second pass if NIST's own wording is needed as a second citation
 - Vercel's "Mitigating Denial of Wallet risks with Vercel" post, surfaced under the DDoS mitigation doc, URL not captured — Vercel naming the attack by the same term OWASP and the Kelly paper use suggests a fourth corroborating source, and it may describe a Vercel specific mitigation the filed note does not carry
 - Betterleaks, the gitleaks successor by the same author — Too new to recommend over gitleaks today. Worth a follow up in a few months if it stabilises, since `2026-gitleaks-secret-scanning.md` records gitleaks itself as feature complete and receiving patches only
+- Meta's own Permissions Reference (`developers.facebook.com/docs/permissions/` and `/reference/email`) — Returned HTTP 500 on every fetch attempt this sprint. `2026-meta-facebook-login-identity.md` reports `email` as a no-review default permission on secondary sources only; needs a direct read before P0-D2 relies on it
+- Apple's identity token claims reference, for the current data type of `email_verified` and `is_private_email` — Apple's DocC-based pages returned only a title to this sprint's fetch tool. `2026-apple-sign-in-with-apple.md` carries the string-versus-boolean question as secondary-sourced; a Postman call against a live Apple client would settle it directly
+- Discord's own scope requirement for the `verified` field on the user object — `discord/discord-api-docs` has open issues admitting the documentation disagrees with itself. `2026-github-linkedin-discord-identity.md` flags this rather than resolves it; a live test against a registered Discord app would resolve it
+- Whether X bills OAuth 2.0 authentication-only calls under the same per-resource pay-per-use pricing as data reads and writes — `docs.x.com/x-api/getting-started/pricing` prices posts and reads and is silent on sign-in traffic. `2026-x-oauth-identity.md` cannot say whether "Sign in with X" is free to operate at any volume
+- A Google-authored statement about Workspace administrators minting or reassigning addresses inside their own domain, as distinct from the third-party-email-ownership-drift caveat Google does state — Three searches and two primary-page reads this sprint found the latter caveat but not the former. `2026-google-oauth-identity.md` reports the gap rather than guessing at it
 
 </details>
 
-**Gaps.** reading list is 14 todo against 6 filed.
+**Gaps.** reading list is 19 todo against 6 filed.
 
 ### `legal`
 
@@ -350,20 +367,27 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 14 filed, 14 sourced (14 external, 0 from this repo) |
-| Reading list | 22 todo, 14 filed, 0 dead |
-| Positions | 17 |
+| Research | 25 filed, 24 sourced (23 external, 1 from this repo), 1 unsourced |
+| Reading list | 23 todo, 22 filed, 3 dead |
+| Positions | 35 |
 | Charter | `council/legal/charter.md` |
 | Brief | `council/legal/brief.md` |
-| Exchange | raised 3, addressed 0 |
+| Exchange | raised 7, addressed 1 |
 
-**What it has read.** 14 filed in `council/legal/research/`.
+**What it has read.** 25 filed in `council/legal/research/`.
 
 | Source | What it changes here |
 | --- | --- |
+| [Consent as a complete defence to defamation, and the limit that decides how far it goes](https://www.justia.com/trials-litigation/docs/caci/1700/1721/) | **That last sentence describes Dialecta's comment flow almost exactly.** A contributor writes a |
+| [Milkovich v. Lorain Journal: there is no opinion label that saves a statement](https://www.law.cornell.edu/supremecourt/text/497/1) | **A disclaimer is worth close to nothing, and this is the correction to make whenever someone |
+| [Yetman v. English: Arizona's fact/opinion line for defamation](https://www.azbar.org/media/p0onmoso/defamation-2015.pdf`) | Arizona does not appear to hold a stronger or weaker fact/opinion line than the general First |
+| Fair Housing Council v. Roommates.com: the Ninth Circuit's material-contribution test | This is now the more naturally controlling circuit authority for Dialecta's own Section 230 |
+| [Roommates.com: material contribution to unlawfulness, and why Stage 2 survives it](https://cdn.ca9.uscourts.gov/datastore/opinions/2008/04/02/0456916.pdf) | **Stage 2 self-declaration is structurally the Roommates questionnaire, and it survives anyway.** |
 | [DMLP on CDA immunity: mixed content is the unlit part of the map](https://www.dmlp.org/legal-guide/immunity-online-publishers-under-communications-decency-act) | Dialecta being small does not put it outside 230, and it does not put it outside a lawsuit |
 | [DMLP on publishing others' content: your commentary is yours](https://www.dmlp.org/legal-guide/publishing-statements-and-content-others) | The rule splits Dialecta's comment card into two publications on one surface. The comment body |
 | [Nguyen v. Barnes and Noble: a link to the terms is not agreement to the terms](https://en.wikipedia.org/wiki/Nguyen_v._Barnes_%26_Noble,_Inc.) | P0-D2 decides the sign-up flow, and this decides one thing inside it. If Dialecta ever wants to |
+| [A.R.S. Section 12-751: Arizona's anti-SLAPP, and the motive test that blunts it](https://www.azleg.gov/ars/12/00751.htm) | **This does not restore the cheap early exit that Section 230 would have provided, and it |
+| [A.R.S. Section 18-552: Arizona breach notification, and the economic loss trigger](https://www.azleg.gov/ars/18/00552.htm) | **Forty-five days from determination, not sixty.** Connecticut's clock is sixty days from |
 | [Counterman v. Colorado: the speaker's state of mind, and what Breach is not](https://www.law.cornell.edu/supremecourt/text/22-138) | Breach is not a finding of a true threat and should never be described as one. The tier is |
 | [CRS on algorithmic recommendations: the courts that went the other way](https://www.everycrsreport.com/reports/R47753.html) | This is the case for the other side of the tier label question, and it should be argued at full |
 | [Anderson v. TikTok: a platform's own output is first-party speech and Section 230 does not reach it](https://www2.ca3.uscourts.gov/opinarch/223061p.pdf) | This is the strongest appellate support for treating Dialecta's classifier output as the |
@@ -371,20 +395,28 @@
 | [Public Act 25-113: the amended CTDPA text, read for whether a fingerprint is sensitive data](https://www.cga.ct.gov/2025/act/pa/pdf/2025PA-00113-R00SB-01295-PA.pdf) | **The six pillars and the archetype are not sensitive data.** The list at Section 42-515(39) is |
 | [18 U.S.C. Section 2258A: the one mandatory report, and what it does not require](https://www.law.cornell.edu/uscode/text/18/2258A) | This is the one reporting duty that does not care that Dialecta has fourteen members, and the |
 | [47 U.S.C. Section 230: the operative text, and the clause a tier badge lands on](https://www.law.cornell.edu/uscode/text/47/230) | A contributor's comment text is information provided by another information content provider. |
+| [Arizona breach notification: A.R.S. Section 18-552, and the AG's own summary of it](https://www.azleg.gov/ars/18/00552.htm.) | Dialecta's establishment moving to Arizona means Dialecta is now squarely "a person that |
+| Arizona has no comprehensive consumer privacy statute in force | The relocation itself does not add a second comprehensive-privacy regime on top of whatever |
+| [Arizona's anti-SLAPP statute, expanded 2022: A.R.S. Sections 12-751 and 12-752](https://www.azleg.gov/ars/12/00751.htm.) | This is the most consequential single finding of this research pass and it was not something |
 | [Connecticut Attorney General on the CTDPA: who enforces it, and for how much](https://portal.ct.gov/ag/sections/privacy/the-connecticut-data-privacy-act) | No private right of action is the single most useful fact about Connecticut exposure for a |
+| [Doe 1 v. Meta: the Ninth Circuit declines to follow Anderson, in Dialecta's own forum](https://blog.ericgoldman.org/archives/2026/05/ninth-circuit-panel-goes-out-of-its-way-to-question-section-230-doe-v-meta.htm) | **This is the controlling forum and it goes the other way from Anderson.** Dialecta is operated |
 | [EFF on Section 230: it covers the smallest comment section, and it has edges](https://www.eff.org/issues/cda230) | The best argument that Dialecta's whole moderation apparatus is ordinary is here: a small |
 | [Van Dort on the reporting gap: no US law makes a platform report a credible threat](https://journals.law.umn.edu/mjlst/2026/03/24/closing-the-reporting-gap-building-a-legal-framework-for-reporting-serious-online-threats) | Dialecta owes no duty to report a threat. The Breach tier can fire, the comment can be |
 | [Wiley Rein on the 2026 CTDPA amendments: the thresholds, and a profiling duty with a date on it](https://www.wiley.law/alert-Major-Changes-to-Connecticut-Consumer-Privacy-Law-Will-Take-Effect-July-1-2026) | The alert is right on the three triggers and right that the sensitive data trigger has no |
 
-<details><summary>Still to read: 22 lead(s)</summary>
+<details><summary>Still to read: 23 lead(s)</summary>
 
+- Arizona State Law Journal, "SLAPPing Down Meritless Claims: Arizona's Anti-SLAPP Expansion", 2025-11-09, https://arizonastatelawjournal.org/2025/11/09/slapping-down-meritless-claims-arizonas-anti-slapp-expansion-questionable-constitutionality-and-the-continued-need-for-judicial-interpretation/ — Whether any Arizona court has applied the amended statute to a publisher. Moves the anti-SLAPP note from statutory reading to prediction
+- Turner v. Devlin, 174 Ariz. 201 (1993), and Yetman v. English, 168 Ariz. 71 (1991), https://law.justia.com/cases/arizona/supreme-court/1993/cv-91-0365-pr-2.html — Arizona's opinion doctrine in the original. The disclosed-basis defence for the tier badge is state law and currently rests on a Supreme Court case plus a search summary
+- State Bar of Arizona civil jury instructions, defamation, https://www.azbar.org/media/p0onmoso/defamation-2015.pdf — The elements as Arizona actually charges them, including whether Arizona follows Restatement Section 583 on consent
+- Doe 1 v. Meta Platforms, Inc., 2026 WL 1144707 (9th Cir. Apr. 28, 2026), slip opinion — Read at second hand through Eric Goldman. The single highest value unread item in this tree, because it is the home circuit five months ago
+- Dyroff v. Ultimate Software Grp., 934 F.3d 1093 (9th Cir. 2019) — Binding here. Cited this sprint only through two CRS reports
 - CCPA and CPRA FAQ, California Privacy Protection Agency, https://cppa.ca.gov/faq.html — The regulator's own thresholds, and its definition of inferences about a consumer's characteristics
 - CCPA updates: cybersecurity audits, risk assessments, ADMT, approved 2025-09-22, effective 2026-01-01, https://cppa.ca.gov/regulations/ccpa_updates.html — California's profiling and automated decisionmaking rules, the closest US regulatory analogue to a public per-user fingerprint
 - GDPR Art. 3, territorial scope, https://gdpr-info.eu/art-3-gdpr/ — The two tests that decide whether EU readers pull Dialecta in. A practitioner mirror, so cross-check anything load bearing against EUR-Lex
 - GDPR Art. 9, special categories, https://gdpr-info.eu/art-9-gdpr/ — The exhaustive list, to check an argument-style fingerprint against rather than assuming the higher bar applies
 - GDPR Art. 22, automated decision-making and profiling, https://gdpr-info.eu/art-22-gdpr/ — The right to contest a solely automated classification, and the human-review safeguard. Stage 2.5 may already be that safeguard, or may not
-- US State Privacy Legislation Tracker, IAPP, https://iapp.org/resources/article/us-state-privacy-legislation-tracker — Which of the nineteen or more states with a comprehensive law could reach a given reader
-- Reporting a Data Breach, CT Office of the Attorney General, https://portal.ct.gov/ag/sections/privacy/reporting-a-data-breach — Conn. Gen. Stat. § 36a-701b: the 60 day clock and the AG notice, if profile data were ever breached
+- US State Privacy Legislation Tracker, IAPP, https://iapp.org/resources/article/us-state-privacy-legislation-tracker — **Promoted 2026-09-20.** Twenty states, per MultiState. With no home-state statute this is no longer background: it is the whole privacy question. Which of the twenty reaches a site that does not target its residents
 - Privacy and Security business guidance, FTC, https://www.ftc.gov/business-guidance/privacy-security — Whatever a privacy policy promises must be honoured under FTC Act Section 5. The baseline risk of posting one at all
 - Terms of Use, DMLP Harvard (archived), http://www.dmlp.org/legal-guide/terms-use — What a small site's terms should cover, written for this scale of operator
 - Cyber Insurance for small business, FTC, https://www.ftc.gov/business-guidance/small-businesses/cybersecurity/cyber-insurance — Unbiased first-party against third-party breakdown, and the questions to put to an agent
@@ -394,14 +426,65 @@
 - Section 512 resources, US Copyright Office, https://www.copyright.gov/512/ — The official notice and takedown walkthrough, including the reinstatement window
 - DMCA Safe Harbor, Copyright Alliance, https://copyrightalliance.org/education/copyright-law-explained/the-digital-millennium-copyright-act-dmca/dmca-safe-harbor/ — A second summary to cross-check the Copyright Office's own language. A rightsholder trade association, so its framing leans away from platforms
 - Moody v. NetChoice, LLC, 603 U.S. 707 (2024), https://www.supremecourt.gov/opinions/23pdf/22-277_d18f.pdf — The decision Anderson is built on, read at second hand this sprint through the Third Circuit's quotations. It is the source of "sometimes added warnings or labels", which is the closest any court has come to describing the tier badge
-- Force v. Facebook, Inc., 934 F.3d 53 (2d Cir. 2019) — The controlling Second Circuit authority for Dialecta's own forum, and the decision Anderson footnote 13 says it may depart from. More load bearing here than Anderson is
+- Force v. Facebook, Inc., 934 F.3d 53 (2d Cir. 2019) — ~~The controlling authority for Dialecta's own forum.~~ **Corrected 2026-09-20: the forum is the Ninth Circuit.** Demoted to background on the circuit split. The rows that replaced it are Doe 1 v. Meta and Dyroff in the Arizona section above
 - Maffick, LLC v. Facebook, Inc., No. 20-05222 (N.D. Cal. Sept. 3, 2020) — The only case this tree has found where a platform's own label on user content was litigated. Cited by CRS only with a "cf.", so read it before repeating what it stands for
-- Fair Housing Council v. Roommates.com, LLC, 521 F.3d 1157 (9th Cir. 2008) (en banc) — The material contribution test in the original. Bears on Stage 2 self-declaration, where the platform structures what a contributor says about themselves
 - 18 U.S.C. Section 2702(b)(8), the Stored Communications Act emergency disclosure exception, https://www.law.cornell.edu/uscode/text/18/2702 — The statutory text of the voluntary route Van Dort describes at second hand. The Breach routing rule should be written to this wording, not to a summary of it
-- Connecticut defamation elements and the opinion privilege, from the Connecticut Bar Association or a Connecticut firm — The tier label position rests on opinion resting on disclosed facts, and that defence is state law. Currently the largest unsourced load in this tree
-- Conn. Gen. Stat. Section 42-520 as amended by P.A. 25-113, consent for sensitive data processing — Whether the Pact and terms could supply the consent that would close the CTDPA question a cheaper way than avoiding the data
 
 </details>
+
+### `circulation`
+
+**What it is for.** Council advisor for audience. Owns how a reader finds Dialecta at all: distribution, the share surface, which platforms carry a piece, paid acquisition when it is worth anything, and the funnel measurement nobody has taken honestly. Use for any question about growth, reach, launch timing, or where readers come from, as distinct from what it costs or whether they come back.
+
+**How it understands the job**, in its own words from `.claude/agents/circulation.md`:
+
+> You own whether anyone arrives.
+
+**Where it stops.**
+
+> `designer` owns the surface a visitor lands on; you own how they got there, and the two of you own
+> the share card together. `treasurer` owns whether money exists to spend and whether advertising is
+> a revenue source. `philosopher` will contest you on whether a growth tactic corrupts what the
+> platform rewards, and **that contest is the reason this seat exists rather than an obstacle to
+> it**: a discourse platform that grows by the means social media grew has become the thing its own
+> founding essay indicts. Expect to lose some of those and concede plainly.
+>
+> `legal` owns what may be said about a named person in a share card, which matters the moment a
+> shared article carries a tier badge or a fingerprint.
+
+| | |
+| --- | --- |
+| Model | sonnet |
+| Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
+| Research | 0 filed, 0 sourced (0 external, 0 from this repo) |
+| Reading list | 14 todo, 0 filed, 0 dead |
+| Positions | 0 |
+| Charter | `council/circulation/charter.md` |
+| Brief | `council/circulation/brief.md` |
+| Exchange | raised 0, addressed 0 |
+
+**What it has read.** Nothing filed yet in `council/circulation/research/`.
+
+<details><summary>Still to read: 14 lead(s)</summary>
+
+- Dialecta's own analytics, whatever exists. Ghost native analytics, Vercel analytics, anything else — The 269 and the 6 are the only real numbers this seat has and nobody has broken them down. Start here, before any external source
+- Stratechery, Substack and the independent-publication playbook on going from zero readers — The closest structural analogue to a one-operator publication with a paid tier
+- Defector, Aftermath, 404 Media, or another worker-owned launch with published subscriber numbers — Publications that launched cold and said out loud what the first year looked like
+- The Browser, Astral Codex Ten, or another single-author publication that grew by being shared rather than advertised — Dan's stated strategy is share-carried. Find who has done it and what it took
+- MetaFilter's traffic collapse, already filed by `treasurer` at `council/treasurer/research/2014-metafilter-ad-collapse.md` — Read the filed note rather than re-finding it. It is the evidence behind the advertising veto and this seat must not argue against it in ignorance
+- Open Graph and Twitter Card specifications, from the primary specs rather than a summary — The share card is the whole strategy's delivery mechanism and it has a specification
+- Reddit's rules on self-promotion, and what actually happens to a link-dropping account — Long-form argument has a natural home there and a well-documented way to get banned from it
+- Hacker News guidelines and the documented behaviour of its ranking — Same reasoning. A single front-page appearance is the largest single arrival event available to a publication like this, and it cannot be bought
+- Google Ads and Meta Ads minimum viable spend, from the platforms' own documentation — Whether paid acquisition is even coherent at a $78 monthly floor. Arithmetic, not opinion
+- Search Console and what an unindexed new domain can expect in months one to six — Organic search is the only channel that compounds without ongoing spend
+- Newsletter as a distribution channel: open rates and growth rates for small independent publications — Resend is already paid for and nearly unused, per `treasurer`
+- The 1,000 True Fans arithmetic, already filed by `treasurer` at `research/2008-kelly-1000-true-fans.md` — The revenue side is filed. This seat owns the arrival side of the same arithmetic
+- Whether a publication's own contributors are its best distribution channel, and what evidence exists either way — Author recruitment may be an acquisition strategy rather than an editorial one
+- Wikipedia's or Wikimedia's fundraising results, already filed by `treasurer` at `research/2026-wikimedia-fundraising.md` — An $11 average gift and what it took to ask for it
+
+</details>
+
+**Gaps.** has filed nothing yet. reading list is 14 todo against 0 filed.
 
 ---
 
@@ -422,7 +505,7 @@
 | Model | sonnet |
 | Tools | `Read`, `Edit`, `Write`, `Bash`, `Grep`, `Glob`, `WebSearch`, `WebFetch` |
 | Research | 15 filed, 15 sourced (10 external, 5 from this repo) |
-| Reading list | 2 todo, 12 filed, 0 dead |
+| Reading list | 3 todo, 12 filed, 0 dead |
 | Practices | 21 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/builder/brief.md` |
@@ -448,10 +531,11 @@
 | [Tiptap HTML utility: JSON to HTML on the server](https://tiptap.dev/docs/editor/api/utilities/html) | A-11 renders `body_html` on the server, which means `@tiptap/html` has to be added to `apps/web` first. Reaching for `generateHTML` from `@tiptap/core` compiles and then fails at runtime ... |
 | What A-1 actually requires | The request path conflicts. The spec says that on click the button is replaced by a loading indicator and the comment is sent to the Claude API in the same call as the classification, so ... |
 
-<details><summary>Still to read: 2 lead(s)</summary>
+<details><summary>Still to read: 3 lead(s)</summary>
 
 - ProseMirror/TipTap server-side schema validation for a submitted `body_json`, distinct from HTML-output sanitization — This sprint's sanitizer research (`2026-html-sanitizer-body-html.md`) covers cleaning the rendered `body_html` on the way out. It does not cover validating that a POSTed JSON document conforms to the editor's own allowed node/mark schema before `@tiptap/html` renders it. A crafted JSON could carry a schema-shaped but dangerous mark, a link `href` of `javascript:`, that a generic sanitizer still has to catch on the way out; worth knowing whether validating the JSON on the way in is the more standard second layer, and whether ProseMirror ships anything for this itself
 - Next.js App Router Route Handler body size limits (`serverActions.bodySizeLimit`, route segment config) for a request that fronts a Supabase TUS upload — Found while reading the Supabase resumable-uploads guide, which does not address it. If A-10 ever proxies an upload through a Route Handler instead of going straight from the browser to Supabase Storage, Next.js's own default body-size ceiling decides whether that path works at all above 6MB
+- `_recovered/api/article/` (`aesthetic-suggest.js`, `classify.js`, `classify-order.js`, `classify-stream.js`, `publish.js`, `repolish.js`, `submit.js`, `suggest-topics.js`, `upload-image.js`, `[id].js`) as prior art for A-10 through A-12 — Raised by `designer` in `exchange/open/2026-09-19-005`, answered 2026-09-20. Security's P0-3 recovery makes this the more complete version of what designer found in the external `dialecta-api` repo, and it is already in this working tree. Confirmed the two are not the same generation: the recovered `aesthetic-suggest.js` is headed "Polish engine v2" and drops the suggestion-card review UX designer quoted from v1 for an auto-polish-at-submit model. Quarantined; cite, do not copy
 
 </details>
 
@@ -521,7 +605,7 @@
 | Practices | 17 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/voice-editor/brief.md` |
-| Exchange | raised 2, addressed 0 |
+| Exchange | raised 2, addressed 1 |
 
 **What it has read.** 11 filed in `team/voice-editor/knowledge/`.
 
@@ -561,10 +645,10 @@
 | Tools | `Read`, `Edit`, `Write`, `Bash`, `Grep`, `Glob`, `WebSearch`, `WebFetch` |
 | Research | 14 filed, 13 sourced (8 external, 5 from this repo), 1 unsourced |
 | Reading list | 3 todo, 10 filed, 0 dead |
-| Practices | 17 |
+| Practices | 19 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/migrator/brief.md` |
-| Exchange | raised 1, addressed 4 |
+| Exchange | raised 1, addressed 6 |
 
 **What it has read.** 14 filed in `team/migrator/knowledge/`.
 
@@ -605,14 +689,14 @@
 | --- | --- |
 | Model | haiku |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 10 filed, 9 sourced (0 external, 9 from this repo), 1 unsourced |
-| Reading list | 4 todo, 11 filed, 0 dead |
-| Practices | 19 |
+| Research | 11 filed, 10 sourced (0 external, 10 from this repo), 1 unsourced |
+| Reading list | 3 todo, 13 filed, 0 dead |
+| Practices | 22 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/spec-reader/brief.md` |
 | Exchange | raised 1, addressed 4 |
 
-**What it has read.** 10 filed in `team/spec-reader/knowledge/`.
+**What it has read.** 11 filed in `team/spec-reader/knowledge/`.
 
 | Source | What it changes here |
 | --- | --- |
@@ -620,6 +704,7 @@
 | The three deferred design tensions | *no implies section* |
 | Axis Mapping v1.1: the rules survive Ghost, and the shipped code already diverged further than that | The Ghost-plumbing separation the reading list asked for exists in practice: the two dead |
 | Classification Engine Specification v1.0: the claim threshold, the spectrum, and the tier boundaries | Full citation now exists for the operational backbone the index already pointed to but no note |
+| Delta Mechanic Spec: its own six stages, and two bare references to a comment-side Stage 2.5 it never defines | Answers `2026-09-20-builder-01-blindspot-discourse-stage-2-5-missing.md` for `builder`: the more |
 | Project Index v0.16: the map, and where the map is wrong | The mandate's method, start from the index then read the owning section, is sound for the ten specs |
 | Self-Snapshot Engine v1.0: archetype is not Voice 1, 2, or 3 | Confirms, from the primary text rather than from `design-tensions.md`'s summary of it, that any |
 | The nine specs the index omits, one verified line each | Two of the nine, `Dialecta_Founding_Philosophy.md` and `Dialecta_Growth_Scroll.md`, needed their |
@@ -627,10 +712,9 @@
 | Tool survey: doc-drift detection, spec conformance, and link checking | No tool found this sprint is worth adopting as a dependency for this seat's actual recurring |
 | Where the 40/35/15/10 classification weighting came from: not a spec, now shipped code, still an open decision | The honest answer to where the weighting came from: nowhere in `docs/`, confirmed independently |
 
-<details><summary>Still to read: 4 lead(s)</summary>
+<details><summary>Still to read: 3 lead(s)</summary>
 
 - `docs/Dialecta_Editorial_Voice.md` v1.2 as a constraint on this agent's own output — This agent writes notes that Voice v1.2 governs. It has never read the governing spec end to end, only run the regex subset in `scripts/voice_check.py`
-- `docs/Dialecta_Delta_Mechanic_Spec.md` in full — Only ever read in fragments, via `design-tensions.md` Tension 3. Builder's advice record `2026-09-19-002-advice-a1-composer-request-path.md` cites it as describing the comment flow as Stage 1, 2, 2.5, 3, which would be the only place a comment-side Stage 2.5 is named anywhere. If true, it closes part of the gap `2026-dialecta-classification-weighting-provenance.md` found in `Dialecta_Discourse_Layer_UX.md`. Not yet confirmed by a direct read
 - `packages/core/src/classification.ts` against `docs/Dialecta_Classification_Engine_Specification.md`'s Stage A output fields — `axis-mapping.ts` turned out to implement a different scheme than its own spec, undocumented (`2026-dialecta-axis-mapping-v1.md`). `classification.ts` is the natural next file to check for the same kind of drift, since `axisDeltasFor()` takes a `ClassificationResult` from it as its only input
 - `docs/Dialecta_Data_Architecture.md` in full — Cited more than almost any other spec, piecemeal, across `drift-map.md` A1, A2, B1, B2, C3 and G2. Never read end to end or filed as its own source, despite being the file every entity-table and identity-type question eventually routes to
 
@@ -653,7 +737,7 @@
 | Practices | 22 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/decider/brief.md` |
-| Exchange | raised 2, addressed 14 |
+| Exchange | raised 2, addressed 18 |
 
 **What it has read.** 9 filed in `team/decider/knowledge/`.
 

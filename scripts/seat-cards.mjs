@@ -23,7 +23,7 @@ const CHECK = process.argv.includes('--check');
 
 const BENCHES = {
   advisory: {
-    seats: ['treasurer', 'designer', 'philosopher', 'security', 'legal'],
+    seats: ['treasurer', 'designer', 'philosopher', 'security', 'legal', 'circulation'],
     dir: 'council',
     notes: 'research',
     standing: 'positions.md',

@@ -21,6 +21,7 @@ const SEATS = {
   philosopher: 'council/philosopher/research',
   security: 'council/security/research',
   legal: 'council/legal/research',
+  circulation: 'council/circulation/research',
   builder: 'team/builder/knowledge',
   reviewer: 'team/reviewer/knowledge',
   'voice-editor': 'team/voice-editor/knowledge',

@@ -74,8 +74,8 @@ process.stdout.write(`council-smoke against ${BASE}\n\n`);
 const health = await expect('health, no token', '/health', {}, 200);
 if (health) {
   const n = health.agents?.length ?? 0;
-  const ok = n === 11;
-  process.stdout.write(`  ${ok ? 'pass' : 'FAIL'}  roster is 11 seats -> ${n}\n`);
+  const ok = n === 12;
+  process.stdout.write(`  ${ok ? 'pass' : 'FAIL'}  roster is 12 seats -> ${n}\n`);
   ok ? pass++ : fail++;
   process.stdout.write(`        ${(health.agents ?? []).join(', ')}\n`);
 }

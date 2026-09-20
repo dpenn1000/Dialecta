@@ -51,7 +51,7 @@ if (!TOKEN || TOKEN.length < 24) {
   process.exit(1);
 }
 
-const COUNCIL = ['treasurer', 'designer', 'philosopher', 'security', 'legal'];
+const COUNCIL = ['treasurer', 'designer', 'philosopher', 'security', 'legal', 'circulation'];
 const TEAM = ['builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider'];
 const ALL = [...COUNCIL, ...TEAM];
 
