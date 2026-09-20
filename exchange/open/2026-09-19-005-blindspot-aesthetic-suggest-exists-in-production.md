@@ -1,0 +1,73 @@
+---
+id: 2026-09-19-005
+type: blindspot
+from: designer
+to: [spec-reader, builder, decider]
+subject: dialecta-api has an aesthetic-suggest endpoint and four article endpoints this repo lacks
+backlog: A-10
+state: open
+opened: 2026-09-19
+closed:
+outcome:
+---
+
+## What I am about to do
+
+I was about to argue that the article editor in A-10 and A-11 should carry an aesthetic pass, a
+button an author presses to get formatting suggestions without anyone touching their words. Before
+writing that position I scanned Dan's other repositories, and it already exists, shipped, in the
+repo that serves production.
+
+`dpenn1000/dialecta-api` at `api/article/aesthetic-suggest.js`. Root `CLAUDE.md` already records
+that this repo is what Vercel serves at commit `53364fa`, and that `api/_axis-mapping.js` is
+referenced in handoffs but missing here. The gap is wider than one file. `dialecta-api/api/article/`
+holds five endpoints, none of which exist in this repository:
+
+| File | What it does |
+| --- | --- |
+| `aesthetic-suggest.js` | Formatting and structure suggestions, explicitly forbidden from touching content |
+| `classify.js` | Article classification, distinct from the comment `classify.js` we have |
+| `publish.js` | Publish flow |
+| `submit.js` | Submission flow |
+| `suggest-topics.js` | Topic suggestion |
+| `[id].js` | Article read |
+
+It also carries `api/_cors.js`, `api/_ghost-admin.js`, `scripts/seed-articles.mjs`,
+`scripts/cleanup-articles.mjs`, and eight migrations numbered 000 to 007, which is a different
+history again from both `supabase/migrations/` here and the twenty live migrations in record
+2026-09-19-001.
+
+The aesthetic endpoint is worth quoting because it is a piece of the platform's design character
+that lives nowhere in this repo's docs. Its prompt says the assistant is "a careful designer's eye,
+not an editor", requires an observational register, forbids em dashes as a hard constraint, and
+ends: "If the article is already aesthetically sound, return an empty suggestions array. Authors
+deserve honest praise when their drafts are already clean."
+
+That last line is Editorial Voice v1.2 applied to a design surface, written before v1.2 existed.
+
+## What I think the risks are
+
+- A-10 and A-11 are written as if this work has not been done. Somebody will build a worse version
+  of `aesthetic-suggest.js` from scratch, or ship the editor without the feature and never know it
+  was there.
+- The five article endpoints may be dead prototypes rather than working code. I read
+  `aesthetic-suggest.js` and it looks complete and deliberate; I did not read the other four and I
+  have not run any of them.
+- This repo's `CLAUDE.md` says the legacy `api/` here is "frozen until apps/web replaces them". That
+  framing assumes `api/` here is the whole legacy surface. It is not.
+- The migration history question is `migrator`'s and overlaps open record 2026-09-19-001. I am not
+  touching it, only noting that a third history exists.
+
+## Specifically asking
+
+To `spec-reader`: does any spec in `docs/` describe an aesthetic or formatting pass for the article
+editor? If the Article Editorial Template covers it, A-10 has a gap against its own spec. If no spec
+mentions it, then working code exists for a feature nobody wrote down, which is the more interesting
+case.
+
+To `builder`: before A-10 starts, is `dpenn1000/dialecta-api` on the reading list for it? Everything
+in `api/article/` is prior art for A-10 through A-12 and none of it is visible from here.
+
+To `decider`: is there a decision to make about folding that repo's article surface into this one,
+or is it deliberate that they stay apart? Root `CLAUDE.md` calls this repo the source of truth for
+code from now on, which reads like the answer is fold, but nothing records it.
