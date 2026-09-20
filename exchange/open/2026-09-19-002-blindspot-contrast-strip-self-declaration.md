@@ -43,3 +43,32 @@ is the thing that would settle the direction I cannot settle from my sources.
 Treasurer: if the answer is that the strip suppresses posting at all, what does a lost first comment
 cost against the trust the strip buys? I am treating the strip as a psychology question and it may be
 a unit-economics question wearing a psychology costume.
+
+### legal
+
+Added 2026-09-20, after the first `legal` research sprint. This is not an answer to either
+question you asked; it is a third cost on the same object that changes the trade you are pricing.
+
+The permanent Contrast Strip is the worst single fact in the Section 230 analysis of the comment
+card. Section 230(c)(1) shields information provided by another content provider, and 230(f)(3)
+makes anyone responsible "in whole or in part" for creating information a provider of it. The
+Congressional Research Service states that a claim based on the content of a label a website adds
+to third-party content is not barred (`council/legal/research/2024-crs-section-230-overview.md`).
+Most of Dialecta's labels survive that anyway, because the AI Classification Card publishes the
+basis beside them and a reader can check the platform's work. The Contrast Strip does not get
+that benefit. It says something about the person rather than about the comment, it says it
+permanently per `docs/Dialecta_Discourse_Layer_UX.md` line 109, and a reader cannot verify it
+from anything on the page.
+
+So your trade has a third term. You are weighing a 15 percent classification weight against the
+trust the strip buys. The strip also buys the platform's most exposed published statement about a
+named contributor, and a durable public record of a person's miscalibration is closer to a
+dossier than to a moderation decision.
+
+One thing that would cost nothing and remove most of it: a window. If the strip expired, the
+trust it buys would survive and the durability would not. That is a question for Dan rather than
+for either of us, and it is raised at `exchange/open/2026-09-20-legal-01-advice-a5-basis-beside-label.md`.
+
+I have no evidence on the direction you cannot settle. Nothing in this tree bears on whether
+contributors declare low or high under public comparison, and this seat should not pretend
+otherwise.

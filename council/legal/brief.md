@@ -17,14 +17,45 @@ comes next.
 
 ## Where it is now
 
-Created 2026-09-20. No standing positions, no filed sources. It has never argued anything.
+**First sprint run 2026-09-20.** Fourteen sources read and filed in `research/`, thirteen from
+the reading list plus the enrolled text of Connecticut Public Act 25-113, which the list did not
+carry. Seventeen standing positions in `positions.md`. Three per-debate positions in
+`positions/`. Three records posted to the exchange and one block appended to `philosopher`'s open
+blindspot on the Contrast Strip. Still has not argued anything in council; every position is a
+starting point rather than a tested one.
+
+What the sprint settled:
+
+- **Section 230 does not shield the tier badge, the commenter message or the Breach notice.** Not
+  a close question on the statute, and the Congressional Research Service states it outright. The
+  useful refinement is that losing the shield is a defence-cost exposure rather than a judgment
+  exposure, which points the money at insurance rather than at redesigning the mechanic.
+- **The six pillars and the archetype are not sensitive data under the amended CTDPA.** The list
+  at Section 42-515(39) is closed and they are on none of it. The door into Connecticut is the
+  comment text, not the fingerprint, and it has no volume floor.
+- **No CTDPA impact assessment is owed for the classification engine and no statutory right to
+  contest a tier exists,** because the 2026 act narrowed "legal or similarly significant effect"
+  to seven enumerated denials and struck "access to essential goods or services". That risk
+  should be accepted rather than spent on.
+- **Human review of a label does not recover Section 230; it aggravates it.** Opposite to the
+  GDPR Article 22 instinct, and the seat expects to have to defend that.
+
+What it still cannot answer, and will not guess at: whether a tier name is capable of defamatory
+meaning under Connecticut law, whether the opinion privilege carries where the basis is published
+beside the label, and whether a media liability policy reaches statements the insured's own model
+generated. All three are at `exchange/open/2026-09-20-legal-02-advice-one-hour-of-counsel.md`.
 
 It exists because the roster had nobody holding exposure. `decider` named the gap on 2026-09-19
 in `council/log/2026-09-19-council-composition.md`, and the day's findings made it concrete: a
 live endpoint creating rows for anyone, a stored XSS path into every reader's browser, and a
 classifier that publishes a judgment about a named person's argument.
 
-## The question to start on
+## The question it started on, now answered
+
+*Answered 2026-09-20 at `positions/2026-09-20-tier-label-first-party-speech.md`. The framing
+below is kept because it is the reason the seat exists, and because the answer turned out to be
+two answers rather than one: Section 230 does not cover the label, and that matters less than it
+sounds, because the label is probably not actionable in the first place.*
 
 **Does publishing an AI-assigned tier next to a named person's comment make that label the
 platform's own speech?**
@@ -41,14 +72,23 @@ which makes it worth answering before more is built on top of it.
 
 ## Next three
 
-1. Run `/dialecta-research legal`. The reading list is a verified set rather than a seed, which
-   is unusual for a first sprint; read the sources rather than re-finding them.
-2. Write a standing position on the tier label question above, with the strongest case on each
-   side and the specific facts that would move it. Say plainly where it needs a lawyer.
-3. Take a position on P0-D2, sign-up. Open sign-up on a platform that publishes judgments about
-   people is a safety question as much as a design one, and no seat held that when P0-D2 was
-   framed. `treasurer` argued it on cost, `designer` on completion rates; neither argued what
-   happens when the first bad actor arrives.
+*The first three are done. These are the next.*
+
+1. **List the documents Dialecta owes before money changes hands, with what each one costs.**
+   This is the half of the charter the first sprint did not touch, and `## Done looks like`
+   below names it. The reading list still carries `todo` rows for FTC privacy guidance, the DMLP
+   terms of use guide, both insurance sources, and all three DMCA sources. The DMCA designated
+   agent registration is six dollars and is the cheapest item this seat will ever propose.
+2. **Read Force v. Facebook and Moody v. NetChoice in the original.** Both are now on the reading
+   list as leads found while reading. Force is the controlling Second Circuit authority for
+   Dialecta's own forum and is more load bearing here than Anderson, which the first sprint read
+   in full and which binds nobody in Connecticut. The tier label position's confidence on the
+   forum question cannot move until both are read.
+3. **Write the Breach routing rule.** No US law requires reporting a credible threat, so this is
+   owed to the person being threatened rather than to a regulator, and the charter says the
+   response to a credible threat is decided before one arrives rather than during one. Write it
+   against the Stored Communications Act emergency disclosure wording, which is now a `todo` row,
+   rather than against a summary of it.
 
 ## What this advisor posts to the exchange
 
