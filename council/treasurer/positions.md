@@ -55,10 +55,21 @@
 | The binding constraint is not LTV to CAC, it is that Dan has no capital to front, so payback must land inside year one | High | `positions/acquisition-cost.md` | 2026-09-19 |
 | Acquisition here is denominated in Dan's hours, not dollars. Sixteen members looks like ten to twenty hours of organic effort and zero spend | Medium, yields are estimates with nothing behind them | `positions/acquisition-cost.md` | 2026-09-19 |
 | Emailing the existing Ghost list is the highest return per hour available, because reactivation is not acquisition and should not be priced like it | Medium | `positions/acquisition-cost.md` | 2026-09-19 |
+| The reactivation pool is six real people, not fourteen. The 2026-09-20 export holds ten records, of which one is Dan and three are his own plus-addressed test aliases | High, counted from the export | `research/2026-ghost-member-export.md` | 2026-09-20 |
+| No Stripe customer has ever existed for any Dialecta member. Zero paying is confirmed at source, not inferred from absent revenue | High | `research/2026-ghost-member-export.md` | 2026-09-20 |
+| The personal network channel is already spent. It produced six people in a 17-day window in April 2026 and has produced nobody in the 137 days since | High | `research/2026-ghost-member-export.md` | 2026-09-20 |
+| Measure arm's-length members, not members. Three of the six share Dan's surname, and a relative paying $50 is not evidence the platform works. Arm's-length paying members currently stand at zero of three candidates | Medium-high | `positions/acquisition-cost.md` | 2026-09-20 |
+| After reactivation returns one to three, Dialecta has no warm audience left. The remaining 13 to 15 come from strangers, which is a season of writing rather than two working days | Medium | `positions/acquisition-cost.md` | 2026-09-20 |
 | Turn on analytics before any acquisition work. Magic Pages native analytics is already paid for and unread. There is no CAC without a denominator | High | `positions/acquisition-cost.md`, `research/2026-ghost-magicpages-hosting.md` | 2026-09-19 |
 | Build no funnel, CRM or cohort model. All three allocate an acquisition budget that does not exist. Revisit at 266 members | High | `positions/acquisition-cost.md` | 2026-09-19 |
 | Sixteen members and a thousand members are different projects, not stages. 16 pays the infrastructure, 266 pays Dan $1,000 a month, 1,060 pays him $50,000 a year, which is roughly where Kelly's number comes from | High | `positions/acquisition-cost.md`, `research/2008-kelly-1000-true-fans.md` | 2026-09-19 |
-| This advisor cannot measure anything. Supabase MCP is scoped to another organisation, Vercel Web Analytics is off, and Vercel billing reads return 403 | High | `positions/acquisition-cost.md` | 2026-09-19 |
+| ~~This advisor cannot measure anything.~~ **Resolved 2026-09-20.** Dan supplied the member export and the Ghost analytics. Spend is still unmeasured | High | `research/2026-ghost-native-analytics-all-time.md` | 2026-09-20 |
+| The measured funnel, all time: 269 unique visitors, 1,876 views, 10 member records, 6 real people, 3 arm's-length, 0 paying | High, counted from the dashboard | `research/2026-ghost-native-analytics-all-time.md` | 2026-09-20 |
+| The funnel cannot deliver 16 paying members. At the measured 2.2 percent visitor-to-member rate and a generous 5 percent free-to-paid, 16 paying needs about 14,500 visitors against 269 all time | High | `positions/acquisition-cost.md` | 2026-09-20 |
+| At current baseline traffic of about 5 visitors a week, Dialecta gains roughly one member every two years. That is the cost of dormancy as a number | High | `research/2026-ghost-native-analytics-all-time.md` | 2026-09-20 |
+| Facebook is the only acquisition channel Dialecta has ever had: 54 visitors, a fifth of all traffic, six times the next non-direct source | High | `research/2026-ghost-native-analytics-all-time.md` | 2026-09-20 |
+| Remove organic search from the plan. Google sent 7 visitors and Bing 2 across five and a half months | High | `research/2026-ghost-native-analytics-all-time.md` | 2026-09-20 |
+| The ten-person list has never been emailed. Two newsletters exist, each sent to one recipient, 0 percent opens. The silence is self-inflicted and the fix is one email | High | `research/2026-ghost-native-analytics-all-time.md` | 2026-09-20 |
 
 ## Where this advisor agrees with another, which is worth recording
 
@@ -72,6 +83,7 @@
 | --- | --- |
 | Whether asking contributors for money changes what they do. The monetization position assumes it does not and has no evidence either way | `exchange/open/2026-09-19-002-blindspot-membership-intrinsic-motivation.md` |
 | Whether a membership billing row must land before Phase C retires Ghost's subscription management | `exchange/open/2026-09-19-003-blindspot-no-billing-row-before-ghost-shutdown.md` |
+| Whether P0-6 should exclude Dan's account and three test aliases, and why `profiles` says 14 when the export says 10 | `exchange/open/2026-09-20-004-blindspot-p0-6-would-import-test-accounts.md` |
 
 ## Corrected the same day it was written
 
