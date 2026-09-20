@@ -81,9 +81,12 @@ position is provisional until that plan is found or ruled out.** Dan said he wou
 
 ## Next three
 
-1. **Cancel Resend.** $240 a year, two emails delivered, and Magic Pages already bundles 10,000 a
-   month. Then settle whether the $32 Supabase line is Dialecta's or Trinity's, which is the last
-   thing standing between this advisor and a final floor.
+1. **Get Dan to clear two things.** First, whether the 2026-05-29 hard constraint ("Dialecta must
+   NOT be migrated or touched in ANY way") blocks cancelling Resend. It names DNS and the GoDaddy
+   stack, not Resend, but it ends "or anything else" and it is Dan's rule to interpret. Second,
+   open Supabase billing for the **Pennington Media Group** organisation. That bill is probably
+   missing from the ledger, so the floor is higher than $78, and if the org is on Free tier the
+   database has been paused since May, which would undercut P0-2 through P0-7.
 2. Argue. Run `/dialecta-council` on monetization and on P0-D2 once that is settled. Nothing in
    `positions.md` has met a counter-argument, and an advisor that has only ever agreed with itself
    is not trained.
