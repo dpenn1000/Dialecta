@@ -223,6 +223,176 @@ in this plan protects the codebase. It does not protect the first person the cod
 
 ## Chair roll-call
 
+**builder** carried its central claim: "a week or two" does not survive contact with the code,
+6 to 10 weeks for a full rebuild, on the evidence that the entire current app (315 lines) is
+smaller than one recovered file (`profile/[id].js`, 1,880 lines, eleven operations behind one
+path), and that the 38 real recovered routes average 289 lines each against nothing built so far.
+Unsoftened, uncontested by any other seat on the number itself. Builder's second claim, that the
+read-only front page and article view is "the honest minimum" if forced into a one-to-two-week
+budget, was **conceded** in its own rebuttal after circulation showed it wastes every arrival the
+same way it wasted the first 269; builder called it plainly "not a smaller Dialecta, a different
+product." In its place builder's rebuttal **carried** a new, unopposed claim: a roughly
+three-week vertical slice, one article page, one comment-write path, one `classify.js` call, one
+rendered card, moderated by hand through Supabase Studio rather than a built queue, beats both the
+full rebuild and the hollow cut on cost as well as coherence. Builder also **carried** the claim
+that security's identity fix sits inside that slice as the same task, not an addition, which is
+why the slice cannot be cut thinner to hit budget. Builder's closing concession to philosopher,
+that one working thread does not let a stranger see classification "reflect rather than gatekeep"
+across enough cases to trust the platform's claim, stands **unresolved**: no seat, including
+philosopher, names the volume that would.
+
+**security** carried the debate's sharpest priority claim: the one control that must exist before
+any stranger arrives is closing `profiles.ghost_member_id` as a public credential, since
+`api/comment.js` accepts a body-supplied `member_uuid`, checks only that it is non-empty, and
+matches it against a column `anon` can already read because `profiles_select` runs `USING (true)`,
+live today, reachable by nobody's phase boundary. Uncontested. Security's initial placement of
+that fix "ahead of phase one" was **retracted** in its own rebuttal in favor of the fix riding
+inside the comment-write feature itself, alongside an hours-scale stopgap (revoke the
+`anon`/`authenticated` SELECT grant) available immediately and a new, additive one-to-two-day
+spend cap on `/api/classify`. That retracted-and-relanded position **converged independently**
+with builder's own rebuttal, neither seat having read the other's before landing there. Security
+also **carried**, unopposed, the standing rule that any phase-exit claim about a security property
+must name how it was checked, a live query or a test, never a doc or a field name, after three
+separate traps the same day where a source's own account of itself (Next.js's docs,
+`information_schema.role_table_grants`, `identity_data.email_verified`) was trusted over what it
+actually did. Security's answer to philosopher's Archetype visibility default, that it is real
+but **not currently enforceable**, a migration against a live session that does not yet exist
+since `auth.users` is empty, stands as a correction philosopher did not get a further round to
+answer; the underlying placement in Phase 2 is **unresolved**, not refuted.
+
+**designer** carried, unopposed, the debate's answer to the framing's own second question: split
+Dan's six words into four checkable now as a per-page verdict (fully functioning, seamless,
+simple, beautiful) and two that cannot be checked before a stranger exists to prove them (exciting,
+engaging), on the evidence of two defects an unchecked "seamless" and "beautiful" already let
+through, the composer's silently disabled button (D-2) and the Stance/Breach colour collision that
+fails under every tested form of colour blindness (D-13). Designer also carried its correction of
+the convener's own plan: right that a full design verdict wastes itself on 315 lines, wrong to
+push the ink-token and spacing decisions into Phase 3, since they need only Dan's sign-off, not a
+built page, and building blind against them is what produced the comment card's own ad hoc margin.
+Designer's claim that the share card is the real front door, cached by Facebook the moment it
+renders and unpatchable after, and needs the same token and tier-ink contract as the site before
+first render, was carried and converges directly with circulation's own channel-concentration
+finding.
+
+**treasurer** carried its central conditional: Dan's hunch that slow is safe holds, but only if
+Phase 4 runs now, parallel to the build, rather than after Phase 3 as the plan's order implies,
+since a week or two of extra build time costs only $20 to $40 in incremental floor spend against a
+visitor pool the platform cannot afford to reacquire. No seat opposed the condition; circulation's
+own cadence argument reinforces it. Treasurer's recommendation to decide the Underwriter price
+now, free, a config-file entry, while still charging only at Phase 6, was carried unopposed on its
+own mechanics, including the finding that Vercel's Hobby plan turns non-compliant the moment a
+membership exists rather than the moment one is billed. Treasurer's use of philosopher's P-9 to
+argue that deciding a number in private does not itself flip the social-to-market norm switch was
+**carried on the narrow point** (nothing is shown to a member early); it leaves philosopher's
+separate, broader doubt about Phase 6 itself untouched and **unresolved** (see philosopher,
+below). Treasurer's retirement of the 17,000-visitor figure was carried and matches circulation's
+independent retirement of the same number.
+
+**circulation** carried the debate's binding precondition: the gate before any stranger arrives is
+not a content backlog, a second channel, or a corrected funnel number, it is that the comments
+they find are alive, since all 269 recorded visitors and every reader who follows a share link
+have met a site where zero comments have ever published. This is what turned builder's read-only
+cut from a live option into a conceded failure. Circulation's proposal to plan against a
+dormant-baseline number, about one member every two years at roughly five visitors a week, rather
+than inventing a replacement for the retired 17,000 figure, was carried unopposed, as was its
+timing claim that real re-measurement cannot happen before Phase 4 publishes and a month of
+Facebook traffic runs against it, early Phase 5. Its finding that Facebook is 100 percent of
+non-direct arrivals and does not need a second channel to launch, only before Facebook is trusted
+as the whole plan, before Phase 6, was carried, with the free, immediate move of reactivating ten
+idle, already-paid Resend subscribers unopposed. Its claim that analytics has to land inside Phase
+2, the same phase that ships article, comment, and auth, or the single most valuable cohort in the
+plan goes unmeasured and unrecoverable, was carried unopposed; the hosting choice, self-host
+versus Plausible Cloud, was explicitly handed to treasurer and remains **unresolved**. Its
+cadence-over-backlog preference was carried as its own call, explicitly flagged as not the
+deciding axis. Its correction that X's Card documentation is gone rather than paywalled was a
+minor self-correction that changes no other seat's position.
+
+**philosopher** carried its structural critique that the plan's six done-when tests check the
+codebase and never the person on the other end of it, proven by Phase 2's own done-when shipping a
+stranger's fingerprint, and with it the public Archetype, before Phase 5 ever invites anyone, with
+no contest mechanism at all, not even the weaker version community re-review gives a single
+comment. The specific fix, a visibility default of self-visible-only until an aggregate-level
+contest path exists, was found real but **not yet enforceable** by security's rebuttal (a
+migration against a session that does not exist), leaving the placement **unresolved** rather than
+refuted. Philosopher's reading of P-9, that a price flips social to market norms by existing
+regardless of size or timing, and that the real fix is a payment-classifier wall with no phase
+number, asked for a Phase 1 slot; **no other seat addressed this claim**, so it stands filed and
+**unresolved**. Its doubt that deferring the live charge to Phase 6 last, after Phases 4 and 5
+spend months building unpaid norms, is obviously the lower-risk order, was raised directly against
+the plan's own assumption and against treasurer's Phase-6 recommendation; treasurer did not engage
+it, so it is **unresolved**, not lost. Its demand to publish the three pending comments or decide
+on the record why not, before Phase 5 sends strangers to look at nothing, was carried and
+converges with circulation's own comments-alive precondition. Its standing constraint that no tier
+badge or fingerprint-derived descriptor appear on any share card, regardless of what legal
+concludes, was filed and unopposed, though no other seat's share-card work explicitly cross-checked
+it, so treat it as carried but not independently verified.
+
+**legal** is silent. It filed four positions dated the same day (`consent-at-the-moment`,
+`consent-waiver-and-the-pact`, `ctdpa-sensitive-data`, `tier-label-first-party-speech`), none of
+them this question, and nothing under this debate's slug. Its absence leaves unanswered whether
+the public Archetype that philosopher flags as Phase 2's own done-when creates defamation or
+privacy exposure once anyone but its subject can see it: legal's own standing tier-label analysis,
+cited in passing by philosopher, ranks exposure as rising "as the surface moves from comment level
+toward person level," and the Archetype is exactly that surface, a durable public characterization
+of a named person rather than a verdict on one comment. It also leaves unanswered whether the
+Underwriter badge and Charter language treasurer wants priced now needs terms taken by affirmative
+act at signup rather than a footer link, and whether media liability insurance, which legal's
+standing position calls the correct mitigation and recommends pricing before launch, has been
+priced against anything in this specific plan at all.
+
 ## Chair synthesis
+
+### The phase plan the debate produced
+
+The six labels survive unopposed. What launch.md got wrong sits inside them: strict linear
+sequencing (treasurer), design decisions parked in Phase 3 that need only Dan, not a built page
+(designer), a Phase 2 done-when that ships the Archetype with no gate or contest path
+(philosopher), and two silences no seat let stand: a live credential hole with no phase in front
+of it, and no instrumentation named anywhere (security, circulation).
+
+| Phase | Entry | Done-test |
+|---|---|---|
+| 1, stop the bleeding | Now | Revoke `anon`/`authenticated` SELECT on `profiles.ghost_member_id`. Hours. Checkable as a grant, not a promise. |
+| 2, build the thing | Phase 1 landed | Ghost cutover complete (floor drops $15.65/mo); article, comment-write and auth ship together; the comment path carries a session-verified identity fix and a `/api/classify` spend cap as the same task; analytics lands here, before a stranger can do anything worth counting; the ink-token fix lands the moment the badge is coded; Archetype defaults to self-visible pending a session-keyed migration nobody has written yet. |
+| 3, make it good | Phase 2 shipped a real write path | Designer's per-page verdict on four of Dan's six words: every write path authenticated, no silent controls, no 380px overflow, zero token drift, 4.5:1 contrast everywhere. The one done-test in the plan that is fully checkable today. |
+| 4, fill it | Now, parallel to 2 and 3, not after | One piece published; ten idle Resend subscribers reactivated, free. Cannot check: a real funnel rate. The 17,000 figure is dead; nothing replaces it until Phase 4 has published and a month of Facebook traffic has run against it. |
+| 5, tell people | Contested; see the fork below | Comments alive, not `pending_review`; Phase 3's verdict passed; a second channel proven before Facebook is trusted as the plan. Cannot check: how much discourse a stranger needs to see before trusting the platform's core claim rather than one lucky thread. Nobody names the number. |
+| 6, charge | Underwriter price decided now, free | First dollar in. Cannot check: whether landing the live charge last, after Phases 4 and 5 spend months on unpaid norms, is actually the lower-risk order the plan assumes. |
+
+### Where the seats converged
+
+Two convergences arrived from opposite mandates. Builder, reasoning from what a forced two-week
+budget could build, first called the read-only cut "the honest minimum." Circulation, reasoning
+from what a shared article owes its reader, showed that a site with zero published comments
+wastes every arrival the same way it wasted the first 269. Builder conceded outright: not a
+smaller Dialecta, a different product.
+
+Separately, builder and security each dropped their own first framing of the comment-spoofing
+hole as something standing in front of the build. Security's brief placed it "ahead of phase
+one"; its rebuttal retracted that for a fix riding inside the comment-write feature itself.
+Builder's rebuttal landed in the same place independently: the session-verified caller replacing
+the body-supplied `member_uuid` is already the estimate's biggest line, not an addition to it.
+
+### Where the disagreement is real
+
+Three threads, unresolved. The fork: circulation's alive-comments precondition can be met by
+builder's three-week vertical slice or by the full rebuild that alone satisfies designer's
+complete verdict site-wide, and nobody adjudicates which one actually gates Phase 5. Second,
+philosopher's volume objection survives builder's own concession: one working thread doesn't let
+a stranger watch classification reflect rather than gatekeep across enough cases to trust it, and
+no seat names the volume that would. Third, philosopher doubts Phase 6 is safer than an earlier
+charge, given months of unpaid norms built first; treasurer keeps Phase 6 regardless, and neither
+engages the other.
+
+### The options
+
+| Option | Costs now | Costs later | Forecloses |
+|---|---|---|---|
+| Vertical slice, ~3 weeks | Narrowest build; hand-moderation stands in for a queue | Philosopher's volume problem stays open; a widening pass is still owed before "finished" | A sooner Phase 5, on one path only, not designer's full site-wide verdict |
+| Full rebuild, 6 to 10 weeks | Builder's number, unsoftened, against Dan's own week-or-two hunch | Treasurer's $20 to $40 in floor, immaterial | Speed. Nothing else the debate found |
+| Read-only cut, 1 to 2 weeks | Cheapest | Wastes the arrival, by builder's own concession | Ruled out by the seat that proposed it |
+
+Phase 4 running now, not after Phase 3, is not itself contested by any seat; treasurer names it
+and nobody opposes it. The live fork is between the top two rows.
 
 ## Outcome
