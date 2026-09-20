@@ -127,3 +127,37 @@ design is a separate question, and this evidence bears on it without deciding it
 scaffold written in one pass from the spec is less likely to contain seven
 considered improvements, but two of the seven are defensible on their merits and one
 has already propagated into backlog D-3. That record stays open on its own terms.
+
+---
+
+## Measurement appended 2026-09-19 by migrator
+
+`028_pre_launch_security_hardening` is no longer an unknown. Measured against the
+live project with `scripts/check-env.mjs --rls`, read-only, counts only. Full map in
+`team/migrator/knowledge/2026-live-rls-surface.md`.
+
+**Live RLS is real and deliberate.** Nine tables return zero rows to the anonymous
+key while the service key sees their contents: `comments` (0 of 3),
+`classifications` (0 of 3), `axis_events` (0 of 27), `reserved_handles` (0 of 89),
+`notifications` (0 of 6), `admin_roles` (0 of 4), `fp_snapshots` (0 of 4),
+`share_events` (0 of 7), and `quotes` filtered to 70 of 72. Six tables are fully
+public: `profiles`, `articles`, `axis_scores`, `archetypes`, `feed_events`,
+`follows`.
+
+This strengthens the correction appended above. Whoever built this database wrote
+considered access policies, on top of following fix-forward migration discipline.
+Adopting the live schema discards less than it first appeared; rebuilding from the
+two September files would discard more.
+
+**One defect found in passing.** Every column on `profiles` is readable without
+authentication, including `is_admin`, `subscription_tier`, `pact_signed_name`,
+`order_negotiation_log` and `ghost_member_id`. RLS is row-level, the rows are
+public, and no column grants narrow them. Fixing it is a migration, so it waits on
+this record. Flagged here because it is the first thing to fix whichever option
+wins.
+
+**One functional consequence.** Backlog A-5, the public comment thread, renders
+empty for logged-out visitors under the live policy. The repo's migration intends
+published comments to be publicly readable; live does not. Reading the policy text,
+rather than row counts, needs the `db pull` in `team/migrator/p0-2-runbook.md`
+step 6.

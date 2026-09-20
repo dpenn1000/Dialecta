@@ -70,11 +70,18 @@ are new to this. `supabase/types.ts` is generated from the live project and is t
 real shape, with the limits set out in
 `knowledge/2026-supabase-type-generation-drift.md`.
 
+**The live RLS surface is measured**, not inferred. `scripts/check-env.mjs --rls`
+was run against the live project on 2026-09-19 and
+`knowledge/2026-live-rls-surface.md` holds the map. Nine tables are closed to the
+anonymous key, so `028_pre_launch_security_hardening` did real work. One defect
+found: every column on `profiles` is readable without authentication, including
+`is_admin`.
+
 ## Next three
 
-1. Run Part 1 of `p0-2-runbook.md` once Dan has logged in. Steps 1 to 8 are read-only and answer the three things the repo cannot: the real 20 migration names, whether `028_pre_launch_security_hardening` exists, and what the live RLS policies actually are. Append the output to exchange record `2026-09-19-001`.
-2. Verify the live RLS policies against the mandate, using whatever step 6 recovers. This is the one invariant in `.claude/agents/migrator.md` that this agent currently cannot check on any database, because `supabase/types.ts` does not carry policies. The `pgTAP` lead in the reading list is the fallback if `db pull --declarative` does not return them.
-3. Do NOT write a migration until `2026-09-19-001` closes. When it does, the three smallest migrations are already scoped and are needed under all three options: `classifications.model` and `.prompt_version` (backlog A-2), `comments.delta_acknowledged` (spec entity 1), and `aspirations.visibility` plus `.research_consent_at` (spec entity 7). Write them against whichever schema wins.
+1. Fix the `profiles` column exposure, as soon as `2026-09-19-001` closes and a migration is allowed. Either column grants or a public-profile view. This is the highest-value small migration available and it is independent of which option wins.
+2. Run Part 1 of `p0-2-runbook.md` once Dan has logged in. Steps 1 to 8 are read-only. Two of the three questions it was written to answer are now answered, so what remains is the authoritative 20 migration names and the **policy text** behind the RLS map, which row counts cannot give. Step 6 is the one that matters.
+3. Do NOT write a migration until `2026-09-19-001` closes. When it does, three more are already scoped and are needed under all three options: `classifications.model` and `.prompt_version` (backlog A-2), `comments.delta_acknowledged` (spec entity 1), and `aspirations.visibility` plus `.research_consent_at` (spec entity 7). Write them against whichever schema wins.
 
 ## What this agent posts to the exchange
 

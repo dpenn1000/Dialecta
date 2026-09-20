@@ -1,4 +1,10 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/check-env.mjs)",
+      "Bash(node scripts/check-env.mjs --rls)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {

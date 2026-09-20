@@ -13,3 +13,33 @@
 - 2026-09-19 (agent team): PR #3 merged as `47fab54`, closing P0-1. Added `team/` for the six working agents, mirroring `council/`: `brief.md`, `practices.md`, `knowledge/`. Added `exchange/`, the shared record for handoffs, blind spots, advice and votes, with `SCHEMA.md`, a worked example and an append-only ledger. `/dialecta-research` and `research-sprint.ps1` now take any of the nine agents, plus `council`, `team` or `all`. `.voiceignore` scopes the CI voice gate off the April to May import, 1,667 hard hits across 43 files, none of them in code this project authored. Nine training sessions were started, one per agent, each in its own worktree. Corrected: `dialecta.vercel.app` serves a May 2026 build from `dpenn1000/dialecta-api`, not this repo. Next: Supabase `dialecta-staging` and P0-3, both Dan's.
 
 - 2026-09-19 (supabase reality): P0-2 does not hold as written. The live Dialecta project is `mguulnibvzusfvyuowwh` in the Pennington Media Group org, with 32 tables and 20 applied migrations from April and May 2026, and 10 of the 13 tables this repo's migrations create already exist there with rows. Generated `supabase/types.ts` from live, repointed the broken `npm run types` (it passed `--local`, which needs Docker, and called a `supabase` binary that is not installed). Created nothing, applied nothing, deleted nothing. Full detail in `dialecta-handoff-2026-09-19-supabase-reality.md`; the open question is `exchange/open/2026-09-19-001`.
+
+- 2026-09-19 20:09 UTC, branch `claude/vigorous-pike-a8b098`, 0 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-19 21:22 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:26 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:30 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:32 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:37 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:39 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:40 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:42 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:46 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:47 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:48 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:48 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:49 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+
+- 2026-09-20 00:51 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
