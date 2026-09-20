@@ -28,8 +28,11 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
 // .env is the repo's convention for keys; read it without adding a dependency.
+// Split on \r?\n, never \n alone: a carriage return is a line terminator in a JS regex, so
+// `(.*)$` refuses to match any line of a CRLF file and every key reads as absent. Written on
+// Windows, that is every key. Caught when the service would not start on 2026-09-20.
 for (const line of existsSync(join(ROOT, '.env'))
-  ? readFileSync(join(ROOT, '.env'), 'utf8').split('\n')
+  ? readFileSync(join(ROOT, '.env'), 'utf8').split(/\r?\n/)
   : []) {
   const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)$/);
   if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '').trim();
