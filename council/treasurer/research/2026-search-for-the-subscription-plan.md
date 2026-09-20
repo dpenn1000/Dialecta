@@ -38,3 +38,24 @@ On 2026-09-19 this advisor stated there were no subscription plans anywhere in t
 - Drive holding nothing Dialecta at all is itself useful. It removes an entire search surface for every future session.
 
 *Filed 2026-09-20*
+
+## Closed 2026-09-20: it was never written
+
+Dan asked whether it is lost. It is not lost, and the stronger statement is available.
+
+Every memory store on the machine was searched:
+
+| Store | Files | Dialecta content |
+| --- | --- | --- |
+| `claude-memory` repo, **all of git history across every commit** | all revisions | `project_personal_web_properties.md` and three `MEMORY.md` variants. Nothing else, ever |
+| `memory.prejunction-backup` | 48 | The same file, **byte-identical** to the git copy, and **zero files git history does not already hold** |
+| The Dialecta project's own memory directory under `.claude/projects` | 0 | Empty, created 2026-09-19 |
+| The local-git-dir project's memory directory under `.claude/projects` | 6 | None |
+
+`sync-claude-memory.ps1` explains the deletion and removes the worry. It runs `git add -A` against `C:\Users\dan\claude-memory` itself, so that folder **is** the memory store rather than a copy of one. When something removed the file on 2026-09-12 the sync faithfully committed the removal, and git history kept every prior version. The recovery at `f7cc960` is proof the safety net works.
+
+**The closing argument is the content, not the search.** The single memory node that references `[[subscription-dashboard]]` calls it "the broader cost-cutting context" and, in the same file, rules Dialecta out of that effort in the strongest terms available: "Exclude it entirely from any hosting/cost-cutting migration calculus."
+
+So a Dialecta subscription model was never inside that work. The effort Dan remembers was real, substantial and expense-side, with Dialecta deliberately fenced off from it. **Nothing needs recovering. The monetization work is ahead of this project rather than behind it.**
+
+One correction for Dan, separate from Dialecta: he sees no Memory panel under Settings, Capabilities because his memory is not claude.ai memory. It is file-based, it lives in `C:\Users\dan\claude-memory`, it is committed by `sync-claude-memory.ps1` and pushed to `github.com/dpenn1000/claude-memory`. **The advice about a legacy memory export with five days left does not apply to this setup, and there is no deadline to meet.**
