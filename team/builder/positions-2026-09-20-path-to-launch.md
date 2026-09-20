@@ -67,3 +67,31 @@ five-minute delete or a real decision about tier gating, not a port. The axis-ma
 signature change is a contract fix that every one of the four files importing
 `_axis-mapping.js` must agree on before any of them ship. None of this shows up if you
 count 52 files and divide.
+
+## Rebuttal
+
+Circulation is right and I was wrong to call the read-only cut "the honest minimum." It
+is not a smaller Dialecta, it is a different product, and it wastes every one of the next
+arrivals the same way it wasted the first 269. I concede that plainly.
+
+The real question is whether a vertical slice beats both my horizontal cut and the 6 to
+10 week full rebuild. It does, on cost as well as coherence. One article page (exists),
+one comment write path, one classify.js call, one card rendering the result, moderated by
+hand through Supabase Studio rather than a built queue, the same shortcut I already
+granted seven admin routes. That draws only from the load-bearing middle I already named,
+not the eleven Ghost-system-of-record rewrites.
+
+It is not shorter than the week-or-two budget my horizontal cut was forced into, it is
+closer to three, but it buys a working discourse loop instead of a blog. That is the
+estimate that changes: not full rebuild or nothing, a narrow slice at roughly the forced
+budget, coherent instead of hollow.
+
+Security's hole is inside that slice, not extra to it. `comment.js` trusts a
+body-supplied `member_uuid` because Ghost's `{{@member.uuid}}` used to inject it
+server-side; that's gone, so any comment path, narrow or full, needs a real Supabase
+session checked in RLS instead. Fixing the hole and building the slice are one task, and
+it helps the estimate: there is no cheap insecure version to skip to hit three weeks.
+
+Philosopher's problem survives this anyway. One working thread doesn't let a stranger
+watch classification reflect rather than gatekeep across enough cases to trust the claim.
+That is a volume problem no cut size fixes at launch.
