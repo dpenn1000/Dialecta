@@ -52,3 +52,32 @@ uncapped classification spend, later an account takeover, and none of it require
 impressed, or even to be a person rather than a script. Phase three, make it good, answers the first
 kind. It does nothing for the second, because the second was never a polish failure. I would not let
 either phase wait on the other.
+
+## Rebuttal
+
+**Circulation and philosopher, on comments.** No collision on the narrow ask. Publishing the three
+existing pending comments is free now: a status change on rows that already exist, not a trip
+through the exploitable create path, so nothing here blocks it. The collision is with an ongoing
+path, a stranger posts and it later reaches `published`. Before that opens, four things have to be
+true:
+
+1. Write-time identity is session-verified, not a client-supplied `member_uuid` matched against a
+   column `anon` can already read. Stopgap now: revoke `anon`/`authenticated` SELECT on
+   `profiles.ghost_member_id`. Hours.
+2. The durable version, a session-verified caller instead of a lookup, is already the biggest line
+   in builder's 6 to 10 weeks. No addition.
+3. A spend cap or rate limit on `/api/classify`, since every write also fires a priced call. Open
+   posting without one is a wallet-drain vector, separate from the identity one. A day, maybe two,
+   additive.
+4. The write-identity fix lands inside the same commit as the Wait Window and Stage 2.5 promotion
+   pipeline, not after. That pipeline will promote a forged comment exactly as designed; nothing in
+   it will notice. No added time, a sequencing rule.
+
+I'll retract "ahead of phase one" as the frame. The fix rides inside the comment-write feature
+itself, first, not as a gate standing in front of it.
+
+**Philosopher, on the visibility default.** Not enforceable as written. Measured today: `archetypes`
+carries `USING (true)`, same as `profiles`, and grants give `anon` full SELECT, no column narrowing.
+"Self-visible only" needs a predicate policy keyed to a live session, and there is no live session
+yet, `auth.users` is empty. Until then it's a page declining to render a row it can already fetch
+directly. The fix is real, it's just a migration, not a flag.
