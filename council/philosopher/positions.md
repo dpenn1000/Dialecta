@@ -1,5 +1,213 @@
 # Standing positions
 
+Written by the philosopher. Each row is contested by design and carries a confidence. A position
+with no filed note behind it is marked `(unsourced)`. Evidence points at
+`council/philosopher/research/`. The reasoning behind each row is in the section under it.
+
 | Position | Confidence | Evidence | Last changed |
 | --- | --- | --- | --- |
-| (none yet; first council run fills this) | | | |
+| P-1. Of the four biases the charter names for the classification card, one holds as stated, one holds in weaker form than its stronger sibling, one belongs to a different surface, and one is contested in its own literature | High | `2015-steindl-reactance`, `2021-rathje-outgroup-animosity`, `2014-barasch-broadcasting-narrowcasting`, `2018-gal-loss-of-loss-aversion` | 2026-09-19 |
+| P-2. Legitimacy, not tone, is the card's governing design variable. A contributor who reads the classification as legitimate reflects; one who reads it as illegitimate gets angry immediately | High | `2015-steindl-reactance` | 2026-09-19 |
+| P-3. The Classification Engine Specification overstates the card. Calling the commenter message the platform's primary behavior-change mechanism is a hypothesis, and the nearest tested analogue is small and fragile | High that it is unevidenced, medium on the true size | `2021-roozenbeek-accuracy-nudge-replication`, `2021-pennycook-accuracy-nudge` | 2026-09-19 |
+| P-4. The permanent public Contrast Strip will bias self-declaration downward and corrupt the 15 percent of classification weight it carries | Medium | `2014-barasch-broadcasting-narrowcasting`, `2016-rost-online-firestorms` | 2026-09-19 |
+| P-5. Stage A question 4 should ask for out-group reference by name. It currently aims at the weaker of the two tribal markers | Medium high | `2021-rathje-outgroup-animosity`, `2017-brady-moral-contagion` | 2026-09-19 |
+| P-6. Community voting at 35 percent weight needs a bridging aggregator, not a higher threshold. A raw count of same-side voters is still same-side | Medium | `2017-brady-moral-contagion`, `2022-wojcik-birdwatch-bridging` | 2026-09-19 |
+| P-7. On P0-D2, the consent question is not open against invite-only. It is whether the Pact discloses classification and the Fingerprint before the first comment. Magic link should lead, Google should follow, and invite-only is defensible only as a capacity measure with an end date | Medium high | `2016-rost-online-firestorms`, `2020-lorenz-spreen-boosting-autonomy`, `2014-barasch-broadcasting-narrowcasting` | 2026-09-19 |
+| P-8. The source thesis needs one amendment. The environment does not beat stated values, it distracts people from values they already hold. That is a smaller claim and the one with evidence under it | Medium high | `2021-pennycook-accuracy-nudge` | 2026-09-19 |
+
+---
+
+## P-1. What the classification card actually triggers
+
+The charter names four candidates. Checked against the literature, they do not stand equally, and
+saying so is the point of checking.
+
+**Reactance. Holds as stated, and it is the main event.** Reactance is arousal that follows a threat
+to a free behavior, and it drives counterarguing, devaluing the imposed option, and derogating the
+source (`2015-steindl-reactance`). The card is a textbook trigger: an unrequested judgment of a
+person's own words, delivered at the moment they had decided to act. The predicted failure is not
+that contributors feel bad. It is that they dismiss the engine and post unchanged.
+
+**In-group signaling. Holds, but it is the weaker half of a pair, and the charter named the weaker
+half.** Out-group language predicts sharing about 4.8 times more strongly than negative affect and
+about 6.7 times more strongly than the moral-emotional language Brady et al. measured
+(`2021-rathje-outgroup-animosity`, `2017-brady-moral-contagion`). Tribal behavior on Dialecta will
+show up as writing about the other side more than as flagging one's own team. See P-5.
+
+**The audience effect. Real, and not on this card.** Audience effects follow audience size:
+broadcasting to many raises self-presentation, narrowcasting to one lowers it
+(`2014-barasch-broadcasting-narrowcasting`). The card is a narrowcast. The engine speaks to one
+person, privately, before anything is published. The audience effect belongs to the Contrast Strip,
+the public tier badge and the topology bar. See P-4.
+
+**Loss aversion around tier. Contested, and the platform should stop assuming it.** Gal and Rucker
+review the evidence and find loss aversion unsupported as a general principle, with the endowment
+effect and status quo bias both admitting explanations that do not need it
+(`2018-gal-loss-of-loss-aversion`). Whether a tier drop reads as a loss is an empirical question
+about context, not a fact to design around.
+
+Net: one bias to design against, one to redirect, one to move to the right surface, and one to stop
+citing until somebody measures it.
+
+## P-2. Legitimacy is the design variable
+
+Threats read as illegitimate produce an immediate emotional response. Threats read as legitimate
+produce delayed cognitive reflection instead (`2015-steindl-reactance`, reporting Sittenthaler,
+Steindl and Jonas 2015). Reflection is the entire product. So the question the card has to win is
+not whether it sounds kind. It is whether the contributor believes the reading was earned.
+
+This gives the charter's veto on classification that hides its reasoning an empirical leg to stand
+on, not only an ethical one. The structured analysis grid in Stage 2 of the Discourse Layer, showing
+specificity, emotional register, tribal markers, article engagement and opposing view as separate
+readings, is the legitimacy mechanism. It is not decoration and it is not a debug view. Removing it
+to simplify the card would be the single most damaging change available to this surface.
+
+Two consequences follow. The borderline flag should be shown to the contributor, because a system
+that admits a close call reads as more honest than one that does not. And controlling verbs, meaning
+should, ought, must and need, are reactance triggers by name in the same review. The system prompt in
+`api/classify.js` predates Editorial Voice v1.2, and `scripts/voice_check.py` has no rule for
+controlling language today.
+
+## P-3. The card's behavior-change claim is not evidenced
+
+The Classification Engine Specification calls the commenter message "the primary behavior-change
+mechanism of the platform." The nearest tested analogue is the accuracy nudge. A preregistered
+direct replication failed on its first sample at p = .67, and on a pooled N = 1,583 produced
+treatment d = 0.14 against control d = 0.10 at an uncorrected p = .017
+(`2021-roozenbeek-accuracy-nudge-replication`).
+
+Dialecta's card differs in four ways that could plausibly make it stronger. It addresses the
+contributor's own writing rather than a stranger's headline. It is specific rather than generic. It
+repeats. It carries a visible consequence. None of those differences has been tested, so they are
+reasons to run the experiment rather than reasons to assume its result.
+
+I am not arguing the card is worthless. I am arguing the spec states as settled a thing the platform
+has not measured, and that this is fixable for nearly nothing: the Stage A fields are already logged
+per the spec's own System Integration Notes. Log whether the contributor edited after seeing the card
+and how the tier moved, and the platform is measuring its central claim instead of asserting it.
+
+Worth saying plainly: the Founding Philosophy does not make this mistake. Article 10 calls the answer
+"not assumed" and "the thing being tested." The founding essay is honest here. The engineering spec
+is the document that overreached.
+
+## P-4. The Contrast Strip is an audience, and audiences change behavior
+
+The Discourse Layer UX publishes the mismatch between declared tier and engine tier on every comment
+that has one, permanently, and calls this "not a warning" but "a statement of fact about how the
+system works." Both halves of that are true and the description is still incomplete. The strip is a
+fact and it is also a broadcast, and broadcasting is the condition under which people work to avoid
+looking bad (`2014-barasch-broadcasting-narrowcasting`).
+
+The failure is specific and it damages a locked number. Self-declaration carries 15 percent of
+classification weight. A contributor who expects a permanent public mismatch has one easy way to
+avoid it, which is to declare low. Systematic under-declaration would make that 15 percent measure
+fear of the strip rather than calibration, and Calibration is one of the six pillars.
+
+Rost et al. point the same way from a different direction: visible identity plus an audience turns a
+comment into a performance, and in the one setting measured at scale it made behavior worse rather
+than better (`2016-rost-online-firestorms`).
+
+I am not asking for the strip to be removed. Transparency about the engine's fallibility is worth
+something real. I am asking that permanence be treated as the variable it is, and that somebody
+compare self-declaration distributions for contributors who have received a strip against those who
+have not before the design is locked.
+
+## P-5. Ask for the out-group by name
+
+Question 4 of the Stage A prompt asks "Are tribal, rhetorical, or identity-signaling patterns
+present?" That aims at in-group signaling. The strongest measured marker in the literature is
+reference to an out-group, and the prompt never asks for it (`2021-rathje-outgroup-animosity`).
+
+The Stance and Heat boundary currently turns on whether a comment is mainly expressing feeling or
+mainly signaling group membership. Group membership signaling is hard for a classifier to see.
+Reference to the other side is easy to see and predicts the behavior better. Adding an explicit
+out-group reference check to Stage A is a small prompt change with the best available evidence behind
+it, and the same prompt is inline in `api/classify.js`.
+
+## P-6. Community voting needs a bridging aggregator
+
+Moral contagion is bounded by group membership: moral-emotional language spreads more strongly within
+a faction than between factions (`2017-brady-moral-contagion`). Dialecta removed the diffusion reward
+by sorting on tier before votes, which is the right call. But the vote itself is still a within-group
+signal, and a comment that flatters the voting majority can collect the votes that move its tier. At
+35 percent of classification weight, that is the largest single opening for the behavior this platform
+exists to refuse.
+
+Bridging-based ranking is built for exactly this failure. It surfaces only what people with different
+inferred viewpoints agree on, and when deployed it measurably reduced resharing
+(`2022-wojcik-birdwatch-bridging`). Dialecta already holds the raw material, because the live Supabase
+project has an `opinion_map_positions` table.
+
+This bears on backlog A-D1, which asks about the re-review threshold and whether community judgment
+alone may outweigh the AI. The threshold is the wrong knob while the aggregation is a raw count.
+Settle what is being counted first. Honest limit: bridging assumes factions are legible, and
+disagreements about whether a comment is specific may not split along the axes politics splits on.
+
+## P-7. P0-D2, on consent and autonomy
+
+**The question as framed is not the consent question.** Open against invite-only decides who may
+enter. Autonomy is about what happens to a person once inside, and on Dialecta what happens is
+unusual: every comment is read by a model, a tier is attached in public, a mismatch may be published
+permanently, and a Thinking Fingerprint accumulates from all of it. Consent means the Pact discloses
+those four things before the first comment, in plain language, and that the Growth Layer asks again
+rather than assuming the first yes covers everything it later does. That is the position. The sign-up
+mode is the smaller half of P0-D2.
+
+**On login methods.** Neither magic link nor Google requires a legal name, which the evidence
+supports: non-anonymous users were more aggressive than anonymous ones across 532,197 comments, and
+the mechanism was performance for an audience (`2016-rost-online-firestorms`). Between the two, magic
+link should be presented first and Google second, because Google discloses the sign-up to a third
+party and magic link does not. That is a real autonomy difference and it costs one line of ordering in
+the UI. Passkeys later raise no concern. Any future proposal for verified real identity has this
+study to answer first.
+
+**On open against invite-only.** No autonomy objection to either, and I will not manufacture one.
+Invite-only substitutes the platform's judgment of who belongs for the person's own decision to join,
+which sits badly with Article 6, so if it ships it should be named as a capacity measure with an end
+date rather than as a quality filter. Framed as capacity it is honest, and I concede the treasurer's
+cost case for it without argument: every comment is an API call and a small launch is a cheap one. My
+constraint cuts the same way, because a principle that produces an empty site protects nobody.
+
+**Recommendation.** Open sign-up with the Pact as the gate, magic link first, Google second. If cost
+forces invite-only, time-box it and say in the copy that it is about capacity.
+
+## P-8. One amendment to the source thesis
+
+The Founding Philosophy opens with the claim that human behavior is less influenced by stated values
+than by environmental incentives. Pennycook et al. found something adjacent and importantly different:
+most people say sharing only accurate content matters to them, that preference is real, and the
+environment defeats it by holding attention elsewhere rather than by overriding it. Shifting attention
+back was enough to improve what people shared (`2021-pennycook-accuracy-nudge`).
+
+The thesis sets values and environment against each other. The evidence says they are not opponents.
+The environment wins by distraction, not by conversion.
+
+This is a refinement and not a refutation, and I am not going to inflate it into one. But it changes
+what the platform has to do, and in the platform's favor. Dialecta does not need to install a standard
+its contributors lack. It needs to protect one moment, the moment between writing and posting, from
+being crowded out. That is a smaller job with better evidence behind it, and it explains why Stage 2
+of the Discourse Layer sits exactly where it should. Any future proposal to move classification
+feedback into a notification, a digest, or the profile gives up the mechanism and should be refused on
+that ground.
+
+---
+
+## Where the evidence backed the founding documents
+
+Recording this because an advisor who only finds faults is not being honest either.
+
+- **Article 4, the door held open.** Every commenter message below Breach ending with the option to
+  post as-is is a restoration postscript, and restoration postscripts are the tested intervention for
+  reducing reactance (`2007-miller-restoration-postscripts`). The rule was right before anybody
+  checked. One caveat worth carrying: it was tested as a single exposure, and Dialecta would use one
+  on every comment forever. A door held open a hundred times may stop reading as a door.
+- **Editorial Voice v1.2, observational rather than evaluative.** Controlling language produced
+  message rejection and source derogation in the same study; concrete language drew more attention,
+  was judged more important, and improved assessments of the source. The rule requiring one concrete
+  suggestion buys credibility for the classifier, not just persuasion.
+- **Article 2, the AI reflects rather than gatekeeps.** This is the nudging and boosting distinction
+  in other words (`2020-lorenz-spreen-boosting-autonomy`). A nudge steers the next comment; a boost
+  leaves the contributor better at writing anywhere, including off Dialecta. Useful test to apply to
+  every surface: the structured analysis grid and the seven tier descriptions in the nomination picker
+  are boosts, the nudge bar and the commenter message are nudges. Where a surface could be built
+  either way, build the boost.
