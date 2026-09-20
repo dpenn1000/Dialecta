@@ -75,6 +75,13 @@ five, and this agent is the one most likely to hit it.
 
 Protocol in `exchange/README.md`. One record per question.
 
+## Landed 2026-09-19
+
+Five notes filed, `knowledge/review-checklist.md` written as thirteen named failure modes,
+and PR 3 reviewed across three passes. Fourteen findings, three of them blockers. Two of the
+three passes corrected the review rather than extending it, including retracting the claim
+that a Content Security Policy would neuter the stored XSS.
+
 ## Done looks like
 
 The RLS leads are filed with concrete failure examples. PR #3 has a real review on it.
