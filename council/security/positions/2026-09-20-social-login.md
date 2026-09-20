@@ -158,6 +158,31 @@ what he can pick.
 Neither depends on the `email_verified` research landing. Both can be specified now and neither
 changes shape when it does.
 
+## The standards say the key is wrong, not only the providers
+
+Two findings from the provider sprint move this from a risk argument to an architecture one.
+
+**NIST SP 800-63-4, the Federation and Assertions volume, says the identifier to store is `sub`
+and not the email address.** Dialecta stores and joins on email, in Supabase's linking and again in
+P0-6. That is not a Dialecta invention and it is a common shape, but a current normative source
+names the alternative explicitly. Note: `2026-nist-800-63c-federation-privacy.md`. Worth knowing
+that SP 800-63-3 Volume C was superseded on 2025-08-01, so anything citing the older volume is out
+of date.
+
+**The attack has a name, a paper and a recommended defense, and the defense is the claim token.**
+Sudhodanan and Paverd, USENIX Security 2022, found at least 35 of 75 services vulnerable to account
+pre-hijacking and enumerate five variants. Two are exactly this shape: the classic federated merge,
+and the non-verifying identity provider. Their remedy is to require proof of current control before
+merging rather than to trust an assertion of an address. Note:
+`2022-sudhodanan-prehijacked-accounts.md`.
+
+I arrived at the claim token from the mechanism rather than from the literature, and the literature
+agrees. That is worth saying in council, because it means the recommendation is the standard answer
+to a studied problem rather than this seat's invention.
+
+**RFC 9700 is final** as of January 2025, not a draft. PKCE is mandatory for public clients and
+redirect URIs must match exactly. That is a build requirement rather than a debate input.
+
 ## What I argue
 
 **Google is fine and this seat has no objection to it.** It reads the real claim, it needs no
@@ -191,9 +216,19 @@ depth control degrades to nothing exactly where it is most needed. A token does 
 
 **Where I would land if asked today.** Google now, with the claim token. Add a second provider when
 somebody can name the contributor it brings who would not otherwise arrive, and prefer one from the
-first group when that day comes, since GitHub and Discord read the real signal and suit a discourse
-platform's audience at least as well as Facebook does. That is a preference and not a veto; the
-reach argument belongs to `designer` and `treasurer` and I have not costed it.
+pass-through group when that day comes. On the measured detail, GitHub is the cleanest of all of
+them: an explicit `verified` boolean per address, no review process, usable immediately. For a
+platform whose whole thesis is careful argument, it is also not an odd fit.
+
+Two facts the council should have that are not mine to weigh. Meta never describes the email it
+returns as verified anywhere in its own field documentation, and the field can be absent entirely.
+X has been pay per use since February 2026 with no free tier, which makes it the only provider on
+Dan's list with a recurring bill attached, and that is `treasurer`'s input rather than mine. Apple's
+Guideline 4.8, the one that forces Sign in with Apple alongside other social logins, does not reach
+a website at all, so there is no obligation lurking there.
+
+The reach argument belongs to `designer` and `treasurer` and I have not costed it. This is a
+preference, not a veto.
 
 **What would change my position.** If the second sprint establishes that Facebook and X do only ever
 release confirmed addresses, the hardcoding stops being a hole and becomes an undocumented
