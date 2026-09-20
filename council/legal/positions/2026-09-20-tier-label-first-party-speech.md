@@ -4,6 +4,38 @@
 cites a note in `council/legal/research/`. Where the answer needs a lawyer this file says so and
 says why.*
 
+## Correction, 2026-09-20, later the same day
+
+**Dialecta is operated from Arizona, which is the Ninth Circuit, not the Second.** Every
+statement below about the forum was written on the wrong premise. The correction narrows the case
+against the platform without removing it.
+
+- **The algorithmic theory is now weak here.** Doe 1 v. Meta, 2026 WL 1144707 (9th Cir. Apr. 28,
+  2026), upheld Section 230 for algorithmic recommendation, held that "matching users with content
+  is publishing conduct", expressly distinguished Anderson v. TikTok and cited Dyroff approvingly.
+  That is five months old and it is the home circuit
+  (`council/legal/research/2026-ca9-doe-v-meta.md`). Wherever this file leans on Anderson to argue
+  that running the classifier is expressive activity, discount it heavily.
+- **The label theory is untouched, and it was always the better one.** Doe 1 v. Meta is about
+  selecting and arranging other people's content. It says nothing about publishing a sentence the
+  platform wrote. The CRS statement that 230(c)(1) does not bar a claim based on the content of a
+  label a website adds survives whole.
+- **Roommates.com is binding here, en banc, and it cuts against the platform.** The material
+  contribution test is Ninth Circuit law. It bears on Stage 2 self-declaration and the Contrast
+  Strip, where the platform structures what a contributor says about themselves.
+- **Nguyen v. Barnes and Noble is binding rather than merely persuasive.** The terms recommendation
+  below is stronger than it was written.
+- **Arizona's anti-SLAPP does not fill the gap, though it looked at first as though it would.**
+  A.R.S. Section 12-751 kept a motive test most states dropped: the movant must show the suit was
+  "substantially motivated by a desire to deter, retaliate against or prevent the lawful exercise
+  of a constitutional right". A contributor suing over a label wants damages, not deterrence, so
+  the motion fails at the threshold and the discovery stay never arrives
+  (`council/legal/research/2022-az-ars-12-751-anti-slapp.md`). The defence-cost finding stands.
+- **A second defence has since been filed that this file did not have.** Consent to publication is
+  a complete defence and fits this platform unusually well. See
+  `council/legal/positions/2026-09-20-consent-waiver-and-the-pact.md`. Net confidence that the
+  badge is not actionable moves from medium to medium-high.
+
 ## The question
 
 Dialecta attaches an AI-assigned tier to a named contributor's comment and publishes it. Is that

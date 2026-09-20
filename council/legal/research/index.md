@@ -6,6 +6,11 @@ One file per source: `YYYY-<author>-<slug>.md` with citation, summary, and what 
 named Dialecta surface. Mark vendor and content-marketing sources as such; prefer statute text,
 a regulator, a court, a bar association or a named practising firm.
 
+**Corrected 2026-09-20.** The first fourteen notes were filed assuming a Connecticut operator.
+Dialecta is operated from Arizona. The Connecticut notes stay filed and accurate about
+Connecticut; they are comparative rather than controlling. The six Arizona and defamation notes
+at the bottom are the correction.
+
 | File | Source | Implies for |
 | --- | --- | --- |
 | `2026-usc-section-230-text.md` | 47 U.S.C. Section 230, Cornell LII | The shield covers the comment body and not the badge, because 230(f)(3) reads "in whole or in part" |
@@ -22,3 +27,9 @@ a regulator, a court, a bar association or a named practising firm.
 | `2026-vandort-reporting-gap.md` | Van Dort, MJLST, 2026-03-24, student post | No US law requires reporting a credible threat. The Breach routing rule is an ethics decision, not a compliance one |
 | `2026-usc-2258a-csam-reporting.md` | 18 U.S.C. Section 2258A, Cornell LII | The one mandatory duty that ignores platform size. Attaches the day any surface accepts an uploaded image |
 | `2014-ca9-nguyen-v-barnes-noble.md` | Nguyen v. Barnes and Noble, 763 F.3d 1171 (9th Cir. 2014) | A footer link does not bind. The P0-4 sign-up screen needs an affirmative act on terms |
+| `2026-az-no-comprehensive-privacy-law.md` | MultiState, 2026-02-04, plus 2026 Arizona session search | **The correction.** Arizona has never enacted a comprehensive privacy law and two 2026 bills died. The CTDPA does not reach Dialecta. The live question becomes the twenty states where readers live |
+| `2022-az-ars-12-751-anti-slapp.md` | A.R.S. Section 12-751, primary, plus RCFP | Arizona's anti-SLAPP keeps a motive test most states dropped, so it does not restore the cheap early exit that Section 230 would have given on a tier label |
+| `2022-az-ars-18-552-breach-notification.md` | A.R.S. Section 18-552, primary, plus AZ AG | Forty-five days from determination, AG only above a thousand people, substantial economic loss trigger. `security` has Connecticut's statute filed instead |
+| `2026-ca9-doe-v-meta.md` | Doe 1 v. Meta, 2026 WL 1144707 (9th Cir. Apr. 28, 2026), via Eric Goldman | The home circuit upheld 230 for algorithmic recommendation and distinguished Anderson. The algorithmic theory against the classifier is weak here; the authored-label theory is untouched |
+| `1990-scotus-milkovich-v-lorain-journal.md` | Milkovich v. Lorain Journal Co., 497 U.S. 1 (1990) | No privilege attaches to the word "opinion". A disclaimer buys nothing; publishing the basis beside the badge is what works. Breach is the tier where this bites hardest |
+| `1977-restatement-583-consent-to-defamation.md` | Restatement (Second) of Torts Section 583, via CACI 1721 | Consent to publication is a complete defence, and a contributor who submits a comment knowing the result will be published has given it. The Pact is the strongest evidence of it |

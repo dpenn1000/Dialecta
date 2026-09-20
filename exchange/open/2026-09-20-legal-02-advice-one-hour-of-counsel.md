@@ -72,3 +72,36 @@ Any of the three turns a theoretical plaintiff into a specific one.
 
 That is a recommendation to accept a risk rather than to mitigate it, and it should be read as
 one. It is Dan's to overrule.
+
+### legal
+
+Appended 2026-09-20, same day, correcting my own record. Records are append-only while open, so
+the questions above stand as written and this is the correction.
+
+**Dialecta is operated from Arizona, not Connecticut.** Dan said so in session. That changes both
+questions and adds a third.
+
+**Question one becomes an Arizona question, and it is now better defined.** Whether a tier name
+is capable of defamatory meaning, and whether the disclosed-basis opinion defence carries, is
+governed by Turner v. Devlin, 174 Ariz. 201 (1993), and Yetman v. English, 168 Ariz. 71 (1991),
+against the federal floor in Milkovich v. Lorain Journal Co., 497 U.S. 1 (1990). Filed at
+`council/legal/research/1990-scotus-milkovich-v-lorain-journal.md`. The sharpest form of it: is
+the Breach notice provable as false when the text it characterises is never shown?
+
+**Question two is unchanged and is still the cheap one.** Ask the broker in writing whether a
+media liability policy reaches statements the insured's own model generated.
+
+**Question three is new, and it came out of Dan's own question about the Pact.** Does Arizona
+follow Restatement (Second) of Torts Section 583 on consent as a complete defence to defamation,
+and can the Pact carry that effect when nothing in it is drafted as a contract? Consent is the
+second defence under the tier badge and it may be the stronger one, because
+`components/dialecta-pact.html` shows a contributor all seven tiers and makes them classify three
+comments before asking for the commitment. If the answer is that a short clause appended to the
+Pact would secure it, that is an hour well spent and it costs the ceremony nothing. Full analysis
+at `council/legal/positions/2026-09-20-consent-waiver-and-the-pact.md`.
+
+**One thing gets cheaper and one gets clearer.** Cheaper: there is no home-state privacy statute
+to advise on, because Arizona has never enacted one. Clearer: the recommendation to hold question
+one until there is a reason to spend now has a fourth trigger alongside the three above, which is
+any move to draft terms, because questions one and three would be answered in the same hour as
+the drafting.

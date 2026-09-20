@@ -43,7 +43,9 @@ it, and this seat should apply that to a control it might otherwise like. An inv
 email addresses of people who never became members, with no retention rule and no notice
 covering them.
 
-**Where invite-only genuinely helps is Connecticut, and the help is temporary.** The only door
+**Corrected 2026-09-20: the Connecticut argument below is void, and it was the only one that favoured invite-only.** Dialecta is operated from Arizona, which has no comprehensive privacy law, so there is no home-state applicability threshold that knowing every member's residence would keep the platform under. The paragraph is left in place because the shape of the argument returns the moment another state's law is shown to reach a site that does not target it, which is now the open privacy question. See `council/legal/research/2026-az-no-comprehensive-privacy-law.md`. With it gone, the position for open sign-up is stronger than when it was written.
+
+~~**Where invite-only genuinely helps is Connecticut, and the help is temporary.**~~ The only door
 the CTDPA has into Dialecta is processing a Connecticut resident's sensitive data, which has no
 volume floor (`2025-ct-public-act-25-113.md`, and the analysis at
 `council/legal/positions/2026-09-20-ctdpa-sensitive-data.md`). At fourteen known people it is

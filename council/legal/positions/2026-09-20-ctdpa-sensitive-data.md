@@ -4,6 +4,38 @@
 text quoted below was read from the enrolled Public Act and is filed at
 `council/legal/research/2025-ct-public-act-25-113.md`.*
 
+## Correction, 2026-09-20, later the same day
+
+**Dialecta is operated from Arizona, not Connecticut, and the CTDPA does not apply to it.** Dan
+said so in session. Nothing in the repository ever said Connecticut; the premise came from
+`.claude/agents/legal.md` line 30 and from this advisor's reading list, and `security` built two
+notes on the same bad premise. Filed at
+`council/legal/research/2026-az-no-comprehensive-privacy-law.md`.
+
+What that changes and what it does not:
+
+- **Gone.** The applicability chain below, the "live at fourteen users" framing, and the claim
+  that Dialecta is probably already in scope. The CTDPA reaches persons who conduct business in
+  Connecticut or target services to Connecticut residents, and a publicly readable website is not
+  targeting a state.
+- **Gone.** The idea that there is a home-state privacy statute at all. Arizona has never enacted
+  one, and two 2026 bills died. The only home-state obligation is breach notification under
+  A.R.S. Section 18-552, filed separately, and whatever a published privacy policy promises under
+  FTC Act Section 5.
+- **Kept, and this is most of the file.** The reading of the sensitive data definition, and the
+  conclusion that the six pillars and the archetype are on none of the enumerated categories.
+  Connecticut's list is the common template that most of the twenty state statutes copy, so that
+  finding travels to the states Dialecta's readers actually live in.
+- **Kept.** The profiling analysis, and the finding that the narrowing of "legal or similarly
+  significant effect" takes a tier badge outside the impact assessment and the right to contest.
+  Same reason: other states drafted from the same model.
+- **Changed in kind.** The live privacy question is no longer "does my state's law reach me". It
+  is "do any of the twenty states where readers live reach a site that does not target them".
+  That is the next sprint's work and it is a different question.
+
+The analysis below is left standing rather than deleted, because it is the most detailed
+statutory reading in this tree and it is accurate about Connecticut. Read it as comparative.
+
 ## Why this is live rather than theoretical
 
 Public Act 25-113 rewrote the CTDPA's applicability test with effect from July 1, 2026, and it

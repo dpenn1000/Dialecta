@@ -12,6 +12,33 @@ Nothing here is legal advice and neither is anything this advisor writes from it
 
 States: `todo`, `filed`, `dead`.
 
+## Correction, 2026-09-20
+
+**Dialecta is operated from Arizona.** This list was built assuming Connecticut, as was
+`.claude/agents/legal.md` line 30 and two notes in `council/security/research/`. Nothing in the
+repository ever said Connecticut. The Connecticut rows below stay `filed` because they are
+accurate about Connecticut and because most of the twenty state privacy statutes are drafted from
+the same model, which makes them comparative. They are not this platform's home-state law.
+Arizona has none. See `2026-az-no-comprehensive-privacy-law.md`.
+
+Two consequences for how this list is read. The forum is the Ninth Circuit, not the Second, so
+Dyroff, Roommates.com and Doe 1 v. Meta displace Force v. Facebook as the authorities that
+matter. And the privacy question becomes the states where readers live rather than the state
+where the operator lives, which is a wider question than this list was built for.
+
+## Arizona, the home jurisdiction
+
+| State | Source | Why this advisor needs it |
+| --- | --- | --- |
+| filed | A.R.S. Section 12-751, anti-SLAPP, https://www.azleg.gov/ars/12/00751.htm | The motive test that decides whether the platform has any early exit from a defamation suit at all |
+| filed | A.R.S. Section 18-552, breach notification, https://www.azleg.gov/ars/18/00552.htm | The real breach clock and the substantial economic loss trigger. `security` has Connecticut filed |
+| filed | MultiState, 20 state privacy laws in effect in 2026, https://www.multistate.us/insider/2026/2/4/all-of-the-comprehensive-privacy-laws-that-take-effect-in-2026 | Establishes the negative: Arizona is not on the list |
+| todo | Arizona State Law Journal, "SLAPPing Down Meritless Claims: Arizona's Anti-SLAPP Expansion", 2025-11-09, https://arizonastatelawjournal.org/2025/11/09/slapping-down-meritless-claims-arizonas-anti-slapp-expansion-questionable-constitutionality-and-the-continued-need-for-judicial-interpretation/ | Whether any Arizona court has applied the amended statute to a publisher. Moves the anti-SLAPP note from statutory reading to prediction |
+| todo | Turner v. Devlin, 174 Ariz. 201 (1993), and Yetman v. English, 168 Ariz. 71 (1991), https://law.justia.com/cases/arizona/supreme-court/1993/cv-91-0365-pr-2.html | Arizona's opinion doctrine in the original. The disclosed-basis defence for the tier badge is state law and currently rests on a Supreme Court case plus a search summary |
+| todo | State Bar of Arizona civil jury instructions, defamation, https://www.azbar.org/media/p0onmoso/defamation-2015.pdf | The elements as Arizona actually charges them, including whether Arizona follows Restatement Section 583 on consent |
+| todo | Doe 1 v. Meta Platforms, Inc., 2026 WL 1144707 (9th Cir. Apr. 28, 2026), slip opinion | Read at second hand through Eric Goldman. The single highest value unread item in this tree, because it is the home circuit five months ago |
+| todo | Dyroff v. Ultimate Software Grp., 934 F.3d 1093 (9th Cir. 2019) | Binding here. Cited this sprint only through two CRS reports |
+
 ## Section 230, and the question that makes this seat exist
 
 | State | Source | Why this advisor needs it |
@@ -42,7 +69,7 @@ States: `todo`, `filed`, `dead`.
 | State | Source | Why this advisor needs it |
 | --- | --- | --- |
 | filed | Public Act 25-113 (Substitute S.B. 1295), enrolled text, Connecticut General Assembly, https://www.cga.ct.gov/2025/act/pa/pdf/2025PA-00113-R00SB-01295-PA.pdf | Added during the 2026-09-20 sprint. The primary text the two secondary Connecticut sources summarise. Holds the closed sensitive data list, the profiling definition, and the narrowed "legal or similarly significant effect" that decides whether a tier badge carries any duty |
-| filed | The Connecticut Data Privacy Act, CT Office of the Attorney General, https://portal.ct.gov/ag/sections/privacy/the-connecticut-data-privacy-act | The home-state statute for a Connecticut operator |
+| filed | The Connecticut Data Privacy Act, CT Office of the Attorney General, https://portal.ct.gov/ag/sections/privacy/the-connecticut-data-privacy-act | ~~The home-state statute.~~ **Not the home state.** Kept as the best-read example of the model most of the twenty state statutes follow |
 | filed | Major Changes to Connecticut's Consumer Privacy Law Effective 2026-07-01, Wiley Rein LLP, 2026-04-27, https://www.wiley.law/alert-Major-Changes-to-Connecticut-Consumer-Privacy-Law-Will-Take-Effect-July-1-2026 | **Read second.** The 2026 amendment drops the volume threshold entirely for anyone processing a Connecticut resident's sensitive data. It is already in force. Whether the six pillars and the archetype are sensitive data decides whether Dialecta is in scope at 14 users |
 | todo | CCPA and CPRA FAQ, California Privacy Protection Agency, https://cppa.ca.gov/faq.html | The regulator's own thresholds, and its definition of inferences about a consumer's characteristics |
 | todo | CCPA updates: cybersecurity audits, risk assessments, ADMT, approved 2025-09-22, effective 2026-01-01, https://cppa.ca.gov/regulations/ccpa_updates.html | California's profiling and automated decisionmaking rules, the closest US regulatory analogue to a public per-user fingerprint |
