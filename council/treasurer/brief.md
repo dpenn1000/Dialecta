@@ -15,69 +15,41 @@ for the mandate; this file is the state of the training and what comes next.
 
 ## Where it is now
 
-Sprint 1 ran 2026-09-19. Fifteen sources filed in `research/`, eleven of the fifteen seeded leads
-worked, eighteen new leads added including a second pass on prior art in code and research. Twenty-four standing positions in `positions.md`, each with confidence
-and a filed note behind it. Long-form arguments in `positions/monetization.md` and
-`positions/p0-d2-signup.md`. Two blindspots open: 2026-09-19-002 to the other two
-advisors, and 2026-09-19-003 to `decider` and `builder` on the missing billing row.
+Trained across 2026-09-19 and 2026-09-20. **20 research notes, 3 long-form positions, a standing
+positions table, and 4 open records in the exchange.** The tree now holds measurement rather than
+models on almost everything that matters.
 
-Corrected the same day, after Dan asked whether the sprint had reviewed Dialecta's own
-subscription and advertising material. It had not. Reading `docs/Dialecta_Supabase_Scaling.md`,
-`docs/Dialecta_Data_Architecture.md`, `docs/Dialecta_Growth_Layer_Principles.md` and all 47 backlog
-rows changed three things: the floor was understated by $15 a month because Supabase Pro ships a
-Micro instance and the Scaling spec requires Small before launch; the claim that nothing bends with
-user count was too strong, since the compute ladder is a step function starting near 10,000 active
-users; and nothing in the backlog builds payments at all, while Phase C retires Ghost's subscription
-management in week 8. All three are recorded in place rather than patched over. A fifteenth note,
-`research/2026-dialecta-supabase-scaling-spec.md`, files the spec that caused the correction.
+**Measured, not estimated.** Funnel, all time: 269 unique visitors, 1,876 views, 10 member records
+of which 6 are real people and 3 are arm's length, 0 paying, and no Stripe customer has ever been
+created. Traffic sources: Direct 194, Facebook 54, Google 7. The ten-person list has never been
+emailed. Spend, from Dan's own statement data: about $78 a month excluding Supabase. Two modelled
+lines were wrong, the domain by 16 times and Resend by being carried at zero while $240 a year was
+already going out.
 
-The monetization gap is closed enough to argue. The headline: Dialecta's fixed floor is about $62 a
-month after Ghost cutover, roughly $744 a year, which is sixteen annual memberships or eight of
-Kelly's true fans. AI classification is $0.002 a comment and is not the budget problem. The recommendation is
-a voluntary annual membership plus patronage, gating nothing, with grants ruled out of the operating
-base. The uncomfortable finding this advisor did not want: self-hosting is not the frugal choice
-against Substack and should never be defended as one.
+**The hard finding.** The funnel cannot reach 16 paying members. At measured rates that needs
+roughly 14,500 visitors against 269 all time, and at the current 5 visitors a week Dialecta gains
+about one member every two years. The path runs through asking six people directly and then
+building a channel that does not exist yet.
 
-Not yet done: none of this has been argued in council, so no position has survived a rebuttal. Every
-revenue figure is a model rather than a measurement, because the charter's request to Dan for current
-spend, member count and revenue to date is still unanswered. Three seeded leads are untouched (Knight
-and Omidyar, Discourse.org open core, Fathom and Plausible) and four filed notes rest partly on
-secondary sources because the primary page returned 403 (INN, Medium, Ko-fi, MetaTalk); each one says
-so in the file.
+**Closed this session.** The prior subscription plan Dan remembered was found and it is
+`subscription-command-center`, an expense tracker for the 44 subscriptions Dan pays. Ghost has no
+tiers configured. Every memory store on the machine was searched to the bottom, including all of
+git history. **A Dialecta monetization model was never written**, so nothing here is competing with
+earlier work. Also recovered and now binding: a 2026-05-29 constraint that Dialecta must not be
+migrated or touched, which Dan cleared on 2026-09-20.
 
-Two environment notes for the next thread. The `dialecta-local-research` MCP server failed to connect
-(CONNECTION_CLOSED) although Ollama itself was up with `qwen2.5:14b`, so sprint 1 fell back to
-WebFetch throughout. And `/dialecta-research` is not registered as an invocable skill in a Claude
-Code session even though `.claude/skills/dialecta-research/SKILL.md` exists; sprint 1 read the
-SKILL.md and followed it by hand.
+**Caused this session, and not yet cleaned up.** Probing whether the database was paused, this
+advisor sent a GET to the deployed profile API believing it was read-only. It upserts. A junk row
+`ghost_member_id = 'ping-test-not-a-real-id'`, id `7782682b-4a59-4cc2-a4c7-847d50801ea9`, was
+written to the live `profiles` table and **is still there**. The database is confirmed awake, which
+was the thing being tested. The defect behind it is worse than the row: that endpoint creates an
+identity row for any string, unauthenticated, from anywhere. Recorded as `2026-09-20-005`.
 
-Second day, 2026-09-20. Dan supplied the Ghost member export and the Ghost 6 analytics, so the
-tree now holds measurement rather than models: 269 unique visitors all time, 10 member records of
-which 6 are real people and 3 are arm's length, 0 paying and no Stripe customer ever created, and
-a ten-person list that has never been emailed. Facebook is the only acquisition channel with
-evidence behind it. The acquisition position was corrected twice in one day and is now much less
-optimistic than it started: the funnel cannot deliver 16 paying members, because at measured rates
-that needs roughly 14,500 visitors against 269 all time.
+**Still open.** Two items, both needing Dan. Delete that junk row. And read the Supabase billing
+for the **Pennington Media Group** organisation, which is the last number between this advisor and
+a final floor, and decides whether break-even is 19 annual memberships or 28.
 
-**Closed 2026-09-20: the prior subscription work was found.** It is
-`subscription-command-center`, a deployed dashboard in `Downloads/subscription-dashboard` tracking
-the 44 recurring subscriptions Dan pays, $12,906 a year in total. It is the expense side. There are
-no membership tiers, no prices Dialecta would charge, and Dan confirmed the Ghost console has no
-tiers either. **Dialecta's monetization model has still never been designed**, so nothing this
-advisor wrote is competing with earlier work.
-
-It did answer the charter's outstanding question. Spend is now measured from Dan's statements:
-about $78 a month excluding Supabase, $110 including it. Two modelled lines were wrong. The domain
-was carried at $15 a year and is $242. Resend was carried at $0 and is $240 a year already being
-spent on a service that has delivered two emails. Break-even moves from 16 memberships to 19, or 28
-if Supabase belongs to Dialecta.
-
-The old open item, kept because it still matters: Dan reports a prior subscription model plan that real effort went
-into. An exhaustive search on 2026-09-20 did not find it, recorded in
-`research/2026-search-for-the-subscription-plan.md`. Three places were unreachable: Ghost Admin's
-tier settings, which is the highest-probability location and a quick check for Dan, claude.ai
-conversation history, and Gmail, whose connector authorisation is invalid. **Every monetization
-position is provisional until that plan is found or ruled out.** Dan said he would get back to it.
+Nothing here has been argued in council. No position has met a counter-argument.
 
 ## Next three
 
