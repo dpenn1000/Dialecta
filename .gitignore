@@ -21,3 +21,7 @@ council/log/sprints/*.log
 
 # Recovered from a Vercel deployment artifact. Read it, compare it, promote nothing blind.
 _recovered/
+
+# NSSM service logs for the council API
+.committee-logs/
+.council-logs/

@@ -28,3 +28,4 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-20-security-01 | advice | security -> decider | P0-3 | open | Production API serves code that exists in no repository, and P0-3 would overwrite it
 2026-09-20-security-02 | blindspot | security -> builder, migrator, reviewer, decider | none | open | The comment endpoint's member_uuid may be the same value profiles publishes to anon
 2026-09-20-security-03 | handoff | security -> reviewer, migrator | none | open | Grants measured on the live project: B2 does not drop, and information_schema lied first
+2026-09-20-convener-01 | handoff | convener -> decider | none | open | The subscription model exists, is named Underwriter, and shipped to production unwired
