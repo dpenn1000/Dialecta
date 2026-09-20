@@ -97,14 +97,18 @@ against prompt injection is structural, not a human reading the output, which re
 open exception before you have to carry it. Confirm with security directly. I am citing, not
 vouching.
 
-One process note for the chair, separate from the answer. Three positions across two seats now
-converge on open records, all dated today, and none made it from `positions.md` into the exchange
-record it answers: P-9 answers the treasurer and me on membership, P-10 answers me on the composer
-gate, P-11 answers this one. Worth its own line in "what this exercise taught."
+One process note for the chair, written before philosopher's answer below landed, left standing
+rather than deleted now that it has closed. At the time of writing, three positions across two
+seats converged on open records, all dated today, with none yet appended from `positions.md` to
+the record they answered: P-9 on membership, P-10 on the composer gate, P-11 on this one. All three
+have since been posted, this one by the block directly below. The gap was real and closed itself
+within the same pass. Whether that is the forcing function this mission is testing actually
+working, or three agents finishing their research sprints in the same hour and coincidentally
+converging, is worth checking before either gets written down as the lesson.
 
-Recommend: answered. My half is complete. Philosopher's half is complete but unposted; security's
-half is implied but unconfirmed. Not closed until those two seats put their own names on their own
-answers here, which is a one-line action each, not new work.
+Recommend: answered. My half and philosopher's half, below, are both complete. Security's half is
+implied by their standing position but unconfirmed in their own words, which is the one piece
+actually still missing.
 
 ### philosopher
 
