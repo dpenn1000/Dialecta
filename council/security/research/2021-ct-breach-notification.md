@@ -2,6 +2,26 @@
 
 **Source:** Connecticut General Assembly, "Connecticut General Statutes Section 36a-701b: Breach of security re computerized data containing personal information", Conn. Gen. Stat. Section 36a-701b, as amended by Public Act 21-59 (effective October 1, 2021) and Public Act 23-16 (effective October 1, 2023), read 2026-09-20. https://codes.findlaw.com/ct/title-36a-the-banking-law-of-connecticut/ct-gen-st-sect-36a-701b/
 
+## Correction, 2026-09-20, same day
+
+Written against an unstated assumption that Dialecta's establishment is Connecticut. Dan lives in
+Arizona, since roughly July 2026. See `2023-ct-data-privacy-act.md` for the full correction.
+
+This note survives the correction better than the other two, and the reason is worth keeping. US
+state breach notification statutes key on the residency of the affected individual rather than on
+where the business sits, so Connecticut's deadline and its definition of personal information still
+reach Dialecta for any affected person who lives in Connecticut. What was wrong was the framing,
+which treated this as the home state's law and therefore as the whole picture.
+
+The whole picture is every state where an affected person lives, which for a publication with a
+public reading list is not knowable in advance. Arizona's own statute now also applies and is unread
+by this seat. The practical consequence is that the shortest deadline among the affected states
+governs the response, and this note establishes only one of them.
+
+The WISP safe harbor under PA 21-119 is a Connecticut incentive and was being read as available.
+Whether an Arizona domiciled entity can rely on it is a question for `legal`, not an assumption to
+carry. Record `2026-09-20-security-04`.
+
 ## Summary
 
 Conn. Gen. Stat. Section 36a-701b requires any person who conducts business in Connecticut and who owns, licenses, or maintains computerized data that includes personal information to notify affected Connecticut residents after a breach of security. "Personal information" is a first name or initial plus last name combined with one or more of: Social Security number, driver's license or state ID number, a financial account or credit card number combined with any required access code, medical information, health insurance ID number, biometric data, or, since an October 2023 amendment, precise geolocation data. It separately covers a username or email address combined with a password or a security question and its answer.

@@ -2,6 +2,27 @@
 
 **Source:** Connecticut General Assembly, "Connecticut General Statutes Sections 42-515 to 42-525: Data Privacy and Security", Conn. Gen. Stat. Section 42-516 (Applicability), as amended by Section 6 of Public Act 25-113, effective July 1, 2026, read 2026-09-20. https://law.justia.com/codes/connecticut/title-42/chapter-743jj/section-42-516/
 
+## Correction, 2026-09-20, same day
+
+This note was written against an assumption nobody stated: that Dialecta's establishment is in
+Connecticut. Dan lives in Arizona, and has since roughly July 2026. Nothing in this repository ever
+named a jurisdiction, so the assumption was inherited rather than chosen, which is how it survived
+four notes without being checked.
+
+What that does and does not break. The CTDPA reaches entities that process the data of Connecticut
+residents, so a reader's residency rather than the founder's is the operative question, and the act
+may still apply. The "conducts business in Connecticut" reading in this note was being carried by
+the founder's location and is now unsupported. Separately, the home state regime is a different
+regime rather than the same one moved, and Arizona's consumer privacy posture is unread by this
+seat. Do not infer from this correction either that Arizona has a comparable act or that it has
+none.
+
+The thresholds, the July 2026 rewrite and the correction to the published law firm summaries below
+are unaffected, because they are statements about the statute rather than about who it reaches here.
+
+`legal` owns the redo. Record `2026-09-20-security-04`. Until it closes, treat the applicability
+half of this note as open and the statutory half as read.
+
 ## Summary
 
 The Connecticut Data Privacy Act (CTDPA), Conn. Gen. Stat. Sections 42-515 to 42-525, took effect July 1, 2023. Its applicability test changed completely on July 1, 2026 under Public Act 25-113 (Senate Bill 1295, signed by Governor Ned Lamont on June 24, 2025), and that new test is already in force as of this note's read date. A direct fetch of Justia's and the Connecticut General Assembly's own pages for the amended section returned an access error in both cases; the amended text quoted below is drawn from a search index of Justia's codified text and cross-checked against Snell and Wilmer, Benesch, and WilmerHale client alerts describing the same amendment.

@@ -137,8 +137,8 @@ The live `profiles` carries `order_negotiation_log`, `pact_signed_name`, `field_
 the right instinct. The recommendation is to keep that instinct deliberate as columns get added
 back, because they will be.
 
-Minimisation and retention limits are statutory duties rather than good practice, under both
-Conn. Gen. Stat. 42-520(a)(1) and GDPR Art. 5(1)(c) and (e). Two specifics:
+Minimisation and retention limits are statutory duties rather than good practice, under GDPR
+Art. 5(1)(c) and (e), whose reach is set by Article 3(2) and by where readers are. Two specifics:
 
 - **Write a retention number for fingerprint inputs before launch.** `axis_events` is append only by
   mandate, so it grows forever by design. "Forever" is a retention decision whether or not anyone
@@ -149,10 +149,20 @@ Conn. Gen. Stat. 42-520(a)(1) and GDPR Art. 5(1)(c) and (e). Two specifics:
   and the `null = not yet asked` encoding in the current column is good because it distinguishes
   three states rather than two.
 
-One question is not mine and goes to `legal`: whether a Thinking Fingerprint is "sensitive data"
-under the amended CTDPA. It matters more than it looks. The 2026 amendment added triggers with no
-consumer floor at all, one of which is any processing of sensitive data, so the answer decides
-whether the act reaches Dialecta at 14 members rather than at 35,000.
+**Corrected 2026-09-20.** This paragraph previously asked one question, whether a Thinking
+Fingerprint is "sensitive data" under the amended CTDPA, and treated Connecticut as the governing
+regime. Dan lives in Arizona, since roughly July 2026. Nothing in this repository ever named a
+jurisdiction, so four notes and this section inherited one rather than choosing it.
+
+The question worth asking is larger and still goes to `legal`. Which regimes reach Dialecta at all,
+given an Arizona establishment and readers wherever they are, and then whether a fingerprint is
+sensitive data under each one that does. The CTDPA remains plausible on residency grounds and is no
+longer supported by "the founder is in Connecticut". The sensitive data trigger still matters
+wherever it applies, because it carries no consumer floor, which is what makes it decisive at 14
+members rather than at 35,000.
+
+Nothing above this paragraph changes. The minimisation recommendation now rests on the GDPR half,
+which never turned on Connecticut, and the schema advice was never jurisdictional.
 
 ## 5. Blocker B1 must not survive the rebuild
 
@@ -367,6 +377,6 @@ have to land with the policy change rather than after it.
 | P0-D2, the login methods | Everything in section 1's right hand column depends on there being an identity to check | Dan, with the council |
 | Whether `ghost_member_id` can be dropped after P0-6 | Decides whether section 3 is a fix or a mitigation | builder, migrator |
 | Retention number for `axis_events` and fingerprint inputs | Cheapest to set before the table grows | Dan |
-| Whether the fingerprint is sensitive data under the CTDPA | Decides whether the act applies at 14 members | `legal` |
+| Which privacy regimes reach an Arizona establishment with readers elsewhere, and whether a fingerprint is sensitive data under each | A sensitive data trigger carries no consumer floor, so it decides whether an act applies at 14 members rather than at 35,000. Reopened by the jurisdiction correction | `legal` |
 
 *Framework specific recommendations continue in section 10, filed separately once verified.*

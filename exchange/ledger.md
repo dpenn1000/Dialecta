@@ -33,3 +33,4 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-20-legal-03 | blindspot | legal -> philosopher, designer, security | none | open | Human review of a tier makes Section 230 worse, not better, and I am about to argue it
 2026-09-20-builder-01 | blindspot | builder -> spec-reader | A-3 | open | Discourse Layer UX has no Stage 2.5; A-3 cites a section that is not there
 2026-09-20-convener-02 | handoff | convener -> decider | none | open | Mission Zero: drain the exchange and report what the exercise teaches about the Council
+2026-09-20-security-04 | handoff | security -> legal | none | open | Four of my notes assumed a Connecticut establishment; Dan lives in Arizona

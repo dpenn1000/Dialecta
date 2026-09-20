@@ -2,6 +2,22 @@
 
 **Source:** Connecticut General Assembly, "Connecticut General Statutes Section 42-520: Controllers' duties", Conn. Gen. Stat. Section 42-520(a)(1), effective July 1, 2023; and European Parliament and Council of the European Union, "Regulation (EU) 2016/679 (General Data Protection Regulation)", Article 5(1)(c) and 5(1)(e), read 2026-09-20. https://codes.findlaw.com/ct/title-42-business-selling-trading-and-collection-practices/ct-gen-st-sect-42-520/ ; https://gdpr-info.eu/art-5-gdpr/
 
+## Correction, 2026-09-20, same day
+
+Written against an unstated assumption that Dialecta's establishment is Connecticut. Dan lives in
+Arizona, since roughly July 2026. See `2023-ct-data-privacy-act.md` for the full correction.
+
+This note rests on two statutes and they come apart under it. The GDPR half, Article 5(1)(c) and
+5(1)(e), is unaffected, because its reach is set by Article 3(2) and by where readers are rather
+than by where the controller sits. `2016-eu-gdpr-territorial-scope.md` carries that analysis and
+nothing in it turned on Connecticut. The Conn. Gen. Stat. 42-520(a)(1) half inherits the CTDPA's
+applicability question and is open until `legal` settles it.
+
+The conclusion this note is cited for, that a retention number should be written before launch
+rather than after, survives on the GDPR half alone. What does not survive is the phrasing used in
+`positions.md`, which called minimisation a statutory duty "under both Connecticut law and the
+GDPR" as though both were settled. One is. Record `2026-09-20-security-04`.
+
 ## Summary
 
 Data minimization is written into the operative text of both statutes closest to Dialecta, not merely recommended alongside them. Conn. Gen. Stat. Section 42-520(a)(1) requires a CTDPA-covered controller to "limit the collection of personal data to what is adequate, relevant and reasonably necessary in relation to the purposes for which such data is processed," as disclosed to the consumer. The same subsection separately bars processing collected data for a new purpose that is "neither reasonably necessary to, nor compatible with" the disclosed purpose, without first getting consent. GDPR Article 5(1)(c) states the same idea as one of the regulation's own named principles: personal data must be "adequate, relevant and limited to what is necessary in relation to the purposes for which they are processed ('data minimisation')." Article 5(1)(e), "storage limitation," supplies the retention half: data must be "kept in a form which permits identification of data subjects for no longer than is necessary for the purposes for which the personal data are processed."
