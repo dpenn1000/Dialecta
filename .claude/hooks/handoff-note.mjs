@@ -25,11 +25,21 @@ const gitDir = git(['rev-parse', '--absolute-git-dir']);
 if (!gitDir) process.exit(0);
 const marker = join(gitDir, 'land-reminded');
 
-const dirty = (git(['status', '--porcelain']) ?? '').split('\n').filter(Boolean);
+// Only files an agent could plausibly own. A stray untracked file elsewhere in the repo
+// is nobody's work, and blocking on it makes a session argue with the hook instead of
+// answering the question it was asked. Caught doing exactly that on the first headless
+// committee-api run, 2026-09-20.
+const owned = /^(?:team|council)\/[a-z-]+\//;
+const dirty = (git(['status', '--porcelain']) ?? '')
+  .split('\n')
+  .filter(Boolean)
+  .map((line) => line.slice(3).replace(/^"|"$/g, '').split(' -> ').pop())
+  .filter((p) => owned.test(p) || p.startsWith('exchange/'));
+
 git(['fetch', '-q', 'origin']);
 const ahead = Number(git(['rev-list', '--count', 'origin/main..HEAD']) ?? '0');
 
-if (!dirty.length && !ahead) process.exit(0); // everything is on main; nothing to say
+if (!dirty.length && !ahead) process.exit(0); // nothing of this agent's is unlanded
 if (existsSync(marker)) process.exit(0); // already said it once this session
 
 writeFileSync(marker, new Date().toISOString());

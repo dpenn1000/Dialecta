@@ -1,0 +1,10 @@
+{
+  "name": "@dialecta/committee-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "HTTP front door to the agent committee: ask one agent, the council, or the whole team",
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}
