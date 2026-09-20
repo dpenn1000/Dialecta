@@ -1,0 +1,17 @@
+# What A-1 actually requires
+
+**Source:** `docs/Dialecta_Discourse_Layer_UX.md`, section "Stage 1 and Write and Analyze", read 2026-09-19, against `docs/plans/backlog.md` row A-1, `apps/web/src/styles/tokens.css`, `apps/web/src/strings.ts` and `.voiceignore`.
+
+## Summary
+
+Stage 1 of the spec puts the composer inline at the top of the discussion section, opened by an "Add a comment" control, with no navigation away from the article. Above the textarea sits a single-line nudge bar on the `--gold-pale` surface carrying the Forum-level standard in plain language. The textarea is the canonical `.textarea-field` treatment: `--border-medium` border, `--radius-sm`, an amber focus border and a focus ring given literally as `0 0 0 3px rgba(184,115,42,0.08)`, set in Source Serif 4 at 0.92rem because a comment is a piece of writing. The action control is labelled "Analyze my comment" and stays disabled until the text reaches 12 characters. Four things in that section do not survive contact with the rest of the repo, and they are listed below rather than resolved here, because the mandate says to report a brief and spec disagreement instead of picking a side.
+
+## Implies for Dialecta
+
+- The request path conflicts. The spec says that on click the button is replaced by a loading indicator and the comment is sent to the Claude API in the same call as the classification, so the composer blocks on the model. Backlog A-1 says submit creates a `comments` row at `pending_review` and enqueues classification, with no inline Haiku call, and `.claude/agents/reviewer.md` check 1 makes a blocking classification a correctness finding. This is case 1 in `exchange/README.md` and is posted as `2026-09-19-002-advice-a1-composer-request-path`.
+- The focus ring has no token, and adding one is not a builder edit. `rgba(184,115,42,0.08)` is `--amber`, which is `#b8732a`, at eight percent alpha. `apps/web/src/styles/tokens.css` carries `--amber` and no alpha variant, and its header says it is generated from `design/dialecta-design-spec.html` by `scripts/extract-tokens.mjs` and must not be edited by hand. The canonical design spec uses amber alpha literally in nine places at four levels, 0.08, 0.10, 0.22 and 0.3, and the extractor emits none of them. Under the mandate a missing token is reported rather than invented, so A-1 reports this and the fix lands in the extractor or the design spec.
+- The nudge bar copy cannot be copied across as written. Every string a person reads belongs in `apps/web/src/strings.ts`, the Stage 1 section carries three em dashes inside quoted copy, and `.voiceignore` line 23 exempts the spec but root `CLAUDE.md` states that nothing outside `docs/` is exempt. The `voice-check.mjs` PostToolUse hook will block the write, so the copy needs a voice pass before it lands.
+- `apps/web/src/strings.ts` currently holds `site`, `commenterMessages` and `notices` and no composer keys at all, so A-1 adds the first ones. The three tokens the spec names besides the focus ring all exist: `--gold-pale`, `--border-medium` and `--radius-sm`.
+- Stage 2.5 is missing from this spec. Backlog A-3 cites "Discourse Layer UX, Stage 2 and 2.5", `docs/Dialecta_Delta_Mechanic_Spec.md` describes the comment flow as Stage 1, 2, 2.5 and 3, and the locked decisions weight Stage 2.5 response quality at ten percent, but `docs/Dialecta_Discourse_Layer_UX.md` documents only Stages 1, 2 and 3. That blocks A-3 rather than A-1 and is filed as a lead, not a second advice record.
+
+*Filed 2026-09-19*
