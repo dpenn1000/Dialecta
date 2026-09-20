@@ -201,7 +201,15 @@ server.registerTool(
       'and append a row to that tree\'s index.md. Routes to council/<seat>/research/ for an advisor ' +
       'and team/<seat>/knowledge/ for a practitioner. Refuses unknown seats and never overwrites.',
     inputSchema: {
-      advisor: z.enum(ADVISORS).describe('Your seat name, either bench'),
+      // z.string(), not z.enum, and the difference matters on a write path. An enum is rejected
+      // by the MCP SDK during schema validation, so the handler never runs and the caller gets a
+      // thrown exception. The guard below returns `ERROR: seat must be one of ...` as text, which
+      // a calling model can read and correct. An exception is usually just a dead end.
+      // Changed to an enum on 2026-09-20 and reverted the same day: it made the guard unreachable
+      // for the exact input the guard exists for, and test.mjs:53 caught it.
+      // research_search keeps the enum, because there the parameter is an optional filter and the
+      // discoverability is worth more than a refusal path nobody depends on.
+      advisor: z.string().describe(`Your seat name, either bench. One of: ${ADVISORS.join(', ')}`),
       slug: z.string().describe('File name without .md, lowercase, digits and hyphens, for example 2024-smith-reward-loops'),
       citation: z.string().min(1).describe('Full citation line'),
       summary: z.string().min(1).describe('Summary paragraph(s)'),
