@@ -213,7 +213,10 @@ for (const s of all) {
 }
 const tot = (k) => all.reduce((a, s) => a + s[k], 0);
 L.push(
-  `| **total** | 11 seats | | | | **${tot('notes')}** | **${tot('cited')}** | **${tot('standingRows')}** | | |`,
+  // Counted, not typed. This read "11 seats" as a literal until 2026-09-20, when
+  // `circulation` became the twelfth and the total row kept saying eleven. Line 327
+  // had been counting correctly the whole time, so the file disagreed with itself.
+  `| **total** | ${all.length} seats | | | | **${tot('notes')}** | **${tot('cited')}** | **${tot('standingRows')}** | | |`,
 );
 L.push('');
 L.push(

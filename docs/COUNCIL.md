@@ -6,19 +6,19 @@
 
 | Seat | Bench | Model | Web | Writes | Notes | Sourced | Standing | Raised | Addressed |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `circulation` | advisory | sonnet | yes | yes | 0 | 0 (0w/0r) | 0 | 0 | 0 |
-| `designer` | advisory | sonnet | yes | yes | 19 | 19 (16w/3r) | 31 | 4 | 5 |
-| `legal` | advisory | opus | yes | yes | 25 | 24 (23w/1r) | 35 | 7 | 1 |
+| `circulation` | advisory | sonnet | yes | yes | 12 | 8 (1w/7r) | 31 | 1 | 0 |
+| `designer` | advisory | sonnet | yes | yes | 19 | 19 (16w/3r) | 31 | 4 | 6 |
+| `legal` | advisory | opus | yes | yes | 25 | 24 (23w/1r) | 35 | 7 | 2 |
 | `philosopher` | advisory | opus | yes | yes | 13 | 13 (13w/0r) | 11 | 1 | 5 |
 | `security` | advisory | opus | yes | yes | 50 | 49 (46w/3r) | 32 | 4 | 3 |
 | `treasurer` | advisory | sonnet | yes | yes | 20 | 18 (13w/5r) | 64 | 4 | 4 |
-| `builder` | working | sonnet | yes | yes | 15 | 15 (10w/5r) | 21 | 2 | 9 |
-| `decider` | working | opus | yes | yes | 9 | 9 (7w/2r) | 22 | 2 | 18 |
-| `migrator` | working | sonnet | yes | yes | 14 | 13 (8w/5r) | 19 | 1 | 6 |
-| `reviewer` | working | opus | yes | yes | 17 | 17 (13w/4r) | 26 | 1 | 5 |
+| `builder` | working | sonnet | yes | yes | 15 | 15 (10w/5r) | 21 | 2 | 10 |
+| `decider` | working | opus | yes | yes | 9 | 9 (7w/2r) | 22 | 2 | 19 |
+| `migrator` | working | sonnet | yes | yes | 16 | 15 (8w/7r) | 24 | 2 | 6 |
+| `reviewer` | working | opus | yes | yes | 17 | 17 (13w/4r) | 26 | 1 | 6 |
 | `spec-reader` | working | haiku | yes | yes | 11 | 10 (0w/10r) | 22 | 1 | 4 |
 | `voice-editor` | working | sonnet | yes | yes | 11 | 11 (1w/10r) | 17 | 2 | 1 |
-| **total** | 11 seats | | | | **204** | **198** | **300** | | |
+| **total** | 12 seats | | | | **218** | **208** | **336** | | |
 
 `Notes` is filed sources. `Sourced` is how many name a source it can be checked against, split into `w` for an external URL and `r` for a file in this repository cited with a version, a date or a commit. Both count: a seat whose job is spec conformance cites specs, and doing that with a commit SHA is stricter provenance than a link, not weaker. `Standing` is positions for an advisor, practices for a practitioner. `Raised` and `Addressed` count exchange records in each direction.
 
@@ -52,35 +52,44 @@
 | --- | --- |
 | Model | sonnet |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 0 filed, 0 sourced (0 external, 0 from this repo) |
-| Reading list | 14 todo, 0 filed, 0 dead |
-| Positions | 0 |
+| Research | 12 filed, 8 sourced (1 external, 7 from this repo), 4 unsourced |
+| Reading list | 10 todo, 9 filed, 0 dead |
+| Positions | 31 |
 | Charter | `council/circulation/charter.md` |
 | Brief | `council/circulation/brief.md` |
-| Exchange | raised 0, addressed 0 |
+| Exchange | raised 1, addressed 0 |
 
-**What it has read.** Nothing filed yet in `council/circulation/research/`.
+**What it has read.** 12 filed in `council/circulation/research/`.
 
-<details><summary>Still to read: 14 lead(s)</summary>
+| Source | What it changes here |
+| --- | --- |
+| Kelly's arithmetic assumes arrival; it does not explain it | Dialecta already has the owned channel Kelly's model wants: a Resend audience of 10 people. Per |
+| MetaFilter's ad collapse, read for acquisition concentration rather than revenue | A second arrival channel is worth establishing before Facebook is trusted as "the plan," not |
+| Hacker News: the largest single arrival event that cannot be bought, and cannot be asked for either | The one move this seat might otherwise reach for, asking Dialecta's existing list or personal |
+| Open Graph is a real spec; X's card rendering currently is not stable enough to plan around alone | The mechanical build is simple and not in dispute: `og:title`, `og:description`, `og:image`, |
+| Paid acquisition's minimum viable spend, against a $78 floor | **This is an acquisition-cost finding, not a revenue one. It does not touch treasurer's veto on |
+| [Plausible Analytics: the measurement Dialecta loses the day it leaves Ghost](https://api.github.com/search/repositories?q=self-hosted+privacy+analytics+lightweight&sort=stars&order=desc&per_page=10`,) | GitHub API, unauthenticated, |
+| Reddit is not a native Supabase Auth provider; Facebook and X are | Reddit login is not "one more provider on the same list." It is a different, heavier build than |
+| Resend already does what row 11 of the reading list was looking for | Resend's own product pages, `resend.com/features/broadcasts` and |
+| The funnel everyone is quoting was measured on a site with nothing to join | Every forecast in the Council that leans on "17,000 visitors," or the 14,500 figure in |
+| The share-card and sitemap tools this sprint went looking for already ship inside Next.js | Next.js official documentation, nextjs.org/docs (primary, version 16.3.5 at fetch |
+| The social login conversion lift traces to a 2011 preference survey, not a measurement | Any recommendation to add Facebook, X, or another provider "because it increases signups" is |
+| Wikimedia's funnel starts where Dialecta's problem is | Use Wikimedia for the ask design, recurring over one-off, the average-gift framing, exactly as |
 
-- Dialecta's own analytics, whatever exists. Ghost native analytics, Vercel analytics, anything else — The 269 and the 6 are the only real numbers this seat has and nobody has broken them down. Start here, before any external source
+<details><summary>Still to read: 10 lead(s)</summary>
+
 - Stratechery, Substack and the independent-publication playbook on going from zero readers — The closest structural analogue to a one-operator publication with a paid tier
 - Defector, Aftermath, 404 Media, or another worker-owned launch with published subscriber numbers — Publications that launched cold and said out loud what the first year looked like
-- The Browser, Astral Codex Ten, or another single-author publication that grew by being shared rather than advertised — Dan's stated strategy is share-carried. Find who has done it and what it took
-- MetaFilter's traffic collapse, already filed by `treasurer` at `council/treasurer/research/2014-metafilter-ad-collapse.md` — Read the filed note rather than re-finding it. It is the evidence behind the advertising veto and this seat must not argue against it in ignorance
-- Open Graph and Twitter Card specifications, from the primary specs rather than a summary — The share card is the whole strategy's delivery mechanism and it has a specification
+- The Browser, Astral Codex Ten, or another single-author publication that grew by being shared rather than advertised — Dan's stated strategy is share-carried. Find who has done it and what it took. Started this sprint (Uri Bram/The Browser) but only reached secondary sources (Medium, nichepursuits); no primary source read, so left `todo` rather than filed thin
 - Reddit's rules on self-promotion, and what actually happens to a link-dropping account — Long-form argument has a natural home there and a well-documented way to get banned from it
-- Hacker News guidelines and the documented behaviour of its ranking — Same reasoning. A single front-page appearance is the largest single arrival event available to a publication like this, and it cannot be bought
-- Google Ads and Meta Ads minimum viable spend, from the platforms' own documentation — Whether paid acquisition is even coherent at a $78 monthly floor. Arithmetic, not opinion
-- Search Console and what an unindexed new domain can expect in months one to six — Organic search is the only channel that compounds without ongoing spend
-- Newsletter as a distribution channel: open rates and growth rates for small independent publications — Resend is already paid for and nearly unused, per `treasurer`
-- The 1,000 True Fans arithmetic, already filed by `treasurer` at `research/2008-kelly-1000-true-fans.md` — The revenue side is filed. This seat owns the arrival side of the same arithmetic
-- Whether a publication's own contributors are its best distribution channel, and what evidence exists either way — Author recruitment may be an acquisition strategy rather than an editorial one
-- Wikipedia's or Wikimedia's fundraising results, already filed by `treasurer` at `research/2026-wikimedia-fundraising.md` — An $11 average gift and what it took to ask for it
+- Search Console and what an unindexed new domain can expect in months one to six — Organic search is the only channel that compounds without ongoing spend. Not worked this sprint; treasurer's Ghost analytics note already shows only 9 visitors from Google+Bing in 5.5 months, which weakens the case for prioritising this before other rows
+- Newsletter as a distribution channel: open rates and growth rates for small independent publications — Resend is already paid for and nearly unused, per `treasurer`. **Half-answered this sprint**: the tool-capability question is filed at `research/2026-resend-broadcasts-tool.md` (Resend Broadcasts does everything needed; the blocker was never tooling). Industry open-rate and growth-rate benchmarks specifically remain unresearched, left `todo` for that reason
+- X's own Card documentation returned HTTP 402 Payment Required to this session on 2026-09-20. Worth a periodic re-check of whether it is reachable, and whether the large-image headline-stripping behaviour (currently sourced to one independent commentator, corroborated only for the 2023-2024 period by tech press) still holds today — Found while working row 6. The share-card mechanical recommendation rests partly on a claim this seat could not verify against X's own primary source
+- Ask the 6 real members and 3 arm's-length contacts directly how they actually found Dialecta — Found while writing the funnel correction. Nobody has asked the only 6 people who ever converted what actually worked on them, and it is the cheapest research this seat could run: a personal question to 6 known people, not a study
+- Plausible Cloud's own pricing at Dialecta's traffic tier — Found while filing `research/2026-plausible-analytics-tool.md`. Self-hosting vs Cloud is a `treasurer` cost question this seat flagged but did not price
+- Whether Bluesky, Threads or Mastodon publish open, stable card/embed specs as an alternative to X's now-paywalled and historically unstable one — Found while working row 6. If X's card behaviour is genuinely this unreliable, it is worth knowing whether a newer platform is a more dependable place to plant the share-carries-the-proof strategy
 
 </details>
-
-**Gaps.** has filed nothing yet. reading list is 14 todo against 0 filed.
 
 ### `designer`
 
@@ -108,7 +117,7 @@
 | Positions | 31 |
 | Charter | `council/designer/charter.md` |
 | Brief | `council/designer/brief.md` |
-| Exchange | raised 4, addressed 5 |
+| Exchange | raised 4, addressed 6 |
 
 **What it has read.** 19 filed in `council/designer/research/`.
 
@@ -194,7 +203,7 @@
 | Positions | 35 |
 | Charter | `council/legal/charter.md` |
 | Brief | `council/legal/brief.md` |
-| Exchange | raised 7, addressed 1 |
+| Exchange | raised 7, addressed 2 |
 
 **What it has read.** 25 filed in `council/legal/research/`.
 
@@ -509,7 +518,7 @@
 | Practices | 21 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/builder/brief.md` |
-| Exchange | raised 2, addressed 9 |
+| Exchange | raised 2, addressed 10 |
 
 **What it has read.** 15 filed in `team/builder/knowledge/`.
 
@@ -556,7 +565,7 @@
 | Practices | 22 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/decider/brief.md` |
-| Exchange | raised 2, addressed 18 |
+| Exchange | raised 2, addressed 19 |
 
 **What it has read.** 9 filed in `team/decider/knowledge/`.
 
@@ -591,14 +600,14 @@
 | --- | --- |
 | Model | sonnet |
 | Tools | `Read`, `Edit`, `Write`, `Bash`, `Grep`, `Glob`, `WebSearch`, `WebFetch` |
-| Research | 14 filed, 13 sourced (8 external, 5 from this repo), 1 unsourced |
+| Research | 16 filed, 15 sourced (8 external, 7 from this repo), 1 unsourced |
 | Reading list | 3 todo, 10 filed, 0 dead |
-| Practices | 19 |
+| Practices | 24 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/migrator/brief.md` |
-| Exchange | raised 1, addressed 6 |
+| Exchange | raised 2, addressed 6 |
 
-**What it has read.** 14 filed in `team/migrator/knowledge/`.
+**What it has read.** 16 filed in `team/migrator/knowledge/`.
 
 | Source | What it changes here |
 | --- | --- |
@@ -607,11 +616,13 @@
 | Event sourcing: replaying a ledger against incrementally accumulating state | Cross-referenced from search: "Event Sourcing and the History of Accounting," |
 | [Postgres enum evolution: what ALTER TYPE can and cannot do](https://www.postgresql.org/docs/current/sql-altertype.html,) | PostgreSQL, "ALTER TYPE", https://www.postgresql.org/docs/current/sql-altertype.html, |
 | Schema diffing and drift-detection tools outside the Supabase CLI | GitHub Search API (`api.github.com/search/repositories`) and direct repo |
+| Schema squash runbook | *no implies section* |
 | [Supabase branching: what it copies, what it costs, whether it carries data](https://supabase.com/docs/guides/platform/branching,) | Supabase, "Branching", https://supabase.com/docs/guides/platform/branching, |
 | [Supabase CLI migration workflow](https://supabase.com/docs/guides/deployment/database-migrations,) | Supabase, "Database Migrations", https://supabase.com/docs/guides/deployment/database-migrations, |
 | Supabase db pull declarative mode, and migra against pg-delta | `supabase db pull --help` and `supabase db diff --help`, Supabase CLI |
 | [Supabase declarative schemas, and the case against them here](https://supabase.com/docs/guides/local-development/declarative-database-schemas,) | Supabase, "Declarative database schemas", |
 | [Testing RLS policies: pgTAP, supabase test db, and pg_policies](https://supabase.com/docs/guides/database/extensions/pgtap,) | Supabase, "pgTAP: Unit Testing", https://supabase.com/docs/guides/database/extensions/pgtap, |
+| The 34 LIVE UNVERIFIED markers, checked against real applied SQL | `supabase_migrations.schema_migrations`, project `mguulnibvzusfvyuowwh` |
 | The live migration names, read as a design history | *no implies section* |
 | The repo's 13 tables against the live schema and the spec | *no implies section* |
 | [Type generation into supabase/types.ts, and how it drifts](https://supabase.com/docs/guides/api/rest/generating-types,) | Supabase, "Generating TypeScript Types", |
@@ -642,7 +653,7 @@
 | Practices | 26 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/reviewer/brief.md` |
-| Exchange | raised 1, addressed 5 |
+| Exchange | raised 1, addressed 6 |
 
 **What it has read.** 17 filed in `team/reviewer/knowledge/`.
 
