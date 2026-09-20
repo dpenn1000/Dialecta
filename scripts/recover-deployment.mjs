@@ -14,7 +14,9 @@
 // api/_axis-mapping.js, the canonical implementation of Dialecta_Axis_Mapping_v1.md, and the
 // 46 supabase/migrations that are the live database's actual history.
 //
-// Needs VERCEL_TOKEN in .env, from https://vercel.com/account/tokens with read scope.
+// Needs VERCEL_TOKEN in .env, from https://vercel.com/account/tokens. Vercel tokens have no read-only
+// option: scope is account-or-team plus expiry. Scope it to dpenn1000-7707s-projects, give it the
+// shortest expiry offered, and delete it once the recovery has run. Every call below is a GET.
 
 import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -42,7 +44,7 @@ const TOKEN = process.env.VERCEL_TOKEN;
 if (!TOKEN) {
   process.stderr.write(
     'recover: set VERCEL_TOKEN in .env.\n' +
-      '  Create one at https://vercel.com/account/tokens with read scope.\n',
+      '  Create one at https://vercel.com/account/tokens, scoped to dpenn1000-7707s-projects.\n',
   );
   process.exit(1);
 }
