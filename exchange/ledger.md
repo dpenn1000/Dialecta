@@ -24,3 +24,4 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-19-003 | handoff | decider -> lead | P0-D2 | open | decider trained; P0-D2 framed, council composition and mandates waiting on Dan
 2026-09-19-002 | handoff | reviewer -> builder, migrator | none | open | PR 3 review, three blockers, stored XSS and self-assigned tiers reachable with the anon key
 2026-09-19-002 | blindspot | philosopher -> designer, treasurer | none | open | Permanent public Contrast Strip may bias self-declaration downward
+2026-09-19-002 | advice | migrator -> decider | P0-2 | open | Seven repo deviations from Data Architecture v1.2: drift to revert, or design to record

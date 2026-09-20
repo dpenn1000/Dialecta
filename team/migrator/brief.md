@@ -11,31 +11,99 @@ for the mandate; this file is the state of the training and what comes next.
 | Memory | `team/migrator/practices.md` |
 | Knowledge | `team/migrator/knowledge/` |
 | Leads | `team/migrator/knowledge/reading-list.md` |
+| Runbook | `team/migrator/p0-2-runbook.md` |
 | Skills it owns | `/dialecta-migration` |
 
 ## Where it is now
 
-Five practices from its mandate. Zero filed notes. The situation changed on 2026-09-19: the
-live Dialecta project (`mguulnibvzusfvyuowwh`, Pennington Media Group) holds 32 tables and 20
-applied migrations from April and May 2026, and 10 of the 13 tables this repo's two migrations
-create already exist there with rows. P0-2 is blocked on a decision, not on a login. Read
-`docs/handoffs/dialecta-handoff-2026-09-19-supabase-reality.md` first. `supabase/types.ts` is
-now generated from the live project and is the real shape.
+Trained, as of 2026-09-19. Eleven practices, up from five. Seven filed notes, up from
+zero. The five seeded leads are all filed and five new ones are open.
+
+The three tasks the last brief set are done:
+
+- **The schema diff exists.** `knowledge/2026-live-schema-diff.md` compares all 13
+  tables the repo creates against live and against the spec. Verdict on each. The
+  two known renames are confirmed (`comment_votes` to `tier_nominations`,
+  `opinion_positions` to `opinion_map_positions`) and four findings are new: live
+  `axis_events` has **no `delta` column**, so live counts where the spec sums; live
+  `aspirations` has **no `visibility`**, which the Growth Engine branches on; live
+  `comments` requires four not-null columns the repo lacks; and the repo omits spec
+  entities 10 and 11 (`follows`, `sparring_partners`) entirely, both of which are
+  live.
+- **The migration history is read.** `knowledge/2026-live-migration-history.md`
+  reconstructs 19 of the 20 names from the repo's own handoffs and marks the list as
+  unverified, because the authoritative list is in the live database. The useful
+  findings: live already has a `profiles.is_seed` flag, which is the mechanism
+  backlog B-D1 needs; `002_seed_dev_users` means the 14 live profiles are not 14
+  real people; `007_archetype_enum_canonical_only` shows this database already paid
+  the cost of narrowing an enum once; and `026b` shows the live history followed
+  fix-forward, the same rule this repo enforces.
+- **P0-2 is a runbook.** `p0-2-runbook.md`, every command checked against CLI 2.117.0.
+
+Two corrections to what the last brief assumed. The enum lead called `tier` the
+trap; it is not, the live `tier` enum is identical to the repo's seven values. The
+real enum mismatches are `fp_snapshot_reason`, `comment_status` and `archetype_id`.
+And the CLI does not need installing: `npx --yes supabase` resolves 2.117.0 on
+studio-pc, verified.
+
+P0-2 is still blocked on a decision, not on a login. Two exchange records are open
+and both go to `decider`: `2026-09-19-001` asks whether the September migrations
+were written knowing live existed, and `2026-09-19-002` asks whether seven repo
+deviations from the spec are drift to revert or design to record.
+
+**`2026-09-19-001` now has its answer, appended as evidence on the record.** Dan was
+asked and did not remember, and pointed out the work was done on studio-pc. It was.
+The scaffold arrived as `dialecta-scaffold.zip` from a Cowork chat, per
+`docs/handoffs/dialecta-handoff-2026-09-19-studio-pc.md`, whose install instructions
+tell Dan to create `dialecta-staging` and `db push` into it. Root `CLAUDE.md` at
+commit `96b26b8` described Supabase as four tables and Live, and the migration
+issues `create table` for all four. No session on this machine wrote the SQL, and
+the live project was first read at 19:07:49Z on 2026-09-19, 35 minutes after the
+scaffold was committed, only because Dan asked for help with the Supabase npx.
+
+So the migrations were written without knowledge of the live schema, which is the
+branch the record itself maps to adopting live. The record stays open because
+closing it is `decider`'s, and Dan has not confirmed the finding.
+
+Read `docs/handoffs/dialecta-handoff-2026-09-19-supabase-reality.md` first if you
+are new to this. `supabase/types.ts` is generated from the live project and is the
+real shape, with the limits set out in
+`knowledge/2026-supabase-type-generation-drift.md`.
+
+**The live RLS surface is measured**, not inferred. `scripts/check-env.mjs --rls`
+was run against the live project on 2026-09-19 and
+`knowledge/2026-live-rls-surface.md` holds the map. Nine tables are closed to the
+anonymous key, so `028_pre_launch_security_hardening` did real work. One defect
+found: every column on `profiles` is readable without authentication, including
+`is_admin`.
 
 ## Next three
 
-1. Run `/dialecta-research migrator`. The enum evolution lead is the trap: `tier` has seven values and the specs have already renamed two of them.
-2. Produce the table by table diff between `supabase/migrations/` and the live schema in `supabase/types.ts`. Not a migration, a comparison: for each of the 13 tables the repo creates, does the live one match, differ, or carry a different name. `comment_votes` against `tier_nominations` and `opinion_positions` against `opinion_map_positions` are the two known renames. This is the artifact the decision in exchange record 2026-09-19-001 needs.
-3. Do NOT write a migration and do NOT run `supabase db push` against anything. File a note instead on the 20 live migration names, which read as a design history (`035_growth_engine_schema`, `028_pre_launch_security_hardening`, `tier_nominations`). What they imply about the live design is the context the decision turns on.
+1. Fix the `profiles` column exposure, as soon as `2026-09-19-001` closes and a migration is allowed. Either column grants or a public-profile view. This is the highest-value small migration available and it is independent of which option wins.
+2. Run Part 1 of `p0-2-runbook.md` once Dan has logged in. Steps 1 to 8 are read-only. Two of the three questions it was written to answer are now answered, so what remains is the authoritative 20 migration names and the **policy text** behind the RLS map, which row counts cannot give. Step 6 is the one that matters.
+3. Do NOT write a migration until `2026-09-19-001` closes. When it does, three more are already scoped and are needed under all three options: `classifications.model` and `.prompt_version` (backlog A-2), `comments.delta_acknowledged` (spec entity 1), and `aspirations.visibility` plus `.research_consent_at` (spec entity 7). Write them against whichever schema wins.
 
 ## What this agent posts to the exchange
 
-An `advice` record to Dan through `decider` for any spec field that will not map. That is
-already its mandate; the exchange is where it goes.
+An `advice` record to Dan through `decider` for any spec field that will not map.
+That is already its mandate; the exchange is where it goes. `2026-09-19-002` is the
+worked example.
 
 Protocol in `exchange/README.md`. One record per question.
 
 ## Done looks like
 
-Enum and constraint traps are filed with examples. Every field in both migrations is either
-mapped to a spec line or listed as an open question. P0-2 is a runbook.
+All three met on 2026-09-19.
+
+- Enum and constraint traps are filed with examples:
+  `knowledge/2026-postgresql-enum-evolution.md` and
+  `knowledge/2026-postgresql-domains-vs-checks.md`.
+- Every field in both migrations is either mapped to a spec line or listed as an
+  open question: `knowledge/2026-live-schema-diff.md` for the mapping, exchange
+  `2026-09-19-002` for the questions.
+- P0-2 is a runbook: `p0-2-runbook.md`.
+
+The next bar is narrower. This agent has read a database it has never connected to.
+Everything in `knowledge/` about live is inference from a generated types file and
+from handoff prose. Done next time means the inferences are checked against the
+database itself, and the ones that were wrong are marked wrong.
