@@ -18,3 +18,6 @@ council/log/sprints/*.log
 *.tolken
 *.pem
 *credentials*.json
+
+# Recovered from a Vercel deployment artifact. Read it, compare it, promote nothing blind.
+_recovered/
