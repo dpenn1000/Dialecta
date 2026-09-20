@@ -1,0 +1,15 @@
+{
+  "mode": "apply",
+  "apiBase": "https://dialecta.vercel.app",
+  "when": "2026-04-28T04:50:24.833Z",
+  "results": [
+    {
+      "slug": "on-the-far-shore-of-fear",
+      "id": "69eff72be5eec200010d5310",
+      "status": "applied",
+      "sugCount": 8,
+      "originalLen": 14390,
+      "polishedLen": 14438
+    }
+  ]
+}

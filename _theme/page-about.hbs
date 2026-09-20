@@ -1,0 +1,593 @@
+{{!< default}}
+
+<style>
+  /* ─────────────────────────────────────────────────────────────────────
+     ABOUT PAGE — refreshed 2026-04-29
+     Editorial register: organic, soft, proud. Brass + walnut + paper.
+     ─────────────────────────────────────────────────────────────────────
+     Design choices
+     • Each major section becomes a paper-grained "leaf" with a wood-tone
+       spine on the left edge — gives the page the feel of a bound
+       monograph rather than a wall of body text.
+     • Walnut/cherry/burnt warm-browns layer underneath the existing
+       brass palette. Wood is for accents and ornaments only — never
+       the body color.
+     • All major sizes are clamp() so the page is mobile-aware from
+       the start.
+     • Paper-grain SVG is the canonical fractalNoise pattern used on
+       /, /articles/, post bodies, and editor cards.
+     ───────────────────────────────────────────────────────────────────── */
+
+  .about-page {
+    /* Page-scoped tokens */
+    --paper-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");
+    --walnut:    #4a2810;
+    --cherry:    #6e3917;
+    --burnt:     #8a4a18;
+    --mahogany:  #5e2a14;
+
+    /* Hero brass — high-key metallic for the hero zone, which sits over
+       the dark stone gradient of the page header. The canonical
+       --brass-gradient bottoms out at --brass-deep (#7a4a10) which
+       disappears on dark stone. This high-key version stays in the
+       brass-warm → brass-pale band (all readable values) while keeping
+       the light/peak/light shimmer of polished metal. The shadow uses
+       a hard dark stop so light text gets a crisp edge against the
+       grey backdrop. */
+    --hero-brass: linear-gradient(95deg,
+      var(--brass-warm)   0%,
+      var(--brass-bright) 22%,
+      var(--brass-pale)   50%,
+      var(--brass-bright) 78%,
+      var(--brass-warm)   100%);
+    --hero-brass-shadow:
+      drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45))
+      drop-shadow(0 2px 0 rgba(28, 24, 20, 0.30));
+
+    /* Card brass — for text that lives on the cream paper card surfaces.
+       Differs from the canonical --brass-gradient by swapping the
+       --brass-pale peak (#f5dfa0, which disappears on cream) for
+       --brass-bright (#ecb438, saturated yellow-orange that reads as
+       a peak shimmer without losing legibility). Keeps the
+       light/peak/light shimmer rhythm but with a visible peak. */
+    --card-brass: linear-gradient(95deg,
+      var(--brass-deep)   0%,
+      var(--brass-mid)    20%,
+      var(--brass-warm)   38%,
+      var(--brass-bright) 50%,
+      var(--brass-warm)   62%,
+      var(--brass-mid)    80%,
+      var(--brass-deep)   100%);
+
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 32px) clamp(60px, 8vw, 120px);
+    color: var(--ink);
+  }
+
+  /* ── HERO ─────────────────────────────────────────────────────────── */
+  .about-hero {
+    margin-bottom: clamp(40px, 6vw, 72px);
+    padding-bottom: clamp(28px, 4vw, 48px);
+    position: relative;
+  }
+  .about-hero::after {
+    content: "✦   ✦   ✦";
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1vw + 0.7rem, 1.4rem);
+    color: var(--gold);
+    letter-spacing: 0.4em;
+    margin-top: clamp(28px, 3vw, 40px);
+    opacity: 0.55;
+  }
+
+  .about-hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.28em;
+    text-transform: uppercase;
+    /* High-key brass for legibility on the dark stone backdrop. */
+    background: var(--hero-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--hero-brass-shadow);
+    display: inline-block;
+    margin-bottom: 18px;
+  }
+
+  .about-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 6vw + 0.5rem, 4.4rem);
+    font-weight: 500;
+    line-height: 1.05;
+    margin: 0 0 24px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    max-width: 14ch;
+  }
+  .about-hero-title em {
+    font-style: italic;
+    font-weight: 400;
+    /* High-key brass + harder shadow so the metallic shimmer reads on
+       the dark stone gradient. */
+    background: var(--hero-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--hero-brass-shadow);
+  }
+
+  .about-hero-lede {
+    font-family: var(--font-reading);
+    font-size: clamp(1rem, 0.5vw + 0.92rem, 1.25rem);
+    font-style: italic;
+    line-height: 1.7;
+    color: var(--text-lede);
+    max-width: 56ch;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  /* ── SECTION CARD (paper-grained leaf with wood spine) ─────────────── */
+  .about-card {
+    background-color: var(--paper);
+    background-image: var(--paper-grain);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    /* Padding cut ~40% from previous values; top equals sides so the
+       chrome around section headers feels even and snug. */
+    padding: clamp(14px, 2.4vw, 26px);
+    margin-bottom: clamp(18px, 3vw, 32px);
+    box-shadow:
+      0 1px 3px rgba(74, 40, 16, 0.04),
+      0 4px 18px rgba(74, 40, 16, 0.06);
+    position: relative;
+  }
+  /* Wood "spine" — clamps with the card padding so it doesn't poke
+     past the new tighter chrome. */
+  .about-card::before {
+    content: "";
+    position: absolute;
+    top: clamp(8px, 1.5vw, 14px);
+    bottom: clamp(8px, 1.5vw, 14px);
+    left: 0;
+    width: 3px;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      var(--burnt) 16%,
+      var(--cherry) 50%,
+      var(--burnt) 84%,
+      transparent 100%);
+    border-radius: 0 2px 2px 0;
+  }
+
+  .about-section-numeral {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(2.2rem, 4vw + 0.6rem, 3.4rem);
+    font-weight: 400;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--cherry) 0%, var(--burnt) 55%, var(--brass-mid) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0.85;
+    float: left;
+    margin: 4px 18px 0 0;
+  }
+
+  .about-section-label {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.22em;
+    text-transform: uppercase;
+    /* --card-brass swaps the canonical brass peak (--brass-pale) for
+       --brass-bright so the shimmer doesn't vanish on cream paper. */
+    background: var(--card-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--brass-shadow);
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+
+  .about-section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw + 0.6rem, 2.4rem);
+    font-weight: 500;
+    line-height: 1.12;
+    color: var(--ink);
+    margin: 0 0 18px;
+    letter-spacing: -0.005em;
+  }
+  .about-section-title em {
+    font-style: italic;
+    font-weight: 400;
+    /* Highlighted titlecase words: card-brass with visible peak.
+       This is the page's primary metallic moment; without the
+       brighter peak the "ro" in "Problem" disappeared on cream. */
+    background: var(--card-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--brass-shadow);
+  }
+
+  .about-body {
+    font-family: var(--font-reading);
+    font-size: 1rem;
+    line-height: 1.78;
+    color: var(--body);
+    margin: 0 0 1.1em;
+    font-weight: 400;
+  }
+  .about-body:last-child { margin-bottom: 0; }
+  .about-body strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* Pullquote — brass left rule, walnut italic */
+  .about-pullquote {
+    margin: clamp(20px, 3vw, 32px) 0;
+    padding: 18px 0 18px 22px;
+    border-left: 3px solid var(--gold);
+    background: linear-gradient(90deg, rgba(212,168,74,0.10) 0%, transparent 70%);
+  }
+  .about-pullquote p {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.1rem, 1vw + 0.95rem, 1.4rem);
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 0 10px;
+    font-weight: 400;
+  }
+  .about-pullquote cite {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cherry);
+    font-style: normal;
+  }
+
+  /* Wager strip — paper + brass-top-rule */
+  .wager-strip {
+    margin: clamp(20px, 3vw, 32px) 0;
+    padding: clamp(20px, 3vw, 28px);
+    background-color: var(--paper);
+    background-image: var(--paper-grain);
+    border-top: 2px solid var(--gold);
+    border-bottom: 1px solid var(--border-light);
+    border-radius: 0 0 6px 6px;
+  }
+  .wager-strip-label {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--brass-deep); font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .wager-strip-text {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.05rem, 1vw + 0.85rem, 1.35rem);
+    line-height: 1.55;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .wager-strip-text em {
+    font-style: italic;
+    color: var(--cherry);
+    font-weight: 500;
+  }
+
+  /* ── THREE THREADS ─────────────────────────────────────────────────── */
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: clamp(12px, 2vw, 20px);
+    margin-top: clamp(20px, 3vw, 28px);
+  }
+  .principle-card {
+    background-color: var(--bg-white);
+    background-image: var(--paper-grain);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: clamp(20px, 3vw, 26px);
+    box-shadow: 0 1px 4px rgba(74, 40, 16, 0.05);
+    position: relative;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .principle-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(74, 40, 16, 0.10);
+  }
+  .principle-card::before {
+    content: "✦";
+    position: absolute;
+    top: 12px; right: 16px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--gold);
+    opacity: 0.5;
+  }
+  .principle-word {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.4rem, 1vw + 1.1rem, 1.7rem);
+    font-weight: 500;
+    background: var(--brass-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--brass-shadow);
+    margin: 0 0 6px;
+    line-height: 1.1;
+  }
+  .principle-names {
+    font-family: var(--font-mono);
+    font-size: 9px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brass-deep);
+    margin-bottom: 12px;
+  }
+  .principle-desc {
+    font-family: var(--font-reading);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--body);
+    font-weight: 400;
+  }
+
+  /* ── BUILDER NOTE ──────────────────────────────────────────────────── */
+  .builder-note {
+    background-color: var(--paper);
+    background-image: var(--paper-grain);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: clamp(28px, 5vw, 44px);
+    margin: clamp(36px, 5vw, 56px) 0;
+    box-shadow:
+      0 1px 0 rgba(74, 40, 16, 0.06),
+      0 6px 24px rgba(74, 40, 16, 0.07),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    position: relative;
+  }
+  .builder-note::after {
+    content: "Dialecta";
+    position: absolute;
+    bottom: 14px; right: 22px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    opacity: 0.45;
+  }
+  .builder-note-label {
+    /* Letter-style header instead of mono caps. Italic display, brass
+       text + a thin brass rule under it. Reads as the salutation at
+       the top of a personal letter, which fits the builder note's
+       intimate register. */
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1;
+    margin: 0 0 18px;
+    padding-bottom: 8px;
+    display: inline-block;
+    border-bottom: 1px solid var(--gold);
+    background: var(--card-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--brass-shadow);
+  }
+  .builder-note-text {
+    font-family: var(--font-reading);
+    font-size: 1.02rem;
+    line-height: 1.78;
+    color: var(--body);
+    font-weight: 400;
+    font-style: italic;
+    margin: 0 0 18px;
+  }
+  .builder-note-sig {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--cherry);
+    text-align: right;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+  }
+
+  /* ── CTA ───────────────────────────────────────────────────────────── */
+  .about-cta {
+    text-align: center;
+    margin-top: clamp(48px, 7vw, 88px);
+    padding: clamp(32px, 5vw, 56px) clamp(20px, 4vw, 40px);
+    background-color: var(--paper);
+    background-image: var(--paper-grain);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow:
+      0 4px 24px rgba(74, 40, 16, 0.07),
+      inset 0 0 60px rgba(212, 168, 74, 0.05);
+  }
+  .about-cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 4vw + 0.4rem, 2.6rem);
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.1;
+    margin: 0 0 16px;
+  }
+  .about-cta-title em {
+    font-style: italic; font-weight: 300;
+    background: var(--brass-gradient);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--brass-shadow);
+  }
+  .about-cta-body {
+    font-family: var(--font-reading);
+    font-size: 1.02rem;
+    font-style: italic;
+    color: var(--text-lede);
+    max-width: 56ch;
+    margin: 0 auto 28px;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+  .about-cta-links {
+    display: flex; flex-wrap: wrap;
+    gap: 12px; justify-content: center;
+  }
+  .cta-btn-primary {
+    display: inline-block;
+    padding: 12px 26px;
+    background: var(--brass-gradient);
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+    box-shadow: 0 2px 0 rgba(74, 40, 16, 0.18);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .cta-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 0 rgba(74, 40, 16, 0.22);
+  }
+  .cta-btn-secondary {
+    display: inline-block;
+    padding: 12px 26px;
+    background: transparent;
+    border: 1px solid var(--cherry);
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--cherry);
+    text-decoration: none;
+    transition: all 0.18s ease;
+  }
+  .cta-btn-secondary:hover {
+    background: rgba(110, 57, 23, 0.06);
+    color: var(--walnut);
+    border-color: var(--walnut);
+  }
+
+  /* ── Mobile-only adjustments ───────────────────────────────────────── */
+  @media (max-width: 720px) {
+    .about-hero-title { max-width: none; }
+    .about-hero-title br,
+    .about-section-title br,
+    .about-cta-title br { display: none; }
+    .about-section-numeral { float: none; margin: 0 0 8px; display: block; }
+    .principle-card::before { font-size: 11px; top: 10px; right: 12px; }
+  }
+</style>
+
+<div class="about-page">
+
+  {{!-- HERO --}}
+  <div class="about-hero">
+    <div class="about-hero-eyebrow">About Dialecta</div>
+    <h1 class="about-hero-title">Where ideas are<br>the <em>protagonist.</em></h1>
+    <p class="about-hero-lede">Not identities. Not political teams. Not the loudest voice or the most outraged post. Just the idea itself, stripped of tribal labels, evaluated on its own merits.</p>
+  </div>
+
+  {{!-- 01 — THE PROBLEM --}}
+  <section class="about-card">
+    <span class="about-section-numeral">01</span>
+    <div class="about-section-label">The Problem</div>
+    <h2 class="about-section-title">The platforms got the<br>incentives <em>wrong.</em></h2>
+
+    <p class="about-body">Reward loops are extraordinarily powerful shapers of human behavior. The major platforms understood this and designed environments that reward outrage, identity performance, and tribal confirmation. Not because they wanted those outcomes, but because those behaviors maximized the metric they were optimizing for: engagement at any cost.</p>
+
+    <p class="about-body">The result, at scale, is a civilization measurably angrier, more fragmented, and less capable of honest disagreement. Not because people got worse. Because the environment selects for the worst behaviors available and calls it connection.</p>
+
+    <div class="about-pullquote">
+      <p>Human behavior is less influenced by stated values than by environmental incentives. Whatever a system rewards, humanity will adapt toward.</p>
+      <cite>Dialecta Founding Philosophy</cite>
+    </div>
+
+    <p class="about-body">This isn&rsquo;t a cynical claim. It&rsquo;s the premise for a different kind of design. If the same force that shaped behavior toward outrage can be redirected, the question becomes: what does an environment look like when it&rsquo;s designed to reward thinking well instead?</p>
+  </section>
+
+  {{!-- 02 — THE WAGER --}}
+  <section class="about-card">
+    <span class="about-section-numeral">02</span>
+    <div class="about-section-label">The Wager</div>
+    <h2 class="about-section-title">Redirecting the<br><em>reward loop.</em></h2>
+
+    <p class="about-body">Dialecta doesn&rsquo;t ask its contributors to be better people. It engineers conditions where thinking well is the most rewarding thing you can do here. The mechanics that elsewhere reward reflexive anger and group conformity are reoriented toward clarity, specificity, and honest engagement.</p>
+
+    <div class="wager-strip">
+      <div class="wager-strip-label">The founding bet</div>
+      <div class="wager-strip-text">Design an environment that rewards specificity, intellectual honesty, and genuine engagement. Then watch what <em>emerges.</em></div>
+    </div>
+
+    <p class="about-body">This means the platform isn&rsquo;t neutral. Nothing is. The only question is whether it&rsquo;s shaping the people inside it toward or away from their better capacities. Dialecta has made its choice. Every design decision (the tier system, the AI reflection prompt, the Thinking Fingerprint, the Stewards) exists to serve that single direction of travel.</p>
+  </section>
+
+  {{!-- 03 — THE PHILOSOPHY --}}
+  <section class="about-card">
+    <span class="about-section-numeral">03</span>
+    <div class="about-section-label">The Philosophy</div>
+    <h2 class="about-section-title">Three threads,<br>one <em>platform.</em></h2>
+
+    <div class="principles-grid">
+      <div class="principle-card">
+        <div class="principle-word">Post-Scarcity</div>
+        <div class="principle-names">The Condition</div>
+        <div class="principle-desc">The era of information scarcity is over. What&rsquo;s scarce now is the capacity to evaluate it: to distinguish the specific from the vague, the reasoned from the reflexive. Dialecta is a bet that this capacity can become socially rewarding.</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-word">Relationism</div>
+        <div class="principle-names">The Anthropology</div>
+        <div class="principle-desc">People are formed by the quality of the conversations they inhabit. A comment doesn&rsquo;t exist in isolation: it participates in a discourse, and that discourse either raises or degrades the people inside it.</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-word">Formation</div>
+        <div class="principle-names">The Stakes</div>
+        <div class="principle-desc">Discourse isn&rsquo;t transactional. Articulating a belief, having it challenged, refining it: that happens to you. The platform&rsquo;s design choices carry moral weight because they shape the kinds of people who inhabit it.</div>
+      </div>
+    </div>
+  </section>
+
+  {{!-- 04 — THE BALANCE --}}
+  <section class="about-card">
+    <span class="about-section-numeral">04</span>
+    <div class="about-section-label">The Balance</div>
+    <h2 class="about-section-title">Excellence as invitation,<br><em>never as gatekeeping.</em></h2>
+
+    <p class="about-body">Dialecta is literary, organic, and proud. It&rsquo;s also genuinely open, not as a compromise of its standards but as the fullest expression of them. There&rsquo;s a level of excellence here that serves as an example of how things can be done. But it can never be shameful or belittling.</p>
+
+    <div class="about-pullquote">
+      <p>People can&rsquo;t grow if they aren&rsquo;t invited, encouraged, or able to picture themselves in a different future.</p>
+      <cite>From the Stewards session, the mission statement beneath the mission statement</cite>
+    </div>
+
+    <p class="about-body">The tier system doesn&rsquo;t hide low-quality commentary; it describes it, and invites the writer to say more. The AI reflection doesn&rsquo;t block submission; it holds a mirror. The Thinking Fingerprint doesn&rsquo;t rank contributors against each other; it makes each person more legible to themselves. The platform takes its contributors seriously enough to push back. That&rsquo;s the highest form of respect it knows how to offer.</p>
+  </section>
+
+  {{!-- BUILDER NOTE --}}
+  <div class="builder-note">
+    <div class="builder-note-label">A note from the builder</div>
+    <p class="builder-note-text">Dialecta started as a family blog, a place for people I trusted to engage seriously with the questions I was turning over. It grew when it became clear that the problem it was trying to solve at a small scale was the same problem public discourse faces everywhere. The environment selects for the wrong behavior, and then we wonder why discourse degrades. This platform is a serious attempt to run the experiment in the other direction. It&rsquo;s early. It&rsquo;s unfinished. And I&rsquo;ve never been more convinced that the question it&rsquo;s asking is the right one.</p>
+    <div class="builder-note-sig">Daniel Pennington, Founder</div>
+  </div>
+
+  {{!-- CTA --}}
+  <div class="about-cta">
+    <h2 class="about-cta-title">The door is <em>open.</em></h2>
+    <p class="about-cta-body">Read the Pact. Understand what the platform asks of you and what it offers in return. If it sounds like a place you want to contribute to, you&rsquo;re already the kind of person we built it for.</p>
+    <div class="about-cta-links">
+      <a href="/pact/" class="cta-btn-primary">Read the Pact</a>
+      <a href="/stewards/" class="cta-btn-secondary">Meet the Stewards</a>
+    </div>
+  </div>
+
+</div>

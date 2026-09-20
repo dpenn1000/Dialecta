@@ -1,0 +1,31 @@
+{{!< default}}
+
+{{!--
+  /dev-admin/ — Platform admin dashboard.
+
+  Auth: any admin role grants entry. The mount React app reads the member's
+  effective_capabilities from /api/profile/<uuid> (returned by the RBAC layer
+  added in migration 017_admin_rbac) and gates each section accordingly.
+
+  Sections (each visible only to capability-holders):
+    Feedback   feedback.triage     queue + triage controls (placeholder until
+                                    feedback_items table + submit form ship)
+    Team       members.view        list admins, grant/revoke roles (functional)
+    Articles   articles.*          re-polish, reclassify, archive (placeholder)
+    Quotes     quotes.curate       links to /quotes/?admin=true (existing tool)
+    Members    members.view        directory with PII (placeholder)
+    Tuning     tuning.read         TUNING knob audit (placeholder)
+
+  Logged-out visitors see "please sign in." Members without any admin role
+  see "no access." The page itself is publicly reachable (Ghost doesn't gate
+  page visibility by member status); access enforcement lives at the API
+  layer via verifyCapability() in api/_capabilities.js.
+--}}
+
+<div
+  id="dialecta-dev-admin-root"
+  data-member-uuid="{{@member.uuid}}"
+  data-member-name="{{@member.name}}"
+></div>
+
+<script src="{{asset "js/dev-admin.js"}}" defer></script>

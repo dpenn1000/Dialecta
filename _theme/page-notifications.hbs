@@ -1,0 +1,16 @@
+{{!< default}}
+
+{{!--
+  /notifications/ — Full notification history.
+  Mounts dialecta-notifications-page.jsx (in bundle.js) into the root div.
+  Signed-out visitors get a sign-in nudge from the React component itself
+  (data-member-uuid is empty for them).
+--}}
+
+<main class="post-cell" id="dialecta-notifications-page-root"
+  data-member-uuid="{{@member.uuid}}"
+  data-member-email="{{@member.email}}"
+  data-member-name="{{@member.name}}">
+</main>
+
+<script src="{{asset 'js/notifications.js'}}" defer></script>

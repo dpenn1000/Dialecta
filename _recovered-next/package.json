@@ -1,0 +1,27 @@
+{
+  "name": "dialecta-next",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Dialecta Next.js project: API routes + SEO-surface SSR. Successor to dialecta-api.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "sync-theme": "node scripts/sync-theme.js",
+    "deploy": "npm run sync-theme && vercel --prod",
+    "deploy:all": "npm run sync-theme && vercel --prod && cd ../dialecta-api && vercel --prod"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@supabase/supabase-js": "^2.49.4",
+    "@anthropic-ai/sdk": "^0.39.0",
+    "resend": "^6.12.2",
+    "sharp": "^0.34.5"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "mode": "apply",
+  "apiBase": "https://dialecta.vercel.app",
+  "summary": {
+    "inserted": 2
+  },
+  "entries": [
+    {
+      "ghost_post_id": "69efc475e5eec200010d5299",
+      "slug": "on-doubt-and-devotion-when-faith-pauses",
+      "title": "On Doubt and Devotion: When Faith Pauses",
+      "author_name": "Maya Reiss",
+      "author_member_id": "seed:maya",
+      "word_count": 318,
+      "status": "inserted",
+      "declaration": {
+        "core_claim": "Faith should be understood, following Kierkegaard, as a posture sustained in spite of doubt rather than the elimination of doubt, which means thoughtful believers should keep practicing (showing up, praying, reading) even when they cannot recite the creed without flinching.",
+        "scope_boundary": "This is not a defense of any particular doctrine, an argument for or against Christianity's truth claims, or a guide to resolving specific theological questions. It is also not about deconstruction, deconversion, or whether to leave a tradition, and it does not address non-Christian traditions or the experience of unreflective believers.",
+        "strongest_objection": "A thoughtful reader could argue that this position romanticizes indefinite suspension and lets people avoid the harder intellectual work: if a creed contains specific propositional claims, perpetually 'showing up with the flinch' without ever resolving whether those claims are true is a kind of bad faith, sustaining the social and emotional benefits of religious belonging while quietly hollowing out its content. Kierkegaard's leap was meant to terminate in commitment, not in a permanent middle, and treating 'the middle' as a destination may simply be a more dignified version of the pretending the author criticizes."
+      },
+      "ai_analysis": {
+        "core_claim_detected": "Faith, following Kierkegaard, is a posture sustained despite doubt rather than achieved through doubt's elimination; therefore, thoughtful believers should continue practicing their tradition (showing up, praying, reading) even when they cannot affirm its claims without internal resistance.",
+        "alignment": "aligned",
+        "alignment_note": "Your declared core claim and the article's argument are substantially the same; the piece develops the Kierkegaardian frame and draws out its pastoral consequence without departing from your stated scope.",
+        "ai_suggested_tier": "forum",
+        "tier_reason": "The article reads as a specific, developed claim with clear scope boundaries, grounded reasoning (Kierkegaard, Simone Weil), and direct engagement with the strongest objection (the charge of bad faith and romanticized suspension). The author names the three failed options and proposes a fourth, making the position substantive enough for real disagreement.",
+        "specificity_score": 3,
+        "emotion": "medium",
+        "tribal_markers": false,
+        "tribal_example": null,
+        "opposing_view_engaged": "yes",
+        "flagged_passages": [
+          {
+            "passage": "One prominent Christian framing treats doubt as a problem to overcome, a temporary obstacle on the way back to settled belief. That framing has done real damage.",
+            "tier_pull": "forum",
+            "why": "Names a specific opposing position and claims a concrete consequence, setting up the contrast that structures the entire argument."
+          },
+          {
+            "passage": "When a thoughtful person stops being able to recite the creed without flinching, the responses available to them are usually three: pretend the flinch isn't there, leave the tradition entirely, or descend into a private crisis the community cannot see.",
+            "tier_pull": "forum",
+            "why": "Enumerates the failed options with precision, making the problem concrete and the fourth option's value legible."
+          },
+          {
+            "passage": "Letting the question sit without resolving it artificially.",
+            "tier_pull": "spark",
+            "why": "Reads as a strong intuition but stops short of explaining what 'artificial resolution' means or why sitting with the question avoids the bad-faith charge the author acknowledges."
+          },
+          {
+            "passage": "I have not stopped going to church because I sometimes don't know what I'm doing there. I have come to think that not-knowing-quite-what-I'm-doing is part of going.",
+            "tier_pull": "forum",
+            "why": "Moves from personal testimony to a propositional claim about the structure of faith practice itself, grounding the abstract argument in lived experience."
+          }
+        ],
+        "axis_suggestions": [
+          {
+            "topic": "Doubt and Faith",
+            "axis_a": "Doubt as obstacle to overcome on the path to settled belief",
+            "axis_b": "Doubt as constitutive condition that makes faith meaningful",
+            "type": "cartesian"
+          },
+          {
+            "topic": "Religious Practice Under Uncertainty",
+            "axis_a": "Continuing practice requires intellectual resolution of doctrinal claims",
+            "axis_b": "Continuing practice is possible and valid without resolving doctrinal claims",
+            "type": "cartesian"
+          },
+          {
+            "topic": "Kierkegaard's Leap",
+            "axis_a": "The leap terminates in commitment and settled conviction",
+            "axis_b": "The leap can be sustained indefinitely as a posture of practiced tension",
+            "type": "cartesian"
+          }
+        ],
+        "borderline_flag": false,
+        "borderline_other_tier": null,
+        "author_message": "You've built a clear architecture here: problem, Kierkegaardian frame, pastoral consequence, and lived example. The strongest remaining work would be to directly address the charge that perpetual 'showing up with the flinch' without intellectual resolution is itself a form of bad faith, perhaps by distinguishing between refusing to resolve and being unable to resolve, or post as-is."
+      }
+    },
+    {
+      "ghost_post_id": "69d5c5c083cd72000193f0cd",
+      "slug": "the-conversation-communities-keep-having-about-solar-and-what-the-evidence-actually-says",
+      "title": "The Conversation Communities Keep Having About Solar (And What the Evidence Actually Says)",
+      "author_name": "Daniel Pennington",
+      "author_member_id": "2f0d5ff2-570e-405a-8b40-ef5552660eb8",
+      "word_count": 2470,
+      "status": "inserted",
+      "declaration": {
+        "core_claim": "The most common technical objections to community-scale solar (environmental harm, rapid degradation, high cost, landfill waste, and risky PPAs) reflect outdated evidence from 10 to 15 years ago and no longer match what current data shows in 2026, leaving community decisions poorly informed regardless of outcome.",
+        "scope_boundary": "This piece is not arguing for or against the approval of any specific project, including the Lake Street Solar Project in Manchester, CT. It does not claim solar is beyond criticism, does not address site-specific concerns like wetland proximity or construction management quality, does not evaluate individual PPA contract terms, and does not dismiss the value of community input or opposition itself.",
+        "strongest_objection": "A thoughtful reader could argue the author cherry-picks favorable industry and trade-association sources (SEIA, Hanwha Qcells, NREL, Brattle) while treating projected futures (2035 recycling values, sustained electricity price growth, recycling economies in 2050) as if they were settled evidence. The 'evidence has moved' framing risks substituting one set of optimistic assumptions for another, since recycling infrastructure is still nascent in practice, degradation rates depend heavily on installation quality and Tier 1 sourcing that local projects may not guarantee, and load-growth forecasts driven by AI demand are themselves contested. The legitimate community concern may not be ignorance of new data but skepticism that vendor-aligned projections will materialize on the timelines promised, which the article does not seriously engage."
+      },
+      "ai_analysis": {
+        "core_claim_detected": "The five most common technical objections to community-scale solar (environmental harm, panel degradation, high cost, landfill waste, unfavorable PPAs) were well-founded 10-15 years ago but no longer match current evidence and technology as of 2026, leaving community decision-making poorly informed regardless of which way projects are decided.",
+        "alignment": "aligned",
+        "alignment_note": "Your independent read matches the author's declared core claim closely; the article systematically addresses each objection against updated evidence and explicitly disclaims taking a position on any specific project approval.",
+        "ai_suggested_tier": "forum",
+        "tier_reason": "This reads as a forum-tier article. It presents a specific, falsifiable claim (evidence has moved on five named objections), sets clear scope boundaries (not arguing for or against specific projects, not dismissing community input), engages the strongest objection directly (acknowledging vendor-aligned sources and contested projections), and grounds reasoning in named evidence sources rather than tribal framing.",
+        "specificity_score": 3,
+        "emotion": "low",
+        "tribal_markers": false,
+        "tribal_example": null,
+        "opposing_view_engaged": "partially",
+        "opposing_view_note": "The article acknowledges the strongest objection in its declared scope (vendor-aligned sources, nascent recycling infrastructure, contested load-growth forecasts) but does not seriously engage the skepticism that projections may not materialize on promised timelines, which is the core of the legitimate community concern the author identifies but does not address substantively in the text.",
+        "flagged_passages": [
+          {
+            "passage": "The recycling economy that will exist in 2050 will not resemble the one critics were rightly describing five years ago.",
+            "tier_pull": "spark",
+            "why": "This statement treats a projected future (2050 recycling economy) as settled evidence without acknowledging the gap between current nascent infrastructure and the $12 billion recovery value projected for 2035, which is itself a forecast dependent on sustained material prices and market conditions."
+          },
+          {
+            "passage": "Connecticut's average retail rate was 10.9 cents per kilowatt-hour in 2000. By 2020 it had reached 23.3 cents, a 114 percent increase in two d[truncated]",
+            "tier_pull": "spark",
+            "why": "The passage uses historical price growth to argue against falling electricity prices but does not engage the specific risk that AI-driven load growth forecasts (which the author cites) may not materialize, or that sustained electrification could flatten rather than steepen price curves."
+          },
+          {
+            "passage": "A project installed today reaches end of life in 25 to 30 years. The recycling economy that will exist in 2050 will not resemble the one critics were rightly describing five years ago.",
+            "tier_pull": "spark",
+            "why": "Substitutes one set of optimistic assumptions (recycling infrastructure will scale as projected) for another (current concerns are outdated) without addressing the contingency that private capital may not materialize if material recovery values don't sustain the timelines promised."
+          },
+          {
+            "passage": "Modern Tier 1 panels degrade at roughly 0.4 to 0.5 percent of output per year. Five years ago the industry average was around 0.7 percent.",
+            "tier_pull": "forum",
+            "why": "This passage is concrete and measurable; it names specific degradation rates, acknowledges the improvement trajectory, and notes the caveat that premium manufacturers achieve better results, grounding the claim in verifiable data rather than projection."
+          }
+        ],
+        "axis_suggestions": [
+          {
+            "topic": "Evidence Temporality",
+            "axis_a": "Historical data and current measured performance are the primary basis for evaluating technology claims",
+            "axis_b": "Projected future infrastructure and market conditions are equally valid as evidence for evaluating long-term sustainability claims",
+            "type": "cartesian"
+          },
+          {
+            "topic": "Community Risk Assessment",
+            "axis_a": "Communities should evaluate projects against best-case vendor projections and industry-aligned forecasts",
+            "axis_b": "Communities should evaluate projects against the risk that vendor projections and nascent infrastructure may not materialize on promised timelines",
+            "type": "cartesian"
+          },
+          {
+            "topic": "Information Asymmetry",
+            "axis_a": "Community opposition reflects outdated evidence and emotional reasoning rather than legitimate skepticism",
+            "axis_b": "Community opposition reflects rational skepticism about whether vendor-aligned projections will materialize, which is distinct from ignorance of new data",
+            "type": "cartesian"
+          }
+        ],
+        "borderline_flag": true,
+        "borderline_other_tier": "spark",
+        "author_message": "You've built a strong structure here: five named objections, each addressed against specific 2026 evidence, with clear scope boundaries that protect the article from being read as advocacy for any particular project. The energy driving this piece is genuine respect for community engagement paired with frustration at information lag. To move this toward unambiguous forum tier, engage directly with the contingency risk the author identifies in their own strongest-objection framing: what would need to be true about recycling infrastructure scaling, material recovery values sustaining, and load-growth forecasts holding for these projections to materialize, and what happens to the analysis if those conditions don't hold. Or post as-is."
+      }
+    }
+  ]
+}

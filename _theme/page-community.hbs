@@ -1,0 +1,24 @@
+{{!< default}}
+
+{{!--
+  /community/ — the contributors directory.
+
+  Activated by creating a Ghost page (Admin → Pages → New page) with
+  the slug `community`. The page itself can be empty; Ghost auto-routes
+  the template by filename.
+
+  React mounts the ContributorsList into #dialecta-community-root from
+  bundle.js. The list pulls from /api/profile/_list and renders cards
+  with name, archetype, Steward Order (if any), bio, and a Follow button
+  for signed-in viewers. Inline client-side search filter; no need for
+  a search backend at our scale.
+
+  Ghost nav update: change "Community" link from `/` to `/community/`
+  in Ghost admin → Settings → Navigation.
+--}}
+<div
+  id="dialecta-community-root"
+  data-viewer-uuid="{{#if @member}}{{@member.uuid}}{{/if}}"
+></div>
+
+<script src="{{asset 'js/community.js'}}" defer></script>

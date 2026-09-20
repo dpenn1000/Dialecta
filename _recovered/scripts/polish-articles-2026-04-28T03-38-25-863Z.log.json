@@ -1,0 +1,15 @@
+{
+  "mode": "apply",
+  "apiBase": "https://dialecta.vercel.app",
+  "when": "2026-04-28T03:38:25.866Z",
+  "results": [
+    {
+      "slug": "the-conversation-communities-keep-having-about-solar-and-what-the-evidence-actually-says",
+      "id": "69d5c5c083cd72000193f0cd",
+      "status": "applied",
+      "sugCount": 11,
+      "originalLen": 18056,
+      "polishedLen": 17886
+    }
+  ]
+}

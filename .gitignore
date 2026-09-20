@@ -20,7 +20,6 @@ council/log/sprints/*.log
 *credentials*.json
 
 # Recovered from a Vercel deployment artifact. Read it, compare it, promote nothing blind.
-_recovered/
 
 # NSSM service logs for the council API
 .committee-logs/
@@ -30,5 +29,8 @@ _recovered/
 scripts/.service-sd-backup.txt
 
 # Ghost theme, exported 2026-09-20. Quarantine, same rule as _recovered/.
-_theme/
-_recovered-next/
+
+# _recovered/, _recovered-next/ and _theme/ are deliberately NOT ignored.
+# They are recovered evidence and they are committed so one laptop failure cannot
+# lose them again. The quarantine is a rule, not a gitignore entry: read them, cite
+# them, promote nothing blind. See docs/RECOVERED.md.

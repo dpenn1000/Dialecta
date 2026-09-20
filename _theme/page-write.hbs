@@ -1,0 +1,39 @@
+{{!< default}}
+
+{{!--
+  /write/ — the article submission editor.
+
+  Authors are members with is_author = true on their Supabase profile.
+  This page mounts the React editor (compiled into bundle.js) when a Ghost
+  member is signed in. The editor itself does its own auth check by
+  passing member_uuid to /api/article/submit; the API verifies is_author
+  before accepting the submission.
+
+  Members who are not authors will be able to load the editor but get a
+  403 from the submit endpoint. That is intentional: the gate lives at
+  the API surface, not the page surface, so the auth model stays
+  consistent across all submission paths (future: API-only submission
+  flows, alternative editors, etc.).
+--}}
+
+{{#unless @member}}
+  <div style="max-width:600px;margin:120px auto;padding:32px;text-align:center;">
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.5rem;color:#2c2620;line-height:1.4;margin:0 0 18px;">
+      The editor is for members.
+    </p>
+    <p style="font-family:'Source Serif 4',Georgia,serif;font-size:1rem;color:#5a5248;line-height:1.7;max-width:440px;margin:0 auto 8px;">
+      <a href="/signin/" style="color:#b8862e;text-decoration:none;">Sign in</a>
+      to continue, or visit the
+      <a href="/fingerprint/" style="color:#b8862e;text-decoration:none;">contributors page</a>
+      to read what writers have been working on.
+    </p>
+  </div>
+{{else}}
+  <div
+    id="dialecta-editor-root"
+    data-member-uuid="{{@member.uuid}}"
+    data-member-email="{{@member.email}}"
+    data-member-name="{{@member.name}}"
+  ></div>
+  <script src="{{asset 'js/editor.js'}}" defer></script>
+{{/unless}}

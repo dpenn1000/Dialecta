@@ -1,0 +1,1174 @@
+{{!< default}}
+
+{{#post}}
+
+{{!-- ── READING SPINE ──
+      Stage 1 (visual mock): five segments naming the article's reading
+      modes plus the Bio close. Each segment carries a state mark
+      (pending / active / complete) and a small meta line. No JS yet —
+      states and counts are placeholders. Sticky just under the nav on
+      desktop, pinned to the bottom of the viewport on mobile. Future
+      stages will wire scroll-progress for Read, fetch the live voice
+      count for Discourse, and reflect pre-read / post-read declaration
+      status. Hrefs jump to the existing surfaces by id. --}}
+<nav class="post-spine" aria-label="Article reading spine">
+  <a class="post-spine-segment" href="#dialecta-pre-read-map" data-stage="reflect" data-state="pending">
+    <span class="post-spine-mark" aria-hidden="true">○</span>
+    <span class="post-spine-label">Reflect</span>
+    <span class="post-spine-meta">Pre-read</span>
+  </a>
+  <span class="post-spine-rule" aria-hidden="true"></span>
+  <a class="post-spine-segment" href="#post-content" data-stage="read" data-state="active">
+    <span class="post-spine-mark" aria-hidden="true">◉</span>
+    <span class="post-spine-label">Read</span>
+    <span class="post-spine-meta">Reading</span>
+  </a>
+  <span class="post-spine-rule" aria-hidden="true"></span>
+  <a class="post-spine-segment" href="#dialecta-declaration" data-stage="declare" data-state="pending">
+    <span class="post-spine-mark" aria-hidden="true">○</span>
+    <span class="post-spine-label">Declare</span>
+    <span class="post-spine-meta">After reading</span>
+  </a>
+  <span class="post-spine-rule" aria-hidden="true"></span>
+  <a class="post-spine-segment" href="#dialecta-comments" data-stage="discourse" data-state="pending">
+    <span class="post-spine-mark" aria-hidden="true">○</span>
+    <span class="post-spine-label">Discourse</span>
+    <span class="post-spine-meta">12 voices</span>
+  </a>
+  <span class="post-spine-rule" aria-hidden="true"></span>
+  <a class="post-spine-segment" href="#post-author-bio" data-stage="bio" data-state="pending">
+    <span class="post-spine-mark" aria-hidden="true">○</span>
+    <span class="post-spine-label">Bio</span>
+    <span class="post-spine-meta">Author</span>
+  </a>
+  <span class="post-spine-rule" aria-hidden="true"></span>
+  {{!-- Share segment. Click behavior is JS-driven (see inline script below):
+        if navigator.share is available (mobile, Safari macOS) we open the
+        OS native share sheet; otherwise we toggle the popover anchored
+        beneath. The href fallback scrolls to the inline share row at the
+        end of the article body so this still works without JS. --}}
+  <a class="post-spine-segment post-spine-share"
+     href="#post-share"
+     data-share-spine
+     data-stage="share"
+     data-state="pending"
+     aria-haspopup="true"
+     aria-expanded="false"
+     aria-controls="post-share-popover">
+    <span class="post-spine-mark post-spine-mark-svg" aria-hidden="true">
+      {{!-- 3-node "share network" mark. Brand-resonant: Dialecta's whole
+            architecture is about networks of conversation, so a network
+            glyph reads as both "share" and "join the graph". Inherits
+            currentColor from the same data-state hue chain as the other
+            spine marks. --}}
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="5"  r="2.5"/>
+        <circle cx="6"  cy="12" r="2.5"/>
+        <circle cx="18" cy="19" r="2.5"/>
+        <line x1="8.2"  y1="13.4" x2="15.8" y2="17.6"/>
+        <line x1="15.8" y1="6.4"  x2="8.2"  y2="10.6"/>
+      </svg>
+    </span>
+    <span class="post-spine-label">Share</span>
+    {{!-- No meta on this segment. Share is an action, not a reading
+          stage — a sub-line under the label would be filler, and the
+          extra width pushes the 6-item spine past container at typical
+          desktop sizes. --}}
+  </a>
+</nav>
+
+{{!-- ── SHARE POPOVER (anchored to the spine on desktop) ──
+      Hidden by default. Opens when the spine Share segment is tapped on
+      browsers without navigator.share support. The end-of-article row
+      below is the canonical inline surface; this popover is a quick-
+      access shortcut that mirrors the same buttons. --}}
+<div class="post-share-popover" id="post-share-popover" hidden role="menu" aria-label="Share this article">
+  <div class="post-share-popover-inner">
+    <a class="post-share-btn" data-share-target="x"        target="_blank" rel="noopener" aria-label="Share on X">
+      <span class="post-share-glyph" aria-hidden="true">𝕏</span><span class="post-share-label">X</span></a>
+    <a class="post-share-btn" data-share-target="facebook" target="_blank" rel="noopener" aria-label="Share on Facebook">
+      <span class="post-share-glyph" aria-hidden="true">f</span><span class="post-share-label">Facebook</span></a>
+    <a class="post-share-btn" data-share-target="linkedin" target="_blank" rel="noopener" aria-label="Share on LinkedIn">
+      <span class="post-share-glyph" aria-hidden="true">in</span><span class="post-share-label">LinkedIn</span></a>
+    <a class="post-share-btn" data-share-target="reddit"   target="_blank" rel="noopener" aria-label="Share on Reddit">
+      <span class="post-share-glyph" aria-hidden="true">r/</span><span class="post-share-label">Reddit</span></a>
+    <a class="post-share-btn" data-share-target="email"                                  aria-label="Share via email">
+      <span class="post-share-glyph" aria-hidden="true">✉</span><span class="post-share-label">Email</span></a>
+    <button class="post-share-btn" type="button" data-share-copy aria-label="Copy link">
+      <span class="post-share-glyph" aria-hidden="true">⛓</span><span class="post-share-label">Copy link</span></button>
+  </div>
+</div>
+
+<div class="post-layout">
+
+  <!-- ── MAIN ARTICLE COLUMN ── -->
+  <article class="post-article">
+
+    <!-- Feature image hero (optional, one per article).
+         Sits at the very top of the card via negative margins; must come
+         BEFORE the breadcrumb in markup or it overlaps the breadcrumb. -->
+    {{#if feature_image}}
+      <figure class="post-feature">
+        {{!-- Responsive feature image. Ghost transforms the original on
+              demand at /content/images/size/wXXX/... so the browser downloads
+              an appropriately-sized variant rather than the full upload
+              (which is often 1-3 MB for PNGs). The img_url helper resolves
+              against image_sizes in package.json. eager + async-decode is
+              the right pair for a LCP element above the fold. --}}
+        <img class="post-feature-image"
+             src="{{img_url feature_image size="m"}}"
+             srcset="{{img_url feature_image size="s"}} 600w,
+                     {{img_url feature_image size="m"}} 1000w,
+                     {{img_url feature_image size="l"}} 1600w,
+                     {{img_url feature_image size="xl"}} 2400w"
+             sizes="(max-width: 700px) 100vw, 800px"
+             alt="{{title}}"
+             loading="eager"
+             decoding="async">
+        {{#if feature_image_caption}}
+          <figcaption class="post-feature-caption">{{{feature_image_caption}}}</figcaption>
+        {{/if}}
+      </figure>
+    {{/if}}
+
+    <!-- Breadcrumb / topic chip — appears inside the card body, above the title. -->
+    <div class="post-breadcrumb">
+      <a href="/">Articles</a>
+      <span class="post-breadcrumb-sep">›</span>
+      {{#primary_tag}}
+        <span class="post-topic-chip" data-topic-slug="{{slug}}">{{name}}</span>
+      {{/primary_tag}}
+    </div>
+
+    <!-- Title -->
+    <h1 class="post-title">{{title}}</h1>
+
+    <!-- Lede / dek (from custom_excerpt) — sits ABOVE the byline, editorial
+         convention. Article identity (title + dek) before article meta. -->
+    {{#if custom_excerpt}}
+      <p class="post-lede">{{custom_excerpt}}</p>
+    {{/if}}
+
+    <!-- Meta bar -->
+    <div class="post-meta">
+      {{#primary_author}}
+        <div class="post-meta-author">
+          {{#if profile_image}}
+            <img src="{{profile_image}}" alt="{{name}}" class="post-meta-avatar">
+          {{else}}
+            <span class="post-meta-initials" data-author-name="{{name}}"></span>
+          {{/if}}
+          {{!-- Author name → /author/<slug>/ as fallback (Ghost's author archive
+                page, which lists their published work). The byline-override
+                script swaps href to /profile/?id=<member_id> when the article
+                has a Supabase row with a real author. --}}
+          <a class="post-meta-name" href="{{primary_author.url}}">{{name}}</a>
+        </div>
+      {{/primary_author}}
+      <span class="post-meta-dot">·</span>
+      <span>{{date format="MMMM D, YYYY"}}</span>
+      {{#if reading_time}}
+        <span class="post-meta-dot">·</span>
+        <span>{{reading_time}}</span>
+      {{/if}}
+      <!-- Tier badge — mounted by React using post classification data -->
+      <div id="dialecta-tier-badge" data-post-id="{{id}}" data-post-slug="{{slug}}"></div>
+    </div>
+
+    {{!-- ── DISCOURSE BYLINE CHIP ──
+          Stage 1 (visual mock): single-line affordance under the meta bar
+          announcing the Discourse Layer at the top of the article. Belt-
+          and-suspenders to the spine's Discourse segment — some readers
+          scan the meta bar, some scan the spine. Placeholder voice count
+          for now; future stage will fetch the live total alongside the
+          spine's own count update. --}}
+    <a class="post-discourse-chip" href="#dialecta-comments">
+      <span class="post-discourse-chip-mark" aria-hidden="true">⁂</span>
+      <span class="post-discourse-chip-label">Discourse</span>
+      <span class="post-discourse-chip-count">12 voices</span>
+      <span class="post-discourse-chip-cta">join the conversation →</span>
+    </a>
+
+    {{!-- ── PRE-READ OPINION MAP — relocated 2026-05-01 ──
+          The pre-read map mount no longer renders inline above the body.
+          It now lives inside the Reflect overlay (below, before {{/post}}).
+          Click the spine's Reflect segment to open it; the overlay also
+          auto-opens on first visit per (member, article). The article
+          column flows directly from meta → chip → body, recovering the
+          ~500-700px the inline map used to consume. --}}
+
+    <!-- ── ARTICLE BODY ── -->
+    <section id="post-content" class="post-content">
+      {{!-- Mobile-only Table of Contents disclosure. The DialectaSidebar
+            renders the TOC as a card on desktop. On phones, the sidebar
+            is hidden and the TOC needs to live inline near the top of
+            the body so it's actually useful while reading. CSS controls
+            visibility (.dialecta-mobile-only). --}}
+      <div id="dialecta-toc-mobile" class="dialecta-mobile-only"></div>
+
+      {{content}}
+
+      {{!-- Author sign-off. Hidden until the byline-override script
+            below populates it from the article's Supabase author row.
+            Renders as a hand-script signature in the author's chosen
+            font (profiles.signature_font) — a quiet ceremonial close
+            to the piece, like a hand-signed letter. Only appears when
+            the author has signed the Pact (pact_signed_name set). --}}
+      <div class="post-signoff" data-author-signoff hidden>
+        <span class="post-signoff-dash">—</span>
+        <span class="post-signoff-name" data-signoff-name></span>
+      </div>
+
+      {{!-- Mobile-only rotating quote. Same rotator as the sidebar
+            QuoteCard, surfaced here as a closing benediction before the
+            "The Conversation" transition. CSS hides on desktop. --}}
+      <div id="dialecta-quote-mobile" class="dialecta-mobile-only"></div>
+
+      {{!-- End-of-body sentinel for the IntersectionObserver that
+            auto-opens the Declare overlay. Triggers when ≥50% visible
+            (i.e., the reader has scrolled to the bottom of the article).
+            Zero visual footprint. --}}
+      <div id="post-content-end-sentinel" aria-hidden="true" style="height:1px;width:1px;"></div>
+    </section>
+
+    {{!-- ── AUTHOR BIO (editorial close) ──
+          Mirrors the Atlantic / NYT pattern: every article ends with a
+          short byline block giving the reader a way to know the author
+          and visit more of their work. Initial content uses Ghost's
+          primary_author (correct for legacy articles like Maya's). The
+          byline-override script below replaces name + bio + avatar +
+          profile-link href when the article has a Supabase row with a
+          real author (Path C-lite — every member-written article). --}}
+    {{#primary_author}}
+    <aside id="post-author-bio" class="post-author-bio" data-author-bio>
+      <div class="post-author-bio-avatar">
+        {{#if profile_image}}
+          <img src="{{profile_image}}" alt="{{name}}" class="post-author-bio-img">
+        {{else}}
+          <span class="post-author-bio-initials" data-author-name="{{name}}"></span>
+        {{/if}}
+      </div>
+      <div class="post-author-bio-text">
+        <div class="post-author-bio-name">{{name}}</div>
+        {{#if bio}}
+          <p class="post-author-bio-blurb">{{bio}}</p>
+        {{else}}
+          <p class="post-author-bio-blurb" style="display:none;"></p>
+        {{/if}}
+        <a class="post-author-bio-link" href="{{url}}">Visit {{name}}'s profile →</a>
+      </div>
+    </aside>
+    {{/primary_author}}
+
+    {{!-- ── SHARE ROW — editorial close ──
+          Sits after the author bio, before the discourse transition.
+          Sharing belongs at the moment a reader has just finished the
+          piece and met the author — they're most invested here. The
+          spine's Share segment is a quick-access shortcut to this same
+          surface (plus native-share invocation on supporting browsers).
+          Hrefs are populated by the inline script below from current
+          page meta (og:title + location.href), so Handlebars escaping
+          can't corrupt URL params. --}}
+    <section id="post-share" class="post-share-end" aria-label="Share this article">
+      <div class="post-share-eyebrow">⁂&nbsp;&nbsp;Pass it on</div>
+      <div class="post-share-row">
+        <a class="post-share-btn" data-share-target="x"        target="_blank" rel="noopener" aria-label="Share on X">
+          <span class="post-share-glyph" aria-hidden="true">𝕏</span><span class="post-share-label">X</span></a>
+        <a class="post-share-btn" data-share-target="facebook" target="_blank" rel="noopener" aria-label="Share on Facebook">
+          <span class="post-share-glyph" aria-hidden="true">f</span><span class="post-share-label">Facebook</span></a>
+        <a class="post-share-btn" data-share-target="linkedin" target="_blank" rel="noopener" aria-label="Share on LinkedIn">
+          <span class="post-share-glyph" aria-hidden="true">in</span><span class="post-share-label">LinkedIn</span></a>
+        <a class="post-share-btn" data-share-target="reddit"   target="_blank" rel="noopener" aria-label="Share on Reddit">
+          <span class="post-share-glyph" aria-hidden="true">r/</span><span class="post-share-label">Reddit</span></a>
+        <a class="post-share-btn" data-share-target="email"                                  aria-label="Share via email">
+          <span class="post-share-glyph" aria-hidden="true">✉</span><span class="post-share-label">Email</span></a>
+        <button class="post-share-btn" type="button" data-share-copy aria-label="Copy link">
+          <span class="post-share-glyph" aria-hidden="true">⛓</span><span class="post-share-label">Copy link</span></button>
+        <button class="post-share-btn post-share-native-btn" type="button" data-share-native aria-label="Share">
+          <span class="post-share-glyph post-share-glyph-svg" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5"  r="2.5"/>
+              <circle cx="6"  cy="12" r="2.5"/>
+              <circle cx="18" cy="19" r="2.5"/>
+              <line x1="8.2"  y1="13.4" x2="15.8" y2="17.6"/>
+              <line x1="15.8" y1="6.4"  x2="8.2"  y2="10.6"/>
+            </svg>
+          </span><span class="post-share-label">Share…</span></button>
+      </div>
+    </section>
+
+    {{!-- ── DECLARATION + OPINION MAP — relocated 2026-05-01 ──
+          The declaration block + post-read map mount no longer renders
+          inline below the body. It now lives inside the Declare overlay
+          (below, before {{/post}}). The overlay auto-opens when the
+          reader scrolls to the end of the body (IntersectionObserver on
+          #post-content-end-sentinel) and can also be opened manually via
+          the spine's Declare segment. --}}
+
+    <!-- ── ADMIN RE-POLISH MOUNT ──
+         Renders nothing for non-admin members. For admins (profiles.is_admin
+         = true), mounts a floating "Re-parse" button that opens a modal to
+         re-run polish on this article at a chosen level. -->
+    {{#if @member}}
+      <div
+        id="dialecta-admin-repolish"
+        data-post-id="{{id}}"
+        data-post-slug="{{slug}}"
+        data-member-id="{{@member.uuid}}"
+      ></div>
+
+      <!-- ── ADMIN RE-SETUP OPINION MAPS MOUNT ──
+           Same admin-only pattern. Floating button stacked above Re-parse;
+           opens a modal that re-classifies the article via the live
+           opinion-mapper and lets the admin pick a candidate framing to
+           commit. Smoke-test surface for the picker UX without writing a
+           new article. -->
+      <div
+        id="dialecta-admin-resetup-maps"
+        data-post-id="{{id}}"
+        data-post-slug="{{slug}}"
+        data-member-id="{{@member.uuid}}"
+      ></div>
+    {{/if}}
+
+    <!-- ── DISCOURSE LAYER TRANSITION ──
+         A deliberate visual handoff from "the article" (single voice) to
+         "the conversation" (community). The kicker tells the reader: a
+         different mode begins below. -->
+    <div class="post-discourse-transition">
+      <span class="post-discourse-kicker">The Conversation</span>
+    </div>
+
+    <!-- ── COMMENTS / DISCOURSE LAYER ── -->
+    <div
+      id="dialecta-comments"
+      data-post-id="{{id}}"
+      data-post-slug="{{slug}}"
+      data-post-title="{{title}}"
+      {{!-- primary_tag drives the Reach axis: a comment on an article
+            whose primary_tag is a topic the commenter hasn't engaged
+            before earns +1 Reach. Empty when the article has no
+            primary_tag (rare). --}}
+      data-post-primary-tag="{{#primary_tag}}{{slug}}{{/primary_tag}}"
+      {{#if @member}}
+        {{!-- Use @member.uuid (UUID v4 format), not @member.id (Mongo
+              ObjectID). The Supabase profiles table is keyed on
+              ghost_member_id which holds the UUID. Mixing the two
+              creates duplicate "ghost" profile rows when the API
+              lazy-creates against an ObjectID. Audit cause of the
+              Profile A vs Profile B duplicate from 2026-04-28. --}}
+        data-member-uuid="{{@member.uuid}}"
+        data-member-name="{{@member.name}}"
+        data-member-email="{{@member.email}}"
+      {{/if}}
+    ></div>
+
+  </article>
+
+  {{!-- 2026-04-29: the post-page sidebar moved to default.hbs so the
+        same sidebar persists across every page in the site rail. The
+        post-context data attributes that used to live on this aside
+        are now applied to the default-shell mount via {{#post}} block
+        when the current page IS a post. --}}
+
+</div>
+
+<!-- Author initials computation for post meta -->
+<script>
+  (function() {
+    var el = document.querySelector('.post-meta-initials[data-author-name]');
+    if (!el) return;
+    var name = el.getAttribute('data-author-name') || '';
+    var parts = name.trim().split(/\s+/).filter(Boolean);
+    var initials = parts.length >= 2
+      ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+      : (parts[0] ? parts[0].slice(0, 2).toUpperCase() : '?');
+    el.textContent = initials;
+  })();
+</script>
+
+<!-- ── BYLINE OVERRIDE (Path C-lite Phase 1D) ──
+     All member-written articles attribute to a single house Ghost staff
+     user (Daniel); the real author lives in Supabase as
+     articles.author_member_id → profiles.display_name. This script fetches
+     the article on page load and replaces the byline name + initials +
+     avatar with the real author's data when available. Falls back silently
+     to Ghost's byline for legacy articles (no Supabase row) so Maya's "On
+     Doubt and Devotion" and Daniel's solar piece continue to render
+     correctly via Ghost's primary_author. -->
+<script>
+  (function() {
+    // The discourse-layer mount carries data-post-id; it's the most
+    // stable carrier of the post ID on every post page.
+    var ctx = document.querySelector('#dialecta-comments[data-post-id]');
+    if (!ctx) return;
+    var postId = ctx.getAttribute('data-post-id');
+    if (!postId) return;
+    var apiBase = (window.__DIALECTA_API_URL__ || '').replace(/\/$/, '');
+    fetch(apiBase + '/api/article/' + encodeURIComponent(postId))
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (!data || !data.author || !data.author.display_name) return;
+        var realName       = data.author.display_name;
+        var realBio        = data.author.bio || '';
+        var realAvatar     = data.author.avatar_url || '';
+        var profileHref    = '/profile/?id=' + encodeURIComponent(data.author.member_id);
+        var signatureName  = data.author.pact_signed_name || '';
+        var signatureFont  = data.author.signature_font   || 'Mrs Saint Delafield';
+        function initialsOf(n) {
+          var parts = n.trim().split(/\s+/).filter(Boolean);
+          return parts.length >= 2
+            ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+            : (parts[0] ? parts[0].slice(0, 2).toUpperCase() : '?');
+        }
+        // Plain-HTML mirror of dialecta-underwriter-badge.jsx. Builds a
+        // brass-seal-plus-italic-wordmark span for paid-tier authors.
+        // Charter takes precedence over Honored when both flags are set.
+        // Returns null if author isn't on the paid tier. See memory
+        // project_underwriter_tier for canonical naming + positioning.
+        function makeUnderwriterBadge(author) {
+          if (!author || author.subscription_tier !== 'pro') return null;
+          var isCharter_ = author.is_charter === true;
+          var isHonored_ = author.is_gifted === true && !isCharter_;
+          var word = isCharter_ ? 'Charter Underwriter' : isHonored_ ? 'Honored' : 'Underwriter';
+          var tooltip = isCharter_
+            ? 'Charter Underwriter. Founding member who keeps Dialecta free to read.'
+            : isHonored_
+            ? 'Honored. A year of Dialecta gifted by another member.'
+            : 'Underwriter. Keeps Dialecta free to read.';
+          var uid = 'b' + Math.random().toString(36).slice(2, 9);
+          var vb = isCharter_ ? 32 : 28;
+          var px = isCharter_ ? 24 : 22;
+          var defs = '<defs>'
+            + '<linearGradient id="g-' + uid + '" x1="0" y1="0.5" x2="1" y2="0.5">'
+            +   '<stop offset="0%" stop-color="#7a4a10"/>'
+            +   '<stop offset="18%" stop-color="#b8862e"/>'
+            +   '<stop offset="36%" stop-color="#d4a84a"/>'
+            +   '<stop offset="50%" stop-color="#ecb438"/>'
+            +   '<stop offset="64%" stop-color="#d4a84a"/>'
+            +   '<stop offset="82%" stop-color="#b8862e"/>'
+            +   '<stop offset="100%" stop-color="#7a4a10"/>'
+            + '</linearGradient>'
+            + '<radialGradient id="s-' + uid + '" cx="0.30" cy="0.24" r="0.42">'
+            +   '<stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>'
+            +   '<stop offset="35%" stop-color="rgba(255,255,255,0.40)"/>'
+            +   '<stop offset="100%" stop-color="rgba(255,255,255,0)"/>'
+            + '</radialGradient>'
+            + '<radialGradient id="bg-' + uid + '" cx="0.68" cy="0.86" r="0.42">'
+            +   '<stop offset="0%" stop-color="rgba(60,30,5,0.32)"/>'
+            +   '<stop offset="100%" stop-color="rgba(60,30,5,0)"/>'
+            + '</radialGradient>'
+            + '<filter id="d-' + uid + '" x="-30%" y="-30%" width="160%" height="160%">'
+            +   '<feDropShadow dx="0" dy="0.8" stdDeviation="1.0" flood-color="#3a2208" flood-opacity="0.42"/>'
+            + '</filter>'
+            + '</defs>';
+          var inner;
+          if (isCharter_) {
+            inner = '<circle cx="16" cy="16" r="15" fill="none" stroke="#7a4a10" stroke-width="0.9" opacity="0.65" filter="url(#d-' + uid + ')"/>'
+              + '<circle cx="16" cy="16" r="13" fill="url(#g-' + uid + ')"/>'
+              + '<circle cx="16" cy="16" r="13" fill="url(#s-' + uid + ')"/>'
+              + '<circle cx="16" cy="16" r="13" fill="url(#bg-' + uid + ')"/>'
+              + '<circle cx="16" cy="16" r="13" fill="none" stroke="#5e3a08" stroke-width="0.6" opacity="0.55"/>'
+              + '<text x="16" y="16" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#5e3a08" opacity="0.72" font-family="Georgia, serif" font-weight="bold">&#9733;</text>'
+              + '<g transform="translate(10.5 9)" opacity="0.92"><path d="M 0 -2.4 L 0.4 -0.4 L 2.4 0 L 0.4 0.4 L 0 2.4 L -0.4 0.4 L -2.4 0 L -0.4 -0.4 Z" fill="white"/></g>'
+              + '<circle cx="10.5" cy="9" r="0.8" fill="white" opacity="0.85"/>';
+          } else {
+            inner = '<circle cx="14" cy="14" r="12" fill="url(#g-' + uid + ')" filter="url(#d-' + uid + ')"/>'
+              + '<circle cx="14" cy="14" r="12" fill="url(#s-' + uid + ')"/>'
+              + '<circle cx="14" cy="14" r="12" fill="url(#bg-' + uid + ')"/>'
+              + '<circle cx="14" cy="14" r="12" fill="none" stroke="#5e3a08" stroke-width="0.6" opacity="0.55"/>'
+              + '<g transform="translate(9 7.5)" opacity="0.92"><path d="M 0 -2.2 L 0.35 -0.35 L 2.2 0 L 0.35 0.35 L 0 2.2 L -0.35 0.35 L -2.2 0 L -0.35 -0.35 Z" fill="white"/></g>'
+              + '<circle cx="9" cy="7.5" r="0.7" fill="white" opacity="0.85"/>';
+          }
+          var seal = '<svg viewBox="0 0 ' + vb + ' ' + vb + '" width="' + px + '" height="' + px + '" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">' + defs + inner + '</svg>';
+          var wordHtml = '<span style="font-family:\'Cormorant Garamond\',Georgia,serif;font-style:italic;font-weight:500;font-size:13px;letter-spacing:0.005em;background:var(--brass-gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;text-shadow:0 1px 0 rgba(122,74,16,0.18);white-space:nowrap;">' + word + '</span>';
+          var span = document.createElement('span');
+          span.className = 'dialecta-underwriter-badge-inline';
+          span.title = tooltip;
+          span.setAttribute('aria-label', tooltip);
+          span.style.cssText = 'display:inline-flex;align-items:center;gap:7px;margin-left:10px;vertical-align:middle;flex-shrink:0;cursor:help;';
+          span.innerHTML = seal + wordHtml;
+          return span;
+        }
+        // ── 1. Byline (top-of-article meta bar) ─────────────────────────
+        var nameEl = document.querySelector('.post-meta-author .post-meta-name');
+        if (nameEl) {
+          nameEl.textContent = realName;
+          if (nameEl.tagName === 'A') nameEl.setAttribute('href', profileHref);
+        }
+        // Underwriter / Charter / Honored badge beside the byline name
+        // when the author is on the paid tier. See makeUnderwriterBadge
+        // helper above + memory project_underwriter_tier.
+        if (nameEl && nameEl.parentNode) {
+          var bylineAlready = nameEl.nextElementSibling
+            && nameEl.nextElementSibling.classList
+            && nameEl.nextElementSibling.classList.contains('dialecta-underwriter-badge-inline');
+          if (!bylineAlready) {
+            var bylineBadge = makeUnderwriterBadge(data.author);
+            if (bylineBadge) nameEl.parentNode.insertBefore(bylineBadge, nameEl.nextSibling);
+          }
+        }
+        var initialsEl = document.querySelector('.post-meta-author .post-meta-initials[data-author-name]');
+        if (initialsEl) {
+          initialsEl.setAttribute('data-author-name', realName);
+          initialsEl.textContent = initialsOf(realName);
+        }
+        if (realAvatar) {
+          var imgEl = document.querySelector('.post-meta-author .post-meta-avatar');
+          if (imgEl) {
+            imgEl.src = realAvatar;
+            imgEl.alt = realName;
+          } else if (initialsEl && initialsEl.parentNode) {
+            var img = document.createElement('img');
+            img.src = realAvatar;
+            img.alt = realName;
+            img.className = 'post-meta-avatar';
+            initialsEl.parentNode.replaceChild(img, initialsEl);
+          }
+        }
+        // ── 1.5 Author sign-off (signature at end of body) ──────────────
+        // Every authored article gets a signed close. Two registers:
+        //   - Pact-signed (pact_signed_name set): render the contributor's
+        //     pact_signed_name in their chosen hand-script font. Full
+        //     ceremonial treatment.
+        //   - Default (no Pact yet): render display_name in italic
+        //     Cormorant via the .post-signoff--unsigned modifier class.
+        //     Quieter treatment, no script font, but the article still
+        //     closes with visible attribution.
+        // Legacy articles with no Supabase author row never reach this
+        // branch (the early-return at !data.author kicks them out).
+        var signoffEl = document.querySelector('[data-author-signoff]');
+        if (signoffEl) {
+          var nameSlot = signoffEl.querySelector('[data-signoff-name]');
+          if (signatureName && nameSlot) {
+            // Per-font scale keeps visual height consistent across the
+            // 9 cursive faces. Mirror with SIGNATURE_FONT_SCALES in the
+            // picker (page-pact.hbs) + dialecta-profile-settings.jsx +
+            // PROFILE_SIG_SCALES in dialecta-profile.jsx.
+            var SIG_SCALES = {
+              'Mrs Saint Delafield':  1.00,
+              'Cherish':              0.85,
+              'Give You Glory':       1.40,
+              'Hurricane':            0.95,
+              'Love Light':           1.00,
+              'Nothing You Could Do': 1.10,
+              'Oooh Baby':            0.78,
+              'Qwigley':              1.45,
+              'WindSong':             1.00
+            };
+            var sigScale = SIG_SCALES[signatureFont] || 1;
+            nameSlot.textContent = signatureName;
+            nameSlot.style.fontFamily = '"' + signatureFont + '", cursive';
+            // Set --sig-scale custom property so the CSS calc() in
+            // .post-signoff-name picks up the per-font multiplier.
+            nameSlot.style.setProperty('--sig-scale', sigScale);
+            signoffEl.hidden = false;
+          } else if (realName && nameSlot) {
+            // Fallback for authors who haven't signed the Pact yet.
+            // CSS class swaps to italic Cormorant + smaller scale.
+            signoffEl.classList.add('post-signoff--unsigned');
+            nameSlot.textContent = realName;
+            signoffEl.hidden = false;
+          }
+        }
+        // ── 2. Article-bottom author bio (editorial close) ──────────────
+        var bioBlock = document.querySelector('[data-author-bio]');
+        if (bioBlock) {
+          var bioName = bioBlock.querySelector('.post-author-bio-name');
+          if (bioName) bioName.textContent = realName;
+          // Underwriter / Charter / Honored badge in the bio block.
+          // Same helper as the byline; same idempotency guard.
+          if (bioName && bioName.parentNode) {
+            var bioAlready = bioName.nextElementSibling
+              && bioName.nextElementSibling.classList
+              && bioName.nextElementSibling.classList.contains('dialecta-underwriter-badge-inline');
+            if (!bioAlready) {
+              var bioBadge = makeUnderwriterBadge(data.author);
+              if (bioBadge) bioName.parentNode.insertBefore(bioBadge, bioName.nextSibling);
+            }
+          }
+          var bioBlurb = bioBlock.querySelector('.post-author-bio-blurb');
+          if (bioBlurb) {
+            if (realBio) {
+              bioBlurb.textContent = realBio;
+              bioBlurb.style.display = '';
+            } else {
+              bioBlurb.style.display = 'none';
+            }
+          }
+          var bioLink = bioBlock.querySelector('.post-author-bio-link');
+          if (bioLink) {
+            bioLink.setAttribute('href', profileHref);
+            bioLink.textContent = "Visit " + realName + "'s profile →";
+          }
+          var bioInitials = bioBlock.querySelector('.post-author-bio-initials[data-author-name]');
+          if (bioInitials) {
+            bioInitials.setAttribute('data-author-name', realName);
+            bioInitials.textContent = initialsOf(realName);
+          }
+          if (realAvatar) {
+            var bioImg = bioBlock.querySelector('.post-author-bio-img');
+            if (bioImg) {
+              bioImg.src = realAvatar;
+              bioImg.alt = realName;
+            } else if (bioInitials && bioInitials.parentNode) {
+              var bioImgNew = document.createElement('img');
+              bioImgNew.src = realAvatar;
+              bioImgNew.alt = realName;
+              bioImgNew.className = 'post-author-bio-img';
+              bioInitials.parentNode.replaceChild(bioImgNew, bioInitials);
+            }
+          }
+        }
+      })
+      .catch(function() { /* swallow — Ghost byline is the fallback */ });
+  })();
+</script>
+
+<!-- Subtitle-hierarchy guard: if the article has a custom_excerpt rendered
+     as the .post-lede AND the first structural child of .post-content is
+     an H2 short enough to be a subtitle (under 15 words, the engine's
+     pseudo-header threshold), assume the polish engine duplicated the
+     subtitle role between dek and section heading. Remove the offending
+     H2 so the dek alone carries the subtitle.
+     Belt-and-suspenders to the aesthetic-suggest prompt rule that forbids
+     promoting the first body paragraph to H2 — protects pre-fix articles
+     and any future engine drift. -->
+<script>
+  (function() {
+    var lede = document.querySelector('.post-lede');
+    if (!lede) return;
+    var content = document.querySelector('.post-content');
+    if (!content) return;
+    // Find the first structural child (skip whitespace text nodes).
+    var firstEl = content.firstElementChild;
+    if (!firstEl || firstEl.tagName !== 'H2') return;
+    var words = (firstEl.textContent || '').trim().split(/\s+/).filter(Boolean);
+    if (words.length === 0 || words.length > 14) return;
+    // Looks like a subtitle that duplicates the dek's role. Remove it.
+    firstEl.parentNode.removeChild(firstEl);
+  })();
+</script>
+
+<!-- Title-subtitle split: render-time detection of editorial titles with
+     a parenthetical / colon / em-dash kicker. The kicker becomes its own
+     italic sub-title beneath the main, instead of fighting the main title
+     for visual weight. -->
+<script>
+  (function() {
+    var titleEl = document.querySelector('.post-article .post-title');
+    if (!titleEl) return;
+    var raw = titleEl.textContent.trim();
+    // Match "Main (Subtitle)" / "Main: Subtitle" / "Main — Subtitle".
+    var m = raw.match(/^(.+?)\s+\((.+)\)\s*$/) ||
+            raw.match(/^(.+?):\s+(.+)$/) ||
+            raw.match(/^(.+?)\s+[—–]\s+(.+)$/);
+    if (!m) return;
+    var main = m[1].trim();
+    var sub  = m[2].trim();
+    if (!main || !sub) return;
+    // Don't split if the kicker is suspiciously short (likely not a real
+    // subtitle). 3+ words is the threshold.
+    if (sub.split(/\s+/).filter(Boolean).length < 3) return;
+    titleEl.textContent = main;
+    var subEl = document.createElement('div');
+    subEl.className = 'post-subtitle';
+    subEl.textContent = sub;
+    titleEl.parentNode.insertBefore(subEl, titleEl.nextSibling);
+  })();
+</script>
+
+<!-- Topic chip color: thread the topic's canonical color into the chip's
+     border + text. Tag slugs from Ghost can carry a -2/-3 suffix (Ghost
+     auto-disambiguation); strip those before matching.
+
+     IMPORTANT: keep TOPIC_COLORS below in sync with src/topics.js (the
+     bundle's canonical source of truth). Handlebars cannot import from
+     the bundle, so this map is a parallel copy by necessity. When adding
+     a topic, edit src/topics.js first, then mirror the slug -> color pair
+     here. -->
+<script>
+  (function() {
+    var TOPIC_COLORS = {
+      'politics_governance':   '#9e2020',
+      'law_justice':           '#b04020',
+      'history':               '#9a5818',
+      'economics':             '#b87a18',
+      'environment_energy':    '#3a7a24',
+      'health_medicine':       '#287858',
+      'psychology_behavior':   '#267080',
+      'science_technology':    '#2650a0',
+      'philosophy_ethics':     '#3a3888',
+      'arts_humanities':       '#6a3a9a',
+      'theology_spirituality': '#7a2a80',
+      'society_culture':       '#8a2858',
+    };
+    var chip = document.querySelector('.post-topic-chip[data-topic-slug]');
+    if (!chip) return;
+    var slug = (chip.getAttribute('data-topic-slug') || '').replace(/-\d+$/, '');
+    var color = TOPIC_COLORS[slug];
+    if (!color) return;
+    chip.style.color = color;
+    chip.style.borderColor = color;
+  })();
+</script>
+
+<!-- Sources section detection: find a heading OR a bold-only paragraph
+     inside .post-content whose text matches a known reference-section
+     name (Sources / References / Notes / Bibliography / Citations /
+     Further Reading), tag it as .sources-heading, and tag every
+     following sibling (until the next heading) as .sources-body. Catches
+     both the heading-style markup AND the very common "**Sources**"
+     bold-paragraph pattern that markdown produces. -->
+<script>
+  (function() {
+    var pc = document.querySelector('.post-content');
+    if (!pc) return;
+    var nameRe = /^(sources|references|notes|bibliography|citations|further reading|works cited|works referenced|footnotes|endnotes)\s*:?\s*$/i;
+
+    function tagFollowingSiblings(startEl) {
+      var sib = startEl.nextElementSibling;
+      while (sib) {
+        var tag = sib.tagName.toLowerCase();
+        if (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4') break;
+        if (tag === 'p') {
+          sib.classList.add('sources-body');
+        } else if (tag === 'ol' || tag === 'ul') {
+          sib.classList.add('sources-list');
+          var items = sib.querySelectorAll('li');
+          for (var j = 0; j < items.length; j++) {
+            items[j].classList.add('sources-body');
+          }
+        }
+        sib = sib.nextElementSibling;
+      }
+    }
+
+    // Pattern 1: real heading.
+    var headings = pc.querySelectorAll('h1, h2, h3, h4');
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      if (!nameRe.test((h.textContent || '').trim())) continue;
+      h.classList.add('sources-heading');
+      tagFollowingSiblings(h);
+    }
+
+    // Pattern 2: <p><strong>Sources</strong></p> — markdown's "**Sources**".
+    // The <p> must contain ONLY the <strong> (no other prose around it).
+    var paras = pc.querySelectorAll('p');
+    for (var k = 0; k < paras.length; k++) {
+      var p = paras[k];
+      var strong = p.querySelector('strong');
+      if (!strong) continue;
+      // Verify the paragraph's only meaningful child is the <strong>.
+      var paraText = (p.textContent || '').trim();
+      var strongText = (strong.textContent || '').trim();
+      if (paraText !== strongText) continue;
+      if (!nameRe.test(strongText)) continue;
+      p.classList.add('sources-heading');
+      tagFollowingSiblings(p);
+    }
+  })();
+</script>
+
+{{!-- ══════════════════════════════════════════════════════════════════
+     SPINE-OWNED OVERLAYS (Reflect / Declare)
+     ══════════════════════════════════════════════════════════════════
+     The pre-read Opinion Map and the Author's Declaration both moved
+     out of inline rendering on 2026-05-01. They now live as honored
+     modal overlays anchored to the spine's Reflect and Declare
+     segments. The React mounts (#dialecta-pre-read-map and
+     #dialecta-declaration) sit INSIDE the overlay shells; the existing
+     React components find them by id and render normally. The overlay
+     is laid out in the DOM at all times (using opacity + pointer-events
+     to hide rather than `display:none`) so React can measure container
+     dimensions correctly on initial mount.
+
+     Open/close behavior:
+       Reflect (members only):
+         - Auto-opens 1.5s after page load on first visit per article
+           (tracked via localStorage key dialecta-reflect-seen-<post-id>)
+         - Click spine's Reflect segment opens manually any time
+         - Skip / scrim / Escape / × all close and mark seen
+
+       Declare (everyone):
+         - Auto-opens when #post-content-end-sentinel becomes ≥50%
+           visible, i.e., the reader has reached the end of the body
+         - Click spine's Declare segment opens manually any time
+         - Same dismissal options as Reflect
+
+     Skipped state intentionally leaves the spine mark as `pending` so
+     the reader can return via the spine. Once we wire Supabase state in
+     stage 3, declared positions will set the spine mark to `complete`
+     and skip the auto-open. --}}
+
+{{!-- ── REFLECT OVERLAY (pre-read declaration; members only) ── --}}
+{{#if @member}}
+<div
+  class="post-overlay"
+  data-overlay="reflect"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="post-overlay-reflect-title"
+>
+  <div class="post-overlay-scrim" data-overlay-close></div>
+  <div class="post-overlay-content">
+    <button class="post-overlay-close" data-overlay-close aria-label="Close">×</button>
+    <div class="post-overlay-kicker">⁂ The Delta Mechanic · Pre-read</div>
+    <h2 id="post-overlay-reflect-title" class="post-overlay-title">
+      Where do you stand <em class="dialecta-brass">before reading?</em>
+    </h2>
+    <p class="post-overlay-body">
+      Mark your position on the article's opinion axes. After reading,
+      you'll mark again, and the platform measures the shift. Your
+      declaration is private until you choose to surface it in the
+      conversation.
+    </p>
+
+    {{!-- React mount: DialectaPreReadMap finds this id and renders. --}}
+    <div
+      id="dialecta-pre-read-map"
+      data-post-id="{{id}}"
+      data-post-slug="{{slug}}"
+      data-member-uuid="{{@member.uuid}}"
+    ></div>
+
+    <div class="post-overlay-actions">
+      <button type="button" class="post-overlay-skip" data-overlay-close>Skip for now</button>
+    </div>
+  </div>
+</div>
+{{/if}}
+
+{{!-- ── DECLARE OVERLAY (post-read declaration + map; everyone) ── --}}
+<div
+  class="post-overlay"
+  data-overlay="declare"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="post-overlay-declare-title"
+>
+  <div class="post-overlay-scrim" data-overlay-close></div>
+  <div class="post-overlay-content post-overlay-content--wide">
+    <button class="post-overlay-close" data-overlay-close aria-label="Close">×</button>
+    <div class="post-overlay-kicker">⁂ The Author's Declaration</div>
+    <h2 id="post-overlay-declare-title" class="post-overlay-title">
+      <em class="dialecta-brass">What was committed;</em> what shifted
+    </h2>
+
+    {{!-- React mount: DialectaDeclaration finds this id and renders the
+          declaration block + post-read Opinion Map + "How the engine
+          read this" disclosure. --}}
+    <div
+      id="dialecta-declaration"
+      data-post-id="{{id}}"
+      data-post-slug="{{slug}}"
+      {{#if @member}}data-member-uuid="{{@member.uuid}}"{{/if}}
+    ></div>
+
+    <div class="post-overlay-actions">
+      <button type="button" class="post-overlay-skip" data-overlay-close>Close</button>
+    </div>
+  </div>
+</div>
+
+{{!-- ── OVERLAY CONTROL SCRIPT ──
+      Wires open/close, Escape/scrim/close-button dismissal, body scroll
+      lock, plus the two auto-open triggers. ~80 lines, no dependencies.
+      Spine state (data-state attribute) updates land in stage 3 once we
+      fetch declaration data from Supabase. --}}
+<script>
+  (function() {
+    var POST_ID = '{{id}}';
+    var REFLECT_SEEN_KEY = 'dialecta-reflect-seen-' + POST_ID;
+    var DECLARE_SEEN_KEY = 'dialecta-declare-seen-' + POST_ID;
+
+    // ── Reparent overlays to document.body ──
+    // The overlays render inside the post template, which lives inside
+    // .site-main (position: relative; z-index: 1). That creates a
+    // stacking context, and z-index: 500 on the overlay is bound by it,
+    // so the overlay ends up below the fixed nav (global z-index 100)
+    // even though its own z-index is much higher. Moving the elements
+    // to body escapes the stacking context and lets the overlay paint
+    // above everything.
+    document.querySelectorAll('.post-overlay').forEach(function(el) {
+      document.body.appendChild(el);
+    });
+
+    function getStorage(key) {
+      try { return localStorage.getItem(key); } catch (_) { return null; }
+    }
+    function setStorage(key, val) {
+      try { localStorage.setItem(key, val); } catch (_) {}
+    }
+
+    function openOverlay(stage) {
+      var overlay = document.querySelector('.post-overlay[data-overlay="' + stage + '"]');
+      if (!overlay || overlay.classList.contains('open')) return;
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.documentElement.classList.add('dialecta-overlay-open');
+      // Move focus to the close button for keyboard users. The React
+      // component inside has its own focusables; the close button is a
+      // safe always-present anchor.
+      var closeBtn = overlay.querySelector('.post-overlay-close');
+      if (closeBtn) {
+        setTimeout(function() { closeBtn.focus(); }, 60);
+      }
+    }
+
+    function closeOverlay(overlay) {
+      if (!overlay) overlay = document.querySelector('.post-overlay.open');
+      if (!overlay) return;
+      var stage = overlay.getAttribute('data-overlay');
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      // Mark seen so subsequent page loads don't auto-open again. Manual
+      // spine clicks always work regardless.
+      if (stage === 'reflect') setStorage(REFLECT_SEEN_KEY, '1');
+      else if (stage === 'declare') setStorage(DECLARE_SEEN_KEY, '1');
+      // Release scroll lock only when no overlay is still open.
+      if (!document.querySelector('.post-overlay.open')) {
+        document.documentElement.classList.remove('dialecta-overlay-open');
+      }
+    }
+
+    // Spine click → open the matching overlay. Read / Discourse / Bio
+    // segments keep their default anchor-jump behavior.
+    document.querySelectorAll('.post-spine-segment[data-stage="reflect"], .post-spine-segment[data-stage="declare"]').forEach(function(seg) {
+      seg.addEventListener('click', function(e) {
+        e.preventDefault();
+        openOverlay(seg.getAttribute('data-stage'));
+      });
+    });
+
+    // Close handlers (delegated). Anything carrying [data-overlay-close]
+    // — the scrim, the × button, or the Skip button — dismisses.
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('[data-overlay-close]')) {
+        closeOverlay(e.target.closest('.post-overlay'));
+      }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeOverlay();
+    });
+
+    // ── PLACEMENT COMMIT → OVERLAY CHROME TOGGLE ──
+    // PlacementCard fires these events when the reader's commit state
+    // flips. We add a `placement-committed` class to the matching overlay
+    // so CSS can hide the now-redundant Skip For Now actions row and the
+    // "skip and read" link; the React component renders its own primary
+    // "Begin reading →" close button, which is the canonical exit
+    // post-commit. Re-place fires the uncommit event, restoring chrome.
+    var STAGE_TO_OVERLAY = { pre_read: 'reflect', post_read: 'declare' };
+    document.addEventListener('dialecta:placement-committed', function(e) {
+      var name = STAGE_TO_OVERLAY[(e.detail || {}).stage];
+      if (!name) return;
+      var overlay = document.querySelector('.post-overlay[data-overlay="' + name + '"]');
+      if (overlay) overlay.classList.add('placement-committed');
+    });
+    document.addEventListener('dialecta:placement-uncommitted', function(e) {
+      var name = STAGE_TO_OVERLAY[(e.detail || {}).stage];
+      if (!name) return;
+      var overlay = document.querySelector('.post-overlay[data-overlay="' + name + '"]');
+      if (overlay) overlay.classList.remove('placement-committed');
+    });
+
+    // ── AUTO-OPEN: REFLECT (members only) ──
+    // First visit per (member, article): show the pre-read overlay 1.5s
+    // after page load so the page has settled before the modal appears.
+    {{#if @member}}
+    if (!getStorage(REFLECT_SEEN_KEY)) {
+      setTimeout(function() {
+        // Don't auto-open if another overlay is already up (e.g., the
+        // sitewide signup invite) or the reader has started scrolling
+        // into the article — interpret that as intent to read first.
+        if (document.querySelector('.post-overlay.open')) return;
+        if (window.scrollY > 200) return;
+        openOverlay('reflect');
+      }, 1500);
+    }
+    {{/if}}
+
+    // ── AUTO-OPEN: DECLARE ──
+    // IntersectionObserver on the end-of-body sentinel. When the sentinel
+    // becomes ≥50% visible the reader has reached the bottom of the body,
+    // so we open the Declare overlay (once per article per browser).
+    var sentinel = document.getElementById('post-content-end-sentinel');
+    if (sentinel && 'IntersectionObserver' in window && !getStorage(DECLARE_SEEN_KEY)) {
+      var observer = new IntersectionObserver(function(entries) {
+        if (!entries[0].isIntersecting) return;
+        if (document.querySelector('.post-overlay.open')) return;
+        if (getStorage(DECLARE_SEEN_KEY)) return;
+        openOverlay('declare');
+        observer.disconnect();
+      }, { threshold: 0.5 });
+      observer.observe(sentinel);
+    }
+  })();
+</script>
+
+<script>
+  // ─── Share wiring ───────────────────────────────────────────────────────
+  // Populates hrefs on platform-share buttons, handles copy-link, handles
+  // navigator.share() for native invocation, and toggles the spine popover
+  // on browsers without native share support. Runs entirely on what's
+  // already in the rendered DOM (og:title meta + location.href) so there's
+  // no Handlebars escaping path that could corrupt URL params.
+  //
+  // INTENTIONAL DUPLICATION: The intent-URL builders + the /api/share/track
+  // POST below mirror src/dialecta-share-utils.js. This file is HBS +
+  // inline <script>, NOT part of any ESM bundle, so it cannot import the
+  // shared module. Any change to channel taxonomy, intent-URL patterns,
+  // or the track endpoint MUST be mirrored here. This is the only place
+  // in the theme where the share helpers are intentionally duplicated.
+  // See dialecta-share-utils.js for the canonical React-side version.
+  (function () {
+    var TITLE = (document.querySelector('meta[property="og:title"]') || {}).content
+              || document.title || '';
+    var URL_ABS = location.href;
+
+    var TARGETS = {
+      x:        'https://x.com/intent/tweet?text=' + encodeURIComponent(TITLE) + '&url=' + encodeURIComponent(URL_ABS),
+      facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(URL_ABS),
+      linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(URL_ABS),
+      reddit:   'https://www.reddit.com/submit?url=' + encodeURIComponent(URL_ABS) + '&title=' + encodeURIComponent(TITLE),
+      email:    'mailto:?subject=' + encodeURIComponent(TITLE) + '&body=' + encodeURIComponent(URL_ABS),
+    };
+
+    // Set hrefs on every platform button.
+    document.querySelectorAll('[data-share-target]').forEach(function (el) {
+      var t = el.getAttribute('data-share-target');
+      if (TARGETS[t]) el.setAttribute('href', TARGETS[t]);
+    });
+
+    // Hide native-share buttons on browsers that don't support
+    // navigator.share (most desktops). Mobile browsers + Safari macOS
+    // keep them visible.
+    var NATIVE_OK = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
+    if (!NATIVE_OK) {
+      document.querySelectorAll('[data-share-native], .post-share-native-btn').forEach(function (el) {
+        el.hidden = true;
+      });
+    }
+
+    var popover = document.getElementById('post-share-popover');
+
+    function setPopover(open) {
+      if (!popover) return;
+      popover.hidden = !open;
+      var spine = document.querySelector('[data-share-spine]');
+      if (spine) spine.setAttribute('aria-expanded', String(open));
+    }
+
+    document.addEventListener('click', function (e) {
+      // Spine "Share" segment behavior:
+      //  - Native share available → invoke directly, no popover, no
+      //    navigation. Best UX on phones.
+      //  - Otherwise → toggle the popover anchored under the spine.
+      //  - JS-disabled fallback (no listener fires) → href="#post-share"
+      //    scrolls down to the inline row at the end of the article.
+      var spineShare = e.target.closest && e.target.closest('[data-share-spine]');
+      if (spineShare) {
+        if (NATIVE_OK) {
+          e.preventDefault();
+          navigator.share({ title: TITLE, url: URL_ABS }).catch(function () { /* user dismissed */ });
+          return;
+        }
+        // No native share — open the popover instead of jumping the page.
+        e.preventDefault();
+        setPopover(popover && popover.hidden);
+        return;
+      }
+
+      // Native-share button (end-of-article row) — invoke navigator.share.
+      var native = e.target.closest && e.target.closest('[data-share-native]');
+      if (native) {
+        e.preventDefault();
+        if (NATIVE_OK) {
+          navigator.share({ title: TITLE, url: URL_ABS }).catch(function () { /* user dismissed */ });
+        }
+        return;
+      }
+
+      // Copy link — write absolute URL to clipboard, flash a "copied"
+      // class for ~1.5s so CSS can show a confirmation cue.
+      var copy = e.target.closest && e.target.closest('[data-share-copy]');
+      if (copy) {
+        e.preventDefault();
+        var done = function () {
+          copy.classList.add('copied');
+          setTimeout(function () { copy.classList.remove('copied'); }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(URL_ABS).then(done).catch(function () {
+            // Older browsers — fall back to a temporary input.
+            var ta = document.createElement('textarea');
+            ta.value = URL_ABS;
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); done(); } catch (_) { /* swallow */ }
+            document.body.removeChild(ta);
+          });
+        }
+        return;
+      }
+
+      // Click outside the popover closes it.
+      if (popover && !popover.hidden) {
+        var inside = e.target.closest && (e.target.closest('.post-share-popover') || e.target.closest('[data-share-spine]'));
+        if (!inside) setPopover(false);
+      }
+    });
+
+    // Esc closes the popover.
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && popover && !popover.hidden) setPopover(false);
+    });
+
+    // ─── Share tracking ───────────────────────────────────────────────────
+    // Fires /api/share/track alongside each share action so share_events
+    // accumulates the analytics signal. Non-blocking; tracking failures
+    // never affect the user-facing share. The handler block above is
+    // left intact; this is an additive listener inside the same IIFE so
+    // it shares the NATIVE_OK closure variable.
+    var POST_ID = (function () {
+      var el = document.querySelector('[data-post-id]');
+      return el ? el.getAttribute('data-post-id') : '';
+    })();
+    var API_BASE_TRACK = (window.__DIALECTA_API_URL__ || '').replace(/\/$/, '');
+    var MEMBER_UUID_TRACK = window.__DIALECTA_MEMBER_UUID__ || null;
+
+    function trackShare(channel) {
+      if (!POST_ID) return;
+      try {
+        fetch(API_BASE_TRACK + '/api/share/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            surface_type: 'article',
+            surface_id:   POST_ID,
+            channel:      channel,
+            member_uuid:  MEMBER_UUID_TRACK,
+          }),
+          keepalive: true,
+        }).catch(function () { /* swallow */ });
+      } catch (_) { /* swallow */ }
+    }
+
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest && e.target.closest('[data-share-target]');
+      if (t) { trackShare(t.getAttribute('data-share-target')); return; }
+      if (e.target.closest && e.target.closest('[data-share-copy]'))   { trackShare('link');   return; }
+      if (e.target.closest && e.target.closest('[data-share-native]')) { trackShare('native'); return; }
+      var spine = e.target.closest && e.target.closest('[data-share-spine]');
+      if (spine && NATIVE_OK) { trackShare('native'); return; }
+    });
+  })();
+</script>
+
+<script src="{{asset 'js/post.js'}}" defer></script>
+
+{{/post}}

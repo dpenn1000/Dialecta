@@ -1,0 +1,60 @@
+-- ============================================================================
+-- 000_baseline_documentation.sql
+-- ----------------------------------------------------------------------------
+-- This file documents the baseline schema state that existed BEFORE formal
+-- migrations began. It is intentionally NOT executable SQL — it is a marker
+-- and a TODO for back-filling source-of-truth DDL.
+--
+-- Status as of 2026-04-27 (audit close):
+--
+-- Tables known to exist in production Supabase (created out-of-band via the
+-- Supabase dashboard SQL editor, prior to this migrations folder existing):
+--
+--   • profiles
+--       Columns inferred from api/profile/[id].js:
+--         id              uuid     PRIMARY KEY
+--         ghost_member_id text     UNIQUE NOT NULL  (lookup key)
+--         display_name    text
+--         bio             text
+--         avatar_url      text
+--         location        text
+--         created_at      timestamptz DEFAULT now()
+--       RLS: enabled per dashboard p2-13 description
+--
+--   • comments
+--       Columns inferred from api/comment.js inserts:
+--         id              uuid    PRIMARY KEY
+--         author_id       uuid    (Ghost member ID in Phase 1)
+--         article_id      uuid    (Ghost post ID in Phase 1)
+--         body            text
+--         status          enum    (writes use 'published')
+--         published_at    timestamptz
+--       Spec adds: created_at, status enum (draft/pending_review/published/suppressed)
+--       Migration 001 ALTERs this table to add `delta_acknowledged boolean`.
+--
+--   • classifications
+--       Columns inferred from api/comment.js inserts:
+--         id                  uuid    PRIMARY KEY
+--         comment_id          uuid    FK → comments.id
+--         ai_suggested_tier   enum
+--         self_declared_tier  enum    NULL when accepted
+--         final_tier          enum
+--         classified_at       timestamptz
+--       Spec adds many more fields (claim_text, specificity 0-3, emotion enum,
+--       tribal_markers bool, opposing_view_engaged enum, borderline_flag,
+--       commenter_message text, resolved_at timestamptz). Future migration
+--       should ALTER this table to add the missing fields when needed.
+--
+-- ----------------------------------------------------------------------------
+-- TODO: When convenient, capture authoritative DDL for the three baseline
+-- tables. Two paths:
+--   (a) Supabase dashboard → SQL editor → run `pg_dump --schema-only` query,
+--       paste the result into this file (replacing the comment block above
+--       with executable CREATE TABLE statements).
+--   (b) Adopt Supabase CLI: `supabase db pull` will generate a baseline
+--       migration automatically and place it in this folder.
+--
+-- Until (a) or (b) happens, this file remains documentation only. Migration
+-- 001 assumes the baseline tables exist and uses ALTER TABLE for additions
+-- to existing tables, CREATE TABLE IF NOT EXISTS for everything new.
+-- ============================================================================

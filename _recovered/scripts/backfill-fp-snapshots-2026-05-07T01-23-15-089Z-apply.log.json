@@ -1,0 +1,140 @@
+[
+  {
+    "memberId": "seed:maya",
+    "displayName": "Maya Reiss",
+    "actions": [
+      {
+        "action": "inserted",
+        "reason": "first_entry",
+        "captured_at": "2026-04-29T01:26:42.133Z",
+        "total_graduations": 0
+      }
+    ]
+  },
+  {
+    "memberId": "seed:wen",
+    "displayName": "Wen Zhao",
+    "actions": [
+      {
+        "action": "skip",
+        "reason": "no comments or articles"
+      }
+    ]
+  },
+  {
+    "memberId": "seed:anselm",
+    "displayName": "Father Anselm Okafor",
+    "actions": [
+      {
+        "action": "skip",
+        "reason": "no comments or articles"
+      }
+    ]
+  },
+  {
+    "memberId": "db180309-1b96-4d6d-8400-e15015eb715f",
+    "displayName": "David P",
+    "actions": [
+      {
+        "action": "skip",
+        "reason": "no comments or articles"
+      }
+    ]
+  },
+  {
+    "memberId": "69f337ce4e51770001fb524a",
+    "displayName": "Tom Gaetani",
+    "actions": [
+      {
+        "action": "skip",
+        "reason": "no comments or articles"
+      }
+    ]
+  },
+  {
+    "memberId": "69d5c5be83cd72000193f037",
+    "displayName": "Dialecta House",
+    "actions": [
+      {
+        "action": "skip",
+        "reason": "no comments or articles"
+      }
+    ]
+  },
+  {
+    "memberId": "7fc490f6-aa42-4d90-b387-926022503b0a",
+    "displayName": "Rylie Pennington",
+    "actions": [
+      {
+        "action": "inserted",
+        "reason": "first_entry",
+        "captured_at": "2026-04-29T19:17:32.025Z",
+        "total_graduations": 0
+      }
+    ]
+  },
+  {
+    "memberId": "df2e0dda-8d9a-4b2a-b833-81550f3466ac",
+    "displayName": "Mike P",
+    "actions": [
+      {
+        "action": "skip",
+        "reason": "no comments or articles"
+      }
+    ]
+  },
+  {
+    "memberId": "2f0d5ff2-570e-405a-8b40-ef5552660eb8",
+    "displayName": "Daniel Pennington",
+    "actions": [
+      {
+        "action": "inserted",
+        "reason": "first_entry",
+        "captured_at": "2026-04-27T23:54:19.357Z",
+        "total_graduations": 0
+      }
+    ]
+  },
+  {
+    "memberId": "64c6e1f4-512f-4982-bbdc-7885b5e30449",
+    "displayName": "Kathryn Pennington",
+    "actions": [
+      {
+        "action": "inserted",
+        "reason": "first_entry",
+        "captured_at": "2026-04-29T23:01:31.643Z",
+        "total_graduations": 0
+      }
+    ]
+  },
+  {
+    "memberId": "2cad87f0-7e3a-411e-ad7e-df14f9c49baa",
+    "displayName": "Lloyd Munroe III",
+    "actions": [
+      {
+        "action": "skip",
+        "reason": "no comments or articles"
+      }
+    ]
+  },
+  {
+    "memberId": "55869648-2cdb-47f4-90fd-1f1789f2b655",
+    "displayName": "Glen Nicholes",
+    "actions": [
+      {
+        "action": "skip",
+        "reason": "no comments or articles"
+      }
+    ]
+  },
+  {
+    "memberId": "8f9cc9da-fdbe-47d5-af6e-2323239ec932",
+    "displayName": "Right Said Fred",
+    "actions": [
+      {
+        "action": "skip",
+        "reason": "no comments or articles"
+      }
+    ]
+  }
+]

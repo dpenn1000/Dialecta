@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "functions": {
+    "api/article/classify.js": {
+      "includeFiles": "skills/**",
+      "maxDuration": 240
+    },
+    "api/article/classify-stream.js": {
+      "includeFiles": "skills/**",
+      "maxDuration": 240
+    }
+  },
+  "routes": [
+    { "src": "/api/classify", "dest": "/api/classify.js" },
+    { "src": "/api/comment", "dest": "/api/comment.js" },
+    { "src": "/api/profile/(?<id>[^/]+)", "dest": "/api/profile.js?id=$id" },
+    { "src": "/api/quotes/(?<sub>.+)", "dest": "/api/quotes.js?sub=$sub" },
+    { "src": "/api/quotes", "dest": "/api/quotes.js" },
+
+    { "src": "/contributor/(?<handle>[^/?#]+)/?", "dest": "/api/contributor.js?handle=$handle" },
+    { "src": "/library/(?<slug>[^/?#]+)/?",       "dest": "/api/library.js?slug=$slug" },
+    { "src": "/sitemap-public\\.xml",              "dest": "/api/sitemap.js" },
+    { "src": "/robots\\.txt",                       "dest": "/api/robots.js" }
+  ],
+  "crons": [
+    { "path": "/api/notifications/digest", "schedule": "0 * * * *" }
+  ]
+}

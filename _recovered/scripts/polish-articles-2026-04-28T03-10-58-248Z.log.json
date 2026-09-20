@@ -1,0 +1,36 @@
+{
+  "mode": "dry-run",
+  "apiBase": "https://dialecta.vercel.app",
+  "when": "2026-04-28T03:10:58.254Z",
+  "results": [
+    {
+      "slug": "on-the-far-shore-of-fear",
+      "id": "69eff72be5eec200010d5310",
+      "status": "would-apply",
+      "sugCount": 5,
+      "originalLen": 14082,
+      "polishedLen": 12299,
+      "stripped": [
+        "br"
+      ]
+    },
+    {
+      "slug": "on-doubt-and-devotion-when-faith-pauses",
+      "id": "69efc475e5eec200010d5299",
+      "status": "would-apply",
+      "sugCount": 2,
+      "originalLen": 1936,
+      "polishedLen": 1959,
+      "stripped": []
+    },
+    {
+      "slug": "the-conversation-communities-keep-having-about-solar-and-what-the-evidence-actually-says",
+      "id": "69d5c5c083cd72000193f0cd",
+      "status": "would-apply",
+      "sugCount": 5,
+      "originalLen": 18063,
+      "polishedLen": 12045,
+      "stripped": []
+    }
+  ]
+}

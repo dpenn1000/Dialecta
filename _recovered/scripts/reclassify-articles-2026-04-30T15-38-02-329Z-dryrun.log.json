@@ -1,0 +1,142 @@
+{
+  "mode": "dry-run",
+  "only_post_id": null,
+  "api_base": "https://dialecta.vercel.app",
+  "results": [
+    {
+      "ghost_post_id": "69f2937b4e51770001fb5218",
+      "core_claim_preview": "Revealing how much of everyday life is lived unconsciously. At its core, it’s saying the goal isn’t ",
+      "before_axes": [
+        {
+          "type": "cartesian",
+          "topic": "Source of aliveness",
+          "axis_a": "External novelty",
+          "axis_b": "Internal presence"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Change and avoidance",
+          "axis_a": "Escape pattern",
+          "axis_b": "Intentional shift"
+        }
+      ],
+      "recommended_type": "ternary",
+      "after_axes": [
+        {
+          "type": "ternary",
+          "topic": "Life change catalyst",
+          "poles": [
+            "External shift",
+            "Internal work",
+            "Disruption needed"
+          ]
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null
+    },
+    {
+      "ghost_post_id": "69f2594b4e51770001fb51d7",
+      "core_claim_preview": "Education should be free worldwide.",
+      "before_axes": [
+        {
+          "type": "cartesian",
+          "topic": "Funding model",
+          "axis_a": "Public investment",
+          "axis_b": "Market-based"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Cost feasibility",
+          "axis_a": "Burden manageable",
+          "axis_b": "Unsustainable"
+        }
+      ],
+      "recommended_type": "ternary",
+      "after_axes": [
+        {
+          "type": "ternary",
+          "topic": "Free education priority",
+          "poles": [
+            "Equity first",
+            "Economic return",
+            "Feasibility"
+          ]
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null
+    },
+    {
+      "ghost_post_id": "69d5c5c083cd72000193f0cd",
+      "core_claim_preview": "The most common technical objections to community-scale solar (environmental harm, rapid degradation",
+      "before_axes": [
+        {
+          "type": "cartesian",
+          "topic": "Evidence vintage",
+          "axis_a": "Current data",
+          "axis_b": "Received wisdom"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Read of opposition",
+          "axis_a": "Outdated heuristic",
+          "axis_b": "Rational caution"
+        }
+      ],
+      "recommended_type": null,
+      "after_axes": null,
+      "validation_error": null,
+      "written": false,
+      "error": "GHOST_ADMIN_API_URL not configured"
+    },
+    {
+      "ghost_post_id": "69efc475e5eec200010d5299",
+      "core_claim_preview": "Faith should be understood, following Kierkegaard, as a posture sustained in spite of doubt rather t",
+      "before_axes": [
+        {
+          "type": "cartesian",
+          "topic": "Doubt and faith",
+          "axis_a": "Obstacle",
+          "axis_b": "Constitutive"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Practice stance",
+          "axis_a": "Provisional",
+          "axis_b": "Settled"
+        }
+      ],
+      "recommended_type": null,
+      "after_axes": null,
+      "validation_error": null,
+      "written": false,
+      "error": "GHOST_ADMIN_API_URL not configured"
+    },
+    {
+      "ghost_post_id": "69eff72be5eec200010d5310",
+      "core_claim_preview": "The piece argues that humanity’s traditional frameworks for meaning, shaped by scarcity, survival, a",
+      "before_axes": [
+        {
+          "type": "cartesian",
+          "topic": "Human nature freed",
+          "axis_a": "Toward meaning",
+          "axis_b": "Toward distraction"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Constraint's role",
+          "axis_a": "Obstacle to growth",
+          "axis_b": "Condition for depth"
+        }
+      ],
+      "recommended_type": null,
+      "after_axes": null,
+      "validation_error": null,
+      "written": false,
+      "error": "GHOST_ADMIN_API_URL not configured"
+    }
+  ]
+}

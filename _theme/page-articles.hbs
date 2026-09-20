@@ -1,0 +1,149 @@
+{{!< default}}
+
+{{!--
+  Article archive at /articles/.
+
+  Activated by creating a Ghost page (Admin → Pages → New page) with the
+  slug `articles`. The page itself can be empty; Ghost auto-routes the
+  template by filename.
+
+  This is the dedicated article feed, separate from a member's profile
+  live-feed tab. Both surfaces show the same posts; this one is the
+  "browse all articles" entry point — accessed via the Articles link in
+  the editorial drawer/nav now that `/` renders the profile for
+  signed-in members.
+
+  The Ghost {{posts}} helper isn't available on a custom page template
+  by default, so we use {{#get "posts"}} with author + tag context.
+  Limit 50 keeps the page snappy; older content is reachable via tag
+  pages (/tag/[slug]/) and Ghost's built-in /page/N/ pagination if
+  needed in the future.
+--}}
+{{!--
+  Wrapper container with explicit padding because /articles/ is served
+  under .page-template, which has site-main padding zeroed (an override
+  intended for the post-layout grid on single article pages). Without
+  this wrapper the post-card grid would extend to the viewport edges.
+  Same gutter clamp values as .post-layout so the feed visually aligns
+  with single article pages.
+--}}
+<style>
+  /* ── Articles page hero — matches About + Guidebook bible ──
+     Hero-brass eyebrow + italic display title with brass em + italic
+     serif lede + asterism close. Same family vocabulary as every
+     other top-level page. */
+  .articles-page-wrap {
+    --hero-brass: linear-gradient(95deg,
+      var(--brass-warm)   0%,
+      var(--brass-bright) 22%,
+      var(--brass-pale)   50%,
+      var(--brass-bright) 78%,
+      var(--brass-warm)   100%);
+    --hero-brass-shadow:
+      drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45))
+      drop-shadow(0 2px 0 rgba(28, 24, 20, 0.30));
+  }
+  .articles-hero {
+    text-align: center;
+    margin-bottom: clamp(20px, 3vw, 36px);
+  }
+  .articles-hero-eyebrow {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.28em; text-transform: uppercase;
+    margin-bottom: 14px; display: inline-block;
+    background: var(--hero-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--hero-brass-shadow);
+  }
+  .articles-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw + 0.5rem, 3.6rem);
+    font-weight: 500; line-height: 1.05;
+    color: var(--text-primary);
+    margin: 0 auto 12px;
+    letter-spacing: -0.01em;
+    max-width: 14ch;
+  }
+  .articles-hero-title em {
+    font-style: italic; font-weight: 400;
+    background: var(--hero-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--hero-brass-shadow);
+  }
+  .articles-hero-lede {
+    font-family: var(--font-reading);
+    font-size: clamp(0.95rem, 0.5vw + 0.85rem, 1.1rem);
+    font-style: italic;
+    color: var(--text-lede);
+    line-height: 1.65; max-width: 56ch;
+    margin: 0 auto;
+  }
+  /* Brass-gradient rule under the hero — same vocabulary as the
+     Dev Admin "Signed in as" rule (height: 2px, brass-gradient,
+     centered, capped width). Replaces the previous asterism close. */
+  .articles-hero-rule {
+    height: 2px;
+    width: clamp(160px, 30vw, 280px);
+    margin: clamp(16px, 2.5vw, 24px) auto 0;
+    background: var(--brass-gradient);
+    border-radius: 1px;
+    opacity: 0.9;
+  }
+</style>
+<div class="articles-page-wrap" style="max-width: 1060px; margin: 0 auto; padding: 0 clamp(16px, 1.5vw + 10px, 32px);">
+  <header class="articles-hero">
+    <div class="articles-hero-eyebrow">The Library</div>
+    <h1 class="articles-hero-title">Every <em>Article</em></h1>
+    <p class="articles-hero-lede">Pull up a chair. Open a piece. Stay a while. Ideas this carefully made repay the reader who lingers.</p>
+    <div class="articles-hero-rule" aria-hidden="true"></div>
+  </header>
+<div class="post-feed">
+  {{#get "posts" filter="visibility:[public,members]" limit="50" include="tags,authors" order="published_at desc"}}
+    {{#foreach posts}}
+    <article class="post-card" data-post-id="{{id}}" onclick="window.location='{{url}}'" role="link" tabindex="0">
+
+      {{#primary_tag}}
+        <div class="post-card-tag" data-topic-slug="{{slug}}">{{name}}</div>
+      {{/primary_tag}}
+
+      <h2 class="post-card-title">
+        <a href="{{url}}">{{title}}</a>
+      </h2>
+
+      {{#if excerpt}}
+        <p class="post-card-excerpt">{{excerpt}}</p>
+      {{/if}}
+
+      <div class="post-card-meta">
+        {{#primary_author}}
+          {{!-- Author link: starts pointed at Ghost's author archive as
+                fallback, swapped to /profile/?id=<member_id> by the bulk
+                byline-override script in default.hbs. stopPropagation
+                keeps the card-level click from also firing. --}}
+          <a class="post-card-author" href="{{url}}" onclick="event.stopPropagation()">{{name}}</a>
+          <span class="post-card-meta-sep">·</span>
+        {{/primary_author}}
+        <span>{{date format="MMMM D, YYYY"}}</span>
+        {{#if reading_time}}
+          <span class="post-card-meta-sep">·</span>
+          <span>{{reading_time}} min read</span>
+        {{/if}}
+        <span id="dialecta-forum-rate-{{id}}" class="post-card-forum-rate" style="display:none;"></span>
+      </div>
+
+    </article>
+    {{/foreach}}
+  {{/get}}
+
+  {{#unless @member}}
+  <div class="feed-join-cta">
+    <p class="feed-join-label">Ideas are the protagonist.</p>
+    <p class="feed-join-sub">Join the conversation. Classify arguments, map your position, track how your thinking evolves.</p>
+    <a href="#/portal/signup" data-portal="signup" class="feed-join-btn">Create account</a>
+    <a href="#/portal/signin" data-portal="signin" class="feed-join-signin">Already a member? Sign in</a>
+  </div>
+  {{/unless}}
+</div>
+</div>

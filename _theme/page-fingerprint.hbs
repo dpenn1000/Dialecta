@@ -1,0 +1,393 @@
+{{!< default}}
+
+<style>
+  /* 2026-04-29: added horizontal padding. The page previously inherited
+     no edge padding and the grid (cards, hero carousel, stage rows)
+     ran flush to the device edge on phones, with no breathing room
+     between content and the screen frame. clamp matches the rest of
+     the refresh (16px on phones → 32px on desktop). */
+  .fp-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 clamp(16px, 3vw, 32px);
+
+    /* Brass tokens — match About + Guidebook bible. Hero zone sits on
+       the dark stone gradient backdrop; uses --hero-brass (high-key
+       metallic, all stops readable on stone). Card zones use
+       --card-brass (visible peak on cream). */
+    --hero-brass: linear-gradient(95deg,
+      var(--brass-warm)   0%,
+      var(--brass-bright) 22%,
+      var(--brass-pale)   50%,
+      var(--brass-bright) 78%,
+      var(--brass-warm)   100%);
+    --hero-brass-shadow:
+      drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45))
+      drop-shadow(0 2px 0 rgba(28, 24, 20, 0.30));
+    --card-brass: linear-gradient(95deg,
+      var(--brass-deep)   0%,
+      var(--brass-mid)    20%,
+      var(--brass-warm)   38%,
+      var(--brass-bright) 50%,
+      var(--brass-warm)   62%,
+      var(--brass-mid)    80%,
+      var(--brass-deep)   100%);
+  }
+
+  .fp-hero-eyebrow {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.28em; text-transform: uppercase; margin-bottom: 18px;
+    background: var(--hero-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--hero-brass-shadow);
+    display: inline-block;
+  }
+  .fp-hero-title {
+    font-family: var(--font-display); font-size: clamp(2.2rem, 6vw + 0.5rem, 4.4rem);
+    font-weight: 500; color: var(--text-primary); line-height: 1.05;
+    letter-spacing: -0.01em; margin-bottom: 24px; max-width: 14ch;
+  }
+  .fp-hero-title em {
+    background: var(--hero-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 400; font-style: italic;
+    filter: var(--hero-brass-shadow);
+  }
+  .fp-lede {
+    font-family: var(--font-reading); font-size: 1.15rem; line-height: 1.65;
+    color: var(--text-lede); font-weight: 300; font-style: italic;
+    max-width: 50ch; margin-bottom: 24px;
+  }
+  .fp-rule { height: 2px; background: var(--border-rule); width: 60px; margin-bottom: 56px; }
+
+  .fp-section { margin-bottom: 80px; }
+
+  .fp-section-label {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 8px;
+    background: var(--card-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--brass-shadow);
+    display: inline-block;
+  }
+  .fp-section-title {
+    font-family: var(--font-display); font-size: 2rem; font-weight: 600;
+    color: var(--text-primary); margin-bottom: 8px; line-height: 1.15;
+  }
+  .fp-section-desc {
+    font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;
+    font-weight: 300; max-width: 680px; margin-bottom: 32px;
+  }
+  .fp-section-desc em { font-style: italic; color: var(--text-primary); }
+  .fp-divider {
+    height: 1px; background: linear-gradient(to right, var(--border-rule), transparent 60%);
+    margin-bottom: 32px; opacity: 0.3;
+  }
+
+  /* Stage rows.
+     2026-04-29 stacked redesign: was a horizontal flex (image left,
+     text right) that shrank the text column to ~5-7 words wide once
+     the persistent sidebar took 320px on the right. Now sits inside
+     a 2x2 .fp-stage-grid (auto-fit, minmax 280px) so the four
+     lifecycle moments read as a four-up panel rather than a vertical
+     stack. Each card is column-flex with image on top and text
+     centered below. */
+  .fp-stage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .fp-stage-row {
+    background: var(--bg-white); border: 1px solid var(--border-light);
+    border-radius: var(--radius-md); padding: 28px clamp(18px, 2.5vw, 28px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .fp-stage-img { flex-shrink: 0; display: block; }
+  .fp-stage-text { width: 100%; max-width: 580px; min-width: 0; }
+  .fp-stage-sublabel {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--amber); margin-bottom: 6px;
+  }
+  .fp-stage-title {
+    font-family: var(--font-display); font-size: 1.6rem; font-weight: 500;
+    color: var(--text-primary); margin-bottom: 10px; font-style: italic; line-height: 1.1;
+  }
+  .fp-stage-desc {
+    font-family: var(--font-reading); font-size: 0.92rem; line-height: 1.65;
+    color: var(--text-secondary); max-width: 580px;
+  }
+
+  /* Archetype grid.
+     2026-04-29 stacked: each archetype card was image-left + text-right
+     in a 200px+1fr grid, which collapsed text to a 5-word lane once
+     the page was sharing the rail with the 320px sidebar. Now each
+     card stacks image-on-top, text-below, centered. The 2-up grid of
+     cards stays on wider screens; cards drop to 1-up at narrow widths. */
+  .fp-archetype-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .fp-archetype-card {
+    background: var(--bg-white); border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 28px clamp(18px, 2.5vw, 28px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .fp-archetype-sublabel {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--amber); margin-bottom: 6px;
+  }
+  .fp-archetype-title {
+    font-family: var(--font-display); font-size: 1.4rem; font-weight: 500;
+    color: var(--text-primary); margin-bottom: 10px; font-style: italic;
+  }
+  .fp-archetype-desc {
+    font-family: var(--font-reading); font-size: 0.88rem; line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  /* Texture */
+  .fp-texture-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .fp-texture-card {
+    background: var(--bg-white); border: 1px solid var(--border-light);
+    border-radius: var(--radius-md); padding: 32px 24px;
+    display: flex; flex-direction: column; align-items: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .fp-texture-sublabel {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--amber); margin-top: 18px; margin-bottom: 4px;
+  }
+  .fp-texture-title {
+    font-family: var(--font-display); font-size: 1.2rem; font-weight: 500;
+    color: var(--text-primary); margin-bottom: 8px; font-style: italic;
+  }
+  .fp-texture-desc {
+    font-family: var(--font-reading); font-size: 0.85rem; line-height: 1.6;
+    color: var(--text-secondary); text-align: center; max-width: 280px;
+  }
+
+  /* Footer */
+  .fp-footer {
+    border-top: 2px solid var(--amber); padding-top: 32px; margin-top: 48px; text-align: center;
+  }
+  .fp-footer-name { font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.2em; color: var(--amber); margin-bottom: 6px; }
+  .fp-footer-sub { font-family: var(--font-mono); font-size: 9px; color: var(--text-secondary); letter-spacing: 0.1em; text-transform: uppercase; }
+  .fp-footer-tag { font-family: var(--font-reading); font-style: italic; font-size: 0.85rem; color: var(--text-tertiary); margin-top: 12px; }
+
+  /* Below 720: stage + archetype already stack at every width since
+     the 2026-04-29 refactor; this block only carries the size cuts
+     (smaller fingerprints, tighter padding, scaled-down titles) for
+     phone viewports. */
+  @media (max-width: 720px) {
+    .fp-archetype-grid, .fp-texture-grid { gap: 14px; }
+    .fp-archetype-card { padding: 22px 18px; gap: 14px; }
+    .fp-stage-row { padding: 22px 18px; gap: 16px; }
+    .fp-stage-img { width: 140px !important; height: 140px !important; }
+    .fp-section { margin-bottom: 48px; }
+    .fp-section-title { font-size: clamp(1.4rem, 5vw + 0.4rem, 2rem); }
+    .fp-section-desc { font-size: 0.88rem; }
+    .fp-stage-title { font-size: 1.35rem; }
+    .fp-archetype-title { font-size: 1.25rem; }
+    .fp-rule { margin-bottom: 36px; }
+  }
+  @media (max-width: 480px) {
+    .fp-archetype-card img,
+    .fp-texture-card img { width: 180px !important; height: 180px !important; }
+    .fp-stage-img { width: 110px !important; height: 110px !important; }
+  }
+</style>
+
+<div class="fp-page">
+
+  <!-- HEADER -->
+  <div style="margin-bottom: 24px;">
+    <div class="fp-hero-eyebrow">Dialecta · Identity Element</div>
+    <h1 class="fp-hero-title">The Thinking <em>Fingerprint</em></h1>
+    <p class="fp-lede">An identity artifact that grows with you. No two contributors produce the same shape, and they shouldn't.</p>
+    <div class="fp-rule" style="margin-bottom: 24px;"></div>
+  </div>
+
+  <!-- SECTION 01: HERO CAROUSEL (React, interactive) -->
+  <div class="fp-section">
+    <div style="text-align: center; margin-bottom: 28px;">
+      <div class="fp-section-label">Three Contributors</div>
+      <h2 class="fp-section-title">The same six axes. Three completely different lives.</h2>
+      <p class="fp-section-desc" style="margin-left: auto; margin-right: auto;">Select a contributor to see how their fingerprint reflects their actual engagement history: the topics they wrote about, the tiers they earned, the axes they developed.</p>
+    </div>
+    <div id="fp-hero-root" style="min-height: 480px;"></div>
+  </div>
+
+  <!-- SECTION 02: STAGES OF GROWTH (static SVGs) -->
+  <div class="fp-section">
+    <div class="fp-section-label">02 · Stages of Growth</div>
+    <h2 class="fp-section-title">A fingerprint grows ring by ring.</h2>
+    <p class="fp-section-desc">The same contributor seen at four moments in her life on the platform. Each axis develops independently; some petals bloom faster than others. That's the point.</p>
+    <div class="fp-divider"></div>
+
+    <div class="fp-stage-grid">
+      <div class="fp-stage-row">
+        <img class="fp-stage-img" src="{{asset 'png/fp-stage-newborn.png'}}" width="180" height="180" loading="eager" alt="Newborn fingerprint">
+        <div class="fp-stage-text">
+          <div class="fp-stage-sublabel">0 comments</div>
+          <h3 class="fp-stage-title">Newborn</h3>
+          <p class="fp-stage-desc">Six seed points marking the potential of who you could become. The center holds.</p>
+        </div>
+      </div>
+
+      <div class="fp-stage-row">
+        <img class="fp-stage-img" src="{{asset 'png/fp-stage-early.png'}}" width="180" height="180" loading="eager" alt="Early fingerprint">
+        <div class="fp-stage-text">
+          <div class="fp-stage-sublabel">~5 comments</div>
+          <h3 class="fp-stage-title">Early</h3>
+          <p class="fp-stage-desc">First petals appear. A young reader writes about her own anxiety, raw and unformed: more venting than claiming. Discourse already carries Heat. The fingerprint tilts low, speaking before thinking.</p>
+        </div>
+      </div>
+
+      <div class="fp-stage-row">
+        <img class="fp-stage-img" src="{{asset 'png/fp-stage-emerging.png'}}" width="180" height="180" loading="eager" alt="Emerging fingerprint">
+        <div class="fp-stage-text">
+          <div class="fp-stage-sublabel">~50 comments</div>
+          <h3 class="fp-stage-title">Emerging</h3>
+          <p class="fp-stage-desc">A character begins to show. Mental-health experience is still the foundation, but psychology now appears in her recent rings. Old Heat persists at the center; outer rings calm. Calibration grows as she learns to update her positions publicly.</p>
+        </div>
+      </div>
+
+      <div class="fp-stage-row">
+        <img class="fp-stage-img" src="{{asset 'png/fp-stage-mature.png'}}" width="180" height="180" loading="eager" alt="Mature fingerprint">
+        <div class="fp-stage-text">
+          <div class="fp-stage-sublabel">200+ comments</div>
+          <h3 class="fp-stage-title">Mature</h3>
+          <p class="fp-stage-desc">A fully-formed identity. Innermost rings blue from early anxiety writing, middle rings teal from clinical psychology, outer rings warm brown from the philosophical questions psychology opens up. The Discourse petal still carries a small Heat core: the learning scar of someone who arrived writing from feeling and figured out how to reason.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 03: ARCHETYPES (eight canonical signatures, static SVGs).
+       SVGs are generated via `npm run build:archetypes`, which calls the
+       Fingerprint engine through React's renderToStaticMarkup with the
+       hypothetical-but-canonical data sets in src/dialecta-archetype-grid.jsx.
+       Re-run that script when the engine evolves or the data is tuned;
+       commit the regenerated SVG files. -->
+  <div class="fp-section">
+    <div class="fp-section-label">03 · How to Read a Fingerprint</div>
+    <h2 class="fp-section-title">Eight archetypes. Eight shapes.</h2>
+    <p class="fp-section-desc">Certain axes compete for the same cognitive budget. Acuity trades against Reach. Discourse trades against Calibration and Magnanimity. A contributor cannot max everything at once. The trade-offs make a true circle structurally impossible and force every fingerprint into a real shape.</p>
+    <div class="fp-divider"></div>
+
+    <div class="fp-archetype-grid">
+      <div class="fp-archetype-card">
+        <img src="{{asset 'png/fp-arch-skeptic.png'}}" width="200" height="200" loading="eager" alt="Skeptic fingerprint">
+        <div>
+          <div class="fp-archetype-sublabel">Archetype</div>
+          <h3 class="fp-archetype-title">The Skeptic</h3>
+          <p class="fp-archetype-desc">Questions premises before accepting conclusions. High Acuity reaches the rim with high Consistency. Magnanimity sits shorter than its neighbors because she is sharper than she is generous. Tier history is Forum-clean. The halo reads cool steel: she works in philosophy, science, and the psychology of judgment.</p>
+        </div>
+      </div>
+      <div class="fp-archetype-card">
+        <img src="{{asset 'png/fp-arch-synthesizer.png'}}" width="200" height="200" loading="eager" alt="Synthesizer fingerprint">
+        <div>
+          <div class="fp-archetype-sublabel">Archetype</div>
+          <h3 class="fp-archetype-title">The Synthesizer</h3>
+          <p class="fp-archetype-desc">Finds unexpected connections across domains. Reach extends to the edge while Consistency stays modest, the signature of someone whose positions evolve as new connections appear. Calibration runs high, Magnanimity higher. Tier history is Forum and Spark, no Breach. The halo carries every color: there is no domain she has not engaged with.</p>
+        </div>
+      </div>
+      <div class="fp-archetype-card">
+        <img src="{{asset 'png/fp-arch-advocate.png'}}" width="200" height="200" loading="eager" alt="Advocate fingerprint">
+        <div>
+          <div class="fp-archetype-sublabel">Archetype</div>
+          <h3 class="fp-archetype-title">The Advocate</h3>
+          <p class="fp-archetype-desc">Argues the strongest version of opposing views. Heavy Calibration and Magnanimity, heavy Discourse. The contributor others want to argue with because she treats their arguments better than they do. Discourse carries visible wave texture; high-volume engagement with hard positions leaves a wake before calming. Topic focus: politics and economics.</p>
+        </div>
+      </div>
+      <div class="fp-archetype-card">
+        <img src="{{asset 'png/fp-arch-builder.png'}}" width="200" height="200" loading="eager" alt="Builder fingerprint">
+        <div>
+          <div class="fp-archetype-sublabel">Archetype</div>
+          <h3 class="fp-archetype-title">The Builder</h3>
+          <p class="fp-archetype-desc">Extends ideas into practical frameworks. Acuity is precise and Consistency runs high; frameworks have to hold. Discourse and Magnanimity sit shorter because she is building, not debating. Tier history is Forum-heavy. The halo reads warm: science, technology, environment, the domains where ideas turn into things.</p>
+        </div>
+      </div>
+      <div class="fp-archetype-card">
+        <img src="{{asset 'png/fp-arch-empiricist.png'}}" width="200" height="200" loading="eager" alt="Empiricist fingerprint">
+        <div>
+          <div class="fp-archetype-sublabel">Archetype</div>
+          <h3 class="fp-archetype-title">The Empiricist</h3>
+          <p class="fp-archetype-desc">Grounds every claim in evidence and data. Acuity reaches the rim with Calibration close behind; new data updates the position, but only when the data is real. Tier history is the cleanest on the platform, almost pure Forum across every axis. The halo reads green and clinical-blue: science, health, environment.</p>
+        </div>
+      </div>
+      <div class="fp-archetype-card">
+        <img src="{{asset 'png/fp-arch-contextualist.png'}}" width="200" height="200" loading="eager" alt="Contextualist fingerprint">
+        <div>
+          <div class="fp-archetype-sublabel">Archetype</div>
+          <h3 class="fp-archetype-title">The Contextualist</h3>
+          <p class="fp-archetype-desc">Situates ideas in their historical and cultural frame. Magnanimity and Reach are tall: she sees how positions arise from where the contributor stands. Acuity is moderate because she is not prosecuting one claim, she is mapping the field. The halo reads warm brown and deep purple: history, culture, philosophy, theology.</p>
+        </div>
+      </div>
+      <div class="fp-archetype-card">
+        <img src="{{asset 'png/fp-arch-illuminator.png'}}" width="200" height="200" loading="eager" alt="Illuminator fingerprint">
+        <div>
+          <div class="fp-archetype-sublabel">Archetype</div>
+          <h3 class="fp-archetype-title">The Illuminator</h3>
+          <p class="fp-archetype-desc">Makes complex ideas accessible without losing nuance. High Acuity, high Magnanimity, high Reach. She has to understand it, frame it generously, and know enough domains to translate between them. Discourse is shorter because she is teaching, not debating. Tier history is Forum-clean. The halo carries arts purple, philosophy indigo, and a band of science blue.</p>
+        </div>
+      </div>
+      <div class="fp-archetype-card">
+        <img src="{{asset 'png/fp-arch-reviser.png'}}" width="200" height="200" loading="eager" alt="Reviser fingerprint">
+        <div>
+          <div class="fp-archetype-sublabel">Archetype</div>
+          <h3 class="fp-archetype-title">The Reviser</h3>
+          <p class="fp-archetype-desc">Publicly updates positions when shown evidence. Signature: extraordinarily high Calibration, the axis that measures willingness to revise. Her tier history is unusually clean because the process of public updating protects her from Fog and Heat. Modest Reach; she refines rather than invents. The halo reads green: renewable energy is her dominant territory.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 04: READING THE TEXTURE (static SVGs) -->
+  <div class="fp-section">
+    <div class="fp-section-label">04 · Reading the Texture</div>
+    <h2 class="fp-section-title">Same shape. Different history.</h2>
+    <p class="fp-section-desc">Two contributors can have identical graduation counts and still produce wildly different fingerprints. The shape comes from <em>what</em> was earned. The texture comes from <em>how</em> it was earned. Purity drives color saturation, turbulence generates visible wave patterns in the rings, and clarity modulates how crisp the lines render. The texture remembers.</p>
+    <div class="fp-divider"></div>
+
+    <div class="fp-texture-grid">
+      <div class="fp-texture-card">
+        <img src="{{asset 'png/fp-texture-calm.png'}}" width="240" height="240" loading="eager" alt="Calm Waters fingerprint">
+        <div class="fp-texture-sublabel">Calm Waters</div>
+        <h3 class="fp-texture-title">The Confident Path</h3>
+        <p class="fp-texture-desc">A clinical psychologist who came up through a clean academic path. Her primary territory is psychology, with a middle period writing about music and the neuroscience of listening: visible as a band of purple in her middle rings. Pristine tier history across every axis. Lines render crisp and the rings sit smooth.</p>
+      </div>
+      <div class="fp-texture-card">
+        <img src="{{asset 'png/fp-texture-turbulent.png'}}" width="240" height="240" loading="eager" alt="Turbulent Waters fingerprint">
+        <div class="fp-texture-sublabel">Turbulent Waters</div>
+        <h3 class="fp-texture-title">The Climbed Path</h3>
+        <p class="fp-texture-desc">Same field, same final graduations, same purple middle-period interest in music. But this clinician came up through messier conversations. Heat, Stance, and Fog scattered through her history. Visible wave activity ripples through the rings, and the lines render slightly diffuse where Fog dominated. The texture remembers the climb.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="fp-footer">
+    <div class="fp-footer-name">Dialecta</div>
+    <div class="fp-footer-sub">Thinking Fingerprint · v1 · April 2026</div>
+    <div class="fp-footer-tag">Ideas are the protagonist.</div>
+  </div>
+
+</div>
+
+<script src="{{asset 'js/fingerprint.js'}}" defer></script>

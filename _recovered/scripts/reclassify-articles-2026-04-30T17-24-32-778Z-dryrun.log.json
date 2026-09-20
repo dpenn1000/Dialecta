@@ -1,0 +1,192 @@
+{
+  "mode": "dry-run",
+  "only_post_id": null,
+  "api_base": "https://dialecta.vercel.app",
+  "results": [
+    {
+      "ghost_post_id": "69f2937b4e51770001fb5218",
+      "core_claim_preview": "Revealing how much of everyday life is lived unconsciously. At its core, it’s saying the goal isn’t ",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Internal work",
+            "Environmental reset",
+            "Catalyzed awareness"
+          ],
+          "topic": "Source of aliveness"
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "How to live awake",
+          "poles": [
+            "Change your place",
+            "Change your habits",
+            "Both at once"
+          ],
+          "author_position": {
+            "a": 0.15,
+            "b": 0.65,
+            "c": 0.2
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "ghost_post_id": "69f2594b4e51770001fb51d7",
+      "core_claim_preview": "Education should be free worldwide.",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Fiscal burden",
+            "Economic return",
+            "Systemic limits"
+          ],
+          "topic": "Free education trade-off"
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "cartesian",
+          "axes": [
+            {
+              "topic": "Who should fund it",
+              "axis_a": "Governments lead",
+              "axis_b": "Mixed funding"
+            },
+            {
+              "topic": "How fast it pays back",
+              "axis_a": "Trust the cycle",
+              "axis_b": "Stay cautious"
+            }
+          ],
+          "author_position": {
+            "x": 0.85,
+            "y": 0.15
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 2
+    },
+    {
+      "ghost_post_id": "69d5c5c083cd72000193f0cd",
+      "core_claim_preview": "The most common technical objections to community-scale solar (environmental harm, rapid degradation",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Current data",
+            "Precaution",
+            "Local context"
+          ],
+          "topic": "Evidence weight"
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "cartesian",
+          "axes": [
+            {
+              "topic": "How to weigh current data",
+              "axis_a": "Trust new data",
+              "axis_b": "Stay cautious"
+            },
+            {
+              "topic": "Whose projections to rely on",
+              "axis_a": "Industry sources",
+              "axis_b": "Independent review"
+            }
+          ],
+          "author_position": {
+            "x": 0.75,
+            "y": 0.65
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 2
+    },
+    {
+      "ghost_post_id": "69efc475e5eec200010d5299",
+      "core_claim_preview": "Faith should be understood, following Kierkegaard, as a posture sustained in spite of doubt rather t",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Obstacle to overcome",
+            "Reason to leave",
+            "Constitutive tension"
+          ],
+          "topic": "Doubt in faith"
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "Doubt and belonging",
+          "poles": [
+            "Hide and pretend",
+            "Leave the tradition",
+            "Stay and question"
+          ],
+          "author_position": {
+            "a": 0.05,
+            "b": 0.1,
+            "c": 0.85
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "ghost_post_id": "69eff72be5eec200010d5310",
+      "core_claim_preview": "The piece argues that humanity’s traditional frameworks for meaning, shaped by scarcity, survival, a",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Structure-dependent",
+            "Beauty-seeking",
+            "Drift-prone"
+          ],
+          "topic": "Human nature under freedom"
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "What grounds meaning",
+          "poles": [
+            "Old structures",
+            "Sit with it",
+            "Reach higher"
+          ],
+          "author_position": {
+            "a": 0.25,
+            "b": 0.45,
+            "c": 0.3
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 1
+    }
+  ]
+}

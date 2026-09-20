@@ -1,0 +1,152 @@
+{
+  "mode": "dry-run",
+  "only_post_id": null,
+  "limits": {
+    "topic": {
+      "min": 4,
+      "max": 28
+    },
+    "pole": {
+      "min": 3,
+      "max": 20
+    },
+    "count": 2
+  },
+  "results": [
+    {
+      "ghost_post_id": "69f2937b4e51770001fb5218",
+      "core_claim_preview": "Revealing how much of everyday life is lived unconsciously. At its core, it’s saying the goal isn’t a new place, but a n",
+      "before": [
+        {
+          "type": "cartesian",
+          "topic": "Transformation ",
+          "axis_a": "Inner awakening",
+          "axis_b": "Changing circumstances "
+        }
+      ],
+      "after": [
+        {
+          "type": "cartesian",
+          "topic": "Source of Aliveness",
+          "axis_a": "External novelty",
+          "axis_b": "Internal presence"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Change & Avoidance",
+          "axis_a": "Escape pattern",
+          "axis_b": "Intentional shift"
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null
+    },
+    {
+      "ghost_post_id": "69f2594b4e51770001fb51d7",
+      "core_claim_preview": "Education should be free worldwide.",
+      "before": [
+        {
+          "type": "cartesian",
+          "topic": "Cost",
+          "axis_a": "Education should be free",
+          "axis_b": "It would cost too much"
+        }
+      ],
+      "after": [
+        {
+          "type": "cartesian",
+          "topic": "Funding model",
+          "axis_a": "Public investment",
+          "axis_b": "Market-based"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Cost concern",
+          "axis_a": "Burden manageable",
+          "axis_b": "Burden prohibitive"
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null
+    },
+    {
+      "ghost_post_id": "69d5c5c083cd72000193f0cd",
+      "core_claim_preview": "The most common technical objections to community-scale solar (environmental harm, rapid degradation, high cost, landfil",
+      "before": [],
+      "after": [
+        {
+          "type": "cartesian",
+          "topic": "Evidence basis",
+          "axis_a": "Measured performance",
+          "axis_b": "Projected infrastructure"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Risk materialization",
+          "axis_a": "Vendor timelines reliable",
+          "axis_b": "Vendor timelines uncertain"
+        }
+      ],
+      "validation_error": "axes[0].axis_b length 24 out of [3, 20]",
+      "written": false,
+      "error": null
+    },
+    {
+      "ghost_post_id": "69efc475e5eec200010d5299",
+      "core_claim_preview": "Faith should be understood, following Kierkegaard, as a posture sustained in spite of doubt rather than the elimination ",
+      "before": [],
+      "after": [
+        {
+          "type": "cartesian",
+          "topic": "Doubt in faith",
+          "axis_a": "Obstacle to resolve",
+          "axis_b": "Constitutive condition"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Practice under uncertainty",
+          "axis_a": "Requires intellectual closure",
+          "axis_b": "Valid without resolution"
+        }
+      ],
+      "validation_error": "axes[0].axis_b length 22 out of [3, 20]",
+      "written": false,
+      "error": null
+    },
+    {
+      "ghost_post_id": "69eff72be5eec200010d5310",
+      "core_claim_preview": "The piece argues that humanity’s traditional frameworks for meaning, shaped by scarcity, survival, and rigid belief syst",
+      "before": [
+        {
+          "type": "cartesian",
+          "axis_a": "Human Nature, Optomistic",
+          "axis_b": "Human Nature. Skeptical"
+        },
+        {
+          "type": "cartesian",
+          "axis_a": "Scarcity Limitation",
+          "axis_b": "Scarcity Liberation"
+        }
+      ],
+      "after": [
+        {
+          "type": "cartesian",
+          "topic": "Human nature without constraint",
+          "axis_a": "Seeks meaning",
+          "axis_b": "Drifts toward comfort"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Inherited frameworks",
+          "axis_a": "Necessary anchors",
+          "axis_b": "Obstacles to transcend"
+        }
+      ],
+      "validation_error": "axes[0].topic length 31 out of [4, 28]",
+      "written": false,
+      "error": null
+    }
+  ]
+}

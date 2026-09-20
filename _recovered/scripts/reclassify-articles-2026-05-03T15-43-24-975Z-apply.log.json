@@ -1,0 +1,235 @@
+{
+  "mode": "apply",
+  "only_post_id": null,
+  "api_base": "https://dialecta.vercel.app",
+  "results": [
+    {
+      "ghost_post_id": "69f2937b4e51770001fb5218",
+      "core_claim_preview": "Revealing how much of everyday life is lived unconsciously. At its core, it’s saying the goal isn’t ",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Change your place",
+            "Change your habits",
+            "Both matter"
+          ],
+          "topic": "How to live awake",
+          "author_position": {
+            "a": 0.25,
+            "b": 0.35,
+            "c": 0.4
+          }
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "How do you stop living on autopilot?",
+          "poles": [
+            "Wake up inside",
+            "Change your scene",
+            "Let life shake you"
+          ],
+          "author_position": {
+            "a": 0.6,
+            "b": 0.25,
+            "c": 0.15
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": true,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "ghost_post_id": "69f2594b4e51770001fb51d7",
+      "core_claim_preview": "Education should be free worldwide.",
+      "before_maps": [
+        {
+          "axes": [
+            {
+              "topic": "Economic model",
+              "axis_a": "Upfront investment",
+              "axis_b": "Gradual expansion"
+            },
+            {
+              "topic": "Implementation scope",
+              "axis_a": "Universal access",
+              "axis_b": "Targeted need"
+            }
+          ],
+          "type": "cartesian",
+          "author_position": {
+            "x": 0.85,
+            "y": 0.9
+          }
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "How should education be funded?",
+          "poles": [
+            "Free for all",
+            "Help those in need",
+            "Pay your way"
+          ],
+          "author_position": {
+            "a": 0.88,
+            "b": 0.1,
+            "c": 0.02
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": true,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "ghost_post_id": "69d5c5c083cd72000193f0cd",
+      "core_claim_preview": "The most common technical objections to community-scale solar (environmental harm, rapid degradation",
+      "before_maps": [
+        {
+          "axes": [
+            {
+              "topic": "Evidence currency",
+              "axis_a": "Old data outdated",
+              "axis_b": "Still applies today"
+            },
+            {
+              "topic": "Projection confidence",
+              "axis_a": "Trust forecasts",
+              "axis_b": "Wait for proof"
+            }
+          ],
+          "type": "cartesian",
+          "author_position": {
+            "x": 0.75,
+            "y": 0.7
+          }
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "How should communities judge solar projects?",
+          "poles": [
+            "Trust the data",
+            "Stay skeptical",
+            "Local matters most"
+          ],
+          "author_position": {
+            "a": 0.65,
+            "b": 0.05,
+            "c": 0.3
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": true,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "ghost_post_id": "69efc475e5eec200010d5299",
+      "core_claim_preview": "Faith should be understood, following Kierkegaard, as a posture sustained in spite of doubt rather t",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Doubt to overcome",
+            "Doubt as permanent",
+            "Doubt as transition"
+          ],
+          "topic": "Doubt in faith",
+          "author_position": {
+            "a": 0.05,
+            "b": 0.85,
+            "c": 0.1
+          }
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "What do you do with religious doubt?",
+          "poles": [
+            "Settle the doubt",
+            "Leave the faith",
+            "Stay with doubt"
+          ],
+          "author_position": {
+            "a": 0.08,
+            "b": 0.07,
+            "c": 0.85
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": true,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "ghost_post_id": "69eff72be5eec200010d5310",
+      "core_claim_preview": "The piece argues that humanity’s traditional frameworks for meaning, shaped by scarcity, survival, a",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Structure required",
+            "Freedom sufficient",
+            "Both together"
+          ],
+          "topic": "What grounds meaning",
+          "author_position": {
+            "a": 0.25,
+            "b": 0.5,
+            "c": 0.25
+          }
+        },
+        {
+          "type": "binary",
+          "topic": "Human nature under abundance",
+          "axis_a": "Reaches for depth",
+          "axis_b": "Drifts toward excess",
+          "author_position": {
+            "x": 0.65
+          }
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "What do humans need to find meaning?",
+          "poles": [
+            "Reach for beauty",
+            "Drift to excess",
+            "Need the struggle"
+          ],
+          "author_position": {
+            "a": 0.55,
+            "b": 0.15,
+            "c": 0.3
+          }
+        },
+        {
+          "type": "binary",
+          "topic": "Where does meaning come from?",
+          "axis_a": "Fixed tradition",
+          "axis_b": "Open inquiry",
+          "author_position": {
+            "x": 0.82
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": true,
+      "error": null,
+      "attempts": 1
+    }
+  ]
+}

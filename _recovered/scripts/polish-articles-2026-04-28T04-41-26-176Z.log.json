@@ -1,0 +1,12 @@
+{
+  "mode": "apply",
+  "apiBase": "https://dialecta.vercel.app",
+  "when": "2026-04-28T04:41:26.178Z",
+  "results": [
+    {
+      "slug": "on-the-far-shore-of-fear",
+      "status": "skipped",
+      "reason": "no-changes"
+    }
+  ]
+}

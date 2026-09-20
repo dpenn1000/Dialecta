@@ -1,0 +1,24 @@
+{{!< default}}
+
+{{!--
+  Mount div is always emitted; the React mount in index.jsx decides what to
+  render based on the URL and the viewer's auth state:
+    • ?id=<member_id> in the URL → render that profile (member or non-member
+      visitor — non-members see public-facing data only, no edit / settings).
+    • No ?id= and visitor is a logged-in member → render their own profile.
+    • No ?id= and visitor is a non-member → JSX shows a sign-in prompt.
+  Member data attributes are populated when @member is present, empty
+  otherwise. The JSX handles both cases.
+--}}
+<div
+  id="dialecta-profile-root"
+  data-member-id="{{@member.uuid}}"
+  data-member-name="{{@member.name}}"
+  data-member-email="{{@member.email}}"
+  data-member-avatar="{{@member.avatar_image}}"
+  data-member-created="{{@member.created_at}}"
+></div>
+
+{{!-- Home flow handles the same mount target with cross-profile ?id=
+      browse support (used here for /profile/?id=<other-member>). --}}
+<script src="{{asset 'js/home.js'}}" defer></script>

@@ -1,0 +1,21 @@
+{
+  "name": "dialecta-api",
+  "version": "1.0.0",
+  "description": "Dialecta serverless API -- comment classification, submission, and profile routes",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.x"
+  },
+  "scripts": {
+    "deploy": "vercel --prod",
+    "backfill:avatars":    "node scripts/backfill-avatars.mjs",
+    "backfill:og-bylines": "node scripts/backfill-og-bylines.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@supabase/supabase-js": "^2.49.4",
+    "dotenv": "^17.4.2",
+    "resend": "^6.12.2",
+    "sharp": "^0.34.5"
+  }
+}

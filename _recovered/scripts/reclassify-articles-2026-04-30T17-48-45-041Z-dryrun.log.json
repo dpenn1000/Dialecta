@@ -1,0 +1,207 @@
+{
+  "mode": "dry-run",
+  "only_post_id": null,
+  "api_base": "https://dialecta.vercel.app",
+  "results": [
+    {
+      "ghost_post_id": "69f2937b4e51770001fb5218",
+      "core_claim_preview": "Revealing how much of everyday life is lived unconsciously. At its core, it’s saying the goal isn’t ",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Change your place",
+            "Change your habits",
+            "Both at once"
+          ],
+          "topic": "How to recover aliveness",
+          "author_position": {
+            "a": 0.25,
+            "b": 0.5,
+            "c": 0.25
+          }
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "How to recover aliveness",
+          "poles": [
+            "Change your place",
+            "Change your habits",
+            "Both at once"
+          ],
+          "author_position": {
+            "a": 0.25,
+            "b": 0.5,
+            "c": 0.25
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "ghost_post_id": "69f2594b4e51770001fb51d7",
+      "core_claim_preview": "Education should be free worldwide.",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Upfront public cost",
+            "Earned-back revenue",
+            "Shared burden"
+          ],
+          "topic": "Free education funding model",
+          "author_position": {
+            "a": 0.15,
+            "b": 0.75,
+            "c": 0.1
+          }
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "cartesian",
+          "axes": [
+            {
+              "topic": "Who funds education",
+              "axis_a": "Government leads",
+              "axis_b": "Mixed sources"
+            },
+            {
+              "topic": "When to implement",
+              "axis_a": "Immediate rollout",
+              "axis_b": "Gradual phase-in"
+            }
+          ],
+          "author_position": {
+            "x": 0.85,
+            "y": 0.75
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "ghost_post_id": "69d5c5c083cd72000193f0cd",
+      "core_claim_preview": "The most common technical objections to community-scale solar (environmental harm, rapid degradation",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Trust current data",
+            "Demand local proof",
+            "Wait for better tech"
+          ],
+          "topic": "How to weigh solar evidence",
+          "author_position": {
+            "a": 0.75,
+            "b": 0.15,
+            "c": 0.1
+          }
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "How to weigh solar evidence",
+          "poles": [
+            "Trust current data",
+            "Demand local proof",
+            "Wait for better tech"
+          ],
+          "author_position": {
+            "a": 0.75,
+            "b": 0.15,
+            "c": 0.1
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "ghost_post_id": "69efc475e5eec200010d5299",
+      "core_claim_preview": "Faith should be understood, following Kierkegaard, as a posture sustained in spite of doubt rather t",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Hide it",
+            "Leave the tradition",
+            "Show up with it"
+          ],
+          "topic": "How to hold doubt in faith",
+          "author_position": {
+            "a": 0.05,
+            "b": 0.05,
+            "c": 0.9
+          }
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "How to hold doubt in faith",
+          "poles": [
+            "Hide it",
+            "Leave the tradition",
+            "Show up with it"
+          ],
+          "author_position": {
+            "a": 0.05,
+            "b": 0.05,
+            "c": 0.9
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 1
+    },
+    {
+      "ghost_post_id": "69eff72be5eec200010d5310",
+      "core_claim_preview": "The piece argues that humanity’s traditional frameworks for meaning, shaped by scarcity, survival, a",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Structure-dependent",
+            "Beauty-seeking",
+            "Drift-prone"
+          ],
+          "topic": "Human nature under freedom"
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "ternary",
+          "topic": "What grounds human meaning",
+          "poles": [
+            "Inherited frameworks",
+            "Self-chosen purpose",
+            "Cosmic reverence"
+          ],
+          "author_position": {
+            "a": 0.2,
+            "b": 0.6,
+            "c": 0.2
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 1
+    }
+  ]
+}

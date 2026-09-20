@@ -1,0 +1,46 @@
+{
+  "name": "dialecta",
+  "description": "Dialecta custom theme",
+  "version": "1.0.0",
+  "keywords": [
+    "ghost-theme"
+  ],
+  "author": {
+    "email": "dan@dialecta.org"
+  },
+  "engines": {
+    "ghost": ">=5.0.0"
+  },
+  "config": {
+    "card_assets": true,
+    "image_sizes": {
+      "xs": { "width": 300 },
+      "s":  { "width": 600 },
+      "m":  { "width": 1000 },
+      "l":  { "width": 1600 },
+      "xl": { "width": 2400 }
+    }
+  },
+  "scripts": {
+    "build": "npm run build:shell && npm run build:post && npm run build:home && npm run build:editor && npm run build:community && npm run build:notifications && npm run build:fingerprint && npm run build:quotes && npm run build:dev-admin",
+    "build:shell": "esbuild src/shell.jsx --bundle --minify --outfile=assets/js/shell.js --loader:.js=jsx --jsx-import-source=react --jsx=automatic",
+    "build:post": "esbuild src/post-page-mount.jsx --bundle --minify --outfile=assets/js/post.js --loader:.js=jsx --jsx-import-source=react --jsx=automatic",
+    "build:home": "esbuild src/home-page-mount.jsx --bundle --minify --outfile=assets/js/home.js --loader:.js=jsx --jsx-import-source=react --jsx=automatic",
+    "build:editor": "esbuild src/editor-page-mount.jsx --bundle --minify --outfile=assets/js/editor.js --loader:.js=jsx --jsx-import-source=react --jsx=automatic",
+    "build:community": "esbuild src/community-page-mount.jsx --bundle --minify --outfile=assets/js/community.js --loader:.js=jsx --jsx-import-source=react --jsx=automatic",
+    "build:notifications": "esbuild src/notifications-page-mount.jsx --bundle --minify --outfile=assets/js/notifications.js --loader:.js=jsx --jsx-import-source=react --jsx=automatic",
+    "build:fingerprint": "esbuild src/fingerprint-page-mount.jsx --bundle --minify --outfile=assets/js/fingerprint.js --loader:.js=jsx --jsx-import-source=react --jsx=automatic",
+    "build:quotes": "esbuild src/dialecta-quotes-mount.jsx --bundle --minify --outfile=assets/js/quotes.js --loader:.js=jsx --jsx-import-source=react --jsx=automatic",
+    "build:dev-admin": "esbuild src/dev-admin-mount.jsx --bundle --minify --outfile=assets/js/dev-admin.js --loader:.js=jsx --jsx-import-source=react --jsx=automatic",
+    "build:archetypes": "esbuild scripts/build-archetype-svgs.jsx --bundle --platform=node --loader:.js=jsx --jsx-import-source=react --jsx=automatic --outfile=scripts/.compiled-archetype-svgs.cjs && node scripts/.compiled-archetype-svgs.cjs"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.28.0",
+    "sharp": "^0.34.5"
+  },
+  "dependencies": {
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  }
+}

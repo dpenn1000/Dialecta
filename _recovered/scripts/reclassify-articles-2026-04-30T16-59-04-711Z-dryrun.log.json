@@ -1,0 +1,45 @@
+{
+  "mode": "dry-run",
+  "only_post_id": "69eff72be5eec200010d5310",
+  "api_base": "https://dialecta.vercel.app",
+  "results": [
+    {
+      "ghost_post_id": "69eff72be5eec200010d5310",
+      "core_claim_preview": "The piece argues that humanity’s traditional frameworks for meaning, shaped by scarcity, survival, a",
+      "before_axes": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Structure-dependent",
+            "Beauty-seeking",
+            "Drift-prone"
+          ],
+          "topic": "Human nature under freedom"
+        }
+      ],
+      "recommended_type": "cartesian",
+      "after_axes": [
+        {
+          "type": "cartesian",
+          "topic": "Human nature freed",
+          "axis_a": "Toward flourishing",
+          "axis_b": "Toward drift"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Inherited frameworks",
+          "axis_a": "Necessary anchors",
+          "axis_b": "Constraints to shed"
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 2,
+      "after_author_position": {
+        "x": 0.75,
+        "y": 0.25
+      }
+    }
+  ]
+}

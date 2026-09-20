@@ -1,0 +1,1854 @@
+{{!< default}}
+{{!--
+  page-pact.hbs
+  ─────────────────────────────────────────────────────────────────────────
+  Auto-matched to the Ghost page with slug "pact".
+  Ghost's default.hbs provides: <html>, <head>, {{ghost_head}}, <body>,
+  the canonical site nav, and {{ghost_foot}}.
+  This template adds: pact-specific CSS, the full pact content, and the
+  inline JS for the quiz and commitment flow.
+
+  Font stack: the Google Fonts import is included here inline because the
+  pact uses display weights not loaded globally by default.hbs. If you
+  later centralise fonts in default.hbs, remove the <link> below.
+  ─────────────────────────────────────────────────────────────────────────
+--}}
+
+{{#post}}
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,300;1,400;1,500&family=Source+Serif+4:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&family=Mrs+Saint+Delafield&family=Allura&display=swap" rel="stylesheet">
+
+<style>
+  /* ── Page-specific CSS ──────────────────────────────────────────────────
+     default.hbs owns the body background and nav styles.
+     Everything below is scoped to the Pact page only.
+     ─────────────────────────────────────────────────────────────────────── */
+  :root {
+    --ink:          #1c1814;
+    --ink-soft:     #2c2620;
+    --body:         #3a342c;
+    --text-prose:   #5e6066;
+    --text-lede:    #2c2620;
+    --secondary:    #5a5248;
+    --tertiary:     #7a7068;
+    --gold:         #d4a84a;
+    --gold-bright:  #e8a830;
+    --amber:        #b8732a;
+    --terra:        #8c4a2f;
+    --ox:           #5a2410;
+    --cream:        #f7f2e8;
+    --dark-card:    #292b2d;
+    --font-display: 'Cormorant Garamond', serif;
+    --font-reading: 'Source Serif 4', Georgia, serif;
+    --font-body:    'DM Sans', sans-serif;
+    --font-mono:    'DM Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+  /* ═══ PAGE LAYOUT ═══ */
+  .page {
+    /* Top pad was 106px — leftover clearance from when this page had
+       its own fixed nav. The .page-template site-main is already
+       zeroed and default.hbs's nav is sticky (not fixed-clearance), so
+       106px was 80px of dead space above the hero. */
+    padding: 0 clamp(16px, 3vw, 24px) clamp(40px, 5vw, 64px);
+    position: relative;
+    z-index: 1;
+  }
+  .pact-stage {
+    max-width: 1060px;
+    margin: 0 auto;
+  }
+
+  /* ═══ ANTIQUE PAPER SURFACE — shared by every section card ═══ */
+  .parchment {
+    position: relative;
+    background:
+      radial-gradient(ellipse at 22% 18%, rgba(232, 200, 140, 0.18) 0%, transparent 42%),
+      radial-gradient(ellipse at 78% 78%, rgba(184, 115, 42, 0.10) 0%, transparent 50%),
+      radial-gradient(ellipse at 88% 12%, rgba(140, 74, 47, 0.08) 0%, transparent 38%),
+      radial-gradient(ellipse at 12% 92%, rgba(212, 168, 74, 0.12) 0%, transparent 45%),
+      linear-gradient(165deg, #efe2c4 0%, #ead7b3 35%, #f0e2bf 70%, #e8d3aa 100%);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow:
+      inset 0 0 0 1px rgba(140, 74, 47, 0.18),
+      inset 0 0 0 9px rgba(140, 74, 47, 0.12),
+      0 2px 12px rgba(28, 24, 20, 0.10),
+      0 12px 48px rgba(28, 24, 20, 0.08);
+    margin-bottom: 32px;
+  }
+  .parchment::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='4'/><feColorMatrix type='matrix' values='0 0 0 0 0.55  0 0 0 0 0.36  0 0 0 0 0.18  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    border-radius: 6px;
+    z-index: 0;
+  }
+  .parchment::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 8% 14%, rgba(140, 74, 47, 0.16) 0%, transparent 1.2%),
+      radial-gradient(circle at 92% 22%, rgba(140, 74, 47, 0.12) 0%, transparent 0.8%),
+      radial-gradient(circle at 14% 88%, rgba(140, 74, 47, 0.18) 0%, transparent 1.0%),
+      radial-gradient(circle at 78% 92%, rgba(140, 74, 47, 0.14) 0%, transparent 1.1%),
+      radial-gradient(circle at 56% 8%, rgba(140, 74, 47, 0.10) 0%, transparent 0.7%),
+      radial-gradient(circle at 32% 56%, rgba(140, 74, 47, 0.09) 0%, transparent 0.5%),
+      radial-gradient(circle at 88% 52%, rgba(140, 74, 47, 0.13) 0%, transparent 0.9%),
+      radial-gradient(circle at 46% 38%, rgba(140, 74, 47, 0.07) 0%, transparent 0.4%),
+      radial-gradient(ellipse 14px 3px at 70% 30%, rgba(140, 74, 47, 0.14) 0%, transparent 100%),
+      radial-gradient(ellipse 8px 2px at 18% 68%, rgba(140, 74, 47, 0.12) 0%, transparent 100%);
+    pointer-events: none;
+    border-radius: 6px;
+    z-index: 0;
+  }
+  .parchment-edges, .parchment-crinkles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 6px;
+  }
+  .parchment-edges {
+    background:
+      radial-gradient(ellipse 180px 120px at 0% 0%, rgba(90, 50, 24, 0.10) 0%, transparent 70%),
+      radial-gradient(ellipse 180px 120px at 100% 0%, rgba(90, 50, 24, 0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 200px 140px at 0% 100%, rgba(90, 50, 24, 0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 200px 140px at 100% 100%, rgba(90, 50, 24, 0.10) 0%, transparent 70%);
+  }
+  .parchment-crinkles {
+    opacity: 0.28;
+    mix-blend-mode: multiply;
+  }
+
+  .parchment-inner {
+    position: relative;
+    z-index: 2;
+    /* Refresh-2026-04-29: Padding cut substantially. Was 72px 88px on
+       desktop — far too much breathing room for a heading-led page,
+       and titles were running outside the parchment on tablets due
+       to the wide horizontal pad eating the available text width.
+       Now fluid, capped much lower. */
+    padding: clamp(28px, 4vw + 8px, 56px) clamp(20px, 4vw, 48px);
+  }
+  .parchment-long .parchment-inner {
+    /* Long-form sections (philosophy + tiers + commit) get a touch
+       more vertical room than the hero, but still well under the
+       previous 88/96 maxes. */
+    padding: clamp(32px, 4vw + 12px, 64px) clamp(20px, 4vw, 48px) clamp(36px, 4vw + 16px, 72px);
+  }
+
+  /* ═══ TYPOGRAPHY ═══ */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    background: linear-gradient(125deg,
+      #5a3a10 0%,
+      #a07828 35%,
+      #d4a84a 55%,
+      #7a5218 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter:
+      drop-shadow(0 1px 0 rgba(28, 24, 20, 0.55));
+    display: inline-block;
+  }
+  h1.display {
+    font-family: var(--font-display);
+    /* Caps reduced — at the previous 6rem max some hero titles were
+       running past the parchment edge on mid-width screens. Word-wrap
+       belt-and-braces in case a single long word forces overflow. */
+    font-size: clamp(2.6rem, 6vw, 4.6rem);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.04;
+    letter-spacing: -0.012em;
+    margin-bottom: 26px;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+  h2.display {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4vw + 0.4rem, 3rem);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin-bottom: 22px;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+  h1.display em, h2.display em {
+    font-weight: 400;
+    font-style: italic;
+    background: linear-gradient(180deg,
+      #6f4e1a 0%,
+      #a07828 10%,
+      #d4a84a 24%,
+      #f0d07a 42%,
+      #e8c366 54%,
+      #c99438 72%,
+      #8c5e1e 88%,
+      #5a3a10 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter:
+      drop-shadow(0 1px 0 rgba(28, 24, 20, 0.55))
+      drop-shadow(0 2px 0 rgba(90, 36, 16, 0.22));
+  }
+  p.lede {
+    font-family: var(--font-reading);
+    font-size: 1.18rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-lede);
+    line-height: 1.65;
+    max-width: 52ch;
+    margin-bottom: 24px;
+  }
+  p.body {
+    font-family: var(--font-reading);
+    font-size: 1.02rem;
+    font-weight: 400;
+    color: var(--text-prose);
+    line-height: 1.8;
+    max-width: 60ch;
+    margin-bottom: 24px;
+  }
+  p.body strong {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .rule {
+    width: 72px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--terra), transparent);
+    margin: 28px 0;
+  }
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(140, 74, 47, 0.25), transparent);
+    margin: 48px 0;
+  }
+
+  /* Pull quote callout */
+  .callout {
+    position: relative;
+    margin: 36px 0;
+    padding: 28px 32px 28px 40px;
+    border-left: 3px solid var(--terra);
+    background: rgba(245, 232, 208, 0.4);
+    border-radius: 0 4px 4px 0;
+    max-width: 60ch;
+  }
+  .callout p {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .callout .attribution {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-style: normal;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 0;
+  }
+
+  /* ═══ CORNER ORNAMENTS ═══ */
+  .corner-mark {
+    position: absolute;
+    top: 36px;
+    right: 44px;
+    font-family: var(--font-display);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--terra);
+    z-index: 2;
+    text-align: right;
+    line-height: 1.6;
+  }
+  .corner-mark .mark-rule {
+    display: block;
+    width: 32px; height: 1px;
+    background: var(--terra);
+    margin: 6px 0 6px auto;
+    opacity: 0.5;
+  }
+  .corner-mark .mark-sub {
+    font-family: var(--font-mono);
+    font-size: 0.52rem;
+    color: var(--amber);
+    letter-spacing: 0.22em;
+  }
+  .folio {
+    position: absolute;
+    bottom: 28px;
+    right: 44px;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-style: italic;
+    color: rgba(140, 74, 47, 0.55);
+    z-index: 2;
+    letter-spacing: 0.08em;
+  }
+
+  /* ═══ TIER LIST — stacked typographic rows ═══ */
+  .tier-list { margin-top: 48px; }
+  .tier-row {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 32px;
+    padding: 32px 0;
+    border-top: 1px dotted rgba(140, 74, 47, 0.28);
+    align-items: start;
+  }
+  .tier-row:first-child { border-top: none; padding-top: 16px; }
+  .tier-row-icon {
+    padding-top: 10px;
+    display: flex; justify-content: flex-start;
+  }
+  .tier-row-icon .tier-svg { width: 48px; height: 48px; }
+  .tier-row-kicker {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .tier-row-name {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 3.4vw, 3rem);
+    font-weight: 600;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 0.95;
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+  .tier-row-desc {
+    font-family: var(--font-reading);
+    font-size: 1.06rem;
+    color: var(--text-prose);
+    line-height: 1.75;
+    max-width: 62ch;
+  }
+  .tier-row-desc::first-letter {
+    font-family: var(--font-display);
+    font-size: 3.6rem;
+    font-weight: 500;
+    font-style: normal;
+    float: left;
+    line-height: 0.82;
+    padding: 6px 10px 0 0;
+    color: var(--terra);
+  }
+  .tier-forum  .tier-row-icon .tier-svg { color: #a07828; }
+  .tier-spark  .tier-row-icon .tier-svg { color: #b0b860; }
+  .tier-echo   .tier-row-icon .tier-svg { color: #708848; }
+  .tier-fog    .tier-row-icon .tier-svg { color: #687488; }
+  .tier-heat   .tier-row-icon .tier-svg { color: #b8732a; }
+  .tier-stance .tier-row-icon .tier-svg { color: #783028; }
+  .tier-breach .tier-row-icon .tier-svg { color: #5a1818; }
+  .tier-forum  .tier-row-desc::first-letter { color: #a07828; }
+  .tier-spark  .tier-row-desc::first-letter { color: #8c8018; }
+  .tier-echo   .tier-row-desc::first-letter { color: #708848; }
+  .tier-fog    .tier-row-desc::first-letter { color: #5e6a7c; }
+  .tier-heat   .tier-row-desc::first-letter { color: #b8732a; }
+  .tier-stance .tier-row-desc::first-letter { color: #783028; }
+  .tier-breach .tier-row-desc::first-letter { color: #5a1818; }
+
+  /* ═══ INLINE SECTION MARKER (for the long card) ═══ */
+  .section-mark {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 72px 0 56px;
+    padding: 0;
+  }
+  .section-mark::before, .section-mark::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(140, 74, 47, 0.45), transparent);
+  }
+  .section-mark-num {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--terra);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  /* ═══ STAGE LIST (how it works) ═══ */
+  .stage-list { margin-top: 32px; }
+  .stage {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-bottom: 1px dotted rgba(140, 74, 47, 0.22);
+  }
+  .stage:last-child { border-bottom: none; }
+  .stage-num {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-style: italic;
+    font-weight: 400;
+    background: linear-gradient(180deg,
+      #6f4e1a 0%,
+      #a07828 10%,
+      #d4a84a 24%,
+      #f0d07a 42%,
+      #e8c366 54%,
+      #c99438 72%,
+      #8c5e1e 88%,
+      #5a3a10 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter:
+      drop-shadow(0 1px 0 rgba(28, 24, 20, 0.55))
+      drop-shadow(0 2px 0 rgba(90, 36, 16, 0.22));
+    min-width: 60px;
+    line-height: 1;
+    padding-top: 4px;
+  }
+  .stage-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .stage-body {
+    font-family: var(--font-reading);
+    font-size: 1rem;
+    color: var(--text-prose);
+    line-height: 1.7;
+    max-width: 58ch;
+  }
+  .stage-body strong { color: var(--ink-soft); font-weight: 500; }
+
+  /* ═══ WAIT GRID ═══ */
+  .wait-grid {
+    margin-top: 32px;
+    border-top: 1px solid rgba(140, 74, 47, 0.22);
+  }
+  .wait-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px dotted rgba(140, 74, 47, 0.22);
+    gap: 24px;
+  }
+  .wait-label {
+    font-family: var(--font-reading);
+    font-size: 1rem;
+    color: var(--text-prose);
+  }
+  .wait-time {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-style: italic;
+    font-weight: 500;
+    background: linear-gradient(180deg,
+      #6f4e1a 0%,
+      #a07828 10%,
+      #d4a84a 24%,
+      #f0d07a 42%,
+      #e8c366 54%,
+      #c99438 72%,
+      #8c5e1e 88%,
+      #5a3a10 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter:
+      drop-shadow(0 1px 0 rgba(28, 24, 20, 0.55))
+      drop-shadow(0 2px 0 rgba(90, 36, 16, 0.22));
+    white-space: nowrap;
+  }
+
+  /* ═══ GROWTH GRID ═══ */
+  .growth-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .growth-card {
+    padding: 24px 26px;
+    background: rgba(255, 253, 248, 0.5);
+    border: 1px solid rgba(140, 74, 47, 0.18);
+    border-radius: 4px;
+    border-top: 2px solid var(--gold-bright);
+  }
+  .growth-tag {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 10px;
+  }
+  .growth-card-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .growth-card-sub {
+    font-family: var(--font-reading);
+    font-size: 0.92rem;
+    color: var(--text-prose);
+    line-height: 1.55;
+  }
+
+  /* ═══ QUIZ ═══ */
+  .quiz-intro {
+    font-family: var(--font-reading);
+    font-size: 1.08rem;
+    font-style: italic;
+    color: var(--text-lede);
+    line-height: 1.65;
+    max-width: 54ch;
+    margin-bottom: 40px;
+  }
+  .quiz-card {
+    display: none;
+    padding: 32px 36px;
+    background: rgba(255, 253, 248, 0.65);
+    border: 1px solid rgba(140, 74, 47, 0.22);
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .quiz-card.active { display: block; }
+  .quiz-count {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 16px;
+  }
+  .quiz-comment {
+    font-family: var(--font-reading);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    padding: 18px 22px;
+    background: rgba(140, 74, 47, 0.06);
+    border-left: 3px solid var(--terra);
+    border-radius: 0 3px 3px 0;
+    margin-bottom: 24px;
+  }
+  .quiz-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .quiz-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    background: rgba(255, 253, 248, 0.7);
+    border: 1px solid rgba(140, 74, 47, 0.25);
+    border-radius: 3px;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .quiz-btn:hover:not(:disabled) {
+    background: rgba(245, 232, 208, 0.8);
+    border-color: var(--terra);
+  }
+  .quiz-btn .tier-svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .quiz-btn:disabled { cursor: default; opacity: 0.7; }
+  .quiz-btn.correct {
+    background: rgba(212, 168, 74, 0.25);
+    border-color: var(--gold-bright);
+    color: var(--ink);
+    opacity: 1;
+  }
+  .quiz-btn.incorrect {
+    background: rgba(184, 115, 42, 0.15);
+    border-color: var(--amber);
+    color: var(--ink-soft);
+    opacity: 1;
+  }
+  .quiz-btn.revealed {
+    background: rgba(212, 168, 74, 0.18);
+    border-color: var(--gold);
+    opacity: 1;
+  }
+  .quiz-feedback {
+    display: none;
+    margin-top: 16px;
+    padding: 18px 22px;
+    background: rgba(245, 232, 208, 0.5);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 3px 3px 0;
+    font-family: var(--font-reading);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+  .quiz-feedback.visible { display: block; }
+  .quiz-feedback strong { font-weight: 600; color: var(--ink); }
+  .quiz-next {
+    display: none;
+    margin-top: 16px;
+    padding: 10px 24px;
+    background: transparent;
+    border: 1px solid var(--terra);
+    color: var(--terra);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-style: italic;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .quiz-next.visible { display: inline-block; }
+  .quiz-next:hover { background: var(--terra); color: var(--cream); }
+  .quiz-complete {
+    display: none;
+    text-align: center;
+    padding: 40px 32px;
+  }
+  .quiz-complete.visible { display: block; }
+  .quiz-score {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    font-weight: 600;
+    font-style: italic;
+    background: linear-gradient(180deg,
+      #6f4e1a 0%,
+      #a07828 10%,
+      #d4a84a 24%,
+      #f0d07a 42%,
+      #e8c366 54%,
+      #c99438 72%,
+      #8c5e1e 88%,
+      #5a3a10 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter:
+      drop-shadow(0 1px 0 rgba(28, 24, 20, 0.55))
+      drop-shadow(0 2px 0 rgba(90, 36, 16, 0.22));
+    line-height: 1;
+  }
+  .quiz-score-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-top: 10px;
+    margin-bottom: 24px;
+  }
+  .quiz-message {
+    font-family: var(--font-reading);
+    font-size: 1.08rem;
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    max-width: 50ch;
+    margin: 0 auto;
+  }
+
+  /* ═══ COMMITMENT ═══ */
+  .pact-text {
+    font-family: var(--font-reading);
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.75;
+    max-width: 56ch;
+    margin: 0 auto 32px;
+    text-align: center;
+  }
+  /* Path A / Path B selection styles removed 2026-04-29 along with the
+     UI block. The choice moved to the post composer where it applies. */
+  .commit-wrap { text-align: center; margin-top: 8px; }
+
+  /* ═══ COMMITTED-SEALED STATE ═══
+     Applied to the .commit-form on successful commit. The form does not
+     hide; instead the signature "hardens" on the page (readonly, brass-
+     bright underline, no editable affordance) and the button is replaced
+     with a Begin → link. This gives the new member a clear, persistent
+     visual record of what they signed and an obvious next step, instead
+     of a hidden form they might think failed. */
+  .commit-form.committed-sealed .signature-input {
+    pointer-events: none;
+    cursor: default;
+    caret-color: transparent;
+    color: var(--brass-deep, #6a4a18);
+  }
+  .commit-form.committed-sealed .signature-line {
+    border-bottom-color: var(--gold-bright, #d4a84a);
+    border-bottom-width: 2px;
+  }
+  .commit-form.committed-sealed .signature-prompt {
+    color: var(--brass-warm, #b8862e);
+    letter-spacing: 0.18em;
+    font-style: normal;
+  }
+  .commit-form.committed-sealed .signature-name-label {
+    color: var(--tertiary);
+    font-style: italic;
+  }
+  /* The "Begin →" CTA is an <a> styled to inherit the .brass treatment.
+     Add link-specific resets (no underline, inline-block) so it renders
+     as a button. */
+  .committed-cta {
+    text-decoration: none;
+    display: inline-block;
+  }
+  .committed-cta:hover { text-decoration: none; }
+
+  /* ═══ BRASS BUTTON ═══ */
+  .brass {
+    position: relative;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #3a2410;
+    padding: 16px 40px;
+    cursor: pointer;
+    border: none;
+    border-radius: 3px;
+    background:
+      linear-gradient(180deg,
+        #6f4e1a 0%, #a07828 6%, #d4a84a 18%, #f0d07a 34%,
+        #e8c366 50%, #c99438 66%, #8c5e1e 84%, #5a3a10 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 240, 180, 0.65),
+      inset 0 -1px 0 rgba(60, 36, 10, 0.55),
+      inset 1px 0 0 rgba(255, 220, 140, 0.35),
+      inset -1px 0 0 rgba(60, 36, 10, 0.35),
+      0 1px 0 rgba(255, 240, 180, 0.30),
+      0 2px 4px rgba(28, 24, 20, 0.28),
+      0 6px 14px rgba(28, 24, 20, 0.22);
+    text-shadow:
+      0 1px 0 rgba(255, 236, 176, 0.55),
+      0 -1px 0 rgba(60, 36, 10, 0.35);
+    transition: transform 0.08s ease, box-shadow 0.15s ease, filter 0.2s ease;
+  }
+  .brass:hover:not(:disabled) {
+    background:
+      linear-gradient(180deg,
+        #7a5620 0%, #ad8430 6%, #e0b452 18%, #f6d884 34%,
+        #f0cc70 50%, #d4a040 66%, #956420 84%, #603e12 100%);
+  }
+  .brass:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow:
+      inset 0 1px 2px rgba(60, 36, 10, 0.40),
+      inset 0 -1px 0 rgba(255, 240, 180, 0.30),
+      0 1px 0 rgba(255, 240, 180, 0.20),
+      0 1px 2px rgba(28, 24, 20, 0.25);
+  }
+  .brass:disabled {
+    cursor: not-allowed;
+  }
+
+  /* ═══ COMMITTED STATE ═══ */
+  .committed { display: none; text-align: center; padding: 40px 20px; }
+  .committed.visible { display: block; }
+  .committed-mark {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--gold-bright);
+    filter: drop-shadow(0 1px 2px rgba(28, 24, 20, 0.3));
+  }
+  .committed-title {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 14px 0 12px;
+  }
+  .committed-title em {
+    font-weight: 400;
+    font-style: italic;
+    background: linear-gradient(180deg,
+      #6f4e1a 0%,
+      #a07828 10%,
+      #d4a84a 24%,
+      #f0d07a 42%,
+      #e8c366 54%,
+      #c99438 72%,
+      #8c5e1e 88%,
+      #5a3a10 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter:
+      drop-shadow(0 1px 0 rgba(28, 24, 20, 0.55))
+      drop-shadow(0 2px 0 rgba(90, 36, 16, 0.22));
+  }
+  .committed-sub {
+    font-family: var(--font-reading);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    max-width: 50ch;
+    margin: 0 auto 28px;
+  }
+
+  /* ═══ FOOTER ═══ */
+  .footer {
+    text-align: center;
+    padding: 48px 24px 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-mark {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 8px;
+  }
+  .footer-note {
+    font-family: var(--font-reading);
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--tertiary);
+    line-height: 1.6;
+    max-width: 56ch;
+    margin: 0 auto;
+  }
+
+
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 768px) {
+    .parchment-inner { padding: 52px 32px; }
+    .corner-mark { top: 20px; right: 24px; }
+    .folio { bottom: 18px; right: 24px; }
+    .stage { flex-direction: column; gap: 8px; }
+    .stage-num { font-size: 2rem; }
+    .nav-sub-inner { overflow-x: auto; }
+    .nav-sub-inner a { flex-shrink: 0; }
+  }
+
+  /* ── Narrow phones: drop inner parchment padding to 20px sides so
+        overflow: hidden on .parchment never clips the body content.
+        Also enforce box-sizing and width so the card fills correctly. ── */
+  @media (max-width: 480px) {
+    .page { padding-left: 12px; padding-right: 12px; }
+    .parchment {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .parchment-inner {
+      padding: 40px 20px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .parchment-long .parchment-inner {
+      padding: 48px 20px 56px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+  }
+
+  /* Shared SVG crinkles block — used inside every parchment */
+  .crinkles-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     REFRESH-2026-04-29 ADDITIONS
+     ═══════════════════════════════════════════════════════════════════
+     Layered ON TOP of the existing parchment system. Nothing above is
+     modified. The parchment aesthetic is the page's defining register
+     and stays untouched. These additions contribute four things:
+       1. A ceremonial signature line (Pinyon Script cursive)
+       2. Brass shimmer nods on small labels (tier kickers, path icons,
+          committed celebration title) — sparing, not dismantling
+       3. Asterism marks between major parchment sections
+       4. A mid-mobile (720px) layer to handle tier rows, commit area,
+          and quiz cards that the existing 768px / 480px queries skip
+     ═══════════════════════════════════════════════════════════════════ */
+
+  /* ── Card-brass token (cream context) and asterism mark ──────────── */
+  :root {
+    --pact-card-brass: linear-gradient(95deg,
+      #7a4a10 0%, #b8862e 20%, #d4a84a 38%, #ecb438 50%,
+      #d4a84a 62%, #b8862e 80%, #7a4a10 100%);
+    --pact-card-brass-shadow: drop-shadow(0 2px 0 rgba(28, 24, 20, 0.20));
+  }
+
+  /* ── Brass shimmer on small labels (sparing) ─────────────────────── */
+  .tier-row-kicker {
+    background: var(--pact-card-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--pact-card-brass-shadow);
+    color: transparent !important;
+  }
+  .committed-title em {
+    background: var(--pact-card-brass);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: var(--pact-card-brass-shadow);
+    color: transparent !important;
+  }
+
+  /* ── Asterism mark — appears at the end of each parchment section's
+        inner content. Uses ::after so the existing markup is unchanged.
+        Only renders for the main long-form parchment sections (the
+        ones with .parchment-long), not the hero or commit panels. ── */
+  .parchment-long .parchment-inner::after {
+    content: "✦   ✦   ✦";
+    display: block;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1vw + 0.7rem, 1.4rem);
+    color: var(--gold);
+    letter-spacing: 0.4em;
+    margin-top: clamp(28px, 3vw, 48px);
+    opacity: 0.5;
+  }
+
+  /* ── Signature line: Pinyon Script cursive above the commit button ─
+        A formal-document signature line. Replaces nothing; sits above
+        the existing "I Understand — Enter" button. The user types
+        their name in flourishing 19th-century formal cursive (Pinyon
+        Script, Google Fonts), which provides the ceremonial weight a
+        commitment of this nature deserves. The button is gated on the
+        signature having content (handled in JS). ───────────────────── */
+  .signature-area {
+    margin: 36px auto 28px;
+    /* Widened from 420px on 2026-05-01 — several script fonts (Hurricane,
+       Cherish, Oooh Baby) render visibly wider than Mrs Saint Delafield
+       at the same nominal size, so an 80-char name was getting clipped
+       on the original line length. 720px clears all 9 fonts at sensible
+       names. The input's max-width is still bounded by the parent form. */
+    max-width: 720px;
+    text-align: center;
+  }
+  .signature-prompt {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 22px;
+    display: block;
+  }
+  .signature-line {
+    position: relative;
+    border-bottom: 1px solid rgba(140, 74, 47, 0.55);
+    /* Top padding bumped 4 → 12 so the cursive ascenders (capital D
+       and P flourishes etc.) have a clear margin above the underline
+       instead of clipping against the prompt above. */
+    padding: 12px 16px 6px;
+    margin-bottom: 8px;
+  }
+  .signature-line::before {
+    /* Old-fashioned signature-line "X" marker on the left */
+    content: "✕";
+    position: absolute;
+    left: 0; bottom: 6px;
+    color: rgba(140, 74, 47, 0.6);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .signature-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    /* Mrs Saint Delafield is the default; the JS picker swaps the family
+       inline when the user clicks a chip. The per-font scale variable
+       (--sig-scale) is also set inline so each face renders at a
+       similar visual height — see the data-font rules on the chips
+       below for the canonical scale values. Default 1.0 = baseline.
+       line-height: 1.5 (was 1.05) gives the script-font ascenders
+       room — without it, capital flourishes on D, P, etc. clip
+       against the top of the input box. */
+    font-family: 'Mrs Saint Delafield', 'Allura', 'Cormorant Garamond', cursive;
+    font-size: calc(clamp(2.0rem, 4vw + 0.6rem, 3.0rem) * var(--sig-scale, 1));
+    color: var(--ox);
+    text-align: center;
+    padding: 0 16px;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+  }
+  .signature-input::placeholder {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    color: rgba(140, 74, 47, 0.35);
+    letter-spacing: 0.02em;
+  }
+  /* ── Signature font picker ────────────────────────────────────────────
+        A row of chips below the signature line, each rendered in its own
+        Google Font. Clicking re-renders the signature input live. The
+        chosen font persists with the Pact commit (signature_font column
+        on profiles) and surfaces as the contributor's signature on
+        their profile page and at the bottom of articles they author.
+        Keep the family list in sync with api/_signature-fonts.js.
+        ───────────────────────────────────────────────────────────── */
+  .signature-font-picker {
+    margin: 22px auto 0;
+    max-width: 520px;
+    text-align: center;
+  }
+  .signature-font-picker-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--brass-warm, #b8862e);
+    display: block;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+  .signature-font-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+  .signature-font-chip {
+    font-size: 1.15rem;
+    line-height: 1;
+    padding: 8px 14px;
+    border: 1px solid rgba(140, 74, 47, 0.22);
+    border-radius: 4px;
+    background: rgba(255, 253, 248, 0.55);
+    color: rgba(60, 44, 28, 0.78);
+    cursor: pointer;
+    transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+    user-select: none;
+  }
+  .signature-font-chip:hover {
+    border-color: rgba(184, 134, 46, 0.55);
+    background: rgba(255, 253, 248, 0.95);
+  }
+  .signature-font-chip.is-active {
+    border-color: var(--gold-bright, #d4a84a);
+    background: rgba(245, 223, 160, 0.22);
+    color: var(--brass-deep, #6a4a18);
+    box-shadow: 0 1px 0 rgba(184, 134, 46, 0.30);
+  }
+  /* Per-font family. Each chip's --sig-scale (and the .signature-font-chip
+     base font-size) is set by the picker JS at page load using actual
+     canvas measurements of each font's rendered bounding box, so all 9
+     faces visually equalize regardless of intrinsic x-height. The static
+     scale multipliers here used to be eyeballed; the canvas-measure
+     approach replaces that with real numbers. */
+  .signature-font-chip {
+    /* Multiplied by --sig-scale set per-chip by the picker JS. Default
+       1.0 keeps the chip readable before measurement completes. */
+    font-size: calc(1.2rem * var(--sig-scale, 1));
+  }
+  .signature-font-chip[data-font="Mrs Saint Delafield"]  { font-family: 'Mrs Saint Delafield', cursive; }
+  .signature-font-chip[data-font="Cherish"]              { font-family: 'Cherish', cursive; }
+  .signature-font-chip[data-font="Give You Glory"]       { font-family: 'Give You Glory', cursive; }
+  .signature-font-chip[data-font="Hurricane"]            { font-family: 'Hurricane', cursive; }
+  .signature-font-chip[data-font="Love Light"]           { font-family: 'Love Light', cursive; }
+  .signature-font-chip[data-font="Nothing You Could Do"] { font-family: 'Nothing You Could Do', cursive; }
+  .signature-font-chip[data-font="Oooh Baby"]            { font-family: 'Oooh Baby', cursive; }
+  .signature-font-chip[data-font="Qwigley"]              { font-family: 'Qwigley', cursive; }
+  .signature-font-chip[data-font="WindSong"]             { font-family: 'WindSong', cursive; }
+  /* Hide the picker once the signature is sealed — the choice is locked. */
+  .commit-form.committed-sealed .signature-font-picker { display: none; }
+  .signature-name-label {
+    display: block;
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--tertiary);
+  }
+
+  /* ── Mid-mobile augmentation (720px) — fills the gap between the
+        existing 768px and 480px queries, focused on surfaces those
+        queries don't cover. ───────────────────────────────────────── */
+  @media (max-width: 720px) {
+    /* Tier rows: stack icon above text on narrow widths so neither
+       gets crushed. The grid-template stays for desktop. */
+    .tier-row {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 22px 0;
+    }
+    .tier-row-icon { padding-top: 0; }
+    .tier-row-name { font-size: clamp(1.7rem, 6vw, 2.4rem); margin-bottom: 12px; }
+    .tier-row-desc { font-size: 0.96rem; line-height: 1.65; }
+    .tier-row-desc::first-letter { font-size: 2.6rem; }
+
+    /* Quiz card breathing room */
+    .quiz-card { padding: 22px 18px; }
+
+    /* Commit form internal spacing */
+    .commit-form { padding-top: 8px; }
+    .pact-text { font-size: 1rem; line-height: 1.7; }
+    .signature-input { padding: 0 12px; }
+  }
+</style>
+
+<div class="page">
+<div class="pact-stage">
+
+<!-- ═══ HERO ═══ -->
+<section class="parchment fade-in">
+  <div class="parchment-edges"></div>
+  <svg class="parchment-crinkles" viewBox="0 0 1000 700" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="w7" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7"/>
+          <feDisplacementMap in="SourceGraphic" scale="18"/>
+        </filter>
+        <filter id="w3" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="3"/>
+          <feDisplacementMap in="SourceGraphic" scale="12"/>
+        </filter>
+        <filter id="b7"><feGaussianBlur stdDeviation="0.6"/></filter>
+      </defs>
+      <g filter="url(#w7)" opacity="0.65">
+        <path d="M 80 120 Q 260 180, 430 210 T 780 260" fill="none" stroke="#8c4a2f" stroke-width="0.6" stroke-linecap="round" filter="url(#b7)"/>
+        <path d="M 120 430 Q 320 460, 500 440 T 900 480" fill="none" stroke="#8c4a2f" stroke-width="0.5" stroke-linecap="round" filter="url(#b7)"/>
+        <path d="M 200 560 Q 380 600, 560 580 T 860 620" fill="none" stroke="#5a2410" stroke-width="0.4" stroke-linecap="round" filter="url(#b7)"/>
+      </g>
+      <g filter="url(#w3)" opacity="0.55">
+        <path d="M 620 60 Q 680 140, 740 200 T 880 340" fill="none" stroke="#8c4a2f" stroke-width="0.5" stroke-linecap="round" filter="url(#b7)"/>
+        <path d="M 40 300 Q 110 360, 180 400" fill="none" stroke="#8c4a2f" stroke-width="0.5" stroke-linecap="round" filter="url(#b7)"/>
+        <path d="M 480 130 Q 540 210, 580 300" fill="none" stroke="#5a2410" stroke-width="0.35" stroke-linecap="round" filter="url(#b7)"/>
+      </g>
+      <g filter="url(#w3)" opacity="0.35">
+        <ellipse cx="340" cy="260" rx="38" ry="6" fill="none" stroke="#8c4a2f" stroke-width="0.4" filter="url(#b7)"/>
+        <ellipse cx="720" cy="420" rx="52" ry="8" fill="none" stroke="#8c4a2f" stroke-width="0.35" filter="url(#b7)"/>
+      </g>
+    </svg>
+  <div class="corner-mark">
+    Dialecta
+    <span class="mark-rule"></span>
+    <span class="mark-sub">MMXXVI</span>
+  </div>
+  <div class="parchment-inner" style="text-align: center;">
+    <span class="eyebrow">Before you enter</span>
+    <h1 class="display">This is <em>the pact.</em></h1>
+    <p class="lede" style="margin-left: auto; margin-right: auto;">
+      Not terms and conditions. Not rules imposed from above. A mutual agreement
+      between you and a place that intends to take your thinking seriously.
+    </p>
+    <p class="body" style="margin-left: auto; margin-right: auto;">
+      Read the charter below, try the tier-reading exercise, and decide whether
+      this is a place you want to contribute to. When you&rsquo;re ready, sign at the bottom.
+    </p>
+  </div>
+  <div class="folio">§ I</div>
+</section>
+
+<!-- ═══ MISSION ═══ -->
+<section class="parchment parchment-long fade-in">
+  <div class="parchment-edges"></div>
+  <svg class="parchment-crinkles" viewBox="0 0 1000 2800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="lw1" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="11"/><feDisplacementMap in="SourceGraphic" scale="18"/></filter>
+        <filter id="lw2" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="19"/><feDisplacementMap in="SourceGraphic" scale="12"/></filter>
+        <filter id="lb1"><feGaussianBlur stdDeviation="0.6"/></filter>
+      </defs>
+      <g filter="url(#lw1)" opacity="0.65">
+        <path d="M 80 120 Q 260 180, 430 210 T 780 260" fill="none" stroke="#8c4a2f" stroke-width="0.6" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 120 530 Q 320 560, 500 540 T 900 580" fill="none" stroke="#8c4a2f" stroke-width="0.5" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 200 860 Q 380 900, 560 880 T 860 920" fill="none" stroke="#5a2410" stroke-width="0.4" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 80 1220 Q 260 1280, 430 1310 T 780 1360" fill="none" stroke="#8c4a2f" stroke-width="0.6" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 120 1630 Q 320 1660, 500 1640 T 900 1680" fill="none" stroke="#8c4a2f" stroke-width="0.5" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 200 1960 Q 380 2000, 560 1980 T 860 2020" fill="none" stroke="#5a2410" stroke-width="0.4" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 80 2320 Q 260 2380, 430 2410 T 780 2460" fill="none" stroke="#8c4a2f" stroke-width="0.6" stroke-linecap="round" filter="url(#lb1)"/>
+      </g>
+      <g filter="url(#lw2)" opacity="0.55">
+        <path d="M 620 160 Q 680 240, 740 300 T 880 440" fill="none" stroke="#8c4a2f" stroke-width="0.5" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 40 700 Q 110 760, 180 800" fill="none" stroke="#8c4a2f" stroke-width="0.5" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 480 1030 Q 540 1110, 580 1200" fill="none" stroke="#5a2410" stroke-width="0.35" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 760 1500 Q 820 1560, 860 1640" fill="none" stroke="#8c4a2f" stroke-width="0.4" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 620 1860 Q 680 1940, 740 2000 T 880 2140" fill="none" stroke="#8c4a2f" stroke-width="0.5" stroke-linecap="round" filter="url(#lb1)"/>
+        <path d="M 40 2200 Q 110 2260, 180 2300" fill="none" stroke="#8c4a2f" stroke-width="0.5" stroke-linecap="round" filter="url(#lb1)"/>
+      </g>
+      <g filter="url(#lw2)" opacity="0.35">
+        <ellipse cx="340" cy="460" rx="38" ry="6" fill="none" stroke="#8c4a2f" stroke-width="0.4" filter="url(#lb1)"/>
+        <ellipse cx="720" cy="1220" rx="52" ry="8" fill="none" stroke="#8c4a2f" stroke-width="0.35" filter="url(#lb1)"/>
+        <ellipse cx="280" cy="1860" rx="44" ry="7" fill="none" stroke="#8c4a2f" stroke-width="0.4" filter="url(#lb1)"/>
+        <ellipse cx="680" cy="2380" rx="48" ry="6" fill="none" stroke="#8c4a2f" stroke-width="0.35" filter="url(#lb1)"/>
+      </g>
+    </svg>
+  <div class="corner-mark">
+    Dialecta
+    <span class="mark-rule"></span>
+    <span class="mark-sub">MMXXVI</span>
+  </div>
+  <div class="parchment-inner">
+    <span class="eyebrow">Why this exists</span>
+    <h2 class="display">Most platforms reward<br>the <em>wrong thing.</em></h2>
+    <p class="body">
+      The loudest voice wins. The most outraged post spreads furthest. Certainty is
+      rewarded; nuance is penalized. You&rsquo;ve felt the pull toward simpler, sharper,
+      angrier. That pull isn&rsquo;t your weakness. It&rsquo;s the system working exactly as designed.
+    </p>
+    <p class="body">
+      <strong>Dialecta is built on a different design.</strong> The mechanics that
+      elsewhere reward reflexive anger and tribal conformity are here reoriented
+      toward something else: curiosity, honest engagement, and the kind of thinking
+      that only happens when you slow down enough to actually think.
+    </p>
+    <div class="callout">
+      <p>The question isn&rsquo;t whether social media influences us. It&rsquo;s how much we&rsquo;re willing to be shaped by it without noticing.</p>
+      <p class="attribution">From the essay that started this</p>
+    </div>
+    <p class="body">
+      This platform isn&rsquo;t neutral. It&rsquo;s <strong>actively trying to make you a
+      clearer thinker</strong>, not by telling you what to think, but by showing
+      you how you think, and giving you the tools to do it better.
+    </p>
+<div class="section-mark"><span class="section-mark-num">§ III · The Classification</span></div>
+<span class="eyebrow">The classification system</span>
+    <h2 class="display">Every voice finds<br>its <em>place.</em></h2>
+    <p class="body">
+      Comments are never hidden. They&rsquo;re sorted into visible tiers based on what
+      they&rsquo;re doing, not what they believe. Strong disagreement belongs in The Forum.
+      Vague outrage lives in The Heat. The system doesn&rsquo;t silence you. It describes
+      you, and invites you to say more.
+    </p>
+    <div class="tier-list">
+      <div class="tier-row tier-forum">
+        <div class="tier-row-icon"><svg class="tier-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 L12 3 L21 7"/><line x1="2" y1="7.5" x2="22" y2="7.5" stroke-width="2.2"/><line x1="6" y1="9" x2="6" y2="19"/><line x1="12" y1="9" x2="12" y2="19"/><line x1="18" y1="9" x2="18" y2="19"/><line x1="3" y1="20" x2="21" y2="20" stroke-width="2.2"/></svg></div>
+        <div>
+          <span class="tier-row-kicker">Tier I</span>
+          <h3 class="tier-row-name">The Forum</h3>
+          <p class="tier-row-desc">Constructive, specific, fact-referenced or clearly reasoned. Strong disagreement belongs here, if it&rsquo;s about something specific.</p>
+        </div>
+      </div>
+      <div class="tier-row tier-spark">
+        <div class="tier-row-icon"><svg class="tier-svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M13 2 L4 14 L11 14 L10 22 L20 9 L13 9 Z"/></svg></div>
+        <div>
+          <span class="tier-row-kicker">Tier II</span>
+          <h3 class="tier-row-name">The Spark</h3>
+          <p class="tier-row-desc">A genuinely interesting idea, but underdeveloped. The seed of something good. Invites expansion rather than resolution.</p>
+        </div>
+      </div>
+      <div class="tier-row tier-echo">
+        <div class="tier-row-icon"><svg class="tier-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 a8 8 0 0 1 14 -5"/><path d="M18 3 L18 7 L14 7"/><path d="M20 12 a8 8 0 0 1 -14 5"/><path d="M6 21 L6 17 L10 17"/></svg></div>
+        <div>
+          <span class="tier-row-kicker">Tier III</span>
+          <h3 class="tier-row-name">The Echo</h3>
+          <p class="tier-row-desc">Restates the article or a prior comment without adding to it. Not harmful, just not propulsive.</p>
+        </div>
+      </div>
+      <div class="tier-row tier-fog">
+        <div class="tier-row-icon"><svg class="tier-svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M6.5 18 C 3.5 18, 2 16, 2 13.5 C 2 11, 4 9.5, 6 9.8 C 6.5 6.5, 9 5, 11.5 5 C 14.5 5, 16.5 7, 17 9.5 C 19.5 9.5, 22 11, 22 14 C 22 16.5, 20 18, 17.5 18 Z"/></svg></div>
+        <div>
+          <span class="tier-row-kicker">Tier IV</span>
+          <h3 class="tier-row-name">The Fog</h3>
+          <p class="tier-row-desc">Vague, unclear, or disconnected. The reader can&rsquo;t tell what the person believes or what point they&rsquo;re making.</p>
+        </div>
+      </div>
+      <div class="tier-row tier-heat">
+        <div class="tier-row-icon"><svg class="tier-svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M12 2 C 10 6, 7 8, 7 13 C 7 17.5, 9.5 21, 12.5 21 C 16 21, 18 17.8, 17.8 14.5 C 17.6 12, 15.8 10, 14 9 C 14.5 11, 13.5 12, 12.5 11.5 C 12 9, 13 6, 12 2 Z"/></svg></div>
+        <div>
+          <span class="tier-row-kicker">Tier V</span>
+          <h3 class="tier-row-name">The Heat</h3>
+          <p class="tier-row-desc">Emotionally charged without constructive specificity. The argument is often in there. It just hasn&rsquo;t been separated from the feeling yet.</p>
+        </div>
+      </div>
+      <div class="tier-row tier-stance">
+        <div class="tier-row-icon"><svg class="tier-svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round" stroke-linecap="round"><line x1="6" y1="3" x2="6" y2="21" stroke-width="2.8"/><path d="M6 4 L18 8 L6 12 Z"/><line x1="3" y1="21" x2="9" y2="21" stroke-width="2.8"/></svg></div>
+        <div>
+          <span class="tier-row-kicker">Tier VI</span>
+          <h3 class="tier-row-name">The Stance</h3>
+          <p class="tier-row-desc">Heavy rhetoric, tribal framing, or coded language signaling team membership over idea engagement. More flag-planting than thinking.</p>
+        </div>
+      </div>
+      <div class="tier-row tier-breach">
+        <div class="tier-row-icon"><svg class="tier-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M9 7 a3 3 0 0 0 -3 3 v2 a3 3 0 0 0 3 3 h1"/><path d="M15 17 a3 3 0 0 0 3 -3 v-2 a3 3 0 0 0 -3 -3 h-1"/><line x1="3" y1="3" x2="21" y2="21" stroke-width="3"/></svg></div>
+        <div>
+          <span class="tier-row-kicker">Tier VII</span>
+          <h3 class="tier-row-name">The Breach</h3>
+          <p class="tier-row-desc">Name-calling, slander, targeted personal attacks. Suppressed from default view, not deleted, with the reason shown transparently.</p>
+        </div>
+      </div>
+    </div>
+<div class="section-mark"><span class="section-mark-num">§ IV · The Process</span></div>
+<span class="eyebrow">The process</span>
+    <h2 class="display">How your words find<br>their <em>tier.</em></h2>
+    <p class="body">
+      Classification isn&rsquo;t done to you. You participate in it, alongside an AI
+      engine and the community around you. Every stage is transparent. Every
+      decision is contestable.
+    </p>
+    <div class="stage-list">
+      <div class="stage">
+        <div class="stage-num">I</div>
+        <div>
+          <div class="stage-title">You write freely</div>
+          <div class="stage-body">No template, no prompt. Write what you actually think, the way you actually think it.</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">II</div>
+        <div>
+          <div class="stage-title">The engine reflects</div>
+          <div class="stage-body">Before you post, an AI reads your submission, not to judge it but to describe what it&rsquo;s doing. It identifies your <strong>core claim</strong>, detects rhetorical patterns, and suggests a tier with a plain-language reason. It names the <strong>strongest element in your writing</strong> first.</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">II.5</div>
+        <div>
+          <div class="stage-title">You respond to the reflection</div>
+          <div class="stage-body">You can <strong>amend</strong> your submission, <strong>respond for the record</strong>, or <strong>post as-is</strong>. None of these choices are wrong. Your response, if reasoned, carries weight in the final classification.</div>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">III</div>
+        <div>
+          <div class="stage-title">The community engages</div>
+          <div class="stage-body">Readers can nominate your post for reclassification, up or down, and must give a reason. Their nominations are visible. The system is always contestable.</div>
+        </div>
+      </div>
+    </div>
+<div class="section-mark"><span class="section-mark-num">§ V · The Wait Architecture</span></div>
+<span class="eyebrow">The wait architecture</span>
+    <h2 class="display">Slowness is<br>a <em>feature.</em></h2>
+    <p class="body">
+      Every timer in this system is the platform saying: <strong>this thought is
+      worth sitting with.</strong> The waits are disclosed, not hidden. They are
+      not friction. They are ritual. The moment the platform makes your post
+      permanent is designed to feel earned.
+    </p>
+    <p class="body">
+      Once your post hardens, it&rsquo;s yours permanently. You can append to it at any
+      time. Your additions are visible and tracked. Public refinement of your
+      thinking is treated here as a strength, not a liability.
+    </p>
+    <div class="wait-grid">
+      <div class="wait-row"><div class="wait-label">After writing, before AI analysis appears</div><div class="wait-time">8 sec</div></div>
+      <div class="wait-row"><div class="wait-label">After AI analysis, before Stage 2.5 options activate</div><div class="wait-time">12 sec</div></div>
+      <div class="wait-row"><div class="wait-label">Full comment reflection window</div><div class="wait-time">30 min</div></div>
+      <div class="wait-row"><div class="wait-label">Article submission reflection window</div><div class="wait-time">24 hrs</div></div>
+      <div class="wait-row"><div class="wait-label">Community reclassification nomination</div><div class="wait-time">20 sec</div></div>
+    </div>
+    {{!-- The "Path A vs Path B" reflect-first / reflection-mode choice
+          used to live as a callout here and as a selector in the
+          Commitment section (§ VIII). Removed 2026-04-29: the choice
+          confused new members during sign-on. The options are now
+          surfaced where they actually apply, in the post composer. --}}
+<div class="section-mark"><span class="section-mark-num">§ VI · The Deeper Purpose</span></div>
+<span class="eyebrow">The deeper purpose</span>
+    <h2 class="display">This platform is trying<br>to <em>grow you.</em></h2>
+    <p class="body">
+      The tier system isn&rsquo;t the point. The point is what happens when you engage
+      with it over time. Every AI reflection that names a pattern in your thinking
+      is a chance to see something about yourself that most environments never show you.
+    </p>
+    <p class="body">
+      When the engine detects a pattern, <strong>emotional frontloading, tribal
+      reflex, certainty performance</strong>, it names it, explains why it
+      happens, and links you to a short, honest explainer. One pattern per
+      submission. Always framed as human, never as deficiency.
+    </p>
+    <div class="growth-grid">
+      <div class="growth-card"><div class="growth-tag">Pattern</div><div class="growth-card-title">Emotional Frontloading</div><div class="growth-card-sub">Leading with feeling rather than claim. The argument is in there. It just hasn&rsquo;t been separated from the emotion carrying it.</div></div>
+      <div class="growth-card"><div class="growth-tag">Pattern</div><div class="growth-card-title">Tribal Reflex</div><div class="growth-card-sub">Evaluating arguments by who is making them, not what they contain. Agreement or disagreement before engagement.</div></div>
+      <div class="growth-card"><div class="growth-tag">Pattern</div><div class="growth-card-title">Certainty Performance</div><div class="growth-card-sub">Expressing more confidence than the evidence warrants, because uncertainty reads as weakness in social environments.</div></div>
+      <div class="growth-card"><div class="growth-tag">Pattern</div><div class="growth-card-title">False Binary</div><div class="growth-card-sub">Collapsing a spectrum into a choice. Team A or Team B, when the reality lives in the space between.</div></div>
+    </div>
+    <p class="body" style="margin-top: 32px;">
+      Your private profile tracks which patterns have appeared in your writing over
+      time, not as a score, not as a judgment, but as a <strong>personal map of
+      your own tendencies.</strong> The goal isn&rsquo;t to correct you. It&rsquo;s to make
+      you more legible to yourself.
+    </p>
+<div class="section-mark"><span class="section-mark-num">§ VII · Learn by Doing</span></div>
+<span class="eyebrow">Learn by doing</span>
+    <h2 class="display">Can you read<br>the <em>tier?</em></h2>
+    <p class="quiz-intro">Before you commit, try classifying three real comments. This is the fastest way to understand what the system actually sees, and what it misses.</p>
+
+    <div class="quiz-card active" id="q1">
+      <div class="quiz-count">Comment 1 of 3</div>
+      <div class="quiz-comment">"This entire piece ignores the fact that renewable energy simply doesn't work at scale. Anyone who believes otherwise hasn't looked at the actual numbers. Wake up."</div>
+      <div class="quiz-options">
+        <button class="quiz-btn" onclick="answer(1, 'forum', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 L12 3 L21 7"/><line x1="2" y1="7.5" x2="22" y2="7.5" stroke-width="2.2"/><line x1="6" y1="9" x2="6" y2="19"/><line x1="12" y1="9" x2="12" y2="19"/><line x1="18" y1="9" x2="18" y2="19"/><line x1="3" y1="20" x2="21" y2="20" stroke-width="2.2"/></svg> The Forum</button>
+        <button class="quiz-btn" onclick="answer(1, 'spark', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M13 2 L4 14 L11 14 L10 22 L20 9 L13 9 Z"/></svg> The Spark</button>
+        <button class="quiz-btn" onclick="answer(1, 'heat', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M12 2 C 10 6, 7 8, 7 13 C 7 17.5, 9.5 21, 12.5 21 C 16 21, 18 17.8, 17.8 14.5 C 17.6 12, 15.8 10, 14 9 C 14.5 11, 13.5 12, 12.5 11.5 C 12 9, 13 6, 12 2 Z"/></svg> The Heat</button>
+        <button class="quiz-btn" onclick="answer(1, 'stance', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round" stroke-linecap="round"><line x1="6" y1="3" x2="6" y2="21" stroke-width="2.8"/><path d="M6 4 L18 8 L6 12 Z"/><line x1="3" y1="21" x2="9" y2="21" stroke-width="2.8"/></svg> The Stance</button>
+      </div>
+      <div class="quiz-feedback" id="f1"></div>
+      <button class="quiz-next" id="n1" onclick="nextQ(2)">Next comment →</button>
+    </div>
+
+    <div class="quiz-card" id="q2">
+      <div class="quiz-count">Comment 2 of 3</div>
+      <div class="quiz-comment">"I think the article makes a strong point about incentive structures, but it doesn't address the transition cost problem, which seems like a significant gap. What's the argument for why market signals alone would handle it?"</div>
+      <div class="quiz-options">
+        <button class="quiz-btn" onclick="answer(2, 'forum', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 L12 3 L21 7"/><line x1="2" y1="7.5" x2="22" y2="7.5" stroke-width="2.2"/><line x1="6" y1="9" x2="6" y2="19"/><line x1="12" y1="9" x2="12" y2="19"/><line x1="18" y1="9" x2="18" y2="19"/><line x1="3" y1="20" x2="21" y2="20" stroke-width="2.2"/></svg> The Forum</button>
+        <button class="quiz-btn" onclick="answer(2, 'echo', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 a8 8 0 0 1 14 -5"/><path d="M18 3 L18 7 L14 7"/><path d="M20 12 a8 8 0 0 1 -14 5"/><path d="M6 21 L6 17 L10 17"/></svg> The Echo</button>
+        <button class="quiz-btn" onclick="answer(2, 'fog', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M6.5 18 C 3.5 18, 2 16, 2 13.5 C 2 11, 4 9.5, 6 9.8 C 6.5 6.5, 9 5, 11.5 5 C 14.5 5, 16.5 7, 17 9.5 C 19.5 9.5, 22 11, 22 14 C 22 16.5, 20 18, 17.5 18 Z"/></svg> The Fog</button>
+        <button class="quiz-btn" onclick="answer(2, 'heat', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M12 2 C 10 6, 7 8, 7 13 C 7 17.5, 9.5 21, 12.5 21 C 16 21, 18 17.8, 17.8 14.5 C 17.6 12, 15.8 10, 14 9 C 14.5 11, 13.5 12, 12.5 11.5 C 12 9, 13 6, 12 2 Z"/></svg> The Heat</button>
+      </div>
+      <div class="quiz-feedback" id="f2"></div>
+      <button class="quiz-next" id="n2" onclick="nextQ(3)">Next comment →</button>
+    </div>
+
+    <div class="quiz-card" id="q3">
+      <div class="quiz-count">Comment 3 of 3</div>
+      <div class="quiz-comment">"Something about this resonates with me, though I'm not sure I fully agree. There's probably more to it."</div>
+      <div class="quiz-options">
+        <button class="quiz-btn" onclick="answer(3, 'spark', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M13 2 L4 14 L11 14 L10 22 L20 9 L13 9 Z"/></svg> The Spark</button>
+        <button class="quiz-btn" onclick="answer(3, 'echo', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 a8 8 0 0 1 14 -5"/><path d="M18 3 L18 7 L14 7"/><path d="M20 12 a8 8 0 0 1 -14 5"/><path d="M6 21 L6 17 L10 17"/></svg> The Echo</button>
+        <button class="quiz-btn" onclick="answer(3, 'fog', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M6.5 18 C 3.5 18, 2 16, 2 13.5 C 2 11, 4 9.5, 6 9.8 C 6.5 6.5, 9 5, 11.5 5 C 14.5 5, 16.5 7, 17 9.5 C 19.5 9.5, 22 11, 22 14 C 22 16.5, 20 18, 17.5 18 Z"/></svg> The Fog</button>
+        <button class="quiz-btn" onclick="answer(3, 'heat', this)"><svg class="tier-svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><path d="M12 2 C 10 6, 7 8, 7 13 C 7 17.5, 9.5 21, 12.5 21 C 16 21, 18 17.8, 17.8 14.5 C 17.6 12, 15.8 10, 14 9 C 14.5 11, 13.5 12, 12.5 11.5 C 12 9, 13 6, 12 2 Z"/></svg> The Heat</button>
+      </div>
+      <div class="quiz-feedback" id="f3"></div>
+      <button class="quiz-next" id="n3" onclick="showResult()">See your result →</button>
+    </div>
+
+    <div class="quiz-complete" id="qresult">
+      <div class="quiz-score" id="score-display">0/3</div>
+      <div class="quiz-score-label">Comments correctly classified</div>
+      <div class="quiz-message" id="score-msg"></div>
+    </div>
+<div class="section-mark"><span class="section-mark-num">§ VIII · The Commitment</span></div>
+<div style="text-align: center;"><span class="eyebrow">The commitment</span>
+    <h2 class="display" style="margin-left: auto; margin-right: auto;">I understand and want<br>to <em>participate.</em></h2>
+
+    {{#if @member}}
+    <div class="commit-form" id="commitForm" data-member-uuid="{{@member.uuid}}">
+      <p class="pact-text">
+        I am here to engage with ideas, not to signal my team. I understand that my
+        words carry weight and that the platform will hold them accountable, not to
+        punish me, but to take me seriously. I welcome the mirror. I am willing to
+        be surprised by what I find in my own thinking.
+      </p>
+      {{!-- Signature line: the user types their name in flourishing
+            cursive (Pinyon Script). Acts as the ritual touchpoint
+            before the commit button — a real-document gesture, not
+            just a click. The button stays disabled until the
+            signature has at least 2 characters of content. --}}
+      <div class="signature-area">
+        <span class="signature-prompt">Sign your name below</span>
+        <div class="signature-line">
+          <input
+            type="text"
+            id="signatureInput"
+            class="signature-input"
+            autocomplete="off"
+            spellcheck="false"
+            maxlength="80"
+            aria-label="Your signature"
+            placeholder="Your full name"
+          >
+        </div>
+        <span class="signature-name-label">Signed in your hand</span>
+
+        {{!-- Font picker. The chip whose data-font matches the
+              active font carries .is-active. JS toggles the class
+              and updates the signature input's font-family live.
+              The chosen font is sent with the Pact commit. --}}
+        <div class="signature-font-picker">
+          <span class="signature-font-picker-label">Pick your hand</span>
+          <div class="signature-font-chips" id="signatureFontChips">
+            <button type="button" class="signature-font-chip is-active" data-font="Mrs Saint Delafield">Aa</button>
+            <button type="button" class="signature-font-chip"           data-font="Cherish">Aa</button>
+            <button type="button" class="signature-font-chip"           data-font="Give You Glory">Aa</button>
+            <button type="button" class="signature-font-chip"           data-font="Hurricane">Aa</button>
+            <button type="button" class="signature-font-chip"           data-font="Love Light">Aa</button>
+            <button type="button" class="signature-font-chip"           data-font="Nothing You Could Do">Aa</button>
+            <button type="button" class="signature-font-chip"           data-font="Oooh Baby">Aa</button>
+            <button type="button" class="signature-font-chip"           data-font="Qwigley">Aa</button>
+            <button type="button" class="signature-font-chip"           data-font="WindSong">Aa</button>
+          </div>
+        </div>
+      </div>
+
+      <p id="commitError" style="display:none; color:#b8372e; font-family: var(--font-body); font-size: 0.9rem; text-align:center; margin: 0 0 16px;"></p>
+      <div class="commit-wrap">
+        <button class="brass" id="commitBtn" onclick="commit()" disabled>I Understand &middot; Enter</button>
+      </div>
+    </div>
+    {{else}}
+    <div class="commit-form" style="text-align:center;">
+      <p class="pact-text" style="margin-bottom: 24px;">
+        I am here to engage with ideas, not to signal my team. I understand that my
+        words carry weight and that the platform will hold them accountable, not to
+        punish me, but to take me seriously. I welcome the mirror. I am willing to
+        be surprised by what I find in my own thinking.
+      </p>
+      <p style="font-family: var(--font-reading); font-size: 0.95rem; color: var(--secondary); font-style: italic; margin-bottom: 20px; line-height: 1.6;">
+        The Pact is a commitment, not a checkbox. Sign in to take it.
+      </p>
+      <div class="commit-wrap">
+        <a href="#/portal/signin" data-portal="signin" class="brass" style="text-decoration:none; display:inline-block;">Sign in to commit</a>
+      </div>
+      <p style="font-family: var(--font-reading); font-size: 0.85rem; color: var(--tertiary); font-style: italic; margin-top: 16px;">
+        Don't have an account yet?
+        <a href="#/portal/signup" data-portal="signup" style="color: var(--amber); text-decoration: none;">Join Dialecta</a>.
+      </p>
+    </div>
+    {{/if}}
+
+    <div class="committed" id="committedState">
+      <div class="committed-mark">✦</div>
+      <div class="committed-title">Welcome to <em>Dialecta.</em></div>
+      <div class="committed-sub">Your words are yours here. Use them well, and let the platform show you how to use them better.</div>
+      <button class="brass">Enter the Forum →</button>
+    </div></div>
+  </div>
+  <div class="folio">§ II–VIII</div>
+</section>
+
+</div><!-- /stage -->
+
+<footer class="footer">
+  <div class="footer-mark">Dialecta</div>
+  <p class="footer-note">A platform for constructive dialogue, informed debate, and idea-first discourse. Founded April 2026. Built on the belief that thinking well is worth rewarding.</p>
+</footer>
+
+</div><!-- /page -->
+
+<script>
+  const answers = { 1: 'heat', 2: 'forum', 3: 'fog' };
+  const feedback = {
+    1: {
+      correct: "<strong>The Heat, correct.</strong> There&rsquo;s a factual claim buried here (doesn&rsquo;t work at scale) but it arrives without evidence, wrapped in dismissal. The feeling is leading the argument, not the argument itself. A Forum version of this comment would cite the specific numbers it claims exist.",
+      wrong:   "<strong>The Heat is the closest read.</strong> There&rsquo;s a factual claim in here, scale limitations, but it&rsquo;s never substantiated. Wake up signals frustration rather than evidence. The Stance would require more explicit tribal framing; The Forum would require the actual numbers it gestures at."
+    },
+    2: {
+      correct: "<strong>The Forum, correct.</strong> This comment names a specific gap in the argument (transition costs), acknowledges what the article did well, and asks a precise question. Disagreement with a cited reason and a genuine question, that&rsquo;s exactly what The Forum rewards.",
+      wrong:   "<strong>The Forum is the right call here.</strong> Notice the structure: it names what worked, identifies a specific gap, and asks a genuine question rather than making an assertion. That combination is what separates Forum from everything below it."
+    },
+    3: {
+      correct: "<strong>The Fog, correct.</strong> The commenter has a feeling but hasn&rsquo;t located an idea yet. Something resonates and there&rsquo;s probably more to it, neither sentence tells us what they actually think. Not harmful, not dismissive, just genuinely unclear. An invitation to say more.",
+      wrong:   "<strong>The Fog is the right tier here.</strong> This isn&rsquo;t The Spark, there&rsquo;s no seed of an idea, just a vague sense of one. It isn&rsquo;t Echo because it doesn&rsquo;t restate anything. It&rsquo;s Fog: the reader genuinely can&rsquo;t tell what position the commenter holds."
+    }
+  };
+  let score = 0;
+
+  function answer(q, choice, btn) {
+    const btns = btn.parentElement.querySelectorAll('.quiz-btn');
+    btns.forEach(b => b.disabled = true);
+    const correct = answers[q];
+    const isCorrect = choice === correct;
+    if (isCorrect) score++;
+    btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+    btns.forEach(b => {
+      if (b !== btn && b.getAttribute('onclick').includes("'" + correct + "'")) {
+        b.classList.add('revealed');
+      }
+    });
+    const fb = document.getElementById('f' + q);
+    fb.innerHTML = isCorrect ? feedback[q].correct : feedback[q].wrong;
+    fb.classList.add('visible');
+    document.getElementById('n' + q).classList.add('visible');
+  }
+  function nextQ(n) {
+    document.getElementById('q' + (n-1)).classList.remove('active');
+    document.getElementById('q' + n).classList.add('active');
+    document.getElementById('q' + n).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function showResult() {
+    document.getElementById('q3').classList.remove('active');
+    const result = document.getElementById('qresult');
+    result.classList.add('visible');
+    document.getElementById('score-display').textContent = score + '/3';
+    const msgs = {
+      0: "You’re exactly who this platform is for. The tier system takes time to internalize. That’s intentional. Every reflection is a chance to sharpen the eye.",
+      1: "A solid start. One of these distinctions is genuinely subtle. Most people miss it the first time. That’s the system working as designed.",
+      2: "Strong reading. You’re already thinking the way this platform rewards. The third distinction is the hardest one in practice.",
+      3: "You have the eye. Welcome. The community will benefit from how you see."
+    };
+    document.getElementById('score-msg').textContent = msgs[score];
+  }
+  // The commit button enables as soon as the signature has at least 2
+  // characters. The earlier requirement to pick Path A / Path B was
+  // removed 2026-04-29 — that choice now lives in the post composer
+  // where it actually applies, not in the sign-on ritual.
+  function refreshCommitGate() {
+    var sig = document.getElementById('signatureInput');
+    var btn = document.getElementById('commitBtn');
+    if (!btn) return;
+    var hasName = !!sig && sig.value.trim().length >= 2;
+    btn.disabled = !hasName;
+    // Mirror what the user is typing into every chip so the preview
+    // shows their actual signature in each font, not just "Aa". Falls
+    // back to "Aa" while the input is empty.
+    var preview = (sig && sig.value.trim()) ? sig.value : 'Aa';
+    var chips = document.querySelectorAll('.signature-font-chip');
+    for (var i = 0; i < chips.length; i++) chips[i].textContent = preview;
+  }
+  // Wire the signature input to refresh the gate on every keystroke.
+  // Defer to next tick so the input element is mounted before we
+  // attach. addEventListener with a stale ref crashes silently if the
+  // form is gated to non-members (then the signature input doesn't
+  // render at all), hence the null-guard.
+  (function () {
+    var attach = function () {
+      var sig = document.getElementById('signatureInput');
+      if (sig) sig.addEventListener('input', refreshCommitGate);
+      attachSignatureFontPicker();
+      // Kick off canvas-based font calibration. Async; updates the
+      // chip scales + signature input in place once measurements
+      // come back. Fonts may finish loading in any order, so we wait
+      // on document.fonts.load promises before measuring.
+      calibrateSignatureFonts().catch(function () { /* swallow */ });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', attach);
+    } else {
+      attach();
+    }
+  })();
+  // Default font matches the .signature-input CSS (Mrs Saint Delafield)
+  // so the page renders identically before any chip is clicked. The JS
+  // mutation later overwrites this when the user picks a chip.
+  var SELECTED_SIGNATURE_FONT = 'Mrs Saint Delafield';
+  // Per-font scale, computed at page load by measuring each font's
+  // actual rendered bounding box on a canvas (see calibrateSignatureFonts
+  // below). Pre-seeded with 1.0 so the page renders sanely before
+  // calibration completes. Mrs Saint Delafield is the baseline (always 1.0).
+  var SIGNATURE_FONT_SCALES = {
+    'Mrs Saint Delafield':  1.00,
+    'Cherish':              1.00,
+    'Give You Glory':       1.00,
+    'Hurricane':            1.00,
+    'Love Light':           1.00,
+    'Nothing You Could Do': 1.00,
+    'Oooh Baby':            1.00,
+    'Qwigley':              1.00,
+    'WindSong':             1.00
+  };
+  // List of all 9 fonts the picker offers — used by the calibrator to
+  // know which families to load and measure.
+  var SIGNATURE_FONT_LIST = Object.keys(SIGNATURE_FONT_SCALES);
+  var SIGNATURE_BASELINE_FONT = 'Mrs Saint Delafield';
+
+  /* ── Dynamic font calibration ──
+     Each cursive face has a wildly different intrinsic visual height
+     at the same em-size: Qwigley's caps + flourishes barely reach the
+     x-height of Cherish's; Oooh Baby's swirls overshoot most others.
+     Static scale guesses can't normalize all 9 — so we measure each
+     font's actual rendered bounding box on a canvas and compute the
+     scale needed to bring it to the baseline (Mrs Saint Delafield).
+     Result: every font renders at the same visible height across the
+     picker chips and the signature input.
+     Sample text uses both ascenders and descenders ('Pgy Hk') so the
+     measurement captures the full vertical extent each font occupies. */
+  var SIGNATURE_CALIBRATION_SAMPLE = 'Pgy Hk';
+  var SIGNATURE_CALIBRATION_BASE_PX = 100;
+
+  function measureFontHeight(family, text) {
+    if (!measureFontHeight._ctx) {
+      var canvas = document.createElement('canvas');
+      measureFontHeight._ctx = canvas.getContext('2d');
+    }
+    var ctx = measureFontHeight._ctx;
+    ctx.font = SIGNATURE_CALIBRATION_BASE_PX + 'px "' + family + '", cursive';
+    var m = ctx.measureText(text);
+    var ascent  = m.actualBoundingBoxAscent  || 0;
+    var descent = m.actualBoundingBoxDescent || 0;
+    return ascent + descent;
+  }
+
+  async function calibrateSignatureFonts() {
+    // Wait for all 9 signature fonts to load before measuring. Without
+    // this, the canvas falls back to a system font and the heights are
+    // identical (and useless).
+    if (document.fonts && document.fonts.load) {
+      try {
+        await Promise.all(SIGNATURE_FONT_LIST.map(function (f) {
+          return document.fonts.load(SIGNATURE_CALIBRATION_BASE_PX + 'px "' + f + '"');
+        }));
+      } catch (e) { /* ignore — partial load still gives useful data */ }
+    }
+
+    var baseHeight = measureFontHeight(SIGNATURE_BASELINE_FONT, SIGNATURE_CALIBRATION_SAMPLE);
+    if (!baseHeight || !isFinite(baseHeight)) return; // measurement failed; keep 1.0 fallbacks
+
+    for (var i = 0; i < SIGNATURE_FONT_LIST.length; i++) {
+      var f = SIGNATURE_FONT_LIST[i];
+      var h = measureFontHeight(f, SIGNATURE_CALIBRATION_SAMPLE);
+      if (h > 0 && isFinite(h)) {
+        SIGNATURE_FONT_SCALES[f] = baseHeight / h;
+      }
+    }
+
+    // Apply to chips (sets --sig-scale per chip).
+    var chips = document.querySelectorAll('.signature-font-chip');
+    for (var j = 0; j < chips.length; j++) {
+      var chip = chips[j];
+      var fam  = chip.getAttribute('data-font');
+      if (fam && SIGNATURE_FONT_SCALES[fam] != null) {
+        chip.style.setProperty('--sig-scale', SIGNATURE_FONT_SCALES[fam]);
+      }
+    }
+
+    // Re-apply current font to the signature input so its scale picks
+    // up the freshly-measured value.
+    applySignatureFont(SELECTED_SIGNATURE_FONT);
+  }
+  function applySignatureFont(fontName) {
+    SELECTED_SIGNATURE_FONT = fontName;
+    var sig = document.getElementById('signatureInput');
+    if (sig) {
+      // Quote the family because every option is a multi-word name.
+      sig.style.fontFamily = '"' + fontName + '", cursive';
+      // Apply the per-font scale so e.g. Qwigley renders larger than
+      // its intrinsic 1em (which would otherwise read as too small
+      // next to Mrs Saint Delafield).
+      var scale = SIGNATURE_FONT_SCALES[fontName] || 1;
+      sig.style.setProperty('--sig-scale', scale);
+    }
+    var chips = document.querySelectorAll('.signature-font-chip');
+    for (var i = 0; i < chips.length; i++) {
+      var c = chips[i];
+      if (c.getAttribute('data-font') === fontName) c.classList.add('is-active');
+      else c.classList.remove('is-active');
+    }
+  }
+  function attachSignatureFontPicker() {
+    var chips = document.querySelectorAll('.signature-font-chip');
+    for (var i = 0; i < chips.length; i++) {
+      (function (chip) {
+        chip.addEventListener('click', function (e) {
+          // Defensive — the buttons are type="button" but stop default
+          // anyway so a parent <form> never gets a stray submit.
+          e.preventDefault();
+          var font = chip.getAttribute('data-font');
+          if (font) applySignatureFont(font);
+        });
+      })(chips[i]);
+    }
+  }
+  // Pact-text version. Bump when the body of the Pact changes
+  // materially. Stored on the profile row so we can re-prompt members
+  // who agreed to an older version.
+  var PACT_VERSION = '1.0';
+
+  async function commit() {
+    var btn   = document.getElementById('commitBtn');
+    var form  = document.getElementById('commitForm');
+    var errEl = document.getElementById('commitError');
+    var sig   = document.getElementById('signatureInput');
+    var memberUuid = form && form.getAttribute('data-member-uuid');
+    var signedName = sig ? sig.value.trim() : '';
+
+    if (!memberUuid) {
+      // Defensive — the @member branch should not even render the form
+      // for non-members, but guard anyway.
+      window.location.href = '#/portal/signin';
+      return;
+    }
+    if (signedName.length < 2) {
+      if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'Please sign your name above.'; }
+      if (sig) sig.focus();
+      return;
+    }
+
+    var apiBase = (window.__DIALECTA_API_URL__ || '').replace(/\/$/, '');
+    var origText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Committing…';
+    if (errEl) errEl.style.display = 'none';
+
+    try {
+      var res = await fetch(apiBase + '/api/profile/' + encodeURIComponent(memberUuid), {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          _action:        'become_author',
+          pact_version:   PACT_VERSION,
+          signed_name:    signedName,
+          signature_font: SELECTED_SIGNATURE_FONT,
+        }),
+      });
+      var json = await res.json().catch(function () { return {}; });
+      if (!res.ok && !(res.status === 409 && json.already_author)) {
+        throw new Error(json.error || ('Commit failed: ' + res.status));
+      }
+      // Success path (200) and idempotent re-commit (409 already_author)
+      // both transform the form into its sealed state. The signature
+      // stays on the page as the permanent record — "hardened" the same
+      // way a posted comment hardens after its malleability window. The
+      // brass button is replaced with a "Begin →" link to /profile/, so
+      // there is no longer a clickable button waiting for resubmission.
+      form.classList.add('committed-sealed');
+      if (sig) { sig.readOnly = true; sig.setAttribute('aria-readonly', 'true'); }
+      btn.disabled = true;
+      var promptEl = form.querySelector('.signature-prompt');
+      if (promptEl) promptEl.textContent = '✦  Sealed';
+      var nameLabelEl = form.querySelector('.signature-name-label');
+      if (nameLabelEl) {
+        var when = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+        nameLabelEl.textContent = 'Committed · ' + when;
+      }
+      var btnWrap = btn.parentElement;
+      if (btnWrap) {
+        btnWrap.innerHTML = '<a class="brass committed-cta" href="/profile/">Welcome to Dialecta &middot; Begin →</a>';
+      }
+      // The legacy committedState block below is no longer needed — the
+      // sealed form is the celebration. Scroll the form's footer into
+      // view so the new "Begin" link sits clearly in the viewport.
+      if (btnWrap && typeof btnWrap.scrollIntoView === 'function') {
+        btnWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = origText;
+      if (errEl) {
+        errEl.style.display = 'block';
+        errEl.textContent = err.message || 'Could not commit. Try again in a moment.';
+      }
+    }
+  }
+
+
+</script>
+
+{{/post}}

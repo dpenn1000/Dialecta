@@ -1,0 +1,72 @@
+{{!< default}}
+
+{{!--
+  Member-aware landing. Two render paths:
+    • Signed-in members: their profile is the index.
+      Same mount div + data attributes the /profile/ route uses; the
+      React mount in index.jsx finds #dialecta-profile-root and renders
+      the canonical profile (fingerprint, axes, live feed, archetype,
+      Steward Order, connections). The live feed tab inside the profile
+      provides their access to recent articles — the post grid moves
+      from "front door" to "one tab inside your home."
+    • Visitors: the article-feed grid (unchanged) plus the join CTA.
+      The article list remains accessible to logged-in members at
+      /articles/ (or via the profile's live-feed tab).
+  Canonical /profile/ stays available for direct access; this just
+  surfaces the same view at the root URL for the signed-in case.
+--}}
+{{#if @member}}
+  <div
+    id="dialecta-profile-root"
+    data-member-id="{{@member.uuid}}"
+    data-member-name="{{@member.name}}"
+    data-member-email="{{@member.email}}"
+    data-member-avatar="{{@member.avatar_image}}"
+    data-member-created="{{@member.created_at}}"
+  ></div>
+  <script src="{{asset 'js/home.js'}}" defer></script>
+{{else}}
+  <div class="post-feed">
+    {{#foreach posts filter="type:post"}}
+    <article class="post-card" data-post-id="{{id}}" onclick="window.location='{{url}}'" role="link" tabindex="0">
+
+      {{#primary_tag}}
+        <div class="post-card-tag" data-topic-slug="{{slug}}">{{name}}</div>
+      {{/primary_tag}}
+
+      <h2 class="post-card-title">
+        <a href="{{url}}">{{title}}</a>
+      </h2>
+
+      {{#if excerpt}}
+        <p class="post-card-excerpt">{{excerpt}}</p>
+      {{/if}}
+
+      <div class="post-card-meta">
+        {{#primary_author}}
+          {{!-- Author link: starts pointed at Ghost's author archive as
+                fallback, swapped to /profile/?id=<member_id> by the bulk
+                byline-override script in default.hbs. stopPropagation
+                keeps the card-level click from also firing. --}}
+          <a class="post-card-author" href="{{url}}" onclick="event.stopPropagation()">{{name}}</a>
+          <span class="post-card-meta-sep">·</span>
+        {{/primary_author}}
+        <span>{{date format="MMMM D, YYYY"}}</span>
+        {{#if reading_time}}
+          <span class="post-card-meta-sep">·</span>
+          <span>{{reading_time}} min read</span>
+        {{/if}}
+        <span id="dialecta-forum-rate-{{id}}" class="post-card-forum-rate" style="display:none;"></span>
+      </div>
+
+    </article>
+    {{/foreach}}
+
+    <div class="feed-join-cta">
+      <p class="feed-join-label">Ideas are the protagonist.</p>
+      <p class="feed-join-sub">Join the conversation. Classify arguments, map your position, track how your thinking evolves.</p>
+      <a href="#/portal/signup" data-portal="signup" class="feed-join-btn">Create account</a>
+      <a href="#/portal/signin" data-portal="signin" class="feed-join-signin">Already a member? Sign in</a>
+    </div>
+  </div>
+{{/if}}

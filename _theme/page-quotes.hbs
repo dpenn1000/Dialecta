@@ -1,0 +1,27 @@
+{{!< default}}
+
+{{#contentFor "head"}}
+  <meta name="robots" content="noindex, follow">
+{{/contentFor}}
+
+{{!--
+  The Dialecta Quote Library admin and browse page.
+
+  Auth tiers (resolved client-side via /api/quotes/admins):
+    • Logged-out visitor       → browse live library only
+    • Logged-in member          → browse + suggest (lands as draft for admin review)
+    • is_quote_admin = true     → browse + suggest + add + edit + archive +
+                                  drafts queue + admin management
+
+  The mount div carries member identity from Ghost. The React app fetches
+  admin status from the API (rather than embedding it as a data attribute)
+  because the flag can change at any time.
+--}}
+<div
+  id="dialecta-quotes-root"
+  data-member-id="{{@member.uuid}}"
+  data-member-name="{{@member.name}}"
+  data-member-email="{{@member.email}}"
+></div>
+
+<script src="{{asset "js/quotes.js"}}" defer></script>

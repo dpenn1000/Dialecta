@@ -1,0 +1,43 @@
+{
+  "mode": "dry-run",
+  "only_post_id": "69efc475e5eec200010d5299",
+  "api_base": "https://dialecta.vercel.app",
+  "results": [
+    {
+      "ghost_post_id": "69efc475e5eec200010d5299",
+      "core_claim_preview": "Faith should be understood, following Kierkegaard, as a posture sustained in spite of doubt rather t",
+      "before_axes": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Obstacle to overcome",
+            "Reason to leave",
+            "Constitutive tension"
+          ],
+          "topic": "Doubt in faith"
+        }
+      ],
+      "recommended_type": "ternary",
+      "after_axes": [
+        {
+          "type": "ternary",
+          "topic": "Doubt and practice",
+          "poles": [
+            "Resolve or leave",
+            "Hide and pretend",
+            "Show up with doubt"
+          ]
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 1,
+      "after_author_position": {
+        "a": 0.05,
+        "b": 0.05,
+        "c": 0.9
+      }
+    }
+  ]
+}

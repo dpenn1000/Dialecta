@@ -1,0 +1,151 @@
+{
+  "mode": "dry-run",
+  "apiBase": "https://dialecta.vercel.app",
+  "summary": {
+    "dry_run_ok": 2
+  },
+  "entries": [
+    {
+      "ghost_post_id": "69efc475e5eec200010d5299",
+      "slug": "on-doubt-and-devotion-when-faith-pauses",
+      "title": "On Doubt and Devotion: When Faith Pauses",
+      "author_name": "Maya Reiss",
+      "author_member_id": "seed:maya",
+      "word_count": 318,
+      "status": "dry_run_ok",
+      "declaration": {
+        "core_claim": "Doubt is not an obstacle to Christian faith but a constitutive part of it, and the right pastoral response is to keep practicing (showing up, praying, reading) without artificially resolving the doubt.",
+        "scope_boundary": "This is not a defense of any particular doctrine, an argument for or against Christianity's truth claims, or a guide for people who have decisively deconverted; it also does not address non-Christian traditions or offer a systematic theology of doubt beyond the pastoral posture.",
+        "strongest_objection": "A thoughtful reader could argue that perpetually unresolved doubt, dressed up as Kierkegaardian tension, can become a comfortable evasion that lets people avoid the harder work of either genuinely revising their beliefs in light of evidence or honestly leaving a tradition they no longer affirm; calling sustained ambivalence 'faith' may sanctify intellectual cowardice and let institutions off the hook for the specific claims they ask members to assent to."
+      },
+      "ai_analysis": {
+        "core_claim_detected": "Doubt is not an obstacle to faith but constitutive of it; the pastoral response is to continue practicing (showing up, praying, reading) while holding unresolved doubt rather than either hiding it or leaving the tradition entirely.",
+        "alignment": "aligned",
+        "alignment_note": "Your independent read matches the author's declared core claim closely, including the pastoral posture and the rejection of false binary choices.",
+        "ai_suggested_tier": "forum",
+        "tier_reason": "Reads as a specific, developed claim grounded in Kierkegaard and Weil, with clear scope boundaries and direct engagement with the strongest objection (the risk that sustained ambivalence becomes evasion).",
+        "specificity_score": 3,
+        "emotion": "medium",
+        "tribal_markers": false,
+        "tribal_example": null,
+        "opposing_view_engaged": "partially",
+        "flagged_passages": [
+          {
+            "passage": "One prominent Christian framing treats doubt as a problem to overcome, a temporary obstacle on the way back to settled belief. That framing has done real damage.",
+            "tier_pull": "forum",
+            "why": "Names a specific opposing position and claims a concrete consequence, setting up the argument's stakes without strawmanning."
+          },
+          {
+            "passage": "perpetually unresolved doubt, dressed up as Kierkegaardian tension, can become a comfortable evasion that lets people avoid the harder work of either genuinely revising their beliefs",
+            "tier_pull": "forum",
+            "why": "This is the strongest objection the author identified in scope; the article acknowledges it exists but does not fully rebut it, which is the partial engagement."
+          },
+          {
+            "passage": "The fourth option, which most traditions name but most parishes don't actually practice, is to continue showing up with the flinch.",
+            "tier_pull": "forum",
+            "why": "Moves from theology to concrete pastoral practice, grounding the claim in observable behavior rather than abstraction."
+          },
+          {
+            "passage": "I have come to think that not-knowing-quite-what-I'm-doing is part of going.",
+            "tier_pull": "forum",
+            "why": "Personal testimony that illustrates the claim without collapsing into memoir; the 'I' serves the argument rather than replacing it."
+          }
+        ],
+        "axis_suggestions": [
+          {
+            "topic": "Doubt in Faith",
+            "axis_a": "Doubt as obstacle to resolve",
+            "axis_b": "Doubt as constitutive condition",
+            "type": "cartesian"
+          },
+          {
+            "topic": "Pastoral Response",
+            "axis_a": "Hide or leave",
+            "axis_b": "Show up with unresolved tension",
+            "type": "cartesian"
+          },
+          {
+            "topic": "Intellectual Honesty",
+            "axis_a": "Sustained ambivalence as evasion",
+            "axis_b": "Sustained ambivalence as legitimate posture",
+            "type": "cartesian"
+          }
+        ],
+        "borderline_flag": false,
+        "borderline_other_tier": null,
+        "author_message": "You've made a specific claim about what faith is and grounded it in named thinkers and concrete pastoral practice; the article would strengthen if you directly addressed whether the objection you named in scope (that this posture can become comfortable evasion) is a real risk worth naming in the text itself, or whether the practice of showing up with the flinch has built-in safeguards against it. Or post as-is."
+      }
+    },
+    {
+      "ghost_post_id": "69d5c5c083cd72000193f0cd",
+      "slug": "the-conversation-communities-keep-having-about-solar-and-what-the-evidence-actually-says",
+      "title": "The Conversation Communities Keep Having About Solar (And What the Evidence Actually Says)",
+      "author_name": "Daniel Pennington",
+      "author_member_id": "2f0d5ff2-570e-405a-8b40-ef5552660eb8",
+      "word_count": 2470,
+      "status": "dry_run_ok",
+      "declaration": {
+        "core_claim": "The most common technical objections raised in community solar debates (environmental harm, rapid degradation, high cost to ratepayers, landfill waste, and unfavorable PPAs) are largely based on outdated information from 10 to 15 years ago and no longer match what current evidence shows about utility and community-scale solar in 2026.",
+        "scope_boundary": "This piece is not arguing whether any specific project, including the Lake Street Solar Project in Manchester, CT, should be approved. It does not address site-specific siting decisions, wetland proximity issues, individual contract terms, or whether community opposition itself is illegitimate. It also does not cover residential rooftop solar economics in depth beyond the utility-scale comparison, nor does it evaluate non-technical objections like aesthetics or local governance procedure.",
+        "strongest_objection": "A thoughtful reader could argue that the author understates aggregation and execution risk: even if average modern panels degrade slowly, recycling value is rising, and utility-scale economics look favorable on paper, these are population-level statistics that do not guarantee outcomes for any specific 1.2 MW project. Recycling infrastructure projections to 2050 are speculative, EPR programs are voluntary and could be abandoned, the Brattle cost figures depend on modeling assumptions and subsidies that may not persist, and a 25-year PPA locks a community into one developer's execution quality and financial solvency. Communities pushing back may be correctly applying a precautionary principle to a long-duration, site-specific commitment, even if the aggregate technology trends are as favorable as the author claims."
+      },
+      "ai_analysis": {
+        "core_claim_detected": "The five most common technical objections to community solar (environmental harm, panel degradation, high ratepayer costs, landfill waste, and unfavorable PPAs) rest on evidence from 10-15 years ago and no longer match what current data shows about modern solar technology and economics in 2026.",
+        "alignment": "aligned",
+        "alignment_note": "Your read matches the author's declared core claim closely; the article systematically addresses each of the five objections with current evidence and explicitly frames them as outdated.",
+        "ai_suggested_tier": "forum",
+        "tier_reason": "This reads as a forum-tier article. It makes a specific, testable claim (objections are outdated), sets clear scope boundaries (excludes site-specific siting and aesthetics), engages the strongest objection (aggregation and execution risk for individual projects), and grounds reasoning in named evidence (NRCS data, Brattle Group study, manufacturer warranties, recycling economics).",
+        "specificity_score": 3,
+        "emotion": "low",
+        "tribal_markers": false,
+        "tribal_example": null,
+        "opposing_view_engaged": "yes",
+        "flagged_passages": [
+          {
+            "passage": "These are not frivolous concerns. Several of them were well-founded a decade ago. The problem is that the conversation is still being conducted as if the evidence and technology hasn't evolved.",
+            "tier_pull": "forum",
+            "why": "This passage explicitly acknowledges the historical legitimacy of objections while naming the specific problem (outdated framing), which demonstrates engagement with opposing logic rather than dismissal."
+          },
+          {
+            "passage": "A project installed today reaches end of life in 25 to 30 years. The recycling economy that will exist in 2050 will not resemble the one critics were rightly describing five years ago.",
+            "tier_pull": "forum",
+            "why": "Concedes the validity of past criticism while introducing temporal specificity (2050 projections) that acknowledges the speculative nature of future infrastructure, which strengthens rather than weakens the argument."
+          },
+          {
+            "passage": "The argument that communities should wait for better technology is structurally equivalent to the argument for not purchasing a car because a better model will eventually exist.",
+            "tier_pull": "spark",
+            "why": "This analogy is intuitive but somewhat reductive; it sidesteps the legitimate difference between individual consumer choice and 25-year community infrastructure commitments with execution risk."
+          },
+          {
+            "passage": "The comparison isn't between solar and some pristine baseline. It's between solar and what's already running.",
+            "tier_pull": "forum",
+            "why": "This frames the actual decision boundary clearly and prevents a common rhetorical trap (comparing to an impossible alternative rather than realistic options)."
+          }
+        ],
+        "axis_suggestions": [
+          {
+            "topic": "Evidence Temporality",
+            "axis_a": "Objections based on 10-15 year old data remain valid guides for current decisions",
+            "axis_b": "Technology and economics have evolved enough that old objections no longer apply to 2026 installations",
+            "type": "cartesian"
+          },
+          {
+            "topic": "Risk Aggregation",
+            "axis_a": "Favorable population-level statistics guarantee acceptable outcomes for individual projects",
+            "axis_b": "Individual project execution risk justifies precautionary skepticism even when aggregate trends are positive",
+            "type": "cartesian"
+          },
+          {
+            "topic": "Comparison Baseline",
+            "axis_a": "Solar should be evaluated against an ideal or pristine energy system",
+            "axis_b": "Solar should be evaluated against the actual alternative energy sources currently supplying the grid",
+            "type": "cartesian"
+          }
+        ],
+        "borderline_flag": false,
+        "borderline_other_tier": null,
+        "author_message": "You've built a systematic case that specific objections rest on outdated data, and you've named the strongest counterargument yourself in your scope boundary: that population-level statistics don't guarantee individual project outcomes and that a 25-year PPA is a long-duration commitment where execution risk matters. Consider deepening that tension by showing one concrete example of how a community could apply a precautionary principle to this specific project while accepting your broader evidence about the technology, or post as-is."
+      }
+    }
+  ]
+}

@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="{{@site.locale}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{meta_title}}</title>
+  <link rel="stylesheet" href="{{asset "css/style.css"}}">
+  {{!-- Playfair Display italic for the QuoteHero in the sidebar — its
+        Q (and the way the italic strokes flow into one another) reads
+        more elegantly at hero scale than Cormorant italic. Loaded only
+        as italic 400 / 500 / 600 since that's the only place we use
+        it; weight 400 stays delicate, 500 is the default, 600 reserved
+        for hover / emphasis. --}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  {{!-- DNS warm-up for the social share targets used by the article
+        Share row (post.hbs). Facebook's sharer.php is famously slow on
+        first hit; pre-resolving DNS shaves 100-300ms off the first click.
+        Cheap (~bytes), no actual connection opened — that's preconnect's
+        territory and we reserve it for the asset-critical hosts above. --}}
+  <link rel="dns-prefetch" href="https://www.facebook.com">
+  <link rel="dns-prefetch" href="https://x.com">
+  <link rel="dns-prefetch" href="https://www.linkedin.com">
+  <link rel="dns-prefetch" href="https://www.reddit.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+  {{!-- Signature fonts. Keep the family list in sync with
+        api/_signature-fonts.js (the server allowlist) — 9 hand-script
+        faces a contributor can pick when signing the Pact. The
+        page-pact.hbs picker, the profile signature line, and the
+        article sign-off all read profiles.signature_font and render in
+        the chosen face. Loaded sitewide so any page that surfaces a
+        signature has the family cached; only the matching font's woff2
+        actually downloads on each page. --}}
+  <link href="https://fonts.googleapis.com/css2?family=Cherish&family=Give+You+Glory&family=Hurricane&family=Love+Light&family=Mrs+Saint+Delafield&family=Nothing+You+Could+Do&family=Oooh+Baby&family=Qwigley&family=WindSong&display=swap" rel="stylesheet">
+  {{!-- ──────────────────────────────────────────────────────────────────
+       CUSTOM OG IMAGE (post pages only)
+       ──────────────────────────────────────────────────────────────────
+       OG-3 of the OG-card series. The image itself is generated
+       server-side by dialecta-next at /article/<slug>/opengraph-image
+       (1200x630 PNG, branded in cream + brass + Cormorant Garamond).
+       These tags are emitted BEFORE {{ghost_head}} so social-media
+       crawlers prefer ours over Ghost's auto-generated og:image
+       (which falls back to the post's feature_image or the site
+       cover). The {{#post}} block ensures the override only applies
+       on single-post templates; non-post routes get Ghost's default.
+
+       URL is dialecta-next.vercel.app. The library.dialecta.org
+       subdomain plan was rolled back 2026-05-06; dialecta-next is
+       a permanent share-card sidecar, not a future SEO surface.
+       ────────────────────────────────────────────────────────────── --}}
+  {{#post}}
+    <meta property="og:image" content="https://dialecta-next.vercel.app/article/{{slug}}/opengraph-image" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:image" content="https://dialecta-next.vercel.app/article/{{slug}}/opengraph-image" />
+    <meta name="twitter:card" content="summary_large_image" />
+  {{/post}}
+  {{ghost_head}}
+  {{{block "head"}}}
+</head>
+<body class="{{body_class}}">
+
+{{!-- ──────────────────────────────────────────────────────────────────
+     CANONICAL NAV ICON SPRITE
+     ──────────────────────────────────────────────────────────────────
+     Five nav icons + the asterism-strip center mark, defined once as
+     SVG <symbol> elements and referenced via <use> elsewhere on the
+     page. Sprite is hidden visually but reachable by id.
+
+     Final picks (2026-04-28):
+       Articles  → i-nav-codex          (open codex)
+       Community → i-nav-triangle       (3 dots in conversation)
+       Stewards  → i-nav-compassstar    (8-point compass star, no circle)
+       About     → i-nav-italic-i       (Cormorant italic lowercase i)
+       The Pact  → i-nav-asterismseal   (wax seal with ⁂ inside)
+       Strip     → i-strip-curve        (3 dots with connecting curve)
+     ────────────────────────────────────────────────────────────────── --}}
+<svg width="0" height="0" style="position:absolute; visibility:hidden" aria-hidden="true">
+  <defs>
+    <symbol id="i-nav-codex" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M12 7 L4 8 L4 19 L12 18 Z"/>
+      <path d="M12 7 L20 8 L20 19 L12 18 Z"/>
+      <line x1="12" y1="7" x2="12" y2="18"/>
+      <line x1="6" y1="11" x2="10" y2="10.5" stroke-width="0.7"/>
+      <line x1="6" y1="13.5" x2="10" y2="13" stroke-width="0.7"/>
+      <line x1="14" y1="10.5" x2="18" y2="11" stroke-width="0.7"/>
+      <line x1="14" y1="13" x2="18" y2="13.5" stroke-width="0.7"/>
+    </symbol>
+    <symbol id="i-nav-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+      <circle cx="6" cy="8" r="2.4" fill="currentColor"/>
+      <circle cx="18" cy="8" r="2.4" fill="currentColor"/>
+      <circle cx="12" cy="17" r="2.4" fill="currentColor"/>
+      <path d="M8.2 8 Q12 5.5 15.8 8" stroke-linecap="round"/>
+      <path d="M7 10.2 Q9 14.5 10.6 15.5" stroke-linecap="round"/>
+      <path d="M17 10.2 Q15 14.5 13.4 15.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-nav-compassstar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round">
+      <path d="M12 3 L13 11 L11 11 Z" fill="currentColor" stroke="none"/>
+      <path d="M12 21 L13 13 L11 13 Z" fill="currentColor" stroke="none"/>
+      <path d="M21 12 L13 13 L13 11 Z" fill="currentColor" stroke="none"/>
+      <path d="M3 12 L11 13 L11 11 Z" fill="currentColor" stroke="none"/>
+      <path d="M18.4 5.6 L13 12 L12 11 Z" stroke-width="1"/>
+      <path d="M5.6 5.6 L11 11 L12 12 Z" stroke-width="1"/>
+      <path d="M18.4 18.4 L13 12 L12 13 Z" stroke-width="1"/>
+      <path d="M5.6 18.4 L11 13 L12 12 Z" stroke-width="1"/>
+      <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="i-nav-italic-i" viewBox="0 0 24 24">
+      <text x="12" y="20" font-family="'Cormorant Garamond', Georgia, serif" font-style="italic" font-weight="500" font-size="26" text-anchor="middle" fill="currentColor">i</text>
+    </symbol>
+    <symbol id="i-nav-asterismseal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+      <circle cx="12" cy="12" r="9"/>
+      <circle cx="12" cy="12" r="6.5" stroke-width="0.7" stroke-dasharray="0.8 0.8"/>
+      <circle cx="9" cy="10.5" r="1.3" fill="currentColor"/>
+      <circle cx="15" cy="10.5" r="1.3" fill="currentColor"/>
+      <circle cx="12" cy="14.5" r="1.3" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-strip-curve" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+      <circle cx="5" cy="11" r="1.3" fill="currentColor"/>
+      <circle cx="19" cy="11" r="1.3" fill="currentColor"/>
+      <circle cx="12" cy="15" r="1.3" fill="currentColor"/>
+      <path d="M6.3 11 Q12 8.5 17.7 11" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-nav-fingerprint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+      <ellipse cx="12" cy="12" rx="3" ry="4"/>
+      <ellipse cx="12" cy="12" rx="5.5" ry="7" stroke-width="1"/>
+      <ellipse cx="12" cy="12" rx="8" ry="10" stroke-width="0.7"/>
+    </symbol>
+    <symbol id="i-nav-guidebook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+      <rect x="6" y="4" width="12" height="17" rx="0.5"/>
+      <line x1="6" y1="7" x2="18" y2="7" stroke-width="0.8"/>
+      <line x1="9" y1="11" x2="15" y2="11" stroke-width="0.8"/>
+      <line x1="9" y1="14" x2="14" y2="14" stroke-width="0.8"/>
+      <line x1="9" y1="17" x2="13" y2="17" stroke-width="0.8"/>
+      <path d="M14 4 L14 10 L15 8.7 L16 10 L16 4 Z" fill="currentColor" stroke="none"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav class="site-nav">
+  <div class="nav-logo-bar">
+    <div class="nav-logo-inner">
+      {{!-- Logo destination: /profile/ for signed-in members (so the
+           publication's "home" for them is their identity surface +
+           live feed), {{@site.url}} for guests (the article landing). --}}
+      {{!-- Logo → home. For members, "home" IS their profile (rendered by
+            index.hbs's @member branch). For visitors, home is the article
+            feed. One URL, two contextual renders. The /profile/ route
+            remains the canonical explicit URL. --}}
+      <a href="{{@site.url}}">
+        <img src="{{@site.logo}}" alt="{{@site.title}}">
+      </a>
+      <div class="nav-member-area">
+        {{#if @member}}
+          <a href="/write/" class="nav-write-link">Write</a>
+          {{!-- Notifications bell. Mounted client-side by index.jsx into
+                this span. Renders the bell icon + unread badge + slide-in
+                drawer. data-dialecta-bell is the selector index.jsx finds. --}}
+          <span class="nav-bell-slot"
+                data-dialecta-bell
+                data-member-uuid="{{@member.uuid}}"></span>
+          <a href="/profile/" class="nav-member-link">
+            <span class="nav-member-initials"
+                  data-member-name="{{@member.name}}"
+                  data-member-avatar="{{@member.avatar_image}}"
+                  data-member-uuid="{{@member.uuid}}"></span>
+            <span class="nav-member-name">{{@member.name}}</span>
+          </a>
+          {{!-- Settings + Sign Out previously lived here as separate top-bar
+                affordances. They moved into the drawer's member panel
+                (rendered below) on 2026-04-29 so the brand bar holds only
+                identity (avatar + name) and the Write CTA. The drawer is
+                now the canonical place for member utilities on every
+                viewport. --}}
+        {{else}}
+          <a href="#/portal/signin" data-portal="signin" class="nav-signin-link">Sign in</a>
+          <a href="#/portal/signup" data-portal="signup" class="nav-join-link">Join</a>
+        {{/if}}
+        <button
+          class="nav-drawer-toggle"
+          type="button"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="nav-drawer"
+        >☰</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-sub-bar">
+    <div class="nav-sub-inner">
+      {{navigation}}
+    </div>
+    {{!-- Mobile asterism strip — visible only below the lg breakpoint.
+         Decorative-only: narrowing line swipes flanking a curved-asterism
+         mark. CSS in the EDITORIAL DRAWER section of style.css. --}}
+    <div class="nav-asterism-strip" aria-hidden="true">
+      <span class="nav-asterism-swipe"></span>
+      <svg class="nav-asterism-mark" width="22" height="22" viewBox="0 0 24 24">
+        <use href="#i-strip-curve"></use>
+      </svg>
+      <span class="nav-asterism-swipe"></span>
+    </div>
+  </div>
+</nav>
+
+{{!-- ──────────────────────────────────────────────────────────────────
+     EDITORIAL DRAWER (Model B mobile nav)
+     ──────────────────────────────────────────────────────────────────
+     Visible only below the lg breakpoint (≤ 1099px). Holds the canonical
+     5 nav destinations as Cormorant italic links with brass ornaments,
+     plus a member identity footer with Steward Order placeholder.
+     Styles: see "EDITORIAL DRAWER" section in style.css.
+     ────────────────────────────────────────────────────────────────── --}}
+<aside class="nav-drawer" id="nav-drawer" aria-hidden="true" aria-label="Site navigation">
+  <div class="nav-drawer-header">
+    {{#if @site.logo}}
+      <a href="{{@site.url}}" class="nav-drawer-logo-link" aria-label="{{@site.title}}">
+        <img class="nav-drawer-logo" src="{{@site.logo}}" alt="{{@site.title}}">
+      </a>
+    {{else}}
+      <span class="nav-drawer-title">{{@site.title}}</span>
+    {{/if}}
+    <span class="nav-drawer-subtitle">A publication</span>
+  </div>
+
+  <ul class="nav-drawer-links">
+    {{#foreach navigation}}
+      <li{{#if current}} class="nav-current"{{/if}}>
+        <a href="{{url}}"{{#if current}} aria-current="page"{{/if}}>{{label}}</a>
+      </li>
+    {{/foreach}}
+  </ul>
+
+  <div class="nav-drawer-divider">⁂</div>
+
+  {{#if @member}}
+    <div class="nav-drawer-member">
+      <div class="nav-drawer-avatar"
+           data-member-name="{{@member.name}}"
+           data-member-avatar="{{@member.avatar_image}}"
+           data-member-uuid="{{@member.uuid}}">
+        <span class="nav-drawer-avatar-initials"></span>
+      </div>
+      <div class="nav-drawer-membername">{{@member.name}}</div>
+      <div class="nav-drawer-memberorder" data-member-uuid="{{@member.uuid}}"></div>
+      <div class="nav-drawer-memberlinks">
+        {{!-- Profile link removed 2026-04-29: the avatar + name above are
+              already a link to /profile/ on every viewport, so a separate
+              "Profile" pill duplicated the affordance. Order kept as
+              Write → Account → Settings → Sign out: utility actions move
+              left-to-right in declining frequency, with Sign out always
+              last because it's the destructive / session-terminating
+              option. --}}
+        <a href="/write/">Write</a>
+        <a href="#/portal/account" data-portal="account">Account</a>
+        <a href="/profile/?settings=open" data-settings-link>Settings</a>
+        {{!-- Sign Out: explicit member-session DELETE + reload. Calls
+              /members/api/session DELETE directly (more reliable than
+              Portal's hash route) and reloads to '/' on completion. This
+              is now the only sign-out affordance in the shell; the
+              top-bar nav-signout-link was retired same day. --}}
+        <a
+          href="#"
+          onclick="event.preventDefault(); fetch('/members/api/session', { method: 'DELETE', credentials: 'same-origin' }).catch(function(){}).finally(function(){ window.location.href = '/'; });"
+        >Sign out</a>
+      </div>
+
+      {{!-- Admin shortcuts. Hidden by default; populated below by JS that
+            reads the member's effective_capabilities from /api/profile/<uuid>
+            and renders one pill per capability the member holds. Members
+            without any admin role see nothing. --}}
+      <div class="nav-drawer-admin-links" data-member-uuid="{{@member.uuid}}" hidden></div>
+    </div>
+  {{else}}
+    <div class="nav-drawer-member">
+      <div class="nav-drawer-memberlinks">
+        <a href="#/portal/signin" data-portal="signin">Sign in</a>
+        <a href="#/portal/signup" data-portal="signup">Join</a>
+      </div>
+    </div>
+  {{/if}}
+</aside>
+
+<div class="nav-drawer-scrim" aria-hidden="true"></div>
+
+{{!-- Sign-up invite mount. Renders the brass+paper invitation modal for
+      unregistered visitors (data-is-member="false"); the React wrapper
+      bails immediately when data-is-member="true". Auto-shows after a
+      grace period on first visit + intercepts logo clicks for guests. --}}
+<div id="dialecta-signup-invite-root" data-is-member="{{#if @member}}true{{else}}false{{/if}}"></div>
+
+{{!-- ──────────────────────────────────────────────────────────────────
+     UNDER-CONSTRUCTION BANNER
+     ──────────────────────────────────────────────────────────────────
+     Sitewide single-line plate sitting between nav and main. Carries a
+     short note that the platform is in active development plus a link
+     that opens the feedback modal. Visible to every visitor (members
+     and guests). Intended to stay until First Quills reaches public
+     launch (M5/M6 in the roadmap).
+     Styles: see "BUILD BANNER + FEEDBACK MODAL" in style.css.
+     ────────────────────────────────────────────────────────────────── --}}
+<div class="dialecta-build-strip" role="status" aria-live="polite">
+  <span class="dialecta-build-strip-mark" aria-hidden="true">⁂</span>
+  <span class="dialecta-build-strip-text">
+    <span class="dialecta-brass dialecta-build-strip-name">Dialecta</span> is in active development.
+    <a href="#" data-feedback-trigger>Tell us what you see.</a>
+  </span>
+  <span class="dialecta-build-strip-mark" aria-hidden="true">⁂</span>
+</div>
+
+{{!-- ──────────────────────────────────────────────────────────────────
+     FEEDBACK MODAL
+     ──────────────────────────────────────────────────────────────────
+     Hidden by default. Opens when any element with data-feedback-trigger
+     is clicked. POSTs to /api/feedback with auto-captured browser/page
+     metadata. Member identity is attached automatically when @member is
+     signed in (via window.__DIALECTA_MEMBER_UUID__ set below).
+     ────────────────────────────────────────────────────────────────── --}}
+<div class="dialecta-feedback-modal" id="dialecta-feedback-modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="dialecta-feedback-modal-title">
+  <div class="dialecta-feedback-modal-scrim" data-feedback-close></div>
+  <div class="dialecta-feedback-modal-content">
+    <button type="button" class="dialecta-feedback-modal-close" data-feedback-close aria-label="Close">×</button>
+    <div class="dialecta-feedback-modal-kicker">⁂ The Dialecta Press</div>
+    <h2 id="dialecta-feedback-modal-title" class="dialecta-feedback-modal-title">Tell us what you see</h2>
+    <p class="dialecta-feedback-modal-body">
+      A bug, an idea, a typo, an observation. We read every submission and
+      aim to acknowledge within 48 hours.
+    </p>
+
+    <form class="dialecta-feedback-form" data-feedback-form>
+      <label class="dialecta-feedback-field">
+        <span class="dialecta-feedback-label">Kind</span>
+        <select name="type">
+          <option value="bug">Bug · something broken</option>
+          <option value="idea" selected>Idea · feature or enhancement</option>
+          <option value="content">Content · typo, factual issue</option>
+          <option value="question">Question · needs answer</option>
+          <option value="nit">Nit · small observation</option>
+        </select>
+      </label>
+
+      <label class="dialecta-feedback-field">
+        <span class="dialecta-feedback-label">Short title <span class="dialecta-feedback-optional">(optional)</span></span>
+        <input type="text" name="title" maxlength="200" />
+      </label>
+
+      <label class="dialecta-feedback-field">
+        <span class="dialecta-feedback-label">What did you notice?</span>
+        <textarea name="body" required maxlength="5000" rows="6"></textarea>
+      </label>
+
+      <label class="dialecta-feedback-field">
+        <span class="dialecta-feedback-label">
+          Screenshot <span class="dialecta-feedback-optional">(optional, max 5MB)</span>
+        </span>
+        <input
+          type="file"
+          name="screenshot"
+          accept="image/png,image/jpeg,image/gif,image/webp"
+          data-feedback-screenshot
+        />
+        <span class="dialecta-feedback-screenshot-hint" data-feedback-screenshot-hint hidden></span>
+      </label>
+
+      <div class="dialecta-feedback-error" data-feedback-error hidden></div>
+
+      <div class="dialecta-feedback-form-actions">
+        <button type="button" class="dialecta-feedback-cancel" data-feedback-close>Cancel</button>
+        <button type="submit" class="dialecta-feedback-submit">Submit</button>
+      </div>
+    </form>
+
+    <div class="dialecta-feedback-success" data-feedback-success hidden>
+      <div class="dialecta-feedback-modal-kicker">Thank you</div>
+      <p>
+        We&rsquo;ll read it soon. Every submission requires a deliberate
+        triage decision before it leaves the queue, so nothing gets
+        dismissed without review.
+      </p>
+      <button type="button" class="dialecta-feedback-cancel" data-feedback-close>Close</button>
+    </div>
+  </div>
+</div>
+
+<main class="site-main">
+  {{!-- 2026-04-29: site-wide rail. The body sits in the left content
+        column; the right column is the persistent DialectaSidebar that
+        was previously scoped only to post.hbs. Sidebar adapts based on
+        whether the current page has post context (passed via data-* on
+        the mount). On mobile (<1100px) the right column is hidden and
+        page-specific inline mounts (TOC, Quote on the post page, etc.)
+        carry the pieces that still belong inline. --}}
+  <div class="site-rail">
+    <div class="site-content">
+      {{{body}}}
+    </div>
+    <aside class="site-sidebar">
+      <div
+        id="dialecta-sidebar"
+        {{!-- Gate the post-specific data attributes by the actual route
+              type. Ghost's data model treats static pages (Profile,
+              Articles list, Community, Stewards, About, Pact, Fingerprint,
+              Guidebook) as "posts" with page=true, so a naive {{#post}}
+              block fires on every one of them and the React sidebar
+              decides "this is an article" (isArticle = true) and renders
+              the article-only cards (Delta, TOC, Writer, Argument,
+              Also-In) on /profile/ and friends, which is wrong. {{#is
+              "post"}} is the route-level guard that only matches actual
+              article reading pages (/<post-slug>/) and not static pages
+              or list views. --}}
+        {{#is "post"}}
+          {{#post}}
+            data-post-id="{{id}}"
+            data-post-slug="{{slug}}"
+            {{#primary_author}}
+              data-author-id="{{id}}"
+              data-author-name="{{name}}"
+            {{/primary_author}}
+            {{#primary_tag}}
+              data-primary-tag-slug="{{slug}}"
+              data-primary-tag-name="{{name}}"
+            {{/primary_tag}}
+          {{/post}}
+        {{/is}}
+      ></div>
+    </aside>
+  </div>
+</main>
+
+{{#if @member}}
+<script>
+  // Avatar resolver. Hierarchy:
+  //   1. Ghost avatar_image (set in Ghost admin)        → render <img>
+  //   2. Supabase profile.avatar_url (theme upload)     → render <img>
+  //   3. Initials over a pillar-gradient background     → derived from the
+  //      member's top two fingerprint axes via /api/profile/{uuid}.
+  //      Mirrors the connection-chip treatment on the profile page so a
+  //      single visual language carries across every avatar surface.
+  //   4. Initials over the default brass-pale background → new members with
+  //      no graduations yet.
+  //
+  // Used by the brand-bar profile chip AND the drawer's footer avatar.
+  (function() {
+    var AXIS_COLORS = {
+      acuity:      '#d49415',
+      calibration: '#2674d4',
+      magnanimity: '#3aa564',
+      discourse:   '#dc5418',
+      consistency: '#b8429a',
+      reach:       '#a8a020'
+    };
+    var CANONICAL_AXIS_ORDER = ['acuity','calibration','magnanimity','discourse','consistency','reach'];
+
+    function computeInitials(name) {
+      var parts = (name || '').trim().split(/\s+/).filter(Boolean);
+      if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      if (parts[0]) return parts[0].slice(0, 2).toUpperCase();
+      return '?';
+    }
+    function isUsableAvatar(url) {
+      // Gravatar default-blank URLs are not usable; treat as no avatar.
+      return Boolean(url) && !url.includes('d=blank');
+    }
+    function topTwoAxes(scores) {
+      if (!scores) return null;
+      var entries = CANONICAL_AXIS_ORDER
+        .map(function(k) { return [k, scores[k] || 0]; })
+        .filter(function(pair) { return pair[1] > 0; })
+        .sort(function(a, b) {
+          return b[1] - a[1] ||
+                 CANONICAL_AXIS_ORDER.indexOf(a[0]) - CANONICAL_AXIS_ORDER.indexOf(b[0]);
+        });
+      if (entries.length === 0) return null;
+      return [entries[0][0], entries[1] ? entries[1][0] : entries[0][0]];
+    }
+    function applyPillarGradient(el, axisScores) {
+      var top = topTwoAxes(axisScores);
+      var primary, secondary;
+      if (top) {
+        primary = AXIS_COLORS[top[0]];
+        secondary = AXIS_COLORS[top[1]];
+      } else {
+        // No graduations earned yet — fall back to a warm brass gradient
+        // so new members still get a polished avatar instead of the flat
+        // brass-pale chip. Personalized pillar gradient takes over as soon
+        // as axis scores accrue.
+        primary = '#b8862e';   // brass-mid
+        secondary = '#d4a84a'; // brass-warm
+      }
+      el.style.background = 'linear-gradient(135deg, ' + primary + ' 0%, ' + secondary + ' 100%)';
+      el.style.borderColor = primary;
+      el.setAttribute('data-pillared', 'true');
+      return true;
+    }
+    function fetchSupabaseProfile(uuid, cb) {
+      if (!uuid) return cb(null);
+      var apiBase = window.__DIALECTA_API_URL__ || '';
+      fetch(apiBase + '/api/profile/' + uuid)
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(p) { cb(p); })
+        .catch(function() { cb(null); });
+    }
+    function renderInitials(el, name, initialsEl) {
+      var initials = computeInitials(name);
+      if (initialsEl) {
+        initialsEl.textContent = initials;
+      } else {
+        el.textContent = initials;
+      }
+    }
+    function renderImg(el, url, name, initialsEl) {
+      var img = document.createElement('img');
+      img.src = url;
+      img.alt = name || '';
+      img.onerror = function() {
+        img.remove();
+        renderInitials(el, name, initialsEl);
+      };
+      // Empty out the container, then insert.
+      if (initialsEl) initialsEl.textContent = '';
+      else el.textContent = '';
+      el.insertBefore(img, el.firstChild);
+    }
+    function resolveAvatar(el, opts) {
+      var name = el.getAttribute('data-member-name') || '';
+      var ghostUrl = el.getAttribute('data-member-avatar');
+      var uuid = el.getAttribute('data-member-uuid');
+      var initialsEl = opts && opts.initialsSelector ? el.querySelector(opts.initialsSelector) : null;
+
+      if (isUsableAvatar(ghostUrl)) {
+        renderImg(el, ghostUrl, name, initialsEl);
+        return;
+      }
+      // Initials first so something is visible while the Supabase fetch runs.
+      renderInitials(el, name, initialsEl);
+      // Apply default brass gradient immediately — every initials avatar gets
+      // a gradient, never a flat fallback. The Supabase fetch may upgrade it
+      // to a personalized pillar gradient once axis scores arrive.
+      applyPillarGradient(el, null);
+      fetchSupabaseProfile(uuid, function(p) {
+        if (!p) return;
+        if (isUsableAvatar(p.avatar_url)) {
+          renderImg(el, p.avatar_url, name, initialsEl);
+          return; // photo wins; gradient is hidden behind it
+        }
+        // Override the default gradient with the personalized pillar gradient.
+        applyPillarGradient(el, p.axisScores);
+      });
+    }
+    // Brand-bar chip (no inner initials span — text goes directly on the element)
+    document.querySelectorAll('.nav-member-initials[data-member-name]').forEach(function(el) {
+      resolveAvatar(el, { initialsSelector: null });
+    });
+    // Drawer footer (has an inner span for initials).
+    document.querySelectorAll('.nav-drawer-avatar[data-member-name]').forEach(function(el) {
+      resolveAvatar(el, { initialsSelector: '.nav-drawer-avatar-initials' });
+    });
+  })();
+</script>
+{{/if}}
+
+<script>
+  // Inject canonical SVG icons into the drawer's nav links by matching
+  // each link's href / label to a route entry below. The Ghost nav helper
+  // renders bare anchor tags; this script attaches the icon as the link's
+  // first child after render. NOTE: Handlebars expression syntax is NOT
+  // permitted in this script body, even inside JS comments — the template
+  // engine processes such expressions before the browser sees the page.
+  (function() {
+    var ROUTES = [
+      { match: ['articles'],    iconId: 'i-nav-codex' },
+      { match: ['community'],   iconId: 'i-nav-triangle' },
+      { match: ['stewards'],    iconId: 'i-nav-compassstar' },
+      { match: ['about'],       iconId: 'i-nav-italic-i' },
+      { match: ['pact'],        iconId: 'i-nav-asterismseal' },
+      { match: ['fingerprint'], iconId: 'i-nav-fingerprint' },
+      { match: ['guidebook'],   iconId: 'i-nav-guidebook' }
+    ];
+    function iconFor(href, label) {
+      var path = String(href || '').replace(/^https?:\/\/[^/]+/, '').toLowerCase();
+      var lab  = String(label || '').toLowerCase();
+      // Root path resolves to Articles.
+      if (path === '/' || path === '' || lab === 'articles') return 'i-nav-codex';
+      for (var i = 0; i < ROUTES.length; i++) {
+        var entry = ROUTES[i];
+        for (var j = 0; j < entry.match.length; j++) {
+          if (path.indexOf(entry.match[j]) !== -1 || lab.indexOf(entry.match[j]) !== -1) {
+            return entry.iconId;
+          }
+        }
+      }
+      return null;
+    }
+    var SVG_NS = 'http://www.w3.org/2000/svg';
+    function injectIcon(a, className, size) {
+      var iconId = iconFor(a.getAttribute('href'), a.textContent.trim());
+      if (!iconId) return;
+      var svg = document.createElementNS(SVG_NS, 'svg');
+      svg.setAttribute('class', className);
+      svg.setAttribute('width', String(size));
+      svg.setAttribute('height', String(size));
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('aria-hidden', 'true');
+      var use = document.createElementNS(SVG_NS, 'use');
+      use.setAttribute('href', '#' + iconId);
+      svg.appendChild(use);
+      a.insertBefore(svg, a.firstChild);
+    }
+    // Drawer icons (mobile) — 22px to match the 1.4rem italic display label.
+    document.querySelectorAll('.nav-drawer-links a').forEach(function(a) {
+      injectIcon(a, 'nav-drawer-icon', 22);
+    });
+    // Sub-nav icons (desktop) — 14px to fit the 34px-tall metallic sub-nav
+    // bar without crowding the 0.82rem label.
+    document.querySelectorAll('.nav-sub-inner ul li a').forEach(function(a) {
+      injectIcon(a, 'nav-sub-icon', 14);
+    });
+  })();
+</script>
+
+<script>
+  // Editorial drawer toggle (Model B mobile nav).
+  (function() {
+    var toggle = document.querySelector('.nav-drawer-toggle');
+    var drawer = document.getElementById('nav-drawer');
+    var scrim  = document.querySelector('.nav-drawer-scrim');
+    if (!toggle || !drawer || !scrim) return;
+
+    function setOpen(open) {
+      toggle.classList.toggle('open', open);
+      drawer.classList.toggle('open', open);
+      scrim.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      drawer.setAttribute('aria-hidden', String(!open));
+      scrim.setAttribute('aria-hidden', String(!open));
+      document.documentElement.classList.toggle('drawer-open', open);
+    }
+
+    toggle.addEventListener('click', function() {
+      setOpen(!drawer.classList.contains('open'));
+    });
+    scrim.addEventListener('click', function() { setOpen(false); });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && drawer.classList.contains('open')) setOpen(false);
+    });
+    // Close drawer on link tap so the navigation feels responsive.
+    drawer.addEventListener('click', function(e) {
+      if (e.target.closest('a')) setOpen(false);
+    });
+    // If viewport crosses to lg+ while drawer is open (e.g. orientation change
+    // on a tablet), close it so we don't leave an open drawer on a desktop
+    // layout where the desktop nav has reappeared.
+    window.matchMedia('(min-width: 1100px)').addEventListener('change', function(e) {
+      if (e.matches && drawer.classList.contains('open')) setOpen(false);
+    });
+  })();
+</script>
+
+{{#if @member}}
+<script>
+  // Drawer footer: fetch the member's Steward Order from Supabase via the
+  // profile API and render it under their name. Quiet failure if the API
+  // is unreachable — the drawer still works without the Order line.
+  (function() {
+    var orderEl = document.querySelector('.nav-drawer-memberorder[data-member-uuid]');
+    if (!orderEl) return;
+    var uuid = orderEl.getAttribute('data-member-uuid');
+    if (!uuid) return;
+    var apiBase = window.__DIALECTA_API_URL__ || '';
+    fetch(apiBase + '/api/profile/' + uuid)
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(p) {
+        if (!p || !p.order_id || !p.order_label) return;
+        // Map of Order slug → ornament (mirrors src/dialecta-profile-order.jsx).
+        var ornaments = {
+          essayist:'❦', aphorist:'✦', memoirist:'✥', diarist:'❧', blogger:'✜',
+          pamphleteer:'❖', polemicist:'❂', dialectician:'✺', provocateur:'✤',
+          cartographer:'✧', anthologist:'❀', translator:'✠', theorist:'✪',
+          philologist:'✦', lexicographer:'✜', historian:'❦', empiricist:'✤',
+          fabulist:'✿', playwright:'✥', screenwriter:'❂', biographer:'❀',
+          clinician:'✚', diagnostician:'✦', naturalist:'❧',
+          correspondent:'✠', annalist:'❖', reportorial:'✜', critic:'✺', marginalia:'✥',
+          glossator:'❦', futurist:'✪', satirist:'✦'
+        };
+        var orn = ornaments[p.order_id] || '✦';
+        orderEl.innerHTML = '<span style="color:var(--brass-warm);margin-right:6px;">' +
+          orn + '</span>' + p.order_label;
+      })
+      .catch(function() { /* quiet */ });
+  })();
+</script>
+{{/if}}
+
+{{#if @member}}
+<script>
+  // Drawer admin shortcuts. Populates .nav-drawer-admin-links from the
+  // member's effective_capabilities array on /api/profile/<uuid> (added in
+  // migration 017_admin_rbac). Hidden by default; un-hides only if the
+  // member has at least one admin role. Quiet failure if the API is
+  // unreachable (members without admin grants see nothing either way).
+  (function() {
+    var adminEl = document.querySelector('.nav-drawer-admin-links[data-member-uuid]');
+    if (!adminEl) return;
+    var uuid = adminEl.getAttribute('data-member-uuid');
+    if (!uuid) return;
+    var apiBase = window.__DIALECTA_API_URL__ || '';
+
+    fetch(apiBase + '/api/profile/' + uuid)
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(p) {
+        if (!p) return;
+        var roles = p.admin_roles || [];
+        var caps  = p.effective_capabilities || [];
+        if (roles.length === 0) return;
+
+        // Each entry: a capability test → drawer link. Order = display
+        // order. Placeholder hrefs for v1; the /dev-admin/ page comes next.
+        // All admin destinations are tabs inside the single /dev-admin/ Ghost
+        // page, deep-linked via ?tab=<id>. Quote Library is the lone external
+        // shortcut since it lives at /quotes/ and predates /dev-admin/.
+        var ITEMS = [
+          { test: function() { return roles.length > 0; },
+            label: 'Dev Admin',     href: '/dev-admin/' },
+          { test: function() { return caps.indexOf('quotes.curate') !== -1; },
+            label: 'Quote Library', href: '/quotes/?admin=true' },
+          { test: function() {
+              return ['articles.repolish','articles.reclassify','articles.archive']
+                .some(function(c) { return caps.indexOf(c) !== -1; });
+            },
+            label: 'Article Tools', href: '/dev-admin/?tab=articles' },
+          { test: function() { return caps.indexOf('members.manage_roles') !== -1; },
+            label: 'Manage Team',   href: '/dev-admin/?tab=team' },
+          { test: function() { return caps.indexOf('tuning.read') !== -1; },
+            label: 'Tuning',        href: '/dev-admin/?tab=tuning' }
+        ];
+
+        var visibleCount = 0;
+        ITEMS.forEach(function(item) {
+          if (!item.test()) return;
+          var a = document.createElement('a');
+          a.href = item.href;
+          a.textContent = item.label;
+          adminEl.appendChild(a);
+          visibleCount++;
+        });
+
+        if (visibleCount > 0) {
+          adminEl.removeAttribute('hidden');
+        }
+      })
+      .catch(function() { /* quiet */ });
+  })();
+</script>
+{{/if}}
+
+<script>
+  window.__DIALECTA_API_URL__ = 'https://dialecta.vercel.app';
+  {{#if @member}}window.__DIALECTA_MEMBER_UUID__ = {{json @member.uuid}};{{/if}}
+  {{#if @member}}window.__DIALECTA_MEMBER_EMAIL__ = {{json @member.email}};{{/if}}
+</script>
+
+<script>
+  // ─── Under-construction banner + feedback modal ──────────────────────────
+  // Wires every [data-feedback-trigger] to open the modal, every
+  // [data-feedback-close] to close it, and the form to POST to /api/feedback
+  // with auto-captured browser/page metadata.
+  (function() {
+    var modal   = document.getElementById('dialecta-feedback-modal');
+    if (!modal) return;
+    var form    = modal.querySelector('[data-feedback-form]');
+    var success = modal.querySelector('[data-feedback-success]');
+    var errorEl = modal.querySelector('[data-feedback-error]');
+    var submitBtn = modal.querySelector('.dialecta-feedback-submit');
+
+    function openModal() {
+      // Reset to fresh form state every open.
+      form.hidden = false;
+      success.hidden = true;
+      errorEl.hidden = true;
+      errorEl.textContent = '';
+      form.reset();
+      modal.hidden = false;
+      modal.setAttribute('aria-hidden', 'false');
+      document.documentElement.classList.add('dialecta-feedback-open');
+      var firstField = form.querySelector('select, textarea, input');
+      if (firstField) setTimeout(function() { firstField.focus(); }, 50);
+    }
+
+    function closeModal() {
+      modal.hidden = true;
+      modal.setAttribute('aria-hidden', 'true');
+      document.documentElement.classList.remove('dialecta-feedback-open');
+    }
+
+    // Triggers + close handlers wired via event delegation on document so
+    // dynamically-rendered triggers (e.g., placeholder content elsewhere)
+    // also work without re-binding.
+    document.addEventListener('click', function(e) {
+      var trigger = e.target.closest('[data-feedback-trigger]');
+      if (trigger) {
+        e.preventDefault();
+        openModal();
+        return;
+      }
+      if (e.target.closest('[data-feedback-close]')) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+
+    function captureMetadata() {
+      var device = 'desktop';
+      try {
+        if (/Mobi|Android|iPhone|iPad/.test(navigator.userAgent)) device = 'mobile';
+      } catch (_) { /* ignore */ }
+      return {
+        device_type: device,
+        user_agent:  navigator.userAgent || null,
+        viewport:    { w: window.innerWidth, h: window.innerHeight },
+        page_url:    window.location.href,
+        referrer:    document.referrer || null,
+        language:    navigator.language || null,
+        timestamp_client_iso: new Date().toISOString(),
+      };
+    }
+
+    // Screenshot picker: hint line shows filename + size on selection;
+    // turns red if the file exceeds 5MB. Submit-time validation also runs.
+    var screenshotInput = form.querySelector('[data-feedback-screenshot]');
+    var screenshotHint  = form.querySelector('[data-feedback-screenshot-hint]');
+    if (screenshotInput && screenshotHint) {
+      screenshotInput.addEventListener('change', function() {
+        var file = screenshotInput.files && screenshotInput.files[0];
+        if (!file) {
+          screenshotHint.hidden = true;
+          screenshotHint.classList.remove('error');
+          return;
+        }
+        var sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+        if (file.size > 5 * 1024 * 1024) {
+          screenshotHint.textContent = 'Too large: ' + file.name + ' (' + sizeMB + 'MB). Max 5MB.';
+          screenshotHint.classList.add('error');
+        } else {
+          screenshotHint.textContent = file.name + ' · ' + sizeMB + 'MB';
+          screenshotHint.classList.remove('error');
+        }
+        screenshotHint.hidden = false;
+      });
+    }
+
+    function readScreenshotAsDataUrl() {
+      return new Promise(function(resolve) {
+        var file = screenshotInput && screenshotInput.files && screenshotInput.files[0];
+        if (!file) return resolve(null);
+        if (file.size > 5 * 1024 * 1024) return resolve({ error: 'too_large' });
+        var reader = new FileReader();
+        reader.onload  = function() { resolve({ data_url: reader.result }); };
+        reader.onerror = function() { resolve({ error: 'read_failed' }); };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      errorEl.hidden = true;
+      errorEl.textContent = '';
+      submitBtn.disabled = true;
+      var origLabel = submitBtn.textContent;
+      submitBtn.textContent = 'Sending…';
+
+      readScreenshotAsDataUrl().then(function(screenshot) {
+        if (screenshot && screenshot.error === 'too_large') {
+          throw new Error('Screenshot too large (5MB max).');
+        }
+        if (screenshot && screenshot.error === 'read_failed') {
+          throw new Error('Could not read the screenshot file.');
+        }
+
+        var fd = new FormData(form);
+        var payload = {
+          type:              fd.get('type') || 'idea',
+          title:             (fd.get('title') || '').trim() || null,
+          body:              (fd.get('body') || '').trim(),
+          captured_metadata: captureMetadata(),
+        };
+        if (screenshot && screenshot.data_url) {
+          payload.screenshot = { data_url: screenshot.data_url };
+        }
+
+        var apiBase = window.__DIALECTA_API_URL__ || '';
+        var memberUuid = window.__DIALECTA_MEMBER_UUID__ || null;
+        var url = apiBase + '/api/feedback' + (memberUuid ? '?member_id=' + encodeURIComponent(memberUuid) : '');
+
+        return fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload),
+        });
+      })
+        .then(function(r) {
+          if (!r) return;
+          if (!r.ok) {
+            return r.json().catch(function(){ return {}; }).then(function(j) {
+              throw new Error(j.error || 'HTTP ' + r.status);
+            });
+          }
+          form.hidden = true;
+          success.hidden = false;
+        })
+        .catch(function(err) {
+          errorEl.textContent = err.message || 'Submission failed.';
+          errorEl.hidden = false;
+        })
+        .finally(function() {
+          submitBtn.disabled = false;
+          submitBtn.textContent = origLabel;
+        });
+    });
+  })();
+</script>
+
+<!-- ── BYLINE OVERRIDE FOR FEED CARDS (Path C-lite Phase 1D) ──
+     Article cards across the site (page-articles.hbs, index.hbs, anywhere
+     else .post-card[data-post-id] appears) display Ghost's primary_author
+     name in the rendered HTML. For member-written articles that's the
+     house staff user (Daniel) since all member articles attribute server-
+     side to the house identity. The real author lives in
+     articles.author_member_id → profiles.display_name.
+     This script collects all post IDs on the page, makes one bulk lookup,
+     and patches each card's .post-card-author span with the real name.
+     Cards without a Supabase row (legacy articles) silently keep Ghost's
+     byline. Early-exits cleanly on pages with no .post-card[data-post-id].  -->
+<script>
+  (function() {
+    var cards = document.querySelectorAll('.post-card[data-post-id]');
+    if (cards.length === 0) return;
+    var ids = [];
+    cards.forEach(function(c) {
+      var id = c.getAttribute('data-post-id');
+      if (id) ids.push(id);
+    });
+    if (ids.length === 0) return;
+    var apiBase = (window.__DIALECTA_API_URL__ || '').replace(/\/$/, '');
+    fetch(apiBase + '/api/article/_authors?ids=' + encodeURIComponent(ids.join(',')))
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (!data || !data.authors) return;
+        cards.forEach(function(card) {
+          var id = card.getAttribute('data-post-id');
+          var author = data.authors[id];
+          if (!author || !author.display_name) return;
+          var nameEl = card.querySelector('.post-card-author');
+          if (!nameEl) return;
+          nameEl.textContent = author.display_name;
+          if (nameEl.tagName === 'A' && author.member_id) {
+            nameEl.setAttribute('href', '/profile/?id=' + encodeURIComponent(author.member_id));
+          }
+        });
+      })
+      .catch(function() { /* swallow — Ghost byline is the fallback */ });
+  })();
+</script>
+
+<script src="{{asset 'js/shell.js'}}" defer></script>
+{{ghost_foot}}
+</body>
+</html>

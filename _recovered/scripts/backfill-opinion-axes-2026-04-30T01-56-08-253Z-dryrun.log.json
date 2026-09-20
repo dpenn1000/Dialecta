@@ -1,0 +1,40 @@
+{
+  "mode": "dry-run",
+  "only_post_id": "69d5c5c083cd72000193f0cd",
+  "limits": {
+    "topic": {
+      "min": 4,
+      "max": 28
+    },
+    "pole": {
+      "min": 3,
+      "max": 20
+    },
+    "count": 2
+  },
+  "results": [
+    {
+      "ghost_post_id": "69d5c5c083cd72000193f0cd",
+      "core_claim_preview": "The most common technical objections to community-scale solar (environmental harm, rapid degradation, high cost, landfil",
+      "before": [],
+      "after": [
+        {
+          "type": "cartesian",
+          "topic": "Evidence basis",
+          "axis_a": "Measured performance",
+          "axis_b": "Projected futures"
+        },
+        {
+          "type": "cartesian",
+          "topic": "Risk posture",
+          "axis_a": "Vendor timelines",
+          "axis_b": "Materialization risk"
+        }
+      ],
+      "validation_error": null,
+      "written": false,
+      "error": null,
+      "attempts": 1
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "mode": "apply",
+  "only_post_id": "69d5c5c083cd72000193f0cd",
+  "api_base": "https://dialecta.vercel.app",
+  "results": [
+    {
+      "ghost_post_id": "69d5c5c083cd72000193f0cd",
+      "core_claim_preview": "The most common technical objections to community-scale solar (environmental harm, rapid degradation",
+      "before_maps": [
+        {
+          "type": "ternary",
+          "poles": [
+            "Trust current data",
+            "Demand local proof",
+            "Wait for better tech"
+          ],
+          "topic": "How to weigh solar evidence",
+          "author_position": {
+            "a": 0.75,
+            "b": 0.15,
+            "c": 0.1
+          }
+        }
+      ],
+      "after_maps": [
+        {
+          "type": "cartesian",
+          "axes": [
+            {
+              "topic": "Evidence currency",
+              "axis_a": "Old data outdated",
+              "axis_b": "Still applies today"
+            },
+            {
+              "topic": "Projection confidence",
+              "axis_a": "Trust forecasts",
+              "axis_b": "Wait for proof"
+            }
+          ],
+          "author_position": {
+            "x": 0.75,
+            "y": 0.7
+          }
+        }
+      ],
+      "validation_error": null,
+      "written": true,
+      "error": null,
+      "attempts": 2
+    }
+  ]
+}

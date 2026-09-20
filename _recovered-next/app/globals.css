@@ -1,0 +1,89 @@
+/* ─────────────────────────────────────────────────────────────────────────
+ * dialecta-next: global tokens
+ *
+ * Mirrors the theme repo's :root tokens (style.css) so SSR pages render
+ * with the same palette and typography variables. Keep these in sync
+ * when the theme tokens evolve.
+ * ───────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Surfaces */
+  --cream:         #f7f2e8;
+  --paper:         #fefcf5;
+  --paper-bright:  #fffdf8;
+  --bg-white:      #fffdf8;
+
+  /* Text */
+  --ink:           #1c1814;
+  --ink-soft:      #2c2620;
+  --body:          #3a342c;
+  --soft:          #5a5248;
+  --tertiary:      #8c8780;
+
+  /* Borders */
+  --border:        #e0dbd2;
+  --border-light:  #e8e0d0;
+  --border-medium: #d8ceb8;
+
+  /* Brass palette (5-stop) */
+  --brass-deep:    #7a4a10;
+  --brass-mid:     #b8862e;
+  --brass-warm:    #d4a84a;
+  --brass-bright:  #ecb438;
+  --brass-pale:    #f5dfa0;
+
+  /* Aliases (legacy compatibility with theme code) */
+  --gold:          #b8862e;
+  --amber:         #b8732a;
+
+  /* Brass gradient (canonical 7-stop, mirrors theme) */
+  --brass-gradient: linear-gradient(
+    100deg,
+    #8c5a18 0%,
+    #b8862e 18%,
+    #ecb438 38%,
+    #fef0a0 50%,
+    #ecb438 62%,
+    #b8862e 82%,
+    #7a5010 100%
+  );
+
+  /* Status */
+  --error:         #b8372e;
+  --success:       #3aa564;
+
+  /* Layout */
+  --max-width:     1180px;
+  --nav-height:    119px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--cream);
+  color: var(--body);
+  font-family: var(--font-reading), 'Source Serif 4', Georgia, serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--brass-mid);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(184, 134, 46, 0.4);
+}
+
+a:hover {
+  color: var(--brass-deep);
+}
+
+.dialecta-brass {
+  background: var(--brass-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
