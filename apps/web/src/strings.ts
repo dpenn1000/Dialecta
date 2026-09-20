@@ -47,6 +47,22 @@ export const strings = {
     continueWithGoogle: 'Continue with Google',
     signInFailed: 'That sign in link was not valid or has expired. Try again.',
   },
+
+  comment: {
+    malformedRequest: 'That request could not be read.',
+    signInRequired: 'Sign in to comment.',
+    profileRequired: 'Set up your profile before commenting.',
+    profileIncomplete: 'Add a display name to your profile before commenting.',
+    emailRequired: 'Your account has no email on file. Add one before commenting.',
+    bodyRequired: 'Write something before submitting.',
+    invalidArticle: 'article_id, article_slug and article_title are all required.',
+    invalidParent: 'parent_id must be a valid id if provided.',
+    invalidTier: 'That is not one of the seven tiers.',
+    invalidClaims: 'article_claims must be a list of strings if provided.',
+    rateLimited: "That's the fifth comment in ten minutes. Wait a few minutes and try again.",
+    classificationFailed: 'The classification engine could not read this comment. Try again in a moment.',
+    submissionFailed: 'That comment could not be submitted. Try again in a moment.',
+  },
 } as const;
 
 export type Strings = typeof strings;
