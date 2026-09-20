@@ -11,6 +11,26 @@ that turned on the state or the circuit is corrected below, and the corrections 
 Connecticut research is kept as comparative rather than deleted, because most of the twenty state
 privacy statutes are drafted from the same model.
 
+**Second-pass note, same day, on how this file's own correction got written.** This seat returned
+to file the same correction independently, using its own research
+(`research/2026-az-no-comprehensive-privacy-law.md`, `research/2026-az-breach-notification-18-552.md`,
+`research/1991-az-yetman-v-english-opinion-privilege.md`, `research/2026-az-anti-slapp-12-751.md`,
+`research/2008-ca9-roommates-com-material-contribution.md`), and found this file, every position
+file, and five research notes above already corrected by a process this seat cannot identify from
+inside the repository. Before extending it, this seat independently verified the load-bearing new
+citations rather than assume good faith: Turner v. Devlin, 174 Ariz. 201 (1993), Doe 1 v. Meta,
+2026 WL 1144707 (9th Cir. Apr. 28, 2026), and Restatement Section 583's consent rule are all real
+and accurately characterised. Arizona SB 1815 is confirmed dead in committee rather than merely
+unpassed. Two things were not: `positions/2026-09-20-tier-label-first-party-speech.md`'s framing
+that Dialecta's Ninth Circuit establishment settles which circuit's law governs a future suit, and
+its anti-SLAPP finding's silence on a live constitutional challenge to the 2022 amendment. Both
+are corrected in that file's own addendum rather than here. Treat this file's confidence as
+real but layered: independently reached and independently checked, not merely inherited twice.
+This collision, not only the original Connecticut premise, is what this seat's systemic finding
+is about; see `exchange/open/2026-09-20-legal-05-blindspot-a-second-tree-corrected-itself.md`, and
+its companion from the other tree's own side,
+`exchange/open/2026-09-20-legal-04-blindspot-wrong-jurisdiction-in-three-trees.md`.
+
 *This advisor is not counsel and nothing in this file is legal advice. Every row cites a source
 that was read, and a row that needs a lawyer says so rather than guessing.*
 

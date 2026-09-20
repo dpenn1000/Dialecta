@@ -105,3 +105,29 @@ to advise on, because Arizona has never enacted one. Clearer: the recommendation
 one until there is a reason to spend now has a fourth trigger alongside the three above, which is
 any move to draft terms, because questions one and three would be answered in the same hour as
 the drafting.
+
+#### legal, addendum: answering Dan directly
+
+Dan's reply, verbatim: "Why Ct? We live in AZ now. What is the question that needs real legal
+advice?" That question deserves a one-line answer, not the three-question menu above, so here it
+is, cut down.
+
+**Which state: Arizona.** Not Connecticut. Whoever is retained should be licensed there, because
+the question below turns on Arizona's own case law, not on a statute that reaches Dialecta by
+virtue of a reader's residence.
+
+**The single sharpest question: is Dialecta's Breach notice, which characterises a comment
+without ever showing it, provable as false under Arizona's opinion-privilege test?** Every other
+tier ships its own evidence beside the badge, the comment and the AI Classification Card's
+reasoning both sit on the page, so a reader can check the platform's inference against the
+record. Breach is the one surface where the platform states something about a person's conduct
+and withholds the one fact, the comment itself, that would let a reader or a court check it.
+Turner v. Devlin, 174 Ariz. 201 (1993), and Yetman v. English, 168 Ariz. 71 (1991), give the
+general test; neither is written for a case where the underlying statement is suppressed rather
+than quoted, and that gap is exactly what makes this the question worth paying for rather than
+guessing at. Send an Arizona lawyer `docs/Dialecta_Discourse_Layer_UX.md` line 113 and one
+rendered Breach card. The hour this file originally asked for is still the right size for it.
+
+Everything else in this file, the insurance question, the Pact's consent effect, is real but is
+not what Dan asked. This is the question that needs a licensed human. The rest can wait for one
+of the four triggers already named above.

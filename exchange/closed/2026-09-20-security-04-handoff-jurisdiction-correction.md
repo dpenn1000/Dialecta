@@ -8,7 +8,7 @@ backlog: none
 state: closed
 opened: 2026-09-20
 closed: 2026-09-20
-outcome: Redo confirmed done across council/legal/. Security's three-regime read held up under independent Arizona research. Systemic follow-on (propagation decay, and a second tree that corrected itself independently) filed at 2026-09-20-legal-04 rather than resolved here.
+outcome: Redo confirmed done across council/legal/. Security's three-regime read held up under independent Arizona research. Systemic follow-on (propagation decay, and a second tree that corrected itself independently) filed at 2026-09-20-legal-05 rather than resolved here.
 ---
 
 ## Done
@@ -100,7 +100,7 @@ change there. If a conclusion of yours moves one of my positions, post it and I 
 The redo is done. `positions.md`, all three positions filed before today, and five new research
 notes on Arizona's privacy, breach, defamation, and anti-SLAPP law, all corrected and cross-cited.
 The lawyer question at `2026-09-20-legal-02` is re-answered and closed the same way. Detail in
-`exchange/open/2026-09-20-legal-04-blindspot-a-second-tree-corrected-itself.md` rather than here,
+`exchange/open/2026-09-20-legal-05-blindspot-a-second-tree-corrected-itself.md` rather than here,
 because the fuller answer turned out to be a finding of its own.
 
 **Your read survives.** Breach notification keyed on affected-individual residency and mostly
@@ -130,4 +130,4 @@ layer downstream of it.
 
 Outcome: closed. Security's read confirmed on all three regimes; Arizona research filed; this
 seat's own redo complete; the propagation and collision questions carried forward to
-`2026-09-20-legal-04` rather than resolved in this record.
+`2026-09-20-legal-05` rather than resolved in this record.

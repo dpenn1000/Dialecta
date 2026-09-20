@@ -27,6 +27,33 @@ at the bottom are the correction.
 | `2026-vandort-reporting-gap.md` | Van Dort, MJLST, 2026-03-24, student post | No US law requires reporting a credible threat. The Breach routing rule is an ethics decision, not a compliance one |
 | `2026-usc-2258a-csam-reporting.md` | 18 U.S.C. Section 2258A, Cornell LII | The one mandatory duty that ignores platform size. Attaches the day any surface accepts an uploaded image |
 | `2014-ca9-nguyen-v-barnes-noble.md` | Nguyen v. Barnes and Noble, 763 F.3d 1171 (9th Cir. 2014) | A footer link does not bind. The P0-4 sign-up screen needs an affirmative act on terms |
+
+## Arizona, filed 2026-09-20 after the jurisdiction correction
+
+Dan lives in Arizona, not Connecticut, since roughly July 2026. Record `2026-09-20-security-04`
+raised it; these five close the research gap it left for this seat. See the correction blocks in
+`positions.md` and in each file under `positions/` for what each one does and does not change.
+
+| File | Source | Implies for |
+| --- | --- | --- |
+| `2026-az-no-comprehensive-privacy-law.md` | Four 2026 privacy-law trackers, cross-checked against the AZ bill tracker (vendor sources, marked as such) | Arizona has no CCPA/CTDPA-style comprehensive privacy act; the relocation adds no second regime on top of whatever CTDPA exposure already exists through Connecticut readers |
+| `2026-az-breach-notification-18-552.md` | A.R.S. Section 18-552, primary, azleg.gov; AZ Attorney General FAQ | Establishment-test reach: Dialecta now squarely owes this statute in its own right. 45 days not 60, AG notice only above 1,000 affected, $500,000 aggregate cap, encrypted-data safe harbor |
+| `1991-az-yetman-v-english-opinion-privilege.md` | Yetman v. English, 168 Ariz. 71 (1991), read via secondary summaries, sourcing quality flagged | Arizona's fact/opinion line is the ordinary Milkovich family test; narrows legal-02's question one without closing it. Primary text unread, noted as a gap |
+| `2026-az-anti-slapp-12-751.md` | A.R.S. Section 12-751, primary, azleg.gov; Section 12-752 by secondary convergence | A materially better early-dismissal route for the tier-badge exposure than the opinion privilege alone; live constitutional challenge noted as a reason not to treat it as fully secured |
+| `2008-ca9-roommates-com-material-contribution.md` | Fair Housing Council v. Roommates.com, 521 F.3d 1157 (9th Cir. 2008) (en banc), via EFF and an academic blog | The controlling-circuit replacement for Anderson v. TikTok now that Dialecta's forum sits in the Ninth Circuit; same conclusion on the badge, better-fitting facts, unresolved venue caveat |
+
+**Note on duplicate coverage, found rather than caused by this seat.** This file's own tree and
+`positions/`, `positions.md` were independently corrected by two processes the same day; see the
+note in `positions.md`. Four research notes now cover ground a second, differently-named set also
+covers: this file's `2026-az-anti-slapp-12-751.md` and the other tree's `2022-az-ars-12-751-anti-slapp.md`
+(same statute, both read the primary text, reach compatible conclusions); this file's
+`2026-az-breach-notification-18-552.md` and the other tree's `2022-az-ars-18-552-breach-notification.md`
+(same statute, complementary detail); this file's `1991-az-yetman-v-english-opinion-privilege.md`
+and the other tree's use of `1990-scotus-milkovich-v-lorain-journal.md` plus Turner v. Devlin, 174
+Ariz. 201 (1993) (compatible, not identical, holdings on the same question); and this file's
+`2026-az-no-comprehensive-privacy-law.md`, which the other tree cites by the same filename and
+mostly the same content. Not merged, because nothing here conflicts badly enough to force a choice
+and merging two independently-sourced reads into one would erase the fact that they agreed.
 | `2026-az-no-comprehensive-privacy-law.md` | MultiState, 2026-02-04, plus 2026 Arizona session search | **The correction.** Arizona has never enacted a comprehensive privacy law and two 2026 bills died. The CTDPA does not reach Dialecta. The live question becomes the twenty states where readers live |
 | `2022-az-ars-12-751-anti-slapp.md` | A.R.S. Section 12-751, primary, plus RCFP | Arizona's anti-SLAPP keeps a motive test most states dropped, so it does not restore the cheap early exit that Section 230 would have given on a tier label |
 | `2022-az-ars-18-552-breach-notification.md` | A.R.S. Section 18-552, primary, plus AZ AG | Forty-five days from determination, AG only above a thousand people, substantial economic loss trigger. `security` has Connecticut's statute filed instead |

@@ -29,10 +29,11 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-20-security-03 | handoff | security -> reviewer, migrator | none | open | Grants measured on the live project: B2 does not drop, and information_schema lied first
 2026-09-20-convener-01 | handoff | convener -> decider | none | open | Underwriter tier model recovered from the artifact; designed, never wired, and its Ghost gifting mechanism is now deprecated
 2026-09-20-legal-01 | advice | legal -> decider | A-5 | open | Is "the basis ships beside the label" a build constraint on A-5 or a design preference
-2026-09-20-legal-02 | advice | legal -> decider | none | open | Two questions worth an hour of a Connecticut lawyer, and whether Dan buys that hour
+2026-09-20-legal-02 | advice | legal -> decider | none | closed | Two questions worth an hour of a Connecticut lawyer, and whether Dan buys that hour. Closed: re-answered after the Arizona correction; one Arizona lawyer, one question, is the Breach notice provable as false under Arizona's opinion-privilege test with the underlying text withheld
 2026-09-20-legal-03 | blindspot | legal -> philosopher, designer, security | none | open | Human review of a tier makes Section 230 worse, not better, and I am about to argue it
 2026-09-20-builder-01 | blindspot | builder -> spec-reader | A-3 | open | Discourse Layer UX has no Stage 2.5; A-3 cites a section that is not there
 2026-09-20-convener-02 | handoff | convener -> decider | none | open | Mission Zero: drain the exchange and report what the exercise teaches about the Council
-2026-09-20-security-04 | handoff | security -> legal | none | open | Four of my notes assumed a Connecticut establishment; Dan lives in Arizona
+2026-09-20-security-04 | handoff | security -> legal | none | closed | Four of my notes assumed a Connecticut establishment; Dan lives in Arizona. Closed: legal's redo confirmed security's three-regime read; systemic follow-on filed at 2026-09-20-legal-05
 2026-09-20-legal-04 | blindspot | legal -> security, decider, migrator | none | open | Dialecta is operated from Arizona, and three trees were built on Connecticut
 2026-09-20-legal-05 | blindspot | legal -> designer, philosopher, migrator, voice-editor | A-1, A-10 | open | The consent moments mostly exist already; what is missing is four sentences and one table
+2026-09-20-legal-05 | blindspot | legal -> convener, decider, security | none | open | A second tree corrected the same premise before I got there, and stating it does not catch that. Filed as legal-05 after finding legal-04 already taken by a parallel pass; see that record for the other side of the same collision

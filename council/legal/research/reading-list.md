@@ -103,6 +103,26 @@ where the operator lives, which is a wider question than this list was built for
 | todo | Section 512 resources, US Copyright Office, https://www.copyright.gov/512/ | The official notice and takedown walkthrough, including the reinstatement window |
 | todo | DMCA Safe Harbor, Copyright Alliance, https://copyrightalliance.org/education/copyright-law-explained/the-digital-millennium-copyright-act-dmca/dmca-safe-harbor/ | A second summary to cross-check the Copyright Office's own language. A rightsholder trade association, so its framing leans away from platforms |
 
+## Known gaps opened by the 2026-09-20 jurisdiction correction
+
+1. **The Yetman v. English slip opinion, read in full.** `1991-az-yetman-v-english-opinion-privilege.md`
+   relies on secondary summaries because Justia returned a 403 and CourtListener served only a
+   truncated extract on this attempt. The State Bar of Arizona's RAJI defamation instructions PDF
+   was fetched and saved but arrived as unparsed binary; a PDF-capable read, not WebFetch, would
+   close this.
+2. **Whether Connecticut has an anti-SLAPP statute of its own, and how it compares.** It does,
+   Conn. Gen. Stat. Section 52-196a, and this tree never researched it even while every position
+   was framed around Connecticut. That gap predates and is independent of the jurisdiction error;
+   naming it here rather than quietly filing it away is the point.
+3. **Personal jurisdiction and venue for a hypothetical suit against Dan or Dialecta.** Neither
+   Arizona's forum nor Connecticut's follows automatically from where Dan lives or where a
+   contributor lives; defamation venue can follow the plaintiff's domicile under an effects-based
+   theory. Nothing in this tree resolves which circuit's law would actually govern a given future
+   suit, and the correction to `positions/2026-09-20-tier-label-first-party-speech.md` says so
+   directly rather than picking a circuit by default.
+4. **SB 1815, if it moves.** Unenacted as of this reading. A docket check belongs in whichever
+   sprint next touches Arizona privacy law, not a guess now.
+
 ## Known gaps in this list
 
 These were searched for and not found. Do not assume they do not exist; assume one pass failed.
@@ -120,6 +140,20 @@ These were searched for and not found. Do not assume they do not exist; assume o
    definitions.~~ Closed 2026-09-20. Done from the enrolled Public Act rather than found in a
    source, as this row predicted. The answer is at
    `council/legal/positions/2026-09-20-ctdpa-sensitive-data.md`.
+
+## Arizona, added and filed 2026-09-20 after the jurisdiction correction
+
+Dan lives in Arizona, not Connecticut, since roughly July 2026; record `2026-09-20-security-04`
+from `security` named the gap this seat owed. Sourced the same day, same discipline as the rest of
+this list: primary text where it was reachable, secondary convergence marked as such where it was
+not.
+
+| State | Source | Why this advisor needs it |
+| --- | --- | --- |
+| filed | Four 2026 state privacy-law trackers (vendor, marked as such), cross-checked against the Arizona Legislature's bill tracker | Confirms Arizona has no comprehensive consumer privacy act in force and no second regime rides in on the relocation. `2026-az-no-comprehensive-privacy-law.md` |
+| filed | A.R.S. Section 18-552, primary, https://www.azleg.gov/ars/18/00552.htm; AZ Attorney General Data Breach FAQ, https://www.azag.gov/consumer/data-breach/faq | Arizona's own breach notification law, now owed in its own right rather than by comparison to Connecticut's. `2026-az-breach-notification-18-552.md` |
+| filed | Yetman v. English, 168 Ariz. 71 (1991) | Arizona's controlling fact/opinion line for defamation, the state-law question legal-02's question one turns on. Read via secondary summaries only; upgrade to primary text is a named gap below. `1991-az-yetman-v-english-opinion-privilege.md` |
+| filed | A.R.S. Sections 12-751 and 12-752, primary for 12-751, https://www.azleg.gov/ars/12/00751.htm; secondary convergence for 12-752 | Arizona's 2022-expanded anti-SLAPP statute, a faster and previously unresearched early-dismissal route for the tier-badge exposure. `2026-az-anti-slapp-12-751.md` |
 
 ## Already filed by another advisor
 
@@ -139,7 +173,7 @@ Added 2026-09-20. Each came out of a source filed this sprint.
 | todo | Moody v. NetChoice, LLC, 603 U.S. 707 (2024), https://www.supremecourt.gov/opinions/23pdf/22-277_d18f.pdf | The decision Anderson is built on, read at second hand this sprint through the Third Circuit's quotations. It is the source of "sometimes added warnings or labels", which is the closest any court has come to describing the tier badge |
 | todo | Force v. Facebook, Inc., 934 F.3d 53 (2d Cir. 2019) | The controlling Second Circuit authority for Dialecta's own forum, and the decision Anderson footnote 13 says it may depart from. More load bearing here than Anderson is |
 | todo | Maffick, LLC v. Facebook, Inc., No. 20-05222 (N.D. Cal. Sept. 3, 2020) | The only case this tree has found where a platform's own label on user content was litigated. Cited by CRS only with a "cf.", so read it before repeating what it stands for |
-| filed | Fair Housing Council v. Roommates.com, LLC, 521 F.3d 1157 (9th Cir. 2008) (en banc), https://cdn.ca9.uscourts.gov/datastore/opinions/2008/04/02/0456916.pdf | The material contribution test in the original. Bears on Stage 2 self-declaration, where the platform structures what a contributor says about themselves |
+| filed | Fair Housing Council v. Roommates.com, LLC, 521 F.3d 1157 (9th Cir. 2008) (en banc), https://cdn.ca9.uscourts.gov/datastore/opinions/2008/04/02/0456916.pdf | The material contribution test in the original. Bears on Stage 2 self-declaration, where the platform structures what a contributor says about themselves. **Filed 2026-09-20 for a second reason found later: it is now the controlling-circuit replacement for Anderson v. TikTok**, because Arizona sits in the Ninth Circuit and Connecticut does not. `2008-ca9-roommates-com-material-contribution.md` |
 | todo | 18 U.S.C. Section 2702(b)(8), the Stored Communications Act emergency disclosure exception, https://www.law.cornell.edu/uscode/text/18/2702 | The statutory text of the voluntary route Van Dort describes at second hand. The Breach routing rule should be written to this wording, not to a summary of it |
 | todo | Connecticut defamation elements and the opinion privilege, from the Connecticut Bar Association or a Connecticut firm | The tier label position rests on opinion resting on disclosed facts, and that defence is state law. Currently the largest unsourced load in this tree |
 | todo | Conn. Gen. Stat. Section 42-520 as amended by P.A. 25-113, consent for sensitive data processing | Whether the Pact and terms could supply the consent that would close the CTDPA question a cheaper way than avoiding the data |

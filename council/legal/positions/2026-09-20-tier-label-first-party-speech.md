@@ -36,6 +36,41 @@ against the platform without removing it.
   `council/legal/positions/2026-09-20-consent-waiver-and-the-pact.md`. Net confidence that the
   badge is not actionable moves from medium to medium-high.
 
+**Addendum, same day, second pass.** This file's own correction block above was written by a
+process this seat cannot fully account for; see the note on the collision in `positions.md`. Its
+citations check out (Turner v. Devlin, Doe 1 v. Meta and the Restatement consent rule are all
+real and independently confirmed by a second pass), so this addendum corrects two remaining
+overclaims rather than redoing the work.
+
+- **"Dialecta is operated from Arizona, which is the Ninth Circuit" settles the forum too
+  quickly.** Establishment decides where Dan can be sued as a matter of general jurisdiction. It
+  does not decide where a specific future defamation plaintiff, a labelled contributor who could
+  live anywhere, could sue him. Defamation personal jurisdiction can follow the plaintiff's own
+  domicile under an effects-based theory: intentional conduct the defendant knows will cause harm
+  felt in the plaintiff's state. A Connecticut-resident contributor suing over a published tier
+  badge is not obviously required to sue in Arizona, and if they sue at home, the Second Circuit's
+  Force v. Facebook is not automatically irrelevant after all. Read "Roommates.com is binding
+  here" and "Anderson binds nobody here" both as true of Arizona's own courts and false as a
+  claim about every court that could ever hear this case. `research/2008-ca9-roommates-com-material-contribution.md`
+  says this in its own "Implies for Dialecta" section; it belongs here too.
+- **The anti-SLAPP finding is right and is missing a caveat.** The motive-test reading in
+  `research/2022-az-ars-12-751-anti-slapp.md` matches the statute's own text: the movant must show
+  the *suit*, not the underlying speech, was substantially motivated to deter, retaliate against,
+  or prevent a constitutional right. A damages-seeking contributor plausibly fails that threshold,
+  as filed. What is missing is that the 2022 expansion this whole analysis rests on is under a
+  live constitutional challenge, a Maricopa County Attorney special action filed October 2024
+  raising separation-of-powers, victims'-rights, and vagueness objections, unresolved as of a
+  November 2025 law review account (`research/2026-az-anti-slapp-12-751.md`). That does not change
+  the motive-test conclusion. It means neither the statute's reach nor its absence should be
+  treated as settled ground to build anything on.
+- **Yetman v. English, 168 Ariz. 71 (1991), is the Arizona Supreme Court's own foundational
+  statement of the test Turner v. Devlin applies**, adopting the Milkovich "average reader, clearest
+  cases" framework and holding Arizona's constitution grants no greater speech privilege than the
+  First Amendment. It corroborates rather than competes with Turner and Milkovich above; filed
+  separately at `research/1991-az-yetman-v-english-opinion-privilege.md` because this seat read it
+  before finding this file already carried Turner, and the two should be read together rather than
+  as alternatives.
+
 ## The question
 
 Dialecta attaches an AI-assigned tier to a named contributor's comment and publishes it. Is that
