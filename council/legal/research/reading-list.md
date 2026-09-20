@@ -23,8 +23,18 @@ Arizona has none. See `2026-az-no-comprehensive-privacy-law.md`.
 
 Two consequences for how this list is read. The forum is the Ninth Circuit, not the Second, so
 Dyroff, Roommates.com and Doe 1 v. Meta displace Force v. Facebook as the authorities that
-matter. And the privacy question becomes the states where readers live rather than the state
-where the operator lives, which is a wider question than this list was built for.
+matter. The privacy question becomes the states where readers live rather than the state where
+the operator lives, which is a wider question than this list was built for.
+
+**Stale-lead sweep, 2026-09-20, after Dan pointed out the correction had not reached the `todo`
+rows.** The first pass marked the Connecticut rows it had *read* as `filed` and left the
+Connecticut rows it had *not yet read* as `todo`, including two leads this advisor added itself
+at the end of the first sprint. Three are now `dead` with reasons, and two more had descriptions
+that were false rather than stale: Force v. Facebook was labelled the controlling forum
+authority, and the IAPP tracker was labelled background when it is now the whole privacy
+question. **The practice: when a premise changes, sweep the unread rows in the same pass as the
+read ones.** A correction that only reaches the work already done leaves the error waiting for
+the next session.
 
 ## Arizona, the home jurisdiction
 
@@ -76,8 +86,8 @@ where the operator lives, which is a wider question than this list was built for
 | todo | GDPR Art. 3, territorial scope, https://gdpr-info.eu/art-3-gdpr/ | The two tests that decide whether EU readers pull Dialecta in. A practitioner mirror, so cross-check anything load bearing against EUR-Lex |
 | todo | GDPR Art. 9, special categories, https://gdpr-info.eu/art-9-gdpr/ | The exhaustive list, to check an argument-style fingerprint against rather than assuming the higher bar applies |
 | todo | GDPR Art. 22, automated decision-making and profiling, https://gdpr-info.eu/art-22-gdpr/ | The right to contest a solely automated classification, and the human-review safeguard. Stage 2.5 may already be that safeguard, or may not |
-| todo | US State Privacy Legislation Tracker, IAPP, https://iapp.org/resources/article/us-state-privacy-legislation-tracker | Which of the nineteen or more states with a comprehensive law could reach a given reader |
-| todo | Reporting a Data Breach, CT Office of the Attorney General, https://portal.ct.gov/ag/sections/privacy/reporting-a-data-breach | Conn. Gen. Stat. § 36a-701b: the 60 day clock and the AG notice, if profile data were ever breached |
+| todo | US State Privacy Legislation Tracker, IAPP, https://iapp.org/resources/article/us-state-privacy-legislation-tracker | **Promoted 2026-09-20.** Twenty states, per MultiState. With no home-state statute this is no longer background: it is the whole privacy question. Which of the twenty reaches a site that does not target its residents |
+| dead | Reporting a Data Breach, CT Office of the Attorney General, https://portal.ct.gov/ag/sections/privacy/reporting-a-data-breach | **Dead 2026-09-20: wrong state.** Conn. Gen. Stat. Section 36a-701b does not reach an Arizona operator. Superseded by `2022-az-ars-18-552-breach-notification.md`, which is a shorter clock (45 days from determination, not 60 from discovery) and a higher AG threshold |
 
 ## Terms and privacy policy
 
@@ -171,9 +181,9 @@ Added 2026-09-20. Each came out of a source filed this sprint.
 | State | Source | Why this advisor needs it |
 | --- | --- | --- |
 | todo | Moody v. NetChoice, LLC, 603 U.S. 707 (2024), https://www.supremecourt.gov/opinions/23pdf/22-277_d18f.pdf | The decision Anderson is built on, read at second hand this sprint through the Third Circuit's quotations. It is the source of "sometimes added warnings or labels", which is the closest any court has come to describing the tier badge |
-| todo | Force v. Facebook, Inc., 934 F.3d 53 (2d Cir. 2019) | The controlling Second Circuit authority for Dialecta's own forum, and the decision Anderson footnote 13 says it may depart from. More load bearing here than Anderson is |
+| todo | Force v. Facebook, Inc., 934 F.3d 53 (2d Cir. 2019) | ~~The controlling authority for Dialecta's own forum.~~ **Corrected 2026-09-20: the forum is the Ninth Circuit.** Demoted to background on the circuit split. The rows that replaced it are Doe 1 v. Meta and Dyroff in the Arizona section above |
 | todo | Maffick, LLC v. Facebook, Inc., No. 20-05222 (N.D. Cal. Sept. 3, 2020) | The only case this tree has found where a platform's own label on user content was litigated. Cited by CRS only with a "cf.", so read it before repeating what it stands for |
 | filed | Fair Housing Council v. Roommates.com, LLC, 521 F.3d 1157 (9th Cir. 2008) (en banc), https://cdn.ca9.uscourts.gov/datastore/opinions/2008/04/02/0456916.pdf | The material contribution test in the original. Bears on Stage 2 self-declaration, where the platform structures what a contributor says about themselves. **Filed 2026-09-20 for a second reason found later: it is now the controlling-circuit replacement for Anderson v. TikTok**, because Arizona sits in the Ninth Circuit and Connecticut does not. `2008-ca9-roommates-com-material-contribution.md` |
 | todo | 18 U.S.C. Section 2702(b)(8), the Stored Communications Act emergency disclosure exception, https://www.law.cornell.edu/uscode/text/18/2702 | The statutory text of the voluntary route Van Dort describes at second hand. The Breach routing rule should be written to this wording, not to a summary of it |
-| todo | Connecticut defamation elements and the opinion privilege, from the Connecticut Bar Association or a Connecticut firm | The tier label position rests on opinion resting on disclosed facts, and that defence is state law. Currently the largest unsourced load in this tree |
-| todo | Conn. Gen. Stat. Section 42-520 as amended by P.A. 25-113, consent for sensitive data processing | Whether the Pact and terms could supply the consent that would close the CTDPA question a cheaper way than avoiding the data |
+| dead | Connecticut defamation elements and the opinion privilege, from the Connecticut Bar Association or a Connecticut firm | **Dead 2026-09-20: wrong state.** Added as a lead in the first pass, before the jurisdiction was known. The live version is two rows in the Arizona section above: Turner v. Devlin and Yetman v. English, plus the State Bar of Arizona defamation instructions. Still the largest unsourced load in this tree, now pointed at the right state |
+| dead | Conn. Gen. Stat. Section 42-520 as amended by P.A. 25-113, consent for sensitive data processing | **Dead 2026-09-20: the statute does not apply and the question it was asked for has moved.** Whether the Pact can supply consent is now a defamation question under Restatement Section 583, not a privacy-statute question, and it is covered by the State Bar of Arizona row above. See `positions/2026-09-20-consent-waiver-and-the-pact.md` |

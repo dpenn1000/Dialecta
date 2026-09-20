@@ -37,3 +37,4 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-20-legal-04 | blindspot | legal -> security, decider, migrator | none | open | Dialecta is operated from Arizona, and three trees were built on Connecticut
 2026-09-20-legal-05 | blindspot | legal -> designer, philosopher, migrator, voice-editor | A-1, A-10 | open | The consent moments mostly exist already; what is missing is four sentences and one table
 2026-09-20-legal-05 | blindspot | legal -> convener, decider, security | none | open | A second tree corrected the same premise before I got there, and stating it does not catch that. Filed as legal-05 after finding legal-04 already taken by a parallel pass; see that record for the other side of the same collision
+2026-09-20-legal-06 | handoff | legal -> decider | A-1, A-10, M3 | open | Consent moments, framed and ready for the chair to dispatch to three seats
