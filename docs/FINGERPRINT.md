@@ -77,6 +77,32 @@ page states that Acuity trades against Reach and Discourse trades against Calibr
 Magnanimity, so "the trade-offs make a true circle structurally impossible and force every
 fingerprint into a real shape."
 
+`philosopher` and `designer` disagree about whether that is honest, and the disagreement is real
+rather than an error. `philosopher` judges the ring by what it signifies, and finds it earns its
+claim: it sits equidistant from every contributor and reads as horizon rather than reproach.
+`designer` judges whether the copy matches the render math, and finds the engine normalises every
+axis on 22 (lines 158, 163, 276, 287) while the documented data range is 0 to 20, so a contributor
+with no trade-off penalty at all still falls short by construction. Both hold on their own axis.
+What separates them is whether an unreachable potential reads as encouragement, which is Dan's call.
+
+## The three live fingerprints run on the fallback
+
+`_recovered-next/lib/theme/fingerprint-page-mount.jsx` line 23, `axisScoresToFingerprintData`, keeps
+`graduations` and discards everything else: every axis is handed `tierMix: {}` and
+`topicPhases: []`. An empty `tierMix` derives to purity 1, turbulence 0 and clarity 1, so the shape
+renders perfectly smooth, fully saturated and crisp no matter what history sits behind it. An empty
+`topicPhases` falls back to axis colour.
+
+Its only caller is line 113, the contributor carousel. **All three fingerprints the page renders
+live are therefore missing two of the system's channels**, and section 01 invites a comparison
+between three examples that cannot show what the rest of the page goes on to explain. The 14 baked
+examples are the only ones on the page demonstrating the real system.
+
+This is also how the convener misread the system earlier on 2026-09-20: zoomed the hero, saw hue
+varying by angle, and briefed two seats that colour was axis identity. The observation was right
+and the inference was wrong, because the one fingerprint being looked at was the one running on the
+fallback.
+
 ## Breach has no channel, and cannot borrow one
 
 Breach appears exactly once in the engine, in the tier colour table at line 48, and no render path
@@ -135,9 +161,16 @@ that argument does not currently survive.
 | | Owner |
 | --- | --- |
 | The Breach residual's channel, given that both proposed ones are taken | `designer` |
-| Whether the notch reads as a wound, resolved together with the residual | `designer` |
+| Whether the notch reads as a wound, resolved together with the residual and before it ships | `designer` |
+| The contributor carousel discarding `tierMix` and `topicPhases` | `builder` |
+| The axis-colour legend teaching a mapping the engine calls a fallback | `designer` |
 | Builder and Empiricist sharing a green | `designer` |
-| Whether turbulence is legible at avatar scale, or is not an avatar-scale signal | `designer` |
-| Carrying the "potential" framing from onboarding copy onto the ordinary profile render | `designer` |
+| Turbulence being a full-size signal rather than an avatar-scale one | `designer` |
+| Whether an unreachable potential ring reads as encouragement | Dan |
 | P-11, no contest path for a rendered characterisation | `philosopher`, `legal` |
 | Re-baking the examples after any change | `build-archetype-svgs.jsx` exists for this |
+
+`designer` filed seven ordered changes in
+`council/designer/positions/2026-09-20-fingerprint-review.md`. Both seats answered Dan's question
+the same way: good as it is at the level hardest to get right, and what remains is finishing work
+rather than a rebuild.
