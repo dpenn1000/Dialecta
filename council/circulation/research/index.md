@@ -1,6 +1,18 @@
 # Circulation: research index
 
-*Nothing filed yet.*
+Seed leads live in `reading-list.md`; the sprint files them here.
 
-| Note | Source | Filed |
+One file per source: `YYYY-<author>-<slug>.md` with citation, summary, and what it implies for a named Dialecta surface.
+
+| File | Source | Implies for |
 | --- | --- | --- |
+| [2026-dialecta-funnel-correction.md](2026-dialecta-funnel-correction.md) | Dialecta's own data: `council/treasurer/research/2026-ghost-native-analytics-all-time.md` and `council/circulation/brief.md`, read 2026-09-20 | The 17,000-visitor figure the Council quotes is not a forecast, it is one point from a rate measured on a site with zero published discourse and a numerator mostly made of |
+| [2014-metafilter-acquisition-concentration.md](2014-metafilter-acquisition-concentration.md) | David Auerbach, Slate, May 2014, same primary source as treasurer's `2014-metafilter-ad-collapse.md` | Facebook is currently 100 percent of Dialecta's non-direct, non-personal traffic. The same concentration failure MetaFilter suffered on revenue applies to acquisition |
+| [2008-kelly-arrival-and-direct-reach.md](2008-kelly-arrival-and-direct-reach.md) | Kevin Kelly, "1,000 True Fans", The Technium, 2008/2014, same primary source as treasurer's `2008-kelly-1000-true-fans.md` | Kelly's model assumes arrival and argues for owning the relationship once found. Dialecta's Resend list of 10 has never been emailed |
+| [2026-wikimedia-fundraising-arrival-is-different.md](2026-wikimedia-fundraising-arrival-is-different.md) | Wikimedia Foundation FY2024-2025 financials, meta.wikimedia.org, same primary source as treasurer's `2026-wikimedia-fundraising.md` | Wikimedia's arrival is task-driven search traffic with no substitute. Use it for ask design only, not as acquisition evidence |
+| [2026-opengraph-and-x-card-share-surface.md](2026-opengraph-and-x-card-share-surface.md) | Open Graph protocol, ogp.me, primary. X/Twitter Cards via secondary sources; X's own docs returned HTTP 402 | og:title/description/image/url covers both platforms by fallback. Set twitter:card to summary, not summary_large_image, since X has repeatedly dropped headline text on the large card since 2023 |
+| [2026-hacker-news-guidelines-self-promotion.md](2026-hacker-news-guidelines-self-promotion.md) | Hacker News official guidelines, news.ycombinator.com/newsguidelines.html, primary | Self-promotion is limited not banned; soliciting votes is flatly banned. A second-stage channel, single-shot, not the first-hour one |
+| [2026-paid-acquisition-minimum-spend-arithmetic.md](2026-paid-acquisition-minimum-spend-arithmetic.md) | Google Ads Help (primary) plus vendor/agency reporting for Meta, marked as such, fetched 2026-09-20 | Even the smallest technical ad minimums cost more per month than Dialecta's $78 floor has ever earned organically. Acquisition-cost finding, not a revenue one |
+| [2026-plausible-analytics-tool.md](2026-plausible-analytics-tool.md) | GitHub API search, `plausible/analytics`, 29,164 stars, fetched 2026-09-20 | Ghost's native analytics produced every number this seat has and Dialecta is committed to leaving Ghost with no replacement named. Plausible is a maintained, license-clear candidate |
+| [2026-nextjs-native-share-and-sitemap-tooling.md](2026-nextjs-native-share-and-sitemap-tooling.md) | Next.js official docs, nextjs.org/docs, primary, cross-checked against two GitHub searches | No third-party OG-card or sitemap tool is worth adopting; both ship inside the Next.js version apps/web already runs, unused |
+| [2026-resend-broadcasts-tool.md](2026-resend-broadcasts-tool.md) | Resend's own product pages, resend.com/features/broadcasts and /docs/dashboard/broadcasts/introduction | Resend Broadcasts already does what the reading list's newsletter-tooling row asked about. The blocker was never tooling, it's that the list has never been emailed |
