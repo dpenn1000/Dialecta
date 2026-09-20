@@ -9,7 +9,26 @@ import { z } from 'zod';
 import { embed, generate, isUp, listModels, hasModel, EMBED_MODEL, CHAT_MODEL, OLLAMA_HOST, SETUP_HINT } from './ollama.mjs';
 import { buildIndex, loadIndex, indexStats, ROOT, INDEX_FILE } from './index.mjs';
 
-const ADVISORS = ['treasurer', 'designer', 'philosopher'];
+// Every seat, and where each one's notes live. This list said three names until 2026-09-20:
+// treasurer, designer, philosopher. It had never been updated for security or legal, and it had
+// never known the working bench existed at all, so `research_file` refused eight of eleven seats
+// and `research_search` could only filter to three. index.mjs already walked both families, so
+// the index held every seat's notes and the tools in front of it could not reach most of them.
+// Found when a builder sprint reported that research_file would not accept its own name.
+const SEATS = {
+  treasurer: 'council/treasurer/research',
+  designer: 'council/designer/research',
+  philosopher: 'council/philosopher/research',
+  security: 'council/security/research',
+  legal: 'council/legal/research',
+  builder: 'team/builder/knowledge',
+  reviewer: 'team/reviewer/knowledge',
+  'voice-editor': 'team/voice-editor/knowledge',
+  migrator: 'team/migrator/knowledge',
+  'spec-reader': 'team/spec-reader/knowledge',
+  decider: 'team/decider/knowledge',
+};
+const ADVISORS = Object.keys(SEATS);
 const MAX_FETCH_CHARS = 60_000;
 
 const SUMMARIZE_SYSTEM =
@@ -106,11 +125,13 @@ server.registerTool(
   'research_search',
   {
     description:
-      'Semantic search over council/*/research/*.md using local embeddings. Rebuilds the index if it is missing. ' +
-      'Returns the top k chunks with advisor, file, and cosine score.',
+      'Semantic search across every seat\'s filed notes, both benches: council/*/research/*.md and ' +
+      'team/*/knowledge/*.md, using local embeddings. Rebuilds the index if it is missing. ' +
+      'Returns the top k chunks with seat, file, and cosine score. Search here before searching the ' +
+      'web: another seat may have already filed what you are about to go find.',
     inputSchema: {
       query: z.string().min(1).describe('What to look for'),
-      advisor: z.enum(ADVISORS).optional().describe('Limit to one advisor'),
+      advisor: z.enum(ADVISORS).optional().describe('Limit to one seat, either bench'),
       k: z.number().int().min(1).max(50).default(8).describe('How many chunks to return'),
     },
   },
@@ -122,7 +143,10 @@ server.registerTool(
       index = await loadIndex();
     }
     if (!index || index.chunks.length === 0) {
-      return text(`No research files indexed yet. Nothing under ${path.join(ROOT, 'council')}/*/research/*.md apart from index.md.`);
+      return text(
+        `No notes indexed yet. Nothing under ${path.join(ROOT, 'council')}/*/research/*.md or ` +
+          `${path.join(ROOT, 'team')}/*/knowledge/*.md apart from index.md.`,
+      );
     }
     const [qv] = await embed([query]);
     const pool = advisor ? index.chunks.filter((c) => c.advisor === advisor) : index.chunks;
@@ -173,10 +197,11 @@ server.registerTool(
   'research_file',
   {
     description:
-      'Write council/<advisor>/research/<slug>.md from a citation, summary, and implications, and append a row to that ' +
-      'advisor\'s research/index.md. Refuses unknown advisors and never overwrites an existing file.',
+      'File a note into the calling seat\'s own notes tree from a citation, summary, and implications, ' +
+      'and append a row to that tree\'s index.md. Routes to council/<seat>/research/ for an advisor ' +
+      'and team/<seat>/knowledge/ for a practitioner. Refuses unknown seats and never overwrites.',
     inputSchema: {
-      advisor: z.string().describe('One of treasurer, designer, philosopher'),
+      advisor: z.enum(ADVISORS).describe('Your seat name, either bench'),
       slug: z.string().describe('File name without .md, lowercase, digits and hyphens, for example 2024-smith-reward-loops'),
       citation: z.string().min(1).describe('Full citation line'),
       summary: z.string().min(1).describe('Summary paragraph(s)'),
@@ -185,9 +210,11 @@ server.registerTool(
     },
   },
   safe(async ({ advisor, slug, citation, summary, implies, source_url }) => {
-    if (!ADVISORS.includes(advisor)) return text(`ERROR: advisor must be one of ${ADVISORS.join(', ')}; got "${advisor}".`);
+    if (!SEATS[advisor]) return text(`ERROR: seat must be one of ${ADVISORS.join(', ')}; got "${advisor}".`);
     if (!slugOk(slug)) return text('ERROR: slug must be lowercase letters, digits, and hyphens, 2 to 121 characters.');
-    const dir = path.join(ROOT, 'council', advisor, 'research');
+    // Each bench keeps notes in its own place. Hardcoding council/<name>/research/ here is what
+    // made this tool unusable for the six working seats even once their names were accepted.
+    const dir = path.join(ROOT, ...SEATS[advisor].split('/'));
     const file = path.join(dir, `${slug}.md`);
     const indexMd = path.join(dir, 'index.md');
     try {
