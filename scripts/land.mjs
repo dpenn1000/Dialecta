@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 // Land an agent session's work on main, from its own worktree, without a human merge.
 //
-// Usage:  node scripts/land.mjs [--agent <name>] [--message "..."] [--dry-run]
+// Usage:  node scripts/land.mjs [--agent <name>] [--message "..."] [--include <path>] [--dry-run]
+//
+// --include is repeatable, for a shared file inside the fence that this session really did
+// write: exchange/ledger.md, a council/log/ debate entry, a record the chair is closing.
 //
 // Why this exists: on 2026-09-19 nine agents worked in nine worktrees and none of them
 // landed. Every branch had to be merged by hand afterwards. The work was additive and in
@@ -67,6 +70,20 @@ const allowed = [
 ];
 const permitted = (p) => allowed.some((r) => r.test(p));
 
+// Owning a path and having written it this session are different things, and `exchange/` is
+// where they come apart. Every agent writes there, so a fence meaning "you may land exchange
+// records" got read as "stage every dirty file in exchange/". It swept 461 lines of another
+// agent's record closures into a commit whose message was about Next.js research. Nothing was
+// lost; git blame points at the wrong session for those three files, permanently.
+//
+// So `permitted` stays the permission check for the branch as a whole, and `claimable` decides
+// what this run may stage on its own initiative. A record is claimable when the agent's name is
+// in the filename, which `exchange/SCHEMA.md` already guarantees. Anything else inside the fence
+// is landed deliberately with --include, never by happening to be in the way.
+const includes = args.flatMap((a, k) => (a === '--include' ? [args[k + 1]] : [])).filter(Boolean);
+const ownRecord = new RegExp(`^exchange/(?:open|closed)/[0-9-]+-${agent}-`);
+const claimable = (p) => new RegExp(`^${home}/`).test(p) || ownRecord.test(p) || includes.includes(p);
+
 // `git status --porcelain` gives "XY path", and "XY old -> new" for a rename.
 const statusPath = (line) => line.slice(3).replace(/^"|"$/g, '').split(' -> ').pop();
 
@@ -81,11 +98,18 @@ say(`home:   ${home}`);
 const dirty = tryGit('status', '--porcelain').out.split('\n').filter(Boolean);
 if (dirty.length) {
   const paths = dirty.map(statusPath);
-  const mine = paths.filter(permitted);
-  const stray = paths.filter((p) => !permitted(p));
+  const mine = paths.filter(claimable);
+  const stray = paths.filter((p) => !claimable(p));
   if (stray.length) {
-    say(`skipped: ${stray.length} dirty file(s) outside ${home}, left untouched`);
-    stray.forEach((p) => say(`  ${p}`));
+    say(`skipped: ${stray.length} dirty file(s) this run does not claim`);
+    stray.forEach((p) =>
+      say(
+        `  ${p}` +
+          (permitted(p)
+            ? '   (inside the fence, not yours; --include to land it)'
+            : '   (outside the fence)'),
+      ),
+    );
   }
   if (mine.length) {
     if (DRY) {
@@ -175,13 +199,33 @@ if (DRY) {
 
 for (let attempt = 1; attempt <= 5; attempt++) {
   git('fetch', '-q', 'origin');
-  const rb = tryGit('rebase', 'origin/main');
-  if (!rb.ok) {
-    tryGit('rebase', '--abort');
-    die(
-      'rebase onto origin/main hit a conflict, which means another agent touched your files.\n' +
-        `Resolve by hand in this worktree, then run land again.\n${rb.out}`,
-    );
+  // Only rebase when there is something to rebase onto. Zero behind means a plain push is
+  // correct, and rebasing anyway turns a clean land into a chance to fail for nothing.
+  const behind = Number(tryGit('rev-list', '--count', 'HEAD..origin/main').out.trim() || '0');
+  if (behind) {
+    const rb = tryGit('rebase', 'origin/main');
+    if (!rb.ok) {
+      // Two unrelated failures share one exit code. "cannot rebase: You have unstaged changes"
+      // means another agent is working in this tree. There is no conflict, and telling the reader
+      // to resolve one sends them hunting for something that does not exist.
+      const blocked = /cannot rebase|unstaged changes|uncommitted changes|commit or stash/i.test(
+        rb.out,
+      );
+      const dirtyNow = tryGit('status', '--porcelain').out.split('\n').filter(Boolean);
+      tryGit('rebase', '--abort');
+      if (blocked) {
+        die(
+          'git refused the rebase because the working tree is dirty. This is not a conflict.\n' +
+            `${dirtyNow.length} uncommitted path(s), most likely another agent mid-session here:\n` +
+            dirtyNow.map((l) => `  ${l}`).join('\n') +
+            '\nWait for them to finish, or land from your own worktree.',
+        );
+      }
+      die(
+        'rebase onto origin/main hit a real conflict: another agent changed a file you changed.\n' +
+          `Resolve by hand in this worktree, then run land again.\n${rb.out}`,
+      );
+    }
   }
   const landing = Number(tryGit('rev-list', '--count', 'origin/main..HEAD').out.trim() || '0');
   if (tryGit('push', 'origin', 'HEAD:main').ok) {
