@@ -30,7 +30,9 @@ Env vars (see `.env.example`): `ANTHROPIC_API_KEY`, `SUPABASE_URL`, `SUPABASE_SE
 1. `docs/plans/backlog.md`: the ordered work. Pick the top unblocked item.
 2. `docs/handoffs/current.md`: what the last session left.
 3. `exchange/ledger.md`: what agents have open with each other. An open record on your question means answering that one.
-4. `docs/plans/build-plan.md`: the architecture. `docs/decisions/`: the ADRs it rests on (001 leave Ghost, 002 Supabase Auth, 003 own editor).
+4. `docs/plans/build-plan.md`: the architecture.
+
+**End every session with `node scripts/land.mjs --agent <you>`.** It commits inside your folder, runs the gates, rebases and pushes to main. Work that stays on a branch is work nobody else can see; on 2026-09-19 nine sessions left nine branches and all of them had to be merged by hand. `docs/decisions/`: the ADRs it rests on (001 leave Ghost, 002 Supabase Auth, 003 own editor).
 Delegate with `/dialecta-brief` to `builder`; review with `reviewer`; prose with `voice-editor`; schema with `migrator`; spec questions to `spec-reader`; any `-D` backlog row or "should we" question to `decider` (`/dialecta-decide`), or to the full council (`/dialecta-council`: `treasurer`, `designer`, `philosopher` argue it, `decider` chairs, Dan decides). Hooks in `.claude/settings.json` block spec edits and voice hard-rule failures.
 
 ## Repo layout
@@ -45,6 +47,7 @@ docs/decisions/   ADRs, numbered, never edited after Decided
 council/          advisor charters, standing positions, research trees, debate log
 team/             the six working agents: briefs, standing practices, knowledge trees
 exchange/         handoffs, blind spots, advice and votes between agents (see exchange/README.md)
+scripts/land.mjs  how an agent session lands its own work on main, gates and all
 tools/            local-research MCP server: Ollama-backed search, summarize, index (see tools/local-research/README.md)
 api/              legacy Vercel functions, frozen until apps/web replaces them
 components/       React/HTML prototypes (pact, stewards, guidebook, profile, fingerprint, opinion maps, delta, growth scroll)

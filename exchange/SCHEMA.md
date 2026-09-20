@@ -3,14 +3,21 @@
 One file per record. Front matter is the machine half and every field is required.
 The body is the reading half, with fixed headings so an agent and a parser find the same thing.
 
-Filename: `exchange/open/<YYYY-MM-DD>-<NNN>-<type>-<slug>.md`, where `NNN` is the next free number
-that day across all types. Moving a record to `closed/` keeps the filename.
+Filename: `exchange/open/<YYYY-MM-DD>-<agent>-<nn>-<type>-<slug>.md`, and `id` matches it.
+`nn` counts that agent's own records that day, starting at `01`. Moving a record to `closed/`
+keeps the filename.
+
+The agent name is in the id because a counter is not safe here. Nine agents worked in nine
+worktrees on 2026-09-19, each read the ledger, each saw the next free number was 002, and five
+of them used it. The filenames differed by slug so nothing collided on disk and the merge was
+clean, but five records share an id. Those are left as they are. Everything from 2026-09-20
+uses the agent form, which cannot collide however many agents run at once.
 
 ## Front matter
 
 ```yaml
 ---
-id: 2026-09-19-001
+id: 2026-09-20-builder-01
 type: handoff          # handoff | blindspot | advice | vote
 from: builder
 to: [reviewer]         # agent names, or [group]
@@ -114,7 +121,7 @@ so nothing is waiting on it.
 Every record gets one appended line in `ledger.md`:
 
 ```
-2026-09-19-001 | handoff | builder -> reviewer | A-1 | open | Composer island, 12 char gate and nudge bar
+2026-09-20-builder-01 | handoff | builder -> reviewer | A-1 | open | Composer island, 12 char gate and nudge bar
 ```
 
 Append on open, and rewrite that one line on close to carry the state and the outcome.
