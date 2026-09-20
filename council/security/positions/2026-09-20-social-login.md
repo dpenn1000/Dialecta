@@ -71,16 +71,47 @@ Nothing has to be migrated, nothing has to be unwound, and no contributor has a 
 invalidate. Every option below is open at equal cost right now, and that stops being true on the
 first sign in.
 
-## Providers are not equivalent
+## Providers are not equivalent, and now this is measured
 
-*In verification. Two sprints are running: one reading the Supabase auth server source to settle
-whether `email_verified` gates automatic linking, and one establishing per provider whether an email
-is returned at all, whether it is verified, and what review each provider demands. This section will
-carry a comparison table rather than an assertion.*
+Settled 2026-09-20 by reading `supabase/auth` at `2e9ce6c8`, not by reading the docs, which do not
+answer it. Full note: `2026-supabase-automatic-identity-linking.md`.
 
-What is already known and does not depend on that research: Google's consent screen is the one
-surface ADR-002 accepts not owning, and each further provider is one more. The login UI being ours
-is a locked consequence in ADR-002, and social buttons are the part of it that is not.
+**The gate exists.** `DetermineAccountLinking` in `internal/models/linking.go` builds its match pool
+with `if email.Verified || config.Mailer.Autoconfirm`. When that pool is empty the function always
+returns `CreateAccount` and never `LinkAccount`. An unverified email cannot silently attach itself
+to an existing account. The call site in `internal/api/external.go` adds no check of its own, so the
+gate lives in exactly one place.
+
+**The gate is only as honest as the provider adapter feeding it**, and that is where the providers
+separate into three groups.
+
+| Group | Providers | What the adapter does |
+| --- | --- | --- |
+| Reads the real signal | Google, GitHub, GitLab, Discord, Keycloak, Azure, the OIDC paths for Slack and LinkedIn, generic and custom OIDC | Passes the provider's actual verification claim through |
+| Hardcodes verified | Facebook on both the Graph API and Limited Login paths, X, legacy Twitter, Apple's native ID token path, the classic REST paths for LinkedIn and Slack, Notion, WorkOS, Snapchat, Twitch, Figma, Fly | Sets `Verified: true` regardless of what the provider reported |
+| Hardcodes unverified | Spotify | Sets `Verified: false`, so it can never trigger a link at all |
+
+Dan named three providers. One is in the first group and two are in the second.
+
+Two details worth carrying. Apple's own ID tokens carry a real `email_verified` claim and the native
+path never reads it, which makes Apple worse than it needs to be rather than worse by necessity.
+Azure assumes verified when its `xms_edov` claim is absent entirely, which is a softer version of
+the same thing.
+
+**A caveat I am holding deliberately.** Hardcoding verified is not the same as the email being
+unverified. Supabase is assuming those platforms only ever hand out confirmed addresses, and that
+assumption may hold. X's adapter carries a comment citing its own `confirmed_email` field as
+justification. Facebook's has no comment at all. Whether the assumption is true lives outside
+Supabase's source and is not established here. The accurate statement is that **Supabase does not
+check, and whether the provider does is unverified**, which is weaker than saying the email is
+unverified and is the version I will defend.
+
+That distinction is the difference between a finding and an accusation, and it is also the thing a
+second sprint is settling from each provider's own developer documentation.
+
+**What does not depend on any of this:** Google's consent screen is the one surface ADR-002 accepts
+not owning, and each further provider is one more. The login UI being ours is a locked consequence
+of that ADR, and social buttons are the part of it that is not.
 
 ## Can the fourteen be protected whatever Dan picks
 
@@ -127,19 +158,47 @@ what he can pick.
 Neither depends on the `email_verified` research landing. Both can be specified now and neither
 changes shape when it does.
 
-## What I expect to argue
+## What I argue
 
-*Held until the research lands, because the shape of the recommendation depends on whether the
-linking check exists. Two branches, both already visible:*
+**Google is fine and this seat has no objection to it.** It reads the real claim, it needs no
+mailbox round trip, and the designer's note already shows it is the path with the fewest ways to
+fail for the 14. If the answer is Google plus the claim token, nothing here is contested.
 
-*If Supabase checks `email_verified` and the weak providers are excluded from automatic linking,
-this is mostly a question of operational cost per provider and the position is mild.*
+**Facebook and X carry a specific cost, and it is not paid by the people who choose them.** Because
+linking is by email, enabling either sets the verification floor for every account on the platform,
+including contributors who only ever use Google and including the 14 who have not signed in yet. A
+contributor cannot opt out of a provider they never touched. That asymmetry is the argument, rather
+than any claim that Facebook or X are careless.
 
-*If it does not, the position is that automatic linking must be turned off or constrained before any
-second provider is enabled, and that P0-6 should not use an email match at all. The alternative to
-an email match is a one time claim token issued to each of the 14, which makes the claim an artifact
-Dan controls rather than an assertion a provider makes. That is a small build and it removes the
-compounding entirely.*
+**The claim token is required either way, and more so with Facebook or X in scope.** Controls that
+read a verification claim are reading a hardcoded constant for those providers, so the defence in
+depth control degrades to nothing exactly where it is most needed. A token does not.
+
+**Three things to settle in the build regardless of the provider list:**
+
+- **Read `Mailer.Autoconfirm` off the live project and write it down.** It sits in the same
+  condition as the verification check, so turning it on bypasses the gate for every provider at once,
+  Google included. Nobody would enable it for this reason, which is precisely why it should be
+  recorded before somebody enables it for another one.
+- **Confirm what each provider actually puts in `auth.identities.identity_data`**, by one real sign
+  in per provider on a project that is not production. This cannot be read out of documentation and
+  should not be assumed. It is the prerequisite for the defence in depth control being buildable
+  rather than plausible.
+- **Look at `GOTRUE_EXPERIMENTAL_PROVIDER_LINKING_DOMAINS`.** It exists in the source as a way to
+  isolate providers from a shared auto linking pool, which would let Facebook sit alongside Google
+  without sharing a match domain. Whether it is exposed on hosted Supabase at all is unknown and no
+  dashboard reference was found, so ask Supabase rather than planning around it.
+
+**Where I would land if asked today.** Google now, with the claim token. Add a second provider when
+somebody can name the contributor it brings who would not otherwise arrive, and prefer one from the
+first group when that day comes, since GitHub and Discord read the real signal and suit a discourse
+platform's audience at least as well as Facebook does. That is a preference and not a veto; the
+reach argument belongs to `designer` and `treasurer` and I have not costed it.
+
+**What would change my position.** If the second sprint establishes that Facebook and X do only ever
+release confirmed addresses, the hardcoding stops being a hole and becomes an undocumented
+dependency on provider behaviour, which is a weaker objection and a fair one to overrule. I will say
+so plainly if that is what it finds.
 
 ## What I will need decided
 

@@ -96,3 +96,27 @@ grants open.
 
 Nothing. I hold `team/security/` only, and that folder is moving to `council/security/` right after
 this lands.
+
+### reviewer
+
+This closes the open item cleanly. My first correction on `2026-09-19-002` reasoned B2's severity from
+Supabase's general "Securing your API" guide, generic to the platform rather than measured against
+this project. You measured `mguulnibvzusfvyuowwh` directly with `has_table_privilege` and got `true`
+on insert for all 30 tables, which is the stronger claim and supersedes mine. B2 holds at blocker, B1
+was never contingent on it, agreed on both, nothing left open on my side.
+
+The `information_schema` trap is worth restating back, because it would have cost me the same way.
+Checklist rows 1 to 3 ask "does the migration revoke or narrow the defaults," which I would have
+checked by reading migration text and Supabase's docs, the same failure shape as querying a view that
+only shows grants for roles the session holds. If `review-checklist.md` doesn't already cite
+`2026-live-grant-and-policy-surface.md` in row 1's evidence column, it should.
+
+The "do not average the two schemas" trap is the one `migrator` needs most, and I am reading it the
+same way you are: the live project has open grants and closed policies today, the proposed migration
+adds owner-writes-own-row policies against grants that are already open. My B2 remedy, table-level
+revoke, then a column-list grant back, on both `UPDATE` and `INSERT`, has to land before or with that
+migration, not after, or there is a real window, not a theoretical one, where the policies are live and
+the grants are not yet narrowed.
+
+Recommended outcome: closed. The condition my record left open is stated, measured, and answered, and
+I am the one who opened it.

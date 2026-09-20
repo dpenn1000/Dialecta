@@ -1,0 +1,33 @@
+# Automatic Identity Linking in Supabase Auth
+
+**Source:** Supabase, "supabase/auth" (formerly GoTrue), branch `master` at commit `2e9ce6c8` (tag `rc2.198.0-rc.11`), read 2026-09-20. https://github.com/supabase/auth
+
+## Summary
+
+Yes, inside `DetermineAccountLinking` itself, not as a separate check anyone else calls. `internal/models/linking.go` builds its match pool with `if email.Verified || config.Mailer.Autoconfirm { verifiedEmails = append(...) }`. When `verifiedEmails` ends up empty the function always returns `CreateAccount`, never `LinkAccount`: an email only becomes eligible to match an existing user after it passes that filter. The call site, `createAccountFromExternalIdentity` in `internal/api/external.go`, adds no check of its own; the gate lives entirely in `linking.go`.
+
+The real question is whether each provider's `email.Verified` reflects what the provider actually reported. It splits three ways.
+
+Honest, reads the real signal: Google (`u.VerifiedEmail || u.EmailVerified`), GitHub (per address `verified` from `/user/emails`), GitLab, Discord, Kakao's REST path, Keycloak, Azure (the `xms_edov` claim, though it assumes verified when that claim is absent entirely), the OIDC paths for Slack and LinkedIn, and any generic or custom OAuth/OIDC provider (`custom_oauth.go`; the `parseGenericIDToken` fallback in `oidc.go`).
+
+Hardcodes `Verified: true` no matter what the provider says: Facebook, both the Graph API login (`facebook.go:96`, uncommented) and the Limited Login JWT path (`oidc.go:148`, commented "Facebook Limited Login emails are always verified"); X and legacy Twitter OAuth1 (`x.go:131`, `twitter.go:101`, X's comment cites its own `confirmed_email` field name as justification); Apple's native ID token path (`oidc.go:187`, uncommented, despite Apple's own tokens carrying a real `email_verified` claim this code never reads); the classic REST paths for LinkedIn and Slack; Notion, WorkOS, Snapchat, Kakao's ID token path, Twitch, Figma, Fly. Spotify hardcodes `Verified: false`, so it can never trigger a link at all.
+
+For Google, Facebook, and X specifically: running all three means Facebook's and X's side of the protection is entirely Facebook's and X's own account policy, not anything Supabase checks independently. Facebook's Graph API has historically only returned an `email` field for a confirmed address; X names its field `confirmed_email`. Neither claim is verified twice.
+
+No email returned at all: the standard redirect flow (`external.go`) fails closed with `apierrors.NewInternalServerError("Error getting user email from external provider")`, unless the provider's `EmailOptional` config is explicitly turned on (`OAuthProviderConfiguration.EmailOptional`, e.g. `GOTRUE_EXTERNAL_X_EMAIL_OPTIONAL`). It defaults to false for every provider, X included, and `external_x_test.go` tests both states directly.
+
+No setting disables automatic linking outright. `GOTRUE_EXPERIMENTAL_PROVIDER_LINKING_DOMAINS` (`provider=domain` pairs, comma separated) moves named providers out of the shared default pool into their own; giving every provider a unique domain is the closest thing to an off switch. It is Experimental, self-hosted config; this reading found no evidence it is exposed in the hosted project dashboard, which is worth confirming directly with Supabase rather than assuming either way. `GOTRUE_SECURITY_MANUAL_LINKING_ENABLED` is a different thing, as flagged: it only gates the authenticated `linkIdentity()` call a signed-in user makes on themselves.
+
+Docs (`supabase.com/docs/guides/auth/auth-identity-linking`, read 2026-09-20) confirm linking by email and describe the mitigation as removing "any other unconfirmed identities linked to an existing user" once a link happens, which guards against the target account being an attacker's unconfirmed plant. The docs are silent on whether the incoming identity's own verification is checked; that is the code finding above, and docs and code do not conflict, the docs simply stop short of the part that matters here.
+
+One historical match on GitHub: GHSA-v36f-qvww-8w8m / CVE-2026-31813, "Insecure Apple and Azure authentication with ID tokens," patched in auth 2.185.0. Attacker issued, self-signed OIDC tokens for a victim's email, sent to the native `/token?grant_type=id_token` endpoint, were auto-linked to the victim's real Apple or Azure identity, and the attacker received a valid session. Fixed with `GOTRUE_EXTERNAL_ALLOWED_ID_TOKEN_ISSUERS`, present and enforced in the code read here. An earlier, related bug (GHSA-9wqv-qhrh-87f4, patched in 2.47.0) let an attacker hit the same endpoint with an unspecified provider and an arbitrary issuer URL, ahead of a target's first sign up; it is why that issuer allowlist exists at all. This search, supabase/auth issues plus its published security advisories, found no matching report naming Google, Facebook, or X.
+
+## Implies for Dialecta
+
+- P0-D2 (login methods): enabling Google, Facebook, and X together makes Facebook's and X's own account policy the entire "is this email real" check between them. Supabase does not verify either claim independently before linking. A Facebook or X account whose email is not actually confirmed on that platform's side, if one ever exists, walks straight into whatever Dialecta account already holds that address.
+- To drop that shared trust dependency without dropping multi-provider login, set `GOTRUE_EXPERIMENTAL_PROVIDER_LINKING_DOMAINS=google=google,facebook=facebook,x=x`. Confirm with Supabase support whether the hosted project exposes this; this reading could not confirm it either way. Each provider then opens its own account on first use, and a contributor who wants one merged account uses manual linking instead, off by default behind `GOTRUE_SECURITY_MANUAL_LINKING_ENABLED`.
+- Leave `GOTRUE_EXTERNAL_X_EMAIL_OPTIONAL` at its default (off). X without the `users.email` scope granted returns no email, and the default fails that sign in rather than creating an account with no address on file.
+- Do not disable email confirmations project wide for a smoother signup flow. `Mailer.Autoconfirm` feeds the exact same gate that decides automatic linking, for every provider at once, including the honest ones. Turning it off to skip a confirmation email also turns off the one check protecting a Google-linked account.
+- If native mobile Sign in with Apple or Google is ever added (the ID token grant, not the redirect flow used for web), read CVE-2026-31813 first. Confirm the deployed auth version is 2.185.0 or later and that `GOTRUE_EXTERNAL_ALLOWED_ID_TOKEN_ISSUERS` still holds only the two default issuers before shipping it.
+
+*Filed 2026-09-20*
