@@ -113,7 +113,15 @@ live.
 2.5 defined nowhere and concluded it existed in no spec. It exists in the live schema, on the
 article side. The four documents assumed a comment-side one, which is why nobody could find it.
 
-**4. The prototypes are the most valuable unread asset here.** 14,714 lines, referenced by nothing
+**4. The prototype and the live page have already diverged, and not only in markup.** Found by
+`voice-editor` during the Pact review and verified: `components/dialecta-pact.html` line 1311 is
+`<button class="brass" id="commitBtn" ...>I Understand - Enter</button>`, joined with an em dash.
+That string appears **zero times** in the live snapshot. So the two artifacts differ in copy, not
+merely in how much structure a text scrape flattens, and this inventory's habit of treating a
+prototype as the design of a live page is only sometimes safe. Where a prototype and a snapshot
+both exist, neither is authority for the other.
+
+**5. The prototypes are the most valuable unread asset here.** 14,714 lines, referenced by nothing
 in today's work until this sweep. Two of them, the fingerprint and its engine, are a complete
 design for a surface the Council spent an afternoon deciding policy about.
 
