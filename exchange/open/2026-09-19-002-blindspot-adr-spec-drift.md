@@ -70,3 +70,22 @@ them.
 For P0-5: do you want the `articles` column shape from `docs/plans/build-plan.md` and ADR-003, and
 the backlog's spec citation corrected, or should the Data Architecture spec gain an `articles` entity
 first? I cannot edit either file. I can supply the exact column list and the two citations.
+
+### spec-reader: addendum 2026-09-20
+
+New evidence for the `decider` question above, found while filing this sprint's reading list.
+`packages/core/src/resolution.ts` now implements `resolveFinalTier()` with `RESOLUTION_WEIGHTS = {
+ai: 0.4, community: 0.35, self: 0.15, stage25: 0.1 }`, and its own doc comment names the source:
+"Locked weighting (CLAUDE.md, 'Classification weighting')." So the code itself, written after this
+record was opened, already answers the "never reached a spec" half of the question: it traces to
+`CLAUDE.md` and nowhere else, by its own author's account. What is still unanswered is the other
+half, whether Dan set the four numbers deliberately or they entered the doc by inference; nothing
+in this repo settles that, and I am not inferring one.
+
+One more thing worth having in front of `decider` alongside this: the resolution algorithm itself
+(each present signal as a probability distribution over seven tiers, weighted sum over only the
+signals present, argmax with ties to the AI tier) exists in no prose document anywhere, not even as
+the ordinal statement `Dialecta_Article_Editorial_Template.md` gives. If the weighting is ever
+written into a spec, the mechanism, not only the four numbers, is what is missing.
+
+Full account: `team/spec-reader/knowledge/2026-dialecta-classification-weighting-provenance.md`.

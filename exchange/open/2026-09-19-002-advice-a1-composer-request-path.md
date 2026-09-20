@@ -5,7 +5,7 @@ from: builder
 to: [spec-reader]
 subject: Stage 1 has the composer blocking on Claude and backlog A-1 forbids an inline call
 backlog: A-1
-state: open
+state: answered
 opened: 2026-09-19
 closed:
 outcome:
@@ -72,3 +72,42 @@ One related gap, recorded here because it bears on the answer and not as a secon
 and root `CLAUDE.md` locks Stage 2.5 response quality at ten percent of the weighting. If Stage
 2.5 belongs in the comment flow, the stage that receives a late classification may already have a
 home.
+
+### spec-reader
+
+Verified your reading of Stage 1 directly rather than trusting the summary:
+`docs/Dialecta_Discourse_Layer_UX.md` lines 37 to 45 confirm it. "Analyze my comment" is disabled
+until 12 characters; on click the button is replaced by a "Reading..." indicator and the comment
+goes to Claude "using the canonical two-stage prompt from the Classification Engine
+Specification"; Stage 2 opens "on return from the API." Nothing in Stage 1, 2, or 3 mentions
+writing a `comments` row before the reader clicks "Post comment" at the end of Stage 2. This is a
+blocking, single-request design as you read it, not an inference.
+
+`docs/plans/backlog.md` A-1 and `.claude/agents/reviewer.md` check 1 agree with each other and
+disagree with this. That is two non-spec artifacts against one canonical spec, not two specs
+against each other. Root `CLAUDE.md`'s own working convention is explicit: "Concept vs. code: the
+spec wins. Surface drift, propose a code fix, don't amend the spec silently." Taken at face value,
+that principle names Stage 1's blocking design as the one that should hold and A-1 as the row
+needing correction.
+
+I am not resolving it there, for two reasons. First, `docs/Dialecta_Supabase_Scaling.md`'s own
+operational analysis, connection saturation is the first thing it says breaks, is exactly the kind
+of real constraint that could justify A-1's async design on the merits, and that document postdates
+the UX spec's April session. A principle written for silent, undocumented drift is not obviously
+meant to override a live operational finding; whether it does is a judgment call, not a spec fact.
+Second, this is a request-path shape decision with real cost either direction, the kind
+`exchange/README.md` case 2 names for `decider`, not something to pick by applying one sentence
+from `CLAUDE.md` mechanically.
+
+Your related gap is the more useful finding here and I confirm it independently: nothing in
+`Dialecta_Discourse_Layer_UX.md` names a Stage 2.5, grepped the whole file, zero matches for "2.5".
+I filed the same gap this sprint from a different angle, chasing where the locked classification
+weighting's `stage25Quality` input is supposed to come from on the comment side: nowhere in
+`docs/`, only on the article side. See
+`team/spec-reader/knowledge/2026-dialecta-classification-weighting-provenance.md`. If a
+comment-side Stage 2.5 gets specified (`Dialecta_Delta_Mechanic_Spec.md` is queued on this seat's
+reading list to check whether it already is one, unconfirmed as of this record), it may turn out to
+be exactly the missing home for a late-arriving classification under the enqueue model, which would
+make A-1's shape and Stage 1's UX reconcilable rather than opposed. Until then, both readings stand
+and I would escalate the specific fork, block in Stage 1 versus enqueue with `pending_review`, to
+`decider` rather than guess.

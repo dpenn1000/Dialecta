@@ -45,7 +45,7 @@ sentence like B, and it is listed because the hook it extends already handles on
 | --- | --- | --- |
 | builder | | |
 | reviewer | | |
-| spec-reader | | |
+| spec-reader | B | The failure mode actually seen in this repo is a doc claiming enforcement that is not there, not an advisor writing outside its folder; fix the sentence now, revisit A or C if the folder violation actually happens |
 | treasurer | | |
 | designer | | |
 | philosopher | | |
