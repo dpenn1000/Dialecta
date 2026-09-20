@@ -10,13 +10,13 @@ counts from the live database.
 
 ## The one-paragraph answer
 
-Dialecta exists in **four layers that do not match each other**. A live site whose pages live in a
-Ghost theme that is in no repository. An API of 52 files recovered from a Vercel artifact. A
-library of 14,714 lines of prototypes in `components/`. And a Next.js rebuild in `apps/web` that
-covers about a third of the live page set. The gap that matters most is the theme: **page markup
-and layout exist nowhere we control.**
-
----
+**Rewritten 2026-09-20 after exporting the Ghost theme, which overturned most of the first
+version.** Dialecta's live site is a **React application served through Ghost as mount points**,
+not a Ghost blog with custom pages. The theme holds 15 Handlebars templates, a 3,286-line
+stylesheet and **nine minified React bundles totalling about 2.5 MB**. The API behind it is 52
+files recovered from a Vercel artifact. `apps/web` is a Next.js rebuild covering a third of the
+page set. The gap is no longer the theme, which is now in hand. **The gap is the React source**,
+which exists in this repository only as an unproven candidate.
 
 ## Layer 1: the live site
 
@@ -96,10 +96,14 @@ Missing entirely against the live set: **`about`, `fingerprint`, `stewards`, `wr
 
 ## What this sweep found that nobody was looking for
 
-**1. The theme is the real gap.** Page markup and layout exist in Ghost, in no repository here.
-The snapshot preserves the words. `components/` preserves the design of eight surfaces. Neither
-preserves the pages. Retiring Ghost without the theme means rebuilding every page's structure from
-prose and prototypes, and nobody has costed that because nobody had noticed it.
+**1. The theme is no longer the gap. The front-end source is.** The theme is exported to `_theme/`,
+gitignored, 42 files. It contains every page template, including `page-pact.hbs` at **1,854 lines**,
+larger than the 1,411-line prototype. What it does not contain is the source of the nine React
+bundles it loads. `assets/js/home.js` is 440 KB of minified React, and `page-profile.hbs` is a
+23-line mount whose own comment points at an `index.jsx` that is in neither the theme nor this
+repository. `components/*.jsx` is the obvious candidate and **is unproven**: the bundles are
+minified, so a name search across them proves nothing in either direction. This is the same shape
+as the lost API source, one layer up, and it should be established rather than assumed.
 
 **2. `articles` has no content columns.** The live table is
 `id, ghost_post_id, author_member_id, status, declared_tier, ai_suggested_tier, final_tier,
@@ -134,3 +138,71 @@ design for a surface the Council spent an afternoon deciding policy about.
 - **Where does article content live after Ghost?** No table holds it today.
 - **Are the prototypes current?** `growth-scroll-v5` implies four earlier versions. Nothing dates
   them and none is referenced by `apps/web`.
+
+---
+
+## Layer 0: the Ghost theme, exported 2026-09-20
+
+Dan authorised the export from Ghost admin. `dialecta-theme v1.0.0`, 3.35 MB zipped, unpacked into
+gitignored `_theme/`. 42 files: 15 `.hbs`, 9 `.js`, 14 `.png`, 1 `.css`, 1 `.jsx`, 1 `.json`,
+1 `.cjs`. **This is the layer the first version of this document said existed nowhere.**
+
+**The templates split into two kinds**, and the split is the finding.
+
+| Server-rendered content | Lines |
+| --- | --- |
+| `page-pact.hbs` | **1,854** |
+| `page-stewards.hbs` | 1,630 |
+| `post.hbs` | 1,174 |
+| `default.hbs` | 970 |
+| `page-guidebook.hbs` | 686 |
+| `page-about.hbs` | 593 |
+| `page-fingerprint.hbs` | 393 |
+| `page-articles.hbs` | 149 |
+| `index.hbs` | 72 |
+
+| React mount points | Lines | Bundle it loads |
+| --- | --- | --- |
+| `page-write.hbs` | 39 | `editor.js`, 327 KB |
+| `page-dev-admin.hbs` | 31 | `dev-admin.js`, 241 KB |
+| `page-quotes.hbs` | 27 | `quotes.js`, 215 KB |
+| `page-community.hbs` | 24 | `community.js`, 239 KB |
+| `page-profile.hbs` | 23 | `home.js`, 441 KB |
+| `page-notifications.hbs` | 16 | `notifications.js`, 197 KB |
+
+Plus `shell.js` at 284 KB and `post.js` at 358 KB, loaded by the content pages.
+
+**This explains three earlier mysteries at once.**
+
+`write` reads as 22 words in the snapshot because it is a 39-line mount; a text scrape catches the
+shell and never the app. It is published, live, and had 7 visitors.
+
+`profile` is the most-visited page on the site at 44 unique visitors, absent from the snapshot and
+absent from `apps/web`, because it is a mount point rendering a React profile the scrape could not
+see.
+
+And `page-profile.hbs` carries `data-member-id="{{@member.uuid}}"`, which is the Ghost session
+injection `builder` identified as the foundation of `api/comment.js`'s trust model. **It is right
+there in the template, and it disappears with Ghost.**
+
+## The design spec is not what the live site uses
+
+`design/dialecta-design-spec.html` defines **28 `--tier-*` tokens**. The live stylesheet,
+`_theme/assets/css/style.css` at 3,286 lines, defines **zero** of them.
+
+`designer` found that the Pact prototype forks from the spec under renamed variables. The truth is
+larger: **the live site does not consume the design spec at all.** The spec describes a system
+production does not implement, which means the Heat and Stance ink corrections reach `apps/web` if
+it adopts the spec, and reach nothing that is live today.
+
+## What the Ghost admin says, measured 2026-09-20
+
+| | |
+| --- | --- |
+| Pages | **11**, all published. The snapshot captured 9 and missed `profile`, `quotes` and `Dev-Admin` |
+| Most visited | `profile`, 44 unique visitors, nearly double the next |
+| Tiers | **Free $0 only. Stripe is not connected.** The Silver and Gold in the signup portal are Ghost's generic preview, not configuration |
+| Staff | Dan as Owner, **1 Author, 2 Invited** |
+| Newsletter | `Dialecta`, **10 subscribers, 2 delivered** |
+| Analytics | **Tinybird**, cookie-free and first party. This is what vanishes at cutover |
+| Active theme | `dialecta-theme v1.0.0` |

@@ -28,3 +28,6 @@ _recovered/
 
 # Service security descriptor backup, written by grant-service-control.ps1
 scripts/.service-sd-backup.txt
+
+# Ghost theme, exported 2026-09-20. Quarantine, same rule as _recovered/.
+_theme/
