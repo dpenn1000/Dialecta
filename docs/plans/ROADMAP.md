@@ -19,6 +19,29 @@ numbers in them are measured; two of the estimates are known to be wrong and are
 
 ---
 
+## The standing instruction, from Dan, 2026-09-20 evening
+
+**"Just focus on the final destination. There is little to no traffic. Let's not build half
+measures."**
+
+That is a scoping rule and it settles a class of question rather than one question. The deployed
+API is legacy being replaced, not a system being maintained. Nothing transitional gets built for
+it: no hardening of a trust model that is being deleted, no interim admin, no Ghost-compatible
+scaffolding, no migration path from a surface that is going away.
+
+The traffic is what makes this affordable and it is measured rather than assumed: 269 visitors all
+time, 6 real people, one admin profile, zero rows in `auth.users`, and 20 visitors to Dev-Admin in
+its entire life. A defect reachable by almost nobody does not earn a temporary fix when the
+permanent one is already scheduled.
+
+**Where this bites.** The capability escalation `security` found is live and real, and under this
+instruction it is not patched. It is fixed by the thing that replaces it: identity from
+`auth.uid()`, capabilities enforced in RLS. Anything else is a half measure by Dan's own
+definition, and he has ruled.
+
+**Where it does not apply.** Work already shipped into `apps/web` is the destination, not a
+measure. The auth foundation, the sanitizer, the claim token and the axis mapping are all final.
+
 ## Phase 0: done today
 
 Closed rather than planned.
