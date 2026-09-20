@@ -112,7 +112,24 @@ function seatData(name, bench) {
       (f) => f.endsWith('.md') && !['index.md', 'reading-list.md'].includes(f),
     );
   }
-  const cited = notes.filter((f) => /https?:\/\//.test(read(join(notesDir, f)) ?? '')).length;
+  // Provenance, counted honestly. An earlier version of this script counted URLs and called the
+  // result "cited", which reported spec-reader at 0 of 10 and voice-editor at 1 of 11. Both were
+  // wrong. Those two seats read this repository for a living: spec-reader cites
+  // `docs/Dialecta_Axis_Mapping_v1.md` with a version and a date and a cross-check, and
+  // voice-editor cites a file with its word count, the exact command it ran, the date and the
+  // commit SHA. That is stricter provenance than a link, not weaker. A metric that calls it
+  // nothing would have had me reporting the two most careful seats as the least researched.
+  const provenance = (src) => {
+    const head = (section(body(src), /citation|source/i) ?? '') + (body(src).slice(0, 900) ?? '');
+    if (/https?:\/\//.test(src)) return 'web';
+    if (/`[^`]*\.(md|ts|tsx|js|mjs|sql|json|py)`|(?:docs|api|apps|packages|scripts|supabase)\//.test(head))
+      return 'repo';
+    return 'none';
+  };
+  const provs = notes.map((f) => provenance(read(join(notesDir, f)) ?? ''));
+  const web = provs.filter((p) => p === 'web').length;
+  const repo = provs.filter((p) => p === 'repo').length;
+  const cited = web + repo;
 
   // The shelf itself, not just its size. Dan asked to see what each seat has actually read, and
   // a count answers "how much" while hiding the only question that matters: what.
@@ -173,6 +190,8 @@ function seatData(name, bench) {
     hasBrief: Boolean(brief),
     notes: notes.length,
     cited,
+    web,
+    repo,
     shelf,
     pending,
     notesDir: `${b.dir}/${name}/${b.notes}`,
@@ -204,11 +223,11 @@ L.push('');
 // Roster table.
 L.push('## Roster');
 L.push('');
-L.push('| Seat | Bench | Model | Web | Writes | Notes | Cited | ' + 'Standing | Raised | Addressed |');
+L.push('| Seat | Bench | Model | Web | Writes | Notes | Sourced | ' + 'Standing | Raised | Addressed |');
 L.push('| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |');
 for (const s of all) {
   L.push(
-    `| \`${s.name}\` | ${s.bench} | ${s.model} | ${webArmed(s) ? 'yes' : '**no**'} | ${canWrite(s) ? 'yes' : '**no**'} | ${s.notes} | ${s.cited} | ${s.standingRows} | ${s.raised} | ${s.addressed} |`,
+    `| \`${s.name}\` | ${s.bench} | ${s.model} | ${webArmed(s) ? 'yes' : '**no**'} | ${canWrite(s) ? 'yes' : '**no**'} | ${s.notes} | ${s.cited} (${s.web}w/${s.repo}r) | ${s.standingRows} | ${s.raised} | ${s.addressed} |`,
   );
 }
 const tot = (k) => all.reduce((a, s) => a + s[k], 0);
@@ -217,7 +236,7 @@ L.push(
 );
 L.push('');
 L.push(
-  '`Notes` is filed sources. `Cited` is how many of those carry a URL, which is the honest measure of whether a seat read a primary source or wrote from priors. `Standing` is positions for an advisor, practices for a practitioner. `Raised` and `Addressed` count exchange records in each direction.',
+  '`Notes` is filed sources. `Sourced` is how many name a source it can be checked against, split into `w` for an external URL and `r` for a file in this repository cited with a version, a date or a commit. Both count: a seat whose job is spec conformance cites specs, and doing that with a commit SHA is stricter provenance than a link, not weaker. `Standing` is positions for an advisor, practices for a practitioner. `Raised` and `Addressed` count exchange records in each direction.',
 );
 L.push('');
 
@@ -257,7 +276,7 @@ for (const [bench, cfg] of Object.entries(BENCHES)) {
     L.push(`| Model | ${s.model} |`);
     L.push(`| Tools | ${s.tools.length ? s.tools.map((t) => `\`${t}\``).join(', ') : '**none declared**'} |`);
     L.push(
-      `| Research | ${s.notes} filed, ${s.cited} citing a source${s.notes && s.cited < s.notes ? `, ${s.notes - s.cited} without` : ''} |`,
+      `| Research | ${s.notes} filed, ${s.cited} sourced (${s.web} external, ${s.repo} from this repo)${s.notes && s.cited < s.notes ? `, ${s.notes - s.cited} unsourced` : ''} |`,
     );
     L.push(
       `| Reading list | ${s.todo} todo, ${s.filed} filed, ${s.dead} dead${s.todo + s.filed + s.dead === 0 ? ' (**no reading list**)' : ''} |`,
@@ -301,7 +320,7 @@ for (const [bench, cfg] of Object.entries(BENCHES)) {
     if (!webArmed(s)) gaps.push('cannot reach the web, so it cannot verify an external claim');
     if (!canWrite(s)) gaps.push('cannot write, so it cannot file a note or update its standing file');
     if (s.notes === 0) gaps.push('has filed nothing yet');
-    else if (s.cited === 0) gaps.push('has filed notes but none cites a source');
+    else if (s.cited === 0) gaps.push('has filed notes but none names a checkable source');
     if (!s.hasBrief) gaps.push('has no brief, so a fresh session starts without context');
     if (s.todo > s.filed * 2 && s.todo > 6) gaps.push(`reading list is ${s.todo} todo against ${s.filed} filed`);
     if (gaps.length) {

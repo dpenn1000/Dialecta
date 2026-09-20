@@ -4,22 +4,22 @@
 
 ## Roster
 
-| Seat | Bench | Model | Web | Writes | Notes | Cited | Standing | Raised | Addressed |
+| Seat | Bench | Model | Web | Writes | Notes | Sourced | Standing | Raised | Addressed |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `treasurer` | advisory | sonnet | yes | yes | 20 | 13 | 60 | 4 | 4 |
-| `designer` | advisory | sonnet | yes | yes | 19 | 16 | 28 | 4 | 4 |
-| `philosopher` | advisory | opus | yes | yes | 11 | 11 | 8 | 1 | 4 |
-| `security` | advisory | opus | yes | yes | 40 | 36 | 31 | 3 | 1 |
-| `legal` | advisory | opus | yes | yes | 14 | 14 | 17 | 3 | 0 |
-| `builder` | working | sonnet | yes | yes | 15 | 10 | 21 | 2 | 9 |
-| `reviewer` | working | opus | yes | yes | 17 | 13 | 20 | 1 | 5 |
-| `voice-editor` | working | sonnet | yes | yes | 11 | 1 | 12 | 2 | 0 |
-| `migrator` | working | sonnet | yes | yes | 14 | 8 | 17 | 1 | 4 |
-| `spec-reader` | working | haiku | yes | yes | 9 | 0 | 15 | 1 | 4 |
-| `decider` | working | opus | yes | yes | 9 | 7 | 16 | 2 | 14 |
-| **total** | 11 seats | | | | **179** | **129** | **245** | | |
+| `treasurer` | advisory | sonnet | yes | yes | 20 | 18 (13w/5r) | 60 | 4 | 4 |
+| `designer` | advisory | sonnet | yes | yes | 19 | 19 (16w/3r) | 28 | 4 | 4 |
+| `philosopher` | advisory | opus | yes | yes | 11 | 11 (11w/0r) | 8 | 1 | 4 |
+| `security` | advisory | opus | yes | yes | 40 | 39 (36w/3r) | 31 | 3 | 1 |
+| `legal` | advisory | opus | yes | yes | 14 | 14 (14w/0r) | 17 | 3 | 0 |
+| `builder` | working | sonnet | yes | yes | 15 | 15 (10w/5r) | 21 | 2 | 9 |
+| `reviewer` | working | opus | yes | yes | 17 | 17 (13w/4r) | 26 | 1 | 5 |
+| `voice-editor` | working | sonnet | yes | yes | 11 | 11 (1w/10r) | 17 | 2 | 0 |
+| `migrator` | working | sonnet | yes | yes | 14 | 13 (8w/5r) | 17 | 1 | 4 |
+| `spec-reader` | working | haiku | yes | yes | 10 | 9 (0w/9r) | 19 | 1 | 4 |
+| `decider` | working | opus | yes | yes | 9 | 9 (7w/2r) | 22 | 2 | 14 |
+| **total** | 11 seats | | | | **180** | **175** | **266** | | |
 
-`Notes` is filed sources. `Cited` is how many of those carry a URL, which is the honest measure of whether a seat read a primary source or wrote from priors. `Standing` is positions for an advisor, practices for a practitioner. `Raised` and `Addressed` count exchange records in each direction.
+`Notes` is filed sources. `Sourced` is how many name a source it can be checked against, split into `w` for an external URL and `r` for a file in this repository cited with a version, a date or a commit. Both count: a seat whose job is spec conformance cites specs, and doing that with a commit SHA is stricter provenance than a link, not weaker. `Standing` is positions for an advisor, practices for a practitioner. `Raised` and `Addressed` count exchange records in each direction.
 
 ---
 
@@ -39,7 +39,7 @@
 | --- | --- |
 | Model | sonnet |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 20 filed, 13 citing a source, 7 without |
+| Research | 20 filed, 18 sourced (13 external, 5 from this repo), 2 unsourced |
 | Reading list | 18 todo, 12 filed, 3 dead |
 | Positions | 60 |
 | Charter | `council/treasurer/charter.md` |
@@ -115,7 +115,7 @@
 | --- | --- |
 | Model | sonnet |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 19 filed, 16 citing a source, 3 without |
+| Research | 19 filed, 19 sourced (16 external, 3 from this repo) |
 | Reading list | 32 todo, 19 filed, 0 dead |
 | Positions | 28 |
 | Charter | `council/designer/charter.md` |
@@ -195,7 +195,7 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 11 filed, 11 citing a source |
+| Research | 11 filed, 11 sourced (11 external, 0 from this repo) |
 | Reading list | 18 todo, 10 filed, 0 dead |
 | Positions | 8 |
 | Charter | `council/philosopher/charter.md` |
@@ -259,7 +259,7 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Bash`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 40 filed, 36 citing a source, 4 without |
+| Research | 40 filed, 39 sourced (36 external, 3 from this repo), 1 unsourced |
 | Reading list | 14 todo, 6 filed, 0 dead |
 | Positions | 31 |
 | Charter | `council/security/charter.md` |
@@ -350,7 +350,7 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 14 filed, 14 citing a source |
+| Research | 14 filed, 14 sourced (14 external, 0 from this repo) |
 | Reading list | 22 todo, 14 filed, 0 dead |
 | Positions | 17 |
 | Charter | `council/legal/charter.md` |
@@ -421,7 +421,7 @@
 | --- | --- |
 | Model | sonnet |
 | Tools | `Read`, `Edit`, `Write`, `Bash`, `Grep`, `Glob`, `WebSearch`, `WebFetch` |
-| Research | 15 filed, 10 citing a source, 5 without |
+| Research | 15 filed, 15 sourced (10 external, 5 from this repo) |
 | Reading list | 2 todo, 12 filed, 0 dead |
 | Practices | 21 |
 | Charter | none, mandate lives in the agent file |
@@ -467,9 +467,9 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Bash`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 17 filed, 13 citing a source, 4 without |
+| Research | 17 filed, 17 sourced (13 external, 4 from this repo) |
 | Reading list | 3 todo, 18 filed, 0 dead |
-| Practices | 20 |
+| Practices | 26 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/reviewer/brief.md` |
 | Exchange | raised 1, addressed 5 |
@@ -516,9 +516,9 @@
 | --- | --- |
 | Model | sonnet |
 | Tools | `Read`, `Edit`, `Bash`, `Grep`, `WebSearch`, `WebFetch` |
-| Research | 11 filed, 1 citing a source, 10 without |
+| Research | 11 filed, 11 sourced (1 external, 10 from this repo) |
 | Reading list | 3 todo, 11 filed, 0 dead |
-| Practices | 12 |
+| Practices | 17 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/voice-editor/brief.md` |
 | Exchange | raised 2, addressed 0 |
@@ -559,7 +559,7 @@
 | --- | --- |
 | Model | sonnet |
 | Tools | `Read`, `Edit`, `Write`, `Bash`, `Grep`, `Glob`, `WebSearch`, `WebFetch` |
-| Research | 14 filed, 8 citing a source, 6 without |
+| Research | 14 filed, 13 sourced (8 external, 5 from this repo), 1 unsourced |
 | Reading list | 3 todo, 10 filed, 0 dead |
 | Practices | 17 |
 | Charter | none, mandate lives in the agent file |
@@ -605,14 +605,14 @@
 | --- | --- |
 | Model | haiku |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 9 filed, 0 citing a source, 9 without |
-| Reading list | 7 todo, 5 filed, 0 dead |
-| Practices | 15 |
+| Research | 10 filed, 9 sourced (0 external, 9 from this repo), 1 unsourced |
+| Reading list | 4 todo, 11 filed, 0 dead |
+| Practices | 19 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/spec-reader/brief.md` |
 | Exchange | raised 1, addressed 4 |
 
-**What it has read.** 9 filed in `team/spec-reader/knowledge/`.
+**What it has read.** 10 filed in `team/spec-reader/knowledge/`.
 
 | Source | What it changes here |
 | --- | --- |
@@ -624,21 +624,17 @@
 | Self-Snapshot Engine v1.0: archetype is not Voice 1, 2, or 3 | Confirms, from the primary text rather than from `design-tensions.md`'s summary of it, that any |
 | The nine specs the index omits, one verified line each | Two of the nine, `Dialecta_Founding_Philosophy.md` and `Dialecta_Growth_Scroll.md`, needed their |
 | Tier Psychology v1.1: the naming rationale, and a locked/provisional mismatch on two names | Full citation for tier-naming psychology and the commenter-message tone standard now exists; |
+| Tool survey: doc-drift detection, spec conformance, and link checking | No tool found this sprint is worth adopting as a dependency for this seat's actual recurring |
 | Where the 40/35/15/10 classification weighting came from: not a spec, now shipped code, still an open decision | The honest answer to where the weighting came from: nowhere in `docs/`, confirmed independently |
 
-<details><summary>Still to read: 7 lead(s)</summary>
+<details><summary>Still to read: 4 lead(s)</summary>
 
-- `docs/Dialecta_Axis_Mapping_v1.md` v1.1 in full, separated into mapping rules against Ghost era plumbing — It answers Harmonization Tension 2, and the index does not list it. Its `Schema` and `Hook` sections name `ghost_post_id` and `api/article/publish.js`, both retired by ADR-001 and ADR-003. The rules survive the plumbing; nobody has written down which is which
-- `docs/Dialecta_Self_Snapshot_Engine.md` v1.0 against `docs/Dialecta_Growth_Layer_Principles.md` Principle 6 — The spec that should place the assigned archetype in the three voice composition is silent on it. Worth a note of its own before the Tension 1 session, so that session starts from what is specified rather than from the index's prediction
-- The nine other specs the index omits, one line each on what each owns — Half the corpus is off the map. Until this exists, answering "no spec owns that" requires a tree walk every time. See `2026-dialecta-project-index.md`
-- `docs/Dialecta_Tier_Psychology.md` on the seven tiers, the naming principles and the commenter message tone standard — The mandate's canonical name list comes from `.claude/agents/spec-reader.md`, not from a spec. This is the spec that owns the names and the reasoning, and it is the single most likely subject of a question. No filed note covers it
-- `docs/Dialecta_Classification_Engine_Specification.md`: the claim threshold, the 0 to 3 spectrum, the tier boundary rules — The operational backbone, per the index. Every classification question routes here. Verified clean on tier names; the content itself is unfiled
-- Where the classification weighting percentages in root `CLAUDE.md` came from — They are locked as a decision and appear in no spec, while `docs/Dialecta_Article_Editorial_Template.md` line 198 lists the exact weight as an open question. See `drift-map.md` section F1. Either a spec is missing or the lock is premature
 - `docs/Dialecta_Editorial_Voice.md` v1.2 as a constraint on this agent's own output — This agent writes notes that Voice v1.2 governs. It has never read the governing spec end to end, only run the regex subset in `scripts/voice_check.py`
+- `docs/Dialecta_Delta_Mechanic_Spec.md` in full — Only ever read in fragments, via `design-tensions.md` Tension 3. Builder's advice record `2026-09-19-002-advice-a1-composer-request-path.md` cites it as describing the comment flow as Stage 1, 2, 2.5, 3, which would be the only place a comment-side Stage 2.5 is named anywhere. If true, it closes part of the gap `2026-dialecta-classification-weighting-provenance.md` found in `Dialecta_Discourse_Layer_UX.md`. Not yet confirmed by a direct read
+- `packages/core/src/classification.ts` against `docs/Dialecta_Classification_Engine_Specification.md`'s Stage A output fields — `axis-mapping.ts` turned out to implement a different scheme than its own spec, undocumented (`2026-dialecta-axis-mapping-v1.md`). `classification.ts` is the natural next file to check for the same kind of drift, since `axisDeltasFor()` takes a `ClassificationResult` from it as its only input
+- `docs/Dialecta_Data_Architecture.md` in full — Cited more than almost any other spec, piecemeal, across `drift-map.md` A1, A2, B1, B2, C3 and G2. Never read end to end or filed as its own source, despite being the file every entity-table and identity-type question eventually routes to
 
 </details>
-
-**Gaps.** has filed notes but none cites a source.
 
 ### `decider`
 
@@ -652,9 +648,9 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 9 filed, 7 citing a source, 2 without |
-| Reading list | 4 todo, 5 filed, 0 dead |
-| Practices | 16 |
+| Research | 9 filed, 9 sourced (7 external, 2 from this repo) |
+| Reading list | 2 todo, 9 filed, 0 dead |
+| Practices | 22 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/decider/brief.md` |
 | Exchange | raised 2, addressed 14 |
@@ -673,12 +669,10 @@
 | The open decision queue, and who cares most about each | P0-D2 is first on merit, not only because the council skill lists it first. It is the only Open decision in Phase 0, it blocks P0-4, and P0-4 blocks A-1 and B-3. Nothing else Open blocks ... |
 | [What a decision record needs so that reversing it is cheap](https://learn.microsoft.com/en-us/azure/well-architected/architect-role/architecture-decision-record) | This converges with the template variants on the same missing field. A reversal is cheap when the old record named the condition that has since broken, and expensive when it did not, beca... |
 
-<details><summary>Still to read: 4 lead(s)</summary>
+<details><summary>Still to read: 2 lead(s)</summary>
 
-- Jeff Tyree and Art Akerman, "Architecture Decisions: Demystifying Architecture", IEEE Software, 2005 — The source of the richest template and of the Assumptions field. Read so far only through Henderson's transcription, not the paper
-- Zdun and others, "Sustainable Architectural Decisions", the Y-statement format, cited by adr.github.io — A one-sentence decision format. If it holds, the local `## Decision` section could carry the same discipline in a line
-- The WICSA 2015 comparison of seven ADR templates, referenced by adr.github.io — A published comparison beats a collection index for judging whether the local template is missing a field
-- A worked case of an ADR superseded in a public repo, with both records readable — The gap left by the reversal lead. What the first record failed to say is only visible when both records can be read against each other
+- Schwenk, Cosier and the wider devil's advocacy vs. dialectical inquiry vs. consensus literature in strategic decision making (Academy of Management Journal and Decision Sciences, 1980s-90s) — Tests this seat's own chair instruction directly: `.claude/agents/decider.md` says "Dan treats devil's advocate framing as generative." A first pass (search only, not filed) shows both techniques beat consensus on decision quality but cost participant satisfaction and buy-in. A chair overruling a seat's position needs to know the size of that tradeoff, not just that it exists
+- Jeff Bezos, 2016 letter to Amazon shareholders, "disagree and commit" — Practitioner precedent for timeboxing disagreement instead of resolving it. Bears on the standing practice "one extra rebuttal round, allowed only on evidence... never on dissatisfaction with the answer": worth checking whether the source argues for a bound for the same reason this seat adopted one, or a different one
 
 </details>
 
