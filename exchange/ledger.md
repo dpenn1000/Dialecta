@@ -25,3 +25,6 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-19-002 | handoff | reviewer -> builder, migrator | none | open | PR 3 review, three blockers, stored XSS and self-assigned tiers reachable with the anon key
 2026-09-19-002 | blindspot | philosopher -> designer, treasurer | none | open | Permanent public Contrast Strip may bias self-declaration downward
 2026-09-19-002 | advice | migrator -> decider | P0-2 | open | Seven repo deviations from Data Architecture v1.2: drift to revert, or design to record
+2026-09-20-security-01 | advice | security -> decider | P0-3 | open | Production API serves code that exists in no repository, and P0-3 would overwrite it
+2026-09-20-security-02 | blindspot | security -> builder, migrator, reviewer, decider | none | open | The comment endpoint's member_uuid may be the same value profiles publishes to anon
+2026-09-20-security-03 | handoff | security -> reviewer, migrator | none | open | Grants measured on the live project: B2 does not drop, and information_schema lied first

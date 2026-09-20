@@ -4,5 +4,69 @@ Leads live in `reading-list.md`; a sprint files them here, one file per source,
 named `YYYY-<author>-<slug>.md` with citation, summary, and what it implies for a
 named Dialecta surface or a named practice.
 
+Thirty-three notes, filed 2026-09-20 in one sprint across five sections. Six of them measure this
+estate rather than citing an outside source; those are marked below and are the ones another agent
+cannot reproduce from a search.
+
+## This estate, measured
+
 | File | Source | Implies for |
 | --- | --- | --- |
+| [2026-vercel-deployed-api-provenance.md](2026-vercel-deployed-api-provenance.md) | This agent, from the Vercel and GitHub APIs | The production API's commit does not exist on GitHub and about 29 of its endpoints exist in no repository. The deployment artifact is the only copy. Blocks P0-3 |
+| [live-surface-inventory.md](live-surface-inventory.md) | This agent, from the deployment file tree | Thirty-eight routes, the repository named as their source holds 11 files. Thirty are marked `unread` and why. `_cors.js` in full, `_capabilities.js` in part |
+| [2026-live-grant-and-policy-surface.md](2026-live-grant-and-policy-surface.md) | This agent, from `pg_class`, `pg_policies`, `has_table_privilege` | All 30 public tables grant full CRUD to `anon` and `authenticated`. Settles the reviewer's premise: B2 does not drop. Carries the `information_schema` trap |
+| [2026-dialecta-comment-credential-chain.md](2026-dialecta-comment-credential-chain.md) | This agent, joining the deployed docblock to the live RLS policy | `/api/comment` authorizes on `member_uuid`, and `profiles.ghost_member_id` is world readable. Eight of 14 rows carry the matching shape. Handler unread |
+| [2026-live-storage-surface.md](2026-live-storage-surface.md) | This agent, from `storage.buckets` and `storage.objects` | One bucket, `feedback-screenshots`, public read, empty. `article-media` does not exist live. Zero storage policies is doing the work a policy should |
+| [2026-dialecta-secret-and-artifact-hygiene.md](2026-dialecta-secret-and-artifact-hygiene.md) | This agent, from both repositories and the artifact | Nothing credential shaped is in history. The deploy artifact carries contributor names and Ghost ids. No `.vercelignore` |
+
+## Identity and access
+
+| File | Source | Implies for |
+| --- | --- | --- |
+| [2026-supabase-auth-mfa.md](2026-supabase-auth-mfa.md) | Supabase, "Multi-Factor Authentication" | The `aal` claim only gates anything once a `restrictive` RLS policy reads it. Enrolling MFA alone changes nothing |
+| [2026-supabase-google-oauth.md](2026-supabase-google-oauth.md) | Supabase, "Sign in with Google" and "Identity Linking" | P0-D2. Automatic linking by email is on by default. Whether an unverified Google email can trigger it is unconfirmed by Supabase's own docs |
+| [2026-supabase-passkeys.md](2026-supabase-passkeys.md) | Supabase, "Passkey authentication" | Native support exists, beta dated 2026-05-28, opt-in flag. Corrects the assumption that Supabase has no passkeys. AAL level of a passkey sign-in unstated |
+| [2026-supabase-session-cookies.md](2026-supabase-session-cookies.md) | Supabase advanced guide, Next.js guide, `@supabase/ssr` | `getClaims()` over `getSession()` server side. Single use refresh tokens explain random logouts. Cookies chunk past 3180 bytes |
+| [2026-owasp-authentication-cheat-sheet.md](2026-owasp-authentication-cheat-sheet.md) | OWASP Cheat Sheet Series | 15 character password floor, 8 only with MFA, no composition rules, no forced rotation, account keyed lockout with backoff |
+| [2026-owasp-asvs-v6-authentication.md](2026-owasp-asvs-v6-authentication.md) | OWASP ASVS 5.0.0, chapter V6 | Numbered requirement ids (6.2.1, 6.2.5, 6.2.9, 6.2.10, 6.3.3) to cite rather than restating rules in prose |
+| [2026-nist-800-63b.md](2026-nist-800-63b.md) | NIST SP 800-63B-4 | The normative root under Supabase's `aal1` and `aal2` vocabulary and under everyone else's password guidance |
+
+## The AI endpoints
+
+| File | Source | Implies for |
+| --- | --- | --- |
+| [2025-owasp-llm01-prompt-injection.md](2025-owasp-llm01-prompt-injection.md) | OWASP, "LLM01:2025 Prompt Injection" | Output format validation is the one mitigation `api/classify.js` can implement directly. Prompt wording is not OWASP's answer |
+| [2025-owasp-llm10-unbounded-consumption.md](2025-owasp-llm10-unbounded-consumption.md) | OWASP, "LLM10:2025 Unbounded Consumption" | Denial of Wallet under that exact name. Input length cap plus rate limiting are what one function can do |
+| [2025-willison-prompt-injection-design-patterns.md](2025-willison-prompt-injection-design-patterns.md) | Simon Willison, on Beurer-Kellner et al. 2025 | Constrain the output space, do not trust wording. Treat every classification as an unverified signal |
+| [2026-anthropic-structured-outputs.md](2026-anthropic-structured-outputs.md) | Anthropic, "Structured outputs" | `output_config.format` with an `enum` schema constrains `classify.js` to trusted tiers by decoding, not by post hoc validation |
+| [2026-anthropic-rate-and-spend-limits.md](2026-anthropic-rate-and-spend-limits.md) | Anthropic, "Rate limits" | Isolate the Dialecta key in its own workspace with a spend limit. No per key budget exists |
+| [2026-vercel-firewall-and-spend-management.md](2026-vercel-firewall-and-spend-management.md) | Vercel docs, four pages | Hobby gets DDoS mitigation, Attack Mode and one rate limit rule free, and no Spend Management at any price. Normal looking single requests are what DDoS mitigation does not catch |
+| [2021-kelly-denial-of-wallet.md](2021-kelly-denial-of-wallet.md) | Kelly, Glavin and Barrett, arXiv:2104.08031 | `comment.js` calling `classify.js` matches the paper's precondition exactly. Uptime and error rate monitoring will not detect it |
+
+## Data protection and liability
+
+| File | Source | Implies for |
+| --- | --- | --- |
+| [2021-ct-breach-notification.md](2021-ct-breach-notification.md) | Conn. Gen. Stat. 36a-701b | 60 days from discovery. No mandatory written security program, but PA 21-119 gives a punitive damages safe harbor to a business that has one |
+| [2023-ct-data-privacy-act.md](2023-ct-data-privacy-act.md) | Conn. Gen. Stat. 42-516, as amended by PA 25-113 | Threshold dropped to 35,000 consumers, plus two no floor triggers: any sensitive data processing, any sale. Carries a correction to several published law firm summaries |
+| [2016-eu-gdpr-territorial-scope.md](2016-eu-gdpr-territorial-scope.md) | GDPR Art. 3(2), 28(3), 30 and EDPB Guidelines 3/2018 | The fingerprint fits Art. 3(2)(b) monitoring more closely than anything here fits offering. Supabase and Anthropic are processors needing Art. 28(3) terms |
+| [2016-gdpr-automated-decision-making.md](2016-gdpr-automated-decision-making.md) | GDPR Art. 22 and Recital 71 | The fingerprint is profiling on its face. Art. 22 bites only if a tier drives a solely automated decision with significant effect |
+| [2023-ct-data-minimization-retention.md](2023-ct-data-minimization-retention.md) | Conn. Gen. Stat. 42-520(a)(1) and GDPR Art. 5(1)(c) and (e) | Minimisation and retention limits are statutory duties in both regimes. Argues for a written retention number on fingerprint inputs |
+| [2022-travelers-mfa-warranty-rescission.md](2022-travelers-mfa-warranty-rescission.md) | Travelers v. International Control Services, D. Ill. 2:22-cv-02145 | Misstating MFA scope on a cyber application voided the policy retroactively, not one claim. Read via docket index and industry reporting, not the primary filings |
+| [2022-pcissc-saq-a-eligibility.md](2022-pcissc-saq-a-eligibility.md) | PCI SSC, SAQ A under PCI DSS v4.0 | Hosted checkout keeps Dialecta in SAQ A. Since April 2025 the merchant's own checkout page carries a script integrity duty even without touching card data |
+
+## Tooling and standards
+
+| File | Source | Implies for |
+| --- | --- | --- |
+| [2026-gitleaks-secret-scanning.md](2026-gitleaks-secret-scanning.md) | `gitleaks/gitleaks`, and `trufflesecurity/trufflehog` | The control the `vercel.tolken` incident actually wants. A `gitleaks-action` job in `ci.yml` is free on a public repo. No pre-commit tooling exists here yet |
+| [2026-semgrep-static-analysis.md](2026-semgrep-static-analysis.md) | `semgrep/semgrep` and `github/codeql` | `ci.yml` runs no lint or static analysis of any kind. CodeQL default setup is a checkbox on a public repo |
+| [2026-supabase-rls-testing.md](2026-supabase-rls-testing.md) | Supabase pgTAP docs, `usebasejump/supabase-test-helpers`, `supabase/splinter` | What can actually assert "anon cannot read this table" in CI. `supabase/tests/database/` does not exist yet |
+| [2026-ossf-scorecard-supply-chain.md](2026-ossf-scorecard-supply-chain.md) | `ossf/scorecard`, `ossf/allstar`, `step-security/harden-runner` | Actions in `ci.yml` are tag pinned rather than SHA pinned. Allstar assessed and rejected as wrong for a two repo solo setup |
+| [2026-github-dependabot.md](2026-github-dependabot.md) | GitHub Dependabot, `dependabot/dependabot-core` | `.github/dependabot.yml` does not exist. Four ecosystems to cover. Free, no CI minutes |
+| [2026-nextjs-security-headers-csp.md](2026-nextjs-security-headers-csp.md) | Next.js CSP guide, `OWASP/www-project-secure-headers` | The `headers()` the reviewer's should-fix asks for in `apps/web/next.config.ts`. Nonce path unnecessary while there are no inline scripts |
+| [2026-owasp-standards-for-dialecta.md](2026-owasp-standards-for-dialecta.md) | `OWASP/ASVS`, `OWASP/CheatSheetSeries`, the LLM Top 10 project | Which sheets match findings already on record. The LLM Top 10 repo named in the lead is now a legacy archive, superseded by `GenAI-Security-Project/GenAI-LLM-Top10` |
+
+*`live-surface-inventory.md` is written by this agent rather than filed from a source, as
+`team/reviewer/knowledge/review-checklist.md` is in its own tree. It is listed here so the index is
+the whole folder.*

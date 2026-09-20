@@ -1,0 +1,23 @@
+# GDPR territorial reach, and what applying means for records and processors
+
+**Source:** European Parliament and Council of the European Union, "Regulation (EU) 2016/679 (General Data Protection Regulation)", Articles 3(2), 28(3), and 30; European Data Protection Board, "Guidelines 3/2018 on the Territorial Scope of the GDPR (Article 3), Version 2.1", adopted 12 November 2019, read 2026-09-20. https://gdpr-info.eu/art-3-gdpr/ ; https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_3_2018_territorial_scope_after_public_consultation_en_1.pdf
+
+## Summary
+
+Article 3(2) extends the GDPR to a controller or processor with no EU establishment when its processing of an EU data subject's personal data relates to "the offering of goods or services, irrespective of whether a payment of the data subject is required, to such data subjects in the Union; or the monitoring of their behaviour as far as their behaviour takes place within the Union." A US company with no EU office is outside Article 3(1) and lives or dies on this paragraph.
+
+The EDPB's final Guidelines 3/2018 give both prongs content. On "offering," payment is irrelevant, and mere accessibility is explicitly not enough: Recital 23 states that "the mere accessibility of the controller's, processor's or an intermediary's website in the Union, of an email address or of other contact details, or the use of a language generally used in the third country where the controller is established, is insufficient" to show intent to target the EU. What counts instead is a combination of factors the EDPB lists, drawn from CJEU case law: use of a Member State's language or currency, delivery of goods into the EU, EU-targeted marketing or search advertising, a Member State or ".eu" domain, or mention of an EU clientele. No single factor decides it alone.
+
+On "monitoring," Recital 24 asks whether a person is "tracked on the internet including potential subsequent use of personal data processing techniques which consist of profiling a natural person, particularly in order to take decisions concerning her or him or for analysing or predicting her or his personal preferences, behaviours and attitudes." The EDPB is explicit that not any collection of EU personal data counts as monitoring, a specific purpose behind the collection and reuse is required, but it lists profiling toward predicting attitudes and behavior as a core example.
+
+Article 30 requires a controller's record to name the controller and any DPO, the processing purposes, categories of data subjects and data, recipients, transfers outside the EU, envisaged erasure timelines, and security measures; Article 30(5) exempts an organization under 250 employees unless its processing risks rights and freedoms, is not occasional, or touches special category data. Article 28(3) requires a processor contract to fix the processing's subject matter, duration, nature, and purpose, and to bind the processor to instructions-only processing, confidentiality, Article 32 security, subprocessor flow-down, assistance with data subject rights, deletion or return of data at the end of the engagement, and audit cooperation.
+
+## Implies for Dialecta
+
+- The "monitoring" prong is the one to watch, not "offering": an AI feature that scores and archetypes how a person thinks matches the EDPB's own example of profiling "to analyse or predict... personal preferences, behaviours and attitudes." Fingerprinting even one EU-resident member is a plausible trigger for Article 3(2)(b) on its own, independent of whether Dialecta markets to the EU at all.
+- Check whether Dialecta's sign-up or marketing flow shows any of the EDPB's "offering" factors (a currency other than dollars, EU-targeted ads, a language switcher, mention of European members), since any of those add an Article 3(2)(a) argument on top of the profiling one.
+- If Article 3 applies, Article 30's record is not optional paperwork, and the under-250-employee exemption in Article 30(5) is unlikely to save Dialecta, because AI profiling of natural persons is the kind of processing the exemption's own carve-out (a risk to rights and freedoms) is written to catch.
+- Supabase and Anthropic are both processors here. Their standard terms need to be checked against Article 28(3)'s required list, not assumed compliant because they are large vendors.
+- Not legal advice. What would settle it: an attorney's read on whether the fingerprint feature, applied to any actual EU-resident member, makes Article 3(2)(b) apply today, and a line-by-line check of Supabase's and Anthropic's current data processing agreements against Article 28(3).
+
+*Filed 2026-09-20*

@@ -1,0 +1,21 @@
+# GDPR Article 22: automated decisions, profiling, and what it does not ban
+
+**Source:** European Parliament and Council of the European Union, "Regulation (EU) 2016/679 (General Data Protection Regulation)", Article 22 and Recital 71, read 2026-09-20. https://gdpr-info.eu/art-22-gdpr/ ; https://gdpr-info.eu/recitals/no-71/
+
+## Summary
+
+Article 22(1) gives a data subject "the right not to be subject to a decision based solely on automated processing, including profiling, which produces legal effects concerning him or her or similarly significantly affects him or her." Three words carry the weight: "solely" excludes any decision with meaningful human involvement, and "legal effects" or "similarly significant" effects excludes a low-stakes automated output. Recital 71 gives the anchor examples: "automatic refusal of an online credit application" and "e-recruiting practices without any human intervention."
+
+Recital 71 also defines the concept the article regulates: profiling is "any form of automated processing of personal data evaluating the personal aspects relating to a natural person, in particular to analyse or predict aspects concerning the data subject's performance at work, economic situation, health, personal preferences or interests, reliability or behaviour, location or movements." That definition does not require a downstream automated decision to count as profiling; profiling is the evaluation itself. Article 22 only restricts profiling that then drives a solely automated, significant-effect decision.
+
+Article 22(2) allows solely automated decisions with significant effect in three cases: necessary for entering into or performing a contract, authorized by Union or member state law with safeguards, or based on explicit consent. Where contract necessity or explicit consent is the basis, Article 22(3) requires the controller to implement "suitable measures to safeguard the data subject's rights and freedoms and legitimate interests, at least the right to obtain human intervention on the part of the controller, to express his or her point of view and to contest the decision." Article 22(4) bars basing such a decision on special category data except under narrow consent or substantial-public-interest conditions with suitable safeguards. Recital 71 adds that such a measure "should not concern a child," that the controller should use "appropriate mathematical or statistical procedures," correct factors causing inaccuracy, and prevent, in the Recital's own words, "discriminatory effects... on the basis of racial or ethnic origin, political opinion, religion or beliefs, trade union membership, genetic or health status or sexual orientation."
+
+## Implies for Dialecta
+
+- Dialecta's AI fingerprint, which evaluates opinion positions and comment history to assign an archetype and a tier score, matches Recital 71's definition of profiling on its face: "automated processing... evaluating the personal aspects... to analyse or predict... personal preferences or interests, reliability or behaviour."
+- Whether Article 22 itself is triggered turns on what the archetype or tier then does. A label shown only to the member about themselves is a different case from a tier that solely, automatically gates a paid feature, restricts what a member can post, or ranks them without a human in the loop. The more the tier drives a real consequence with no human review, the closer this sits to Article 22(1).
+- If a tier or archetype ever gates a paid membership level in a solely automated way, Article 22(3)'s safeguards, a human-review path, a way to state a view, a way to contest the outcome, are concrete build items, not just a policy line.
+- Recital 71's discrimination list (political opinion and religion or belief among them) lines up closely with what an archetype of how someone thinks is likely to encode. That argues for keeping a human review step in anything the fingerprint feeds, before Article 22 forces the question later.
+- Not legal advice. What would settle it: an attorney's read on whether Dialecta's specific fingerprint pipeline is "solely" automated in the Article 22 sense once any human moderator's role is mapped precisely, and whether the archetype counts as special category data under Article 9 given the political and philosophical content it likely encodes.
+
+*Filed 2026-09-20*
