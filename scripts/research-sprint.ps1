@@ -17,7 +17,7 @@
   Logs land in council\log\sprints\.
 #>
 param(
-  [ValidateSet('treasurer', 'designer', 'philosopher', 'builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider', 'council', 'team', 'all')][string]$Advisor = 'all',
+  [ValidateSet('treasurer', 'designer', 'philosopher', 'builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider', 'security', 'council', 'team', 'all')][string]$Advisor = 'all',
   [int]$MaxSources = 6,
   [string]$Model = 'sonnet',
   [string]$Root = 'C:\Dialecta'
@@ -27,7 +27,7 @@ Set-Location $Root
 if (-not (Get-Command claude -ErrorAction SilentlyContinue)) { throw 'claude CLI not on PATH (npm install -g @anthropic-ai/claude-code)' }
 $logDir = Join-Path $Root 'council\log\sprints'; New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 $council = 'treasurer', 'designer', 'philosopher'
-$team = 'builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider'
+$team = 'builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider', 'security'
 $list = switch ($Advisor) {
   'all'     { $council + $team }
   'council' { $council }

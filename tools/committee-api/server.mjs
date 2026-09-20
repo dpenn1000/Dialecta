@@ -49,7 +49,7 @@ if (!TOKEN || TOKEN.length < 24) {
 }
 
 const COUNCIL = ['treasurer', 'designer', 'philosopher'];
-const TEAM = ['builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider'];
+const TEAM = ['builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider', 'security'];
 const ALL = [...COUNCIL, ...TEAM];
 
 const resolveAgents = (spec) => {

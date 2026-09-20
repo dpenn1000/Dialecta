@@ -1,6 +1,6 @@
 # The working team
 
-Six agents that build, check, and record. They mirror `council/` on purpose: same folder shape, same sprint skill, so there is one mental model for the whole team rather than two.
+Seven agents that build, check, and record. They mirror `council/` on purpose: same folder shape, same sprint skill, so there is one mental model for the whole team rather than two.
 
 | Agent | Owns | Model |
 | --- | --- | --- |
@@ -10,6 +10,7 @@ Six agents that build, check, and record. They mirror `council/` on purpose: sam
 | `migrator` | Schema and RLS, through `supabase/migrations/` only | sonnet |
 | `spec-reader` | What the specs say, with citations, read-only | haiku |
 | `decider` | One open decision at a time, and the chair of the council | opus |
+| `security` | What is deployed and reachable today, in whichever repo it ships from | opus |
 
 ## The difference from the council
 
