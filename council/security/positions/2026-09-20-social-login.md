@@ -138,12 +138,37 @@ because it does not depend on any provider telling the truth, and it is the only
 correct if a provider's verification is itself compromised. It is also a small build: one table, one
 column, one check.
 
-**2. Gate the claim on the provider's own verification, checked here rather than trusted upstream.**
-At the moment of claim, read `auth.identities.provider` and `identity_data` for the identity making
-it, and refuse the legacy profile link unless the provider asserted a verified email. This works
-even if Supabase's automatic linking does not check, because it runs later and separately. Its limit
-is that it trusts the provider's assertion, which is exactly the thing that differs between Google
-and the weaker providers, so it narrows the hole rather than closing it.
+**2. Gate the claim on verification, reading `auth.users.email_confirmed_at` and never
+`identity_data`.**
+
+**Corrected 2026-09-20, after this control was first written.** The original wording said to read
+`auth.identities.identity_data` for the provider's verification claim. That would have been wrong,
+and wrong in a way that fails quietly. `2026-supabase-identity-data-and-email-confirmed-at.md` has
+the source read.
+
+`identity_data` is not the provider's claims. `createAccountFromExternalIdentity` sets it from
+`structs.Map(userData.Metadata)`, a normalised OIDC shaped struct, and each provider fills two
+things independently: `Emails[]`, which drives linking and confirmation, and `Metadata`, which
+becomes `identity_data`. Facebook, X, Twitter, GitHub, GitLab and Discord all set `Emails[].Verified`
+correctly and none of them touches `Metadata.EmailVerified`. That field is never absent, so it
+stores as `false`. Google's sync lives in a function its own comment calls legacy and says never
+runs. **An application reading `identity_data->>'email_verified'` gets the wrong answer for most
+providers, Google included, and gets it as a confident `false` rather than as a null.**
+
+The right column is `auth.users.email_confirmed_at`. `User.Confirm` writes it, and the OAuth call
+site in `external.go` is wrapped in `if decision.CandidateEmail.Verified || config.Mailer.Autoconfirm`,
+which reads the honest `Emails[]` field. No other call site confirms unconditionally on OAuth. It is
+normalised, it is provider independent to read, and it is gated.
+
+What it still cannot do is verify independently. It is gated on the same field the adapters
+hardcode, so a Facebook or X sign in confirms exactly as readily as a Google one. This control
+narrows the hole and does not close it, which was true of the original wording too and is the
+reason it was never the primary.
+
+**The wider lesson, which is worth more than the control.** The obvious implementation of this
+control was silently wrong, and reading the field name would never have revealed it. Two fields in
+the same system carry the same name and only one is honest. Anything built on `identity_data`
+deserves the same check before it is trusted.
 
 **3. Hold the second provider until the 14 have claimed.** Launch with one provider that verifies
 email, let the legacy members claim, then widen. This is a hedge rather than a control. It shrinks
@@ -205,10 +230,19 @@ depth control degrades to nothing exactly where it is most needed. A token does 
   condition as the verification check, so turning it on bypasses the gate for every provider at once,
   Google included. Nobody would enable it for this reason, which is precisely why it should be
   recorded before somebody enables it for another one.
-- **Confirm what each provider actually puts in `auth.identities.identity_data`**, by one real sign
-  in per provider on a project that is not production. This cannot be read out of documentation and
-  should not be assumed. It is the prerequisite for the defence in depth control being buildable
-  rather than plausible.
+- **Do not read `identity_data` for verification, and do not spend a sprint measuring it.** This was
+  listed here as needing one real sign in per provider to settle. It is settled from source instead,
+  and the answer is that the field is not usable: `identity_data.email_verified` is stored `false`
+  for Facebook, X, Twitter, GitHub, GitLab, Discord and in practice Google, because the providers
+  fill `Emails[]` and `Metadata` independently and only the first is honest. Read
+  `auth.users.email_confirmed_at`. Detail in
+  `2026-supabase-identity-data-and-email-confirmed-at.md`.
+- **Carry one Supabase bug into the build rather than discovering it.** `Identity.IsEmailVerified()`
+  reads `identity_data["email_verified"]`, the dishonest field, and `UpdateUserEmailFromIdentities`
+  calls it to decide whether to null out `email_confirmed_at` when a user's primary identity
+  changes. A Facebook or X only contributor who loses another identity can be silently
+  unconfirmed by a key that was never honestly set. Anything treating `email_confirmed_at` as
+  monotonic should not.
 - **Look at `GOTRUE_EXPERIMENTAL_PROVIDER_LINKING_DOMAINS`.** It exists in the source as a way to
   isolate providers from a shared auto linking pool, which would let Facebook sit alongside Google
   without sharing a match domain. Whether it is exposed on hosted Supabase at all is unknown and no
