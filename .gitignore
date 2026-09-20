@@ -25,3 +25,6 @@ _recovered/
 # NSSM service logs for the council API
 .committee-logs/
 .council-logs/
+
+# Service security descriptor backup, written by grant-service-control.ps1
+scripts/.service-sd-backup.txt
