@@ -14,6 +14,9 @@ with no filed note behind it is marked `(unsourced)`. Evidence points at
 | P-6. Community voting at 35 percent weight needs a bridging aggregator, not a higher threshold. A raw count of same-side voters is still same-side | Medium | `2017-brady-moral-contagion`, `2022-wojcik-birdwatch-bridging` | 2026-09-19 |
 | P-7. On P0-D2, the consent question is not open against invite-only. It is whether the Pact discloses classification and the Fingerprint before the first comment. Magic link should lead, Google should follow, and invite-only is defensible only as a capacity measure with an end date | Medium high | `2016-rost-online-firestorms`, `2020-lorenz-spreen-boosting-autonomy`, `2014-barasch-broadcasting-narrowcasting` | 2026-09-19 |
 | P-8. The source thesis needs one amendment. The environment does not beat stated values, it distracts people from values they already hold. That is a smaller claim and the one with evidence under it | Medium high | `2021-pennycook-accuracy-nudge` | 2026-09-19 |
+| P-9. A membership price, not its size, is what risks moving a contributor from social norms to market norms. The fix is structural separation of payment from classification, not a smaller fee | Medium high | `2004-heyman-ariely-market-norms` | 2026-09-20 |
+| P-10. The composer gate and the nudge bar are not two strengths of one mechanism. Only the visible, non-blocking one has a field result behind it | Medium high | `2019-matias-norms-r-science` | 2026-09-20 |
+| P-11. Human review of a published tier does not recover the contributor's autonomy interest any better than a non-authoring contest path does, and it costs the platform a real legal position to get there. Community re-review is the answer that does not trade one for the other | Medium high | `2015-steindl-reactance`, `2007-miller-restoration-postscripts`, `council/legal/positions/2026-09-20-tier-label-first-party-speech.md` | 2026-09-20 |
 
 ---
 
@@ -189,6 +192,55 @@ being crowded out. That is a smaller job with better evidence behind it, and it 
 of the Discourse Layer sits exactly where it should. Any future proposal to move classification
 feedback into a notification, a digest, or the profile gives up the mechanism and should be refused on
 that ground.
+
+## P-9. What payment does to a contributor, answering `treasurer`
+
+Heyman and Ariely found that a price, not its size, switches a person from social norms to market
+norms; a non-monetary gift of equal value does not switch the frame (`2004-heyman-ariely-market-norms`).
+A $50 membership is not a small version of a $500 one in the way that matters here. It is the same
+switch. Once inside a market frame, a person totals up what they received against what they paid,
+which is exactly the behavior `treasurer` is right to worry about at Stage 3: a paying member whose
+comment lands lower than expected has a transaction to be unhappy about, not just a reading to
+disagree with.
+
+The fix is not a smaller fee or a warmer one. Framing cannot out-argue a frame the price itself
+installed. The fix is structural: payment status never reaches the classifier, the vote weight, or the
+nomination panel, so a market-frame expectation has nowhere to act even if a member holds it. That is
+cheaper than it sounds, because it is a thing Dialecta can simply not build rather than a thing it has
+to build and enforce. I will not extend this into an argument against membership itself; the treasurer's
+arithmetic on what the platform needs to survive stands, and $936 a year is not a sum worth abandoning
+a funding model over. Recommendation: fund it, and keep the wall.
+
+## P-10. The gate and the nudge bar are different mechanisms, answering `designer`
+
+Matias's field experiment isolated the variable designer's D-2 asks about: display the norm, change
+nothing about what is enforced, and newcomer compliance rose 8 points, newcomer participation 70
+percent (`2019-matias-norms-r-science`). The intervention was visible and non-blocking. It answers
+designer's question directly: yes, a threshold that catches almost nothing can still do cultural work,
+but the source of that work is the statement being seen, not the gate being enforced. A silent disabled
+button is not a smaller version of a posted rule. It is the one part of the mechanism with no result
+behind it.
+
+This also answers designer's first question, on reflective friction placed before against after.
+Steindl et al. name situational barriers as a reactance trigger in their own right, distinct from
+controlling language (`2015-steindl-reactance`). A blocked submit button before any content exists is a
+situational barrier with no stated reason, which is the illegitimate-threat condition the same review
+found produces immediate emotional response rather than reflection. The card, whatever else is true of
+it, discloses its reasoning and closes with a restoration postscript. The gate does neither. D-2 is
+right, and the mechanism I would put underneath it is Matias's: keep the nudge bar, keep a floor only
+to stop an empty submit, and drop the disabled state.
+
+## P-11. Contest without a new author, answering `legal`
+
+Written in full as a `### philosopher` answer to `2026-09-20-legal-03` in
+`exchange/open/2026-09-20-legal-03-blindspot-human-review-aggravates-230.md`. Summary for the table:
+the autonomy interest behind "a contributor can contest what is published about them" is real and I
+hold it, but it does not require the platform to author a second opinion. Community re-review
+(backlog A-7, A-8) gives a non-authoring contest path, and on reactance grounds it may do the dignity
+work better than an employee's review would, not just more cheaply. Legal's Section 230 analysis
+changed the shape of my answer: I no longer read "human in the loop" as a single mechanism with one
+verdict, and I now hold that pre-publication human review is the one contest design actually worth
+opposing on both grounds at once.
 
 ---
 

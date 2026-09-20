@@ -176,3 +176,81 @@ instruction if the rest were settled:
 The question at the top of this record stands as asked. The answer is now more
 likely to be "revert the first four, decide the last three" than a single rule
 applied to all seven.
+
+---
+
+## Appended 2026-09-20 by migrator
+
+`2026-09-19-001` closed yesterday on option 1, adopt live, paired with option 2, branch for
+staging. That resolves the frame this record's seven items sit inside: whichever way items 2, 5
+and 6 go, the destination schema is live's, not the September files'. Three things follow from
+Dan's partial answer and from the chair's refusal to close this record this morning.
+
+**Item 1 needs no one.** `classifications.opposing_view_engaged` must be the three-value enum,
+`yes` / `partially` / `no`, never a boolean. A boolean cannot hold "partially" and the repo's
+version silently drops it into one of the other two. This was already the least defensible of the
+seven; adopting live settles it further, since live already has the enum
+(`opposing_view_level`) and adopting live means we inherit it for free rather than writing a fix.
+It is a defect, not a decision. It belongs to P0-2, the row already rewriting the repo's
+migrations around live, to carry forward; backlog A-2, the classification job that will actually
+populate this column, is the row that must not reintroduce it in code once P0-2 lands the schema.
+
+**Items 2 and 5, restated as one sentence each, for Dan.**
+
+Item 2: should a reader's opinion-map placement be stored as a labeled before-and-after pair per
+article (`stage`, what the spec says and what live already does), or as an open-ended chain where
+each new placement points back to the one it revises (`delta_of`, what this repo's migration and
+backlog D-3 assume)? The pair costs nothing to adopt, since live already has it, and covers
+exactly one pre-read and one post-read snapshot; the chain costs a new migration against a live
+table and a rewrite of D-3's own description, and buys the ability for a reader to revise a
+placement more than once, which nothing currently asks for but which the chain shape would
+support.
+
+Item 5: should a comment's resolved tier live on the classification record that produced it
+(`classifications.final_tier`, spec and live), or on the comment itself (what this repo's
+migration did)? On classifications, each classification attempt keeps its own result, which
+matters the day a comment gets reclassified, and it costs nothing to adopt since live already has
+it there. On comments, the value is one join closer for any code that only wants "this comment's
+tier right now," but a reclassification has to overwrite that single value rather than layering a
+new classification row underneath it, and nothing on record says that trade was deliberate.
+
+**Item 6 has an answer that was not in the original three, and it does not need Dan to pick a
+side.** Dan asked what the composite key question even is. In plain terms: every table needs
+something that tells two rows apart. Most tables here use a plain `id`, a random value with no
+meaning beyond "this one row." That is a surrogate key. It guarantees uniqueness by construction
+but says nothing about what should be unique in practice, so nothing stops two rows both meaning
+"Dan's acuity score" unless something else checks for that. September's migration used
+`(contributor_id, axis)` itself as `axis_scores`'s identity instead, a natural or composite key
+(composite because it is two columns). That makes a second "Dan's acuity score" row impossible;
+the database refuses the insert. The cost is giving up the plain `id` column, and live already has
+`id` on this table, so changing the key now is a real migration against populated rows, the kind
+`practices.md` already treats as needing care.
+
+**The UNIQUE-constraint option gets both, and does not touch a populated table's primary key.**
+Postgres allows exactly one primary key per table but any number of additional `UNIQUE`
+constraints. Leave live's `id` exactly as it is, and add:
+
+```sql
+alter table axis_scores
+  add constraint axis_scores_one_row_per_axis unique (contributor_id, axis);
+```
+
+That is the same guarantee the composite key was for (a second row for the same contributor and
+axis is refused), it keeps the `id` column live already has, and it changes nothing about
+existing rows beyond checking, once, that no contributor already has two rows for the same axis,
+which is the expected state of a table that has been replayed correctly. This is a single
+additive statement, not a rebuild.
+
+Recommend: keep live's `id` as the primary key on `axis_scores` and add the
+`UNIQUE (contributor_id, axis)` constraint beside it. `archetypes` may want the equivalent
+(`UNIQUE (contributor_id)`), on the same logic, but only if it is meant to hold one current
+archetype per contributor; backlog B-2 says the archetype monitor should "write history," and if
+that means more than one archetype row per contributor over time rather than one row updated in
+place, the unique constraint would be wrong for that table specifically. That is a one-line
+confirmation, not a blocker, and no answer is assumed either way.
+
+What is left for Dan is now three short answers, not seven items' worth of reading: the
+one-sentence question on item 2, the one-sentence question on item 5, and whether the
+UNIQUE-constraint recommendation on item 6 is adopted as written. Item 1 needs nothing further
+from anyone and would be fixed the moment a migration is allowed to ship as part of P0-2, which it
+now is; not doing so in this mission because the mission's scope is answering.
