@@ -269,6 +269,76 @@ release confirmed addresses, the hardcoding stops being a hole and becomes an un
 dependency on provider behaviour, which is a weaker objection and a fair one to overrule. I will say
 so plainly if that is what it finds.
 
+## The whole method set, ranked by what the gate actually verifies
+
+Asked directly which methods to use. Ranked by what each one proves, not by how familiar it feels.
+
+| Method | What the gate verifies | Standing |
+| --- | --- | --- |
+| Passkey, WebAuthn | Possession of a device bound private key, origin bound so it cannot be phished onto a lookalike domain | Strongest available. No shared secret exists to steal, and no third party is in the loop |
+| Email OTP | Control of the mailbox, now | Sound, and the mailbox is already the root of trust whether or not it is the front door |
+| Google, GitHub, GitLab, Discord, Keycloak, generic OIDC | Control of the provider account, with the provider's real verification claim passed through | Fine. Google cheapest to operate, GitHub cleanest on verification |
+| Facebook, X, Apple native path, and about ten others | Control of the provider account. The verification claim is hardcoded by Supabase's adapter, not read | The gate exists and these walk through it |
+| Password | Knowledge of a secret, which is the weakest thing on this list to prove | Argue against, reasons below |
+
+**Passkeys are available and that is newer than most of the repo assumes.** Supabase shipped native
+support as a beta dated 2026-05-28, and the installed `@supabase/supabase-js` is 2.116.0, clearing
+the 2.105.0 floor. This is a live option for P0-D2 rather than an upgrade. One gap: the AAL level a
+passkey sign in reports is unstated in Supabase's docs and matters if MFA enforcement is ever wired
+to `aal`.
+
+**Email OTP over magic link, and this is a correction to ADR-002's pair rather than an objection to
+it.** Both verify the same thing. The magic link is single use, so a corporate mail scanner that
+prefetches URLs consumes it before the contributor clicks, and it dies when opened in a different
+browser than it was requested from. OTP has neither failure and is the same implementation. The
+designer's note already establishes that either one needs custom SMTP before it works at all, since
+the default provider sends two per hour and only to organisation team members.
+
+**Against a password option.** It adds a credential that can be stolen and replayed, which nothing
+else on this list does. It brings a reset flow, which is an attack surface in its own right and is
+the second variant in the pre-hijacking paper. And it brings the whole apparatus that OWASP and
+NIST SP 800-63B require to make it safe: a 15 character floor, breach corpus checks, account keyed
+lockout with backoff, and no composition rules or forced rotation. That is a lot of machinery to get
+right in exchange for proving less than a mailbox already proves.
+
+## What has to be true whichever set is chosen
+
+- **Store `sub`, not the email address**, as the identity key. NIST SP 800-63-4's Federation volume
+  says so, and it is the root fix under the email as join key problem this whole position is about.
+- **A claim token for the 14**, never an email match, for the reasons in the section above.
+- **PKCE and exact redirect URI matching.** RFC 9700, final since January 2025, not a draft.
+- **Read `auth.users.email_confirmed_at` and never `identity_data`**, per the correction above.
+- **`Mailer.Autoconfirm` off, and written down**, because it bypasses the verification gate for
+  every provider at once including Google.
+- **A custom auth domain before launch.** Supabase's own docs call the raw project subdomain
+  phishing susceptible, and a login page is the surface where that matters most.
+
+## Where the fundamentals point, which is not my call
+
+Dan asked which sources align with Dialecta's fundamentals. That is `philosopher`'s seat and
+`designer`'s, and `philosopher` already holds P-7, magic link leads and Google follows. What this
+seat can do is put the two texts next to the finding.
+
+`Dialecta_Founding_Philosophy.md` describes the platforms it was built to refuse: they "designed
+environments that reward outrage, identity performance, and tribal confirmation", they "make
+identity a costume rather than a commitment", and they "corrode" public discourse.
+`Dialecta_Contributor_Identity.md` defines this platform's identity layer explicitly against
+theirs: contributor identity is "descriptive, not declarative", and "This is the inverse of every
+social platform's bio field, where users assert an identity that the system never tests."
+
+Authenticating through X or Facebook asks a contributor to present, at the door, the identity those
+systems shaped. Whether that matters is not mine to weigh and I am not weighing it.
+
+**The part that is mine.** A Thinking Fingerprint attached to a real name social identity is a more
+sensitive artifact than either alone, and every finding in this tree gets worse in that world. It
+also brings GDPR Article 9 closer, since a fingerprint that encodes political or philosophical
+opinion may be special category data, which is an open lead rather than a settled one.
+
+**Worth saying plainly: the two routes converge and they did not start together.** This seat reached
+"not Facebook or X" by reading provider adapter source code. The founding philosophy reaches the
+same place from its thesis about environments. Neither argument needs the other, which is the
+strongest form a recommendation takes.
+
 ## What I will need decided
 
 | Question | Why it matters | Who |
