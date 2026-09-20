@@ -56,6 +56,25 @@ File a tool the same way you file a source, with `implies` naming what it would 
 this seat do that it cannot do today. A tool note that cannot finish that sentence is a bookmark,
 and bookmarks do not go in the tree.
 
+## When a control depends on the answer, read the source
+
+Three separate traps on 2026-09-20, all the same shape: **the thing that looks like the answer is
+the thing that is wrong.** Not one of them could have been caught by reading more carefully,
+because in each case the plausible reading was the wrong one and nothing signalled it.
+
+| The trap | What it looks like | What it is |
+| --- | --- | --- |
+| `proxy.ts` | Every current Next.js sample puts auth checks there | Renamed from `middleware.ts` in 16.0.0. `apps/web` is on 15.5.25, so the file is never invoked and the check fails open, silently |
+| `information_schema` | The standard place to read grants | Reported a grant that a direct `has_column_privilege` call contradicted |
+| `identity_data->>'email_verified'` | The provider's verification claim | A normalised struct most providers never fill, stored as a confident `false` rather than a null |
+
+Each was found by reading the implementation, and each had already produced or nearly produced a
+wrong control. So: **documentation and a field name are enough to form a hypothesis and not enough
+to build a control on.** When something you are about to recommend decides whether a check passes,
+read the source that implements it and cite the file and the commit, not the doc.
+
+This is a cost, so spend it where it pays: on the thing the control reads, not on everything.
+
 **Judge a dependency before you recommend it.** Last release, open issue count, licence, and
 whether one person can abandon it. `security` holds the supply-chain position and will ask.
 
