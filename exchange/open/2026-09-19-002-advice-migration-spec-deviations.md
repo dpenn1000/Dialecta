@@ -254,3 +254,99 @@ one-sentence question on item 2, the one-sentence question on item 5, and whethe
 UNIQUE-constraint recommendation on item 6 is adopted as written. Item 1 needs nothing further
 from anyone and would be fixed the moment a migration is allowed to ship as part of P0-2, which it
 now is; not doing so in this mission because the mission's scope is answering.
+
+---
+
+## Appended 2026-09-20 by migrator, third pass
+
+A migration is now allowed, per this session's brief, and three of this record's items move.
+Full reasoning and the files themselves:
+`team/migrator/knowledge/2026-schema-squash-runbook.md`,
+`supabase/migrations/20260920000000_baseline_live_schema.sql`,
+`supabase/migrations/20260920000100_axis_scores_contributor_axis_unique.sql`.
+
+**Item 6 is executed, not just recommended.** The UNIQUE-constraint migration is written:
+`unique (member_id, axis)` on `axis_scores`, landing beside live's own `id`, exactly as the prior
+appendix proposed and Dan then took as the decision. `archetypes` still gets no equivalent
+constraint; the one-line confirmation that appendix asked for (whether the archetype monitor
+writing history, per backlog B-2, means more than one archetype row per member over time) is
+still not on record.
+
+**Item 1 needed nothing further, and the baseline confirms why: adopting live carries the fix
+in, it does not add it.** `opposing_view_level` is one of the nine true Postgres enums the
+baseline declares, read directly from `supabase/types.ts`, and
+`classifications.opposing_view_engaged` uses it. There is no separate migration for this, and
+writing one anyway would be a change with nothing behind it: the baseline already IS live's
+shape, and live's shape was never the boolean. A no-op file would violate the same "one migration
+per change" rule this record's other items lean on to argue their own cases.
+
+**Item 5, final_tier on classifications: agreed, and it is more than "live already does it this
+way."**
+
+The spec pairs `final_tier` with `resolved_at | timestamp | Null until final_tier is confirmed`
+in the same entity (2, classifications), and that pairing is the argument, not just the
+placement. `resolved_at` is not a fact about a comment; it is a fact about one classification
+attempt reaching a conclusion. A comment does not have a single resolved-at moment if it can be
+reclassified, and it can: the Classification Pipeline's own step 7 writes
+`classifications.final_tier`, and the Axis Score Updater triggers "on community reclassification"
+as a named, separate event from first classification. Backlog A-8 is that re-review path, still
+Todo.
+
+The baseline's own modeling makes the stakes concrete. `classifications.comment_id` is **not**
+unique live, unlike the archived September migration's `unique references comments`. That means
+more than one classification row per comment is not just possible, it is how reclassification is
+meant to work: each attempt is its own row, with its own `ai_suggested_tier`,
+`self_declared_tier`, `resolved_at`, and `final_tier`, all four together. Put `final_tier` on
+`comments` instead, and a reclassification has exactly one place to write it: overwriting the
+single value in place, which severs it from the classification row that actually produced it and
+destroys the record of what it was before. Every question a DM or a contributor might ask later,
+"what did this comment's tier used to be, and why did it change", is answerable for free on
+`classifications` and unanswerable on `comments` without a change log bolted on beside it.
+
+So yes: `final_tier` belongs on `classifications` because it is the output of a classification,
+and specifically because a comment can have more than one of those over its life. The baseline
+already carries it there, matching live and the spec both.
+
+**Item 2, stage against delta_of: this is a product question, and I am routing it rather than
+deciding it.**
+
+What the Delta mechanic is for determines the schema, not the other way round, and the two shapes
+answer different questions. `stage` (pre_read / post_read) says a reader's position is captured
+exactly twice per article: once before, once after. `delta_of` (the archived migration's
+self-reference to "the earlier placement this revises") says a position can be revised any number
+of times, each new placement pointing back at the one before it. Those are different products.
+One measures a single moment of reflection; the other tracks an open-ended history of a reader
+changing their mind about the same question.
+
+`docs/Dialecta_Delta_Mechanic_Spec.md` (v1.0, April 2026), which I read in full this session and
+which `2026-live-schema-diff.md` had only pointed at, not read, is unambiguous about which product
+it currently describes: Stage A happens once, at article load. Stage C happens once, at "article
+fully read (progress bar complete)." The community aggregate is gated on "a minimum of 20
+completed pairs", plural pairs, not a chain of open-ended revisions. There is no mechanism
+anywhere in that document for a third placement. Live's `stage` column is a faithful
+implementation of the mechanic as specced today. `delta_of` implements something the current spec
+does not describe at all.
+
+That finding narrows the question; it does not answer it. The real question is whether the
+one-pair model is what the Delta mechanic should stay, or whether letting a reader revise their
+position more than once over an article's life is a real product improvement that the spec simply
+has not caught up to yet, the same way v1.1 caught up to `follows` and `sparring_partners` after
+they were live before they were specced. That is a craft-and-audience question, exactly what
+`dialecta-council` exists for ("any feature that touches ... craft, audience, or what the platform
+asks of a person"), and it is not this seat's to decide: I write schema from a settled product
+answer, I do not settle the product answer myself.
+
+**Recommending, not deciding:** run `/dialecta-council` on this question before D-1 (which D-3
+depends on) lands, since the answer changes what `opinion_map_positions` needs to carry going
+forward, and changing it after real position data exists is a populated-column migration, not a
+free edit. Backlog D-3 currently reads "before/after placement, `delta_of`" with no `-D` marker
+flagging it as an open question for Dan; whoever has write access to `docs/plans/backlog.md` (not
+this seat, per this session's own write scope) may want to give it one, or fold it into the
+existing D-3 row so the council run has a numbered home instead of only this exchange record.
+
+The baseline in `supabase/migrations/20260920000000_baseline_live_schema.sql` carries `stage`
+forward as live has it today, correctly, since adopting live means adopting live's current shape.
+That is not a resolution of this question, only the default that holds until Council and Dan
+settle it. If the answer comes back "revisions, not just a pair," the mechanical path is an
+additive `delta_of uuid references opinion_map_positions(id)` column beside `stage`, not a
+replacement of it: nothing here forecloses either direction.

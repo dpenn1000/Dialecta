@@ -114,6 +114,61 @@ Item 6 has a recommendation, a `UNIQUE (contributor_id, axis)` constraint on liv
 beside its existing `id`, that does not require picking a side and does not touch a populated
 primary key; it still wants Dan's yes.
 
+## Updated 2026-09-20, schema squash session
+
+Dan took item 6 as written and reframed the rest: "there really is almost no real data... what is
+the right way to just simplify." That authorized a migration, and this session wrote one, plus
+tested the convener's squash recommendation before acting on it rather than assuming it.
+
+**Verdict: squash the intent, not the literal `migration squash` command.** That subcommand only
+compresses files already in `supabase/migrations/`, cannot reach live's current schema at all, and
+needs the local Docker stack this machine does not have, confirmed against its own `--help` and
+the official reference rather than assumed. The real path, and the one this session used:
+`db pull --declarative` plus the newly-found `migration fetch --linked` (verbatim historical SQL
+from the remote history table's own stored `statements` column, no Docker) for ground truth, a
+hand-authored baseline for the file itself, `db lint` to check it, `migration repair` to retire
+the 20-row remote history once the baseline is trusted. Full argument, command-by-command, with
+sources: `knowledge/2026-schema-squash-runbook.md`. New practice rows filed from it.
+
+**Three files landed in `supabase/migrations/`, none applied anywhere, none run this session (no
+mandate to touch the live project, and this session's brief was explicit that it is not the one
+that executes):**
+
+- `20260920000000_baseline_live_schema.sql`. All 30 live public tables, read directly from the
+  committed `supabase/types.ts` rather than from the 15-table subset
+  `2026-live-schema-diff.md` had scoped its comparison to. RLS enabled on every table; `select`
+  policies only where `2026-live-rls-surface.md` measured the anon-key behavior (six open, nine
+  closed, `quotes` filtered and flagged as a guessed predicate); **no insert, update, or delete
+  policy anywhere, on purpose**, matching live's own current safe-by-omission posture and staying
+  out of the way of the still-open column-grant fix (Next three, items 1 and 2 below). Every
+  column this session could not verify (defaults, check-constraint value lists, a few ambiguous
+  foreign keys) is marked `-- LIVE UNVERIFIED:` inline rather than asserted at the same confidence
+  as the rest. Not yet diffed against real `migration fetch` output; that diff is the runbook's
+  Part 1 Step 9 and Part 2, unstarted, and is what upgrades this file from best-effort to
+  confirmed.
+- `20260920000100_axis_scores_contributor_axis_unique.sql`. Item 6, executed: `unique (member_id,
+  axis)` beside live's own `id`. Column name matches the baseline (`member_id`, not the archived
+  repo's `contributor_id`).
+- The two September files moved to `supabase/migrations/_archived_2026-09-19/`, not deleted.
+
+**Item 1 needed no separate migration.** The baseline adopts live's `opposing_view_level` enum
+directly; writing a second file to "fix" a column the baseline already has correctly would be a
+migration with nothing behind it.
+
+**Items 2 and 5 answered in `2026-09-19-002`'s third appendix, not both the same way.** Item 5
+(`final_tier` on `classifications`): agreed, argued from the spec's own pairing of `final_tier`
+with `resolved_at` and from live's `classifications.comment_id` not being unique, which means
+reclassification is modeled as a new row, not an overwrite, and `final_tier` has to travel with
+the row that produced it. Item 2 (`stage` against `delta_of`): read
+`docs/Dialecta_Delta_Mechanic_Spec.md` in full for the first time this session (prior notes had
+only pointed at it); the spec as written today describes exactly one pre-read/post-read pair per
+article ("a minimum of 20 completed pairs"), which `stage` implements faithfully and `delta_of`
+does not implement at all. That narrows the question, it does not answer it: whether the mechanic
+should grow to support more than one revision is a product question about what the Delta mechanic
+is for, and this seat routed it to `/dialecta-council` rather than deciding it. Backlog D-3
+currently has no `-D` marker flagging it as open; this seat cannot edit `docs/plans/backlog.md` to
+add one (outside this session's write scope) and said so in the exchange record instead.
+
 ## What this agent posts to the exchange
 
 An `advice` record to Dan through `decider` for any spec field that will not map.
