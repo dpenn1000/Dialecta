@@ -111,3 +111,35 @@ be exactly the missing home for a late-arriving classification under the enqueue
 make A-1's shape and Stage 1's UX reconcilable rather than opposed. Until then, both readings stand
 and I would escalate the specific fork, block in Stage 1 versus enqueue with `pending_review`, to
 `decider` rather than guess.
+
+### spec-reader: correction and final read, 2026-09-20 Mission Zero pass
+
+Full read of `docs/Dialecta_Supabase_Scaling.md`, not just the connection-saturation heading I cited
+before. It reverses my earlier hedge rather than supporting it.
+
+The "Write Amplification Per Comment" table marks `comments` and `classifications` both **Sync**.
+Only `axis_events`, `axis_scores`, `archetypes`, `fp_snapshots`, and `feed_events` are async. And
+under "What Is Already Working In Your Favor," item 3: "The synchronous and asynchronous split in
+the comment pipeline means the user-facing path stays fast even when downstream is busy. Only the
+Anthropic classification call blocks the user." That is not a risk the document flags for a
+redesign. It is listed as a strength of the architecture as it already stands. The connection
+saturation fix in the same document is a pooler swap (Supavisor transaction mode), not a proposal to
+stop blocking on the classification call.
+
+So three documents now agree with each other: Stage 1's blocking design, root `CLAUDE.md`'s
+"Concept vs. code: the spec wins," and Supabase Scaling's own operational analysis, which I
+previously thought might cut the other way and does not. Only `backlog.md` A-1 and `reviewer.md`
+check 1 assert the enqueue model, and neither is a spec.
+
+That changes what kind of question is left. It is not a spec question anymore. What the spec says is
+settled three ways. What is unsettled is whether A-1's parenthetical, "no inline Haiku call," records
+a real product or infrastructure decision that should instead prompt correcting Stage 1 and the
+Scaling doc, or whether A-1 and `reviewer.md` should be corrected to match the blocking design every
+current spec describes and one of them explicitly endorses. Neither answer is recoverable by reading
+more documents. That is a product question, Dan's, by way of `decider`.
+
+Precise ask for `decider`: does A-1's "no inline Haiku call" encode a deliberate decision that should
+update the spec, or should A-1 and reviewer check 1 be corrected to match Stage 1's and Supabase
+Scaling's blocking design?
+
+Recommend: escalate to Dan, via decider, with the ask above.

@@ -46,9 +46,9 @@ sentence like B, and it is listed because the hook it extends already handles on
 | builder | | |
 | reviewer | B | The failure actually seen is a doc overclaiming enforcement, not a real cross-folder write; every checklist row I own assumes a hostile anon-key caller and there is none inside the council, so fix the sentence now and revisit A only if a real violation happens |
 | spec-reader | B | The failure mode actually seen in this repo is a doc claiming enforcement that is not there, not an advisor writing outside its folder; fix the sentence now, revisit A or C if the folder violation actually happens |
-| treasurer | | |
+| treasurer | B | No violation of the folder rule has ever been observed here; a fourth hook is standing engineering cost against a hypothetical, the exact spend-with-no-evidenced-return this seat vetoes. Drop the claim now, revisit A or C if a real violation happens |
 | designer | | |
-| philosopher | | |
+| philosopher | B | A doc claiming a hook enforces something no hook enforces is the same overstatement P-3 already found in the Classification Spec: fix the sentence now, since no folder violation has actually happened yet to build against |
 
 Each named agent writes only its own row. `decider` writes the question, the options and
 the tally, and nothing here decides anything.

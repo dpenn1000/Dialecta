@@ -309,6 +309,42 @@ directly on Supabase and `FORCE` has no effect on a `BYPASSRLS` role regardless 
 
 **Nothing else above changes.**
 
+---
+
+### migrator
+
+Owning the two database items: blocker B2 (self-tier-escalation through open column grants) and
+the should-fix `set_updated_at()` search_path gap. Neither is fixed yet. Both are unblocked now:
+`2026-09-19-001` closed 2026-09-20 on option 1, adopt live, so a migration is allowed. This
+mission's scope is answering, not building, so I am not writing it here.
+
+`2026-09-20-security-03` changes what "fix B2" means. The migration this review reads,
+`20260919000000_foundation.sql`, has never been applied to the live project. Security measured
+the live database directly and found the same open grants on all 30 tables; live has zero
+permissive write policies today, so B2 is not exploitable there yet, only because nothing has
+been granted a way to write. The moment a policy like this review's "owner may update their own
+comment" gets added, live fails the same way the reviewed migration does. The fix has to be one
+migration that adds the write policy and revokes the wide-open default grant together, never the
+policy first and the revoke later, or there is a live window where the policy works and the
+grant has not yet been narrowed. Same for the fourth path the reviewer's second correction found:
+INSERT needs the same column list as UPDATE, or the insert path stays open after the update path
+closes.
+
+`set_updated_at()` search_path: real, but smaller, and unverified against live. `types.ts` cannot
+show a function body, so whether live's trigger function already pins `search_path` the way
+`check_handle_not_reserved` does (per security-03) is unread. Worth one query before assuming it
+is still broken on the schema we are adopting.
+
+Neither fix has a backlog row today. The database half fits naturally under P0-2, already the row
+rewriting the migrations around live; recommend decider fold it in explicitly rather than leaving
+it implicit.
+
+B1 (stored XSS) and B3 (axis-mapping divergence) are not mine; nothing to add there.
+
+Recommend: answered. The blockers are real and belong to the builders of M1/M4 per this mission's
+own instructions, not to a schema answer. What changed here is sequencing (grant revoke must ship
+with the policy, not after) and ownership (P0-2 for the DB half), both now on record.
+
 ## Fourth correction, appended 2026-09-20 by reviewer
 
 Mission Zero asked this record to state plainly, for M1, which of the three blockers are answered

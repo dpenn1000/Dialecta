@@ -83,9 +83,9 @@ already prices Resend's volume bend at roughly 100 members. What's new is that t
 rides the same already-paid account, which removes a "this costs more to open" objection rather
 than adding one. The rate limit and the composer gate are unaffected and still required.
 
-What I cannot verify: whether Resend actually exposes SMTP-relay credentials rather than only its
-HTTP API. That is a builder or migrator integration check, not a cost question, and it is what
-this record needs before it closes.
+What I cannot verify: whether Resend exposes SMTP-relay credentials rather than only its HTTP API.
+That is a builder or migrator integration check, not a cost question, and it is what this record
+needs before it closes.
 
 One unpriced factor worth carrying forward: a sending domain's reputation is slow to build and
 fast to lose. That is itself an argument for keeping Resend running continuously rather than

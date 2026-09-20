@@ -37,3 +37,55 @@ What I cannot see is why `CLAUDE.md` and the live `profiles` table both report 1
 ## Specifically asking
 
 Before P0-6 runs, should the three test aliases and Dan's own account be excluded from the mapping by a deny list, excluded by a rule such as skipping plus-addressed variants of the owner's address, or left in and filtered later at the query layer? And does anyone know what the other four records in `profiles` are?
+
+---
+
+### migrator
+
+Answering the second question first, because I can, from evidence rather than the export: what
+the other rows in `profiles` are.
+
+`profiles` holds 14 rows today (measured 2026-09-19). Three of them are not Ghost members at
+all: `002_seed_dev_users`, a migration applied live in April, inserts three named development
+fixtures (Maya, Wen, Anselm) with no Ghost account behind any of them. Two independent reads
+confirm this from different directions: `2026-09-20-security-02`'s column-level read of live
+`profiles` shows 3 of the 14 rows carrying a `ghost_member_id` of the form `seed:...`, and the
+live `archetypes` table, fully public, holds exactly 3 rows, matching `002_seed_dev_users`'
+own note that it seeds "18 axis_scores and 3 archetype rows" for those same three fixtures. That
+explains 3 of your 4 extra precisely, not by estimate.
+
+The 4th is still open. The same column-level read shows the remaining 11 rows split across two
+different Ghost id shapes: 8 in the current UUID form Ghost issues today, 3 in Ghost's older
+24-character form. Two different formats on the same column says Ghost's own member-id scheme
+changed at some point between whenever those 3 rows were captured and today, which raises a real
+possibility your fresh export cannot resolve on its own: an old-format row may no longer
+correspond to any member Ghost reports now, whether the account changed id under the hood or no
+longer exists. 11 old rows against 10 in a current export is closer than 14 against 10, but it is
+not the same number, and I cannot close that last gap from a schema. It needs matching by email,
+both ways, not assuming today's export and an earlier mapping still agree.
+
+On the exclusion question: do it at write time, not at the query layer. `axis_events` is
+append-only by design (root mandate, and `team/migrator/practices.md`'s ledger-replay rule), so
+anything that reaches it can only be corrected later by a compensating row, never removed. A
+query-layer filter added afterward still leaves phantom `axis_events`, `axis_scores` and
+`fp_snapshots` rows underneath it for as long as the filter is remembered everywhere it needs to
+apply. Excluding before the first row is ever written costs one condition in one script. I'd
+combine a rule (skip any Ghost email that is a plus-addressed variant of the owner's own address)
+with an explicit check for the owner's bare address itself, since that one is not a "+" variant
+and the rule alone would miss it.
+
+What I'd write into P0-6 instead of what is there: "Reconcile `profiles.ghost_member_id` against
+a current Ghost export by email; do not assume the 11 non-seed rows' existing ids are still
+current, two different Ghost id formats are already present. Exclude the account holder's own
+address and any plus-addressed alias of it from becoming a contributor identity. Link `user_id`
+for the remaining real members on first sign-in by email." I have not written this into
+`docs/plans/backlog.md`; that file is out of scope for this mission, and the actual rewrite is
+decider's or builder's call.
+
+No personal data above; everything is shape and count, read from schema and from migration names
+already in this repo's own knowledge base, not from the export.
+
+Recommend: answered. The count is explained down to one unresolved row, the exclusion mechanism
+has a concrete recommendation, and the backlog text has a concrete replacement. Closing it needs
+someone to actually carry that text into `docs/plans/backlog.md`, which is decider's or builder's
+move, not this record's.

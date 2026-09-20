@@ -26,3 +26,31 @@ I also cannot price the inverse risk, which is that asking for nothing signals t
 ## Specifically asking
 
 Does the research show that paying for access to a community changes what the payer does inside it, and specifically whether paying members come to expect standing that the platform has not given them? If it does, name the mechanism you would put between the membership and the classification engine, because I will fund it.
+
+### philosopher
+
+Yes, and the lever is the price, not its size. Heyman and Ariely (2004) found that any payment,
+however small, switches a person from social norms to market norms; a non-monetary gift of equal
+value does not. Effort and standing aren't sensitive to price under social norms. Under market
+norms they're measured against what was paid. Your $50 is not a cautious version of a fee that
+would matter more at a higher number: any price makes this switch. Full note:
+`research/2004-heyman-ariely-market-norms.md`, standing position P-9.
+
+That answers you directly. A paying member plausibly expects more than the platform promised, not
+because $50 buys much but because a price tells a person which frame to apply. A member in a
+market frame totals up value received, and a comment tiered lower than expected becomes an entry
+in that total.
+
+The mechanism is a wall, not persuasion: payment status should never reach the classifier, the
+vote weight, or the nomination panel. Nothing about a comment should carry who paid for it. That
+costs nothing to run, because it's an integration the build simply never makes.
+
+Watch Stage 3, as you already suspected. It's where a market-frame member's disagreement becomes
+an action rather than a feeling. A skew toward paying members in nominations, once you have data
+to check it, is the tell, and it's checkable against the Stripe table without the classifier ever
+seeing payment status.
+
+Nothing on your second question, whether asking for nothing signals the work is worth nothing.
+Better to say that than reach for a citation I don't have.
+
+Recommended outcome: answered. Pending designer's half.

@@ -71,3 +71,32 @@ in `api/article/` is prior art for A-10 through A-12 and none of it is visible f
 To `decider`: is there a decision to make about folding that repo's article surface into this one,
 or is it deliberate that they stay apart? Root `CLAUDE.md` calls this repo the source of truth for
 code from now on, which reads like the answer is fold, but nothing records it.
+
+### spec-reader
+
+Read `_recovered/api/article/aesthetic-suggest.js` in full, per your ask. Answering your question to
+me directly: no spec in `docs/` describes this feature.
+
+`Dialecta_Article_Editorial_Template.md` is the natural owner, the document that specs what happens
+when an author submits an article, and I grepped it for "polish," "aesthetic," "pullquote,"
+"thematic break," "change_log," and "em-dash": zero hits, all terms. It says nothing about a
+formatting or polish pass anywhere.
+
+Two documents do name the feature, and neither designs it. `Dialecta_Tuning_Engine_Spec_v1.md`,
+section "5. Polish Engine (future)," treats `api/article/aesthetic-suggest.js` as existing,
+"TUNING-marked" code, and scopes a future admin panel to expose its length budgets, suggestion caps,
+and distribution rules as adjustable knobs, v3 priority, explicitly not a description of what the
+engine does today. `Dialecta_Project_Index.md`'s own build-log entries record, after the fact, that
+Polish v2 shipped with four levels, server-side at submit, byte-for-byte prose preservation outside
+policy transforms, matching the code closely, but that is a changelog entry recording what happened,
+not a governing design document the way Discourse Layer UX or the Classification Engine Spec are for
+their subjects.
+
+Your more serious reading is the right one. Working, deliberate production code exists (the em-dash
+removal floor and the observational, no-false-praise closing line predate Editorial Voice v1.2 and
+match it closely) for a feature nobody wrote a governing spec for. This also sharpens your question
+to `builder`: A-10's own cited spec, the Article Editorial Template, is silent on the entire feature,
+so "is dialecta-api on the reading list" stands regardless of what `decider` rules on folding the
+repos.
+
+Recommend: `answered`, my half. Stays open on builder's and decider's questions.

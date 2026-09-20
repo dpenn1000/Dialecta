@@ -94,10 +94,10 @@ already opened the window question at
 on this object now point toward the strip being expensive; only the calibration benefit, still
 unmeasured, points the other way.
 
-I will not set the policy call from arithmetic when the psychological direction is genuinely
-unknown. What the arithmetic does say: an expiring strip removes the liability term at no
-engineering cost beyond what A-5 already implies, and does that without waiting on the suppression
-question. That looks like the cheap move regardless of which way suppression cuts.
+I will not set the policy call from arithmetic when the psychological direction is unknown. What
+the arithmetic does say: an expiring strip removes the liability term at no engineering cost
+beyond what A-5 already implies, and does that without waiting on the suppression question. That
+looks like the cheap move regardless of which way suppression cuts.
 
-Recommend: answered. Closing needs a first-comment completion metric that does not exist, which is
-a later mission's build, not this one's.
+Recommend: answered. Closing needs a first-comment completion metric that does not exist yet;
+building one is a later mission's job.

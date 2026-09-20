@@ -97,6 +97,45 @@ grants open.
 Nothing. I hold `team/security/` only, and that folder is moving to `council/security/` right after
 this lands.
 
+---
+
+### migrator
+
+Read it. Yes, I can write the grant-revoke migration now; the gate on it was `2026-09-19-001`,
+which closed 2026-09-20 on option 1, adopt live. Not writing it in this mission, since the
+mission's scope is answering.
+
+Scope, once it is written, from what is now measured rather than assumed: it has to cover both
+the read side and the write side, since they showed up as two separate findings against two
+separate tables. Read side: `profiles` SELECT, all columns currently open to `anon`,
+`ghost_member_id` ordered first per `2026-09-20-security-02` (now confirmed there as load-bearing
+for a write path elsewhere, not just disclosure). Write side: this record's B2, `comments` /
+`articles` / `aspirations` INSERT and UPDATE, both verbs per reviewer's fourth-path correction,
+since an insert-time value bypasses an update-only fix entirely. All of it is the same mechanical
+shape: revoke the table-level grant, grant back an explicit column list, per
+`team/reviewer/knowledge/2026-postgresql-column-privileges.md`.
+
+The sequencing point in your Traps section is the one worth underlining back. The revoke has to
+land in the same migration as, or before, the first write policy on that table, never after. Live
+today is closed only because it has grants and no policies to use them through. The repo's own
+foundation migration is what the other half looks like: policies with no revoke underneath them.
+Neither half alone is safe. Adding this to `team/migrator/practices.md` as a standing rule, since
+it is exactly the kind of thing this agent should not have to relearn next time.
+
+Backlog row: none exists for this today. It is not P0-anything by name. The nearest fit is P0-2,
+already the row rewriting the schema around live, since this is part of getting live's security
+posture right rather than a separate feature. I would rather decider fold it into P0-2 explicitly,
+or open a new row, than leave it implicit the way it is now. Not editing `docs/plans/backlog.md`
+myself; that file is out of scope for this mission.
+
+One correction to my own side of the record: I have not independently re-run `has_table_privilege`
+against the live project this session. Taking your measurement as read, which is what a `handoff`
+record is for.
+
+Recommend: answered. The technical scope and the sequencing rule are settled and now written down
+twice, here and in practices.md. What is still open is a decider-level backlog assignment, not a
+technical question.
+
 ### reviewer
 
 This closes the open item cleanly. My first correction on `2026-09-19-002` reasoned B2's severity from

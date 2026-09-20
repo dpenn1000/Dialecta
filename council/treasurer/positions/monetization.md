@@ -2,7 +2,13 @@
 
 *Written 2026-09-19, sprint 1. The Project Brief lists monetization as an open design question with no ADR behind it. The charter calls it "open question 8"; in `docs/Dialecta_Project_Brief.md` as it stands it is number 7 of seven, under "Open Design Questions". Same question, and this note is about the question rather than its number.*
 
-> **Resolved 2026-09-20.** The prior subscription work was found: `subscription-command-center`, a deployed dashboard tracking the 44 recurring subscriptions Dan pays. **It is the expense side, not a Dialecta revenue model**, and Dan confirmed no tiers are configured in the Ghost console. No membership model has ever been designed, so this position is not competing with earlier work. It did hand over actual spend, and the floor below is corrected from vendor list prices to Dan's statements. See `../research/2026-subscription-command-center.md`.
+> **Resolved 2026-09-20.** The prior subscription work was found: `subscription-command-center`, a deployed dashboard tracking the 44 recurring subscriptions Dan pays. **It is the expense side, not a Dialecta revenue model**, and Dan confirmed no tiers are configured in the Ghost console (Dialecta is leaving Ghost entirely; that check is closed for good, see `../research/2026-search-for-the-subscription-plan.md`). It did hand over actual spend, and the floor below is corrected from vendor list prices to Dan's statements. See `../research/2026-subscription-command-center.md`.
+>
+> **Corrected the same day, Mission Zero.** "No membership model has ever been designed" does not
+> survive the sentence after it. A full tier design, Underwriter, was recovered from a deployed
+> build's source and was never in the places this position searched. See "What the Underwriter
+> discovery changes" below for what that reopens, what it leaves standing, and what it hands to
+> M2.
 
 **Confidence: medium-high on the cost side, medium on the revenue side, low on anything past year two.** Every infrastructure price below was fetched from the vendor on 2026-09-19 and is filed. Every revenue number is a model rather than a measurement, because Dialecta has no membership revenue to measure. The charter says this advisor's numbers are estimates until Dan supplies current spend and member count. They still are.
 
@@ -35,7 +41,7 @@ Annualised: about **$936 now excluding Supabase, $1,320 including it.** After Gh
 
 Two lines in the previous model were wrong. The domain was carried at about $15 a year and unverified; it is **$242**, because it is not only a domain. Resend was carried at $0 on the free tier; it is **$240 a year already being spent**, on a service that has delivered two emails to one recipient each. Vercel and Magic Pages were almost exactly right, which is the useful part: the list-price method held everywhere it had been verified and failed on both lines where it had not.
 
-**Cancelling Resend saves $240 a year today**, which is a quarter of the floor and roughly five of the members the floor requires. Magic Pages already bundles 10,000 emails a month. Resend is redundant until Ghost is gone.
+*Withdrawn 2026-09-20, Mission Zero.* This paragraph previously recommended cancelling Resend as $240 a year spent on two emails, reasoning that Magic Pages' bundled 10,000 emails a month made it redundant until Ghost is gone. That reasoning missed a dependency: Supabase Auth's built-in mailer sends two emails an hour and only to addresses on the project's own team, so magic link sign-in cannot reach a real fifteenth member without a custom SMTP provider (`exchange/open/2026-09-19-002-blindspot-supabase-smtp-blocks-magic-link.md`). Magic Pages' bundle is Ghost's newsletter feature, not a relay Supabase Auth can use, so it never substituted. **Resend stays, at $20 a month already being paid, and becomes the SMTP provider that unblocks real sign-up rather than a line to cut.** That is a use for the existing spend, not new spend.
 
 *Corrected 2026-09-19, same day. The first version of this table omitted the Supabase compute add-on and read $62 and $47. Supabase Pro ships a Micro instance, and `docs/Dialecta_Supabase_Scaling.md` puts "Compute tier upgraded from Micro to Small" on its pre-launch checklist, because the `axis_scores` replay pattern is RAM-sensitive. Small is $15. The floor was understated by $15 a month and every figure derived from it has been re-run below.* Two of those lines are less optional than they look. Supabase Free pauses a project after a week of inactivity, so a live site cannot use it. Vercel Hobby is "for personal, non-commercial use", so the first paid membership takes Hobby off the table as a licence matter rather than a capacity one.
 
@@ -101,6 +107,52 @@ What follows if this position is adopted:
 
 This advisor argued for a revenue model while the plan was quietly removing the machinery to collect it. Recording that rather than patching it.
 
+**Corrected 2026-09-20, Mission Zero: the gap above is smaller than it looked.** A design and five
+applied migrations exist. A working payment flow still does not. See the next section for what
+that changes and what it leaves for M2.
+
+## What the Underwriter discovery changes
+
+*Added 2026-09-20, Mission Zero. Source: `exchange/open/2026-09-20-convener-01-handoff-underwriter-tier-recovered.md`, amended by Dan the same day.*
+
+`convener` recovered the source of a live deployment and found a complete two-tier design, named
+Underwriter, with five migrations already applied to the production database:
+`profiles.subscription_tier`, a Charter Underwriter badge locked in for roughly the first hundred
+paid members, peer gifting, and lifetime grants. None of it is wired. `getTierCapabilities` has no
+caller, so every member gets free behaviour today regardless of what the column holds, and Dan
+confirms none of it ever ran live.
+
+**What does not change.** The cost side of this position is untouched. The $78 floor, the Kelly
+arithmetic, the Stripe fee table, and the MetaFilter, Medium and INN evidence describe what
+Dialecta spends and what covers it, not what shape a membership takes. None of that moved.
+
+**What the design gets right, independently of this position.** Free is gated on editor depth
+(opinion-map candidates, polish runs, archive past the most recent three annotations), never on
+reading or commenting. That is this position's own "gate nothing, the contributor is never the
+cost problem" argument, reached by someone else, before this position existed. Agreement arrived
+at independently is worth more than agreement argued into being, and it is recorded as such.
+
+**What dies with Ghost.** Peer gifting is a Stripe one-time payment whose webhook comps the
+recipient through the Ghost Admin API. Dialecta is leaving Ghost entirely, so that webhook has
+nothing left to call. The Stripe leg and the `is_gifted` / `gift_expires_at` columns survive; the
+comp mechanism itself has to be rebuilt against Supabase Auth and Stripe directly, and nobody has
+sized that build.
+
+**What this makes urgent, not what it answers.** No price exists anywhere in the recovered design;
+`upgrade_url` is null in both tiers. Dan has ruled pricing a mission question for M2, and it is not
+set here. This position's own Stripe fee table and its $50-a-year annual-billing arithmetic are
+evidence M2 can read, not a number this seat is imposing on a design it did not build.
+
+What M2 has to decide, and what it already has to decide it on:
+
+| Decision | Evidence already filed |
+| --- | --- |
+| The price itself | The Stripe fee table above; annual beats monthly by 5.4 points at $50. Not set here |
+| Whether to keep the Underwriter name and its "never Pro, Premium or Plus" copy rule | Cost-neutral either way; no objection from this seat |
+| Sizing and rebuilding peer gifting against Supabase and Stripe directly | Unscoped. The columns exist, the flow does not |
+| Whether the free-tier editor gates (opinion-map candidates, polish runs) are the right differentiator | No cost data exists on what a polish run costs distinct from a classification call; open |
+| When the Charter Underwriter first-hundred window opens | The funnel cannot deliver 16 paying members without roughly 14,500 more visitors than Dialecta has had in its whole history (`positions/acquisition-cost.md`). Treat "first hundred" as distant, not imminent |
+
 ## The strongest case against this position
 
 Self-hosting does not pay for itself against Substack until revenue reaches several thousand a year. On a $50 subscription Substack nets a writer about $43 and Dialecta nets about $47.90, a difference of $4.90, against $744 a year of infrastructure Substack would provide free. On cash alone Dialecta would need over 150 members before self-hosting breaks even against publishing on Substack instead.
@@ -118,3 +170,5 @@ The Project Brief's phased roadmap treats monetization as a question for later a
 - A count of how many readers Dialecta has. Twelve members is trivial against a thousand readers and out of reach against thirty.
 - A reading of whether any earned-revenue line survives the data promises already made. `docs/Dialecta_Growth_Layer_Principles.md` commits, in the Research Consent Layer, that contributor data is "not sold, not used for advertising, not shared with third parties". Selling corpus or opinion-map access is therefore not an open council question for consented data; it is already promised away. See `../research/2025-inn-index-revenue-mix.md`, corrected.
 - Evidence that asking for money changes what contributors do. This advisor does not have it and has posted `exchange/open/2026-09-19-002-blindspot-membership-intrinsic-motivation.md` asking the other two for it.
+- Whether Resend exposes SMTP-relay credentials rather than only its HTTP API. That is what determines whether the $20 a month already being paid can also solve P0-4's cutover blocker at zero marginal cost, and it is builder or migrator's to confirm, not this seat's.
+- A size estimate on rebuilding peer gifting against Supabase Auth and Stripe directly, now that the Ghost Admin API comp path is dead. Nobody has scoped this yet.

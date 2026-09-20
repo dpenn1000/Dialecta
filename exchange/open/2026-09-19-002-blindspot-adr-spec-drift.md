@@ -89,3 +89,46 @@ the ordinal statement `Dialecta_Article_Editorial_Template.md` gives. If the wei
 written into a spec, the mechanism, not only the four numbers, is what is missing.
 
 Full account: `team/spec-reader/knowledge/2026-dialecta-classification-weighting-provenance.md`.
+
+### spec-reader: reframed for Council debate, 2026-09-20 Mission Zero pass
+
+Dan wants this argued, not decided from here. Restating it in a form a debate can take, not
+resolving it.
+
+**What the four numbers do.** `packages/core/src/resolution.ts`, `RESOLUTION_WEIGHTS = { ai: 0.4,
+community: 0.35, self: 0.15, stage25: 0.1 }`. Each present signal becomes a probability distribution
+over the seven tiers; the four distributions combine by weighted sum over only the signals actually
+present, so an absent signal drops out rather than diluting the sum; the final tier is the argmax of
+the combined distribution, ties going to the AI tier. That tie-break is a second thumb on the scale
+beyond the headline 40 percent and belongs in the same debate, not just the four percentages.
+
+**What turns on them.** `resolveFinalTier` sets `final_tier`, the number every published comment and
+article carries. That number drives the topology bar, the default Quality sort (tier rank first,
+votes second), Forum-tier comment counts on article cards (backlog A-9, a locked UI decision), and
+the Reviser archetype's own requirement that each qualifying acknowledgment be classified at
+Forum-tier (`Dialecta_Delta_Mechanic_Spec.md`, Reviser Requirements). Move the split and you move who
+clears Forum, which changes what a new reader sees first and who becomes a Reviser. Not a scoring
+detail. It sets the platform's visible standard.
+
+**What a seat would need to argue for a different split.** No worked example, calibration data, or
+prose rationale exists anywhere in `docs/` for why it is 40/35/15/10 rather than any other four
+numbers summing to 100; confirmed again this sprint, the figures appear in no spec. A seat arguing
+for a change cannot cite a documented principle on record now. It would have to argue from: what the
+platform's stated design commitments already imply (the Quality-sort default is itself a claim about
+how much AI versus community should shape what a reader sees first, and that claim is written down
+even though the percentages are not); a concrete case where the current split produces a result the
+platform's own values would call wrong; or the standing claim in
+`team/decider/knowledge/2026-dialecta-open-decisions.md`, that backlog row A-D1, whether community
+alone may outweigh AI, "moves the locked 40/35/15/10 weighting, which is a founding commitment."
+That line treats the split as settled and Dan-originated. It is not sourced beyond the same
+`CLAUDE.md` line this record already traces, so a seat could equally argue A-D1 and this weighting
+are one decision wearing two record numbers, not two.
+
+**One fact the Council should have before it argues percentages, not after.** The fourth number,
+`stage25Quality` at 10 percent, has no comment-side source to draw from. Confirmed today
+(`2026-09-20-builder-01-blindspot-discourse-stage-2-5-missing.md`): no spec defines a comment-side
+Stage 2.5 anywhere, checked directly against `Dialecta_Delta_Mechanic_Spec.md` this pass. Debating
+what stage25's weight should be is debating the weight of an input the platform cannot currently
+produce.
+
+Not closing this. Leaving it open for the Council pass.

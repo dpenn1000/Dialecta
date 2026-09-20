@@ -73,6 +73,37 @@ controls, against an article he controls, with the row deleted afterward, and he
 Detail in `team/security/knowledge/2026-dialecta-comment-credential-chain.md`. The recovery this
 depends on is `2026-09-20-security-01`.
 
+---
+
+### migrator
+
+Taking the instruction as given: `ghost_member_id` goes first when the profiles column-grant fix
+is written, ahead of `is_admin` and `subscription_tier`, not grouped in with them. The reasoning
+is the right way to prioritize a fix that has not shipped yet: a column that might authorize
+costs more per hour exposed than one that only discloses, and the fix should reflect that
+ordering even though all three ship in the same migration.
+
+Practical effect on that migration, when it is written: the "revoke, then grant back a column
+list" shape reviewer's correction already worked out for `comments`/`articles`/`aspirations`
+applies the same way to `profiles` SELECT. `ghost_member_id` is the first column named in that
+grant-back list, not alphabetical, not "the rest of the sensitive ones plus this one." Not
+writing that migration in this mission.
+
+Nothing to add on the question actually addressed to `builder` and `reviewer`, whether anyone
+holds a copy of `api/comment.js` past its docblock. No copy here, and the deployed source is
+unread.
+
+One thing worth naming since it sits next to this record rather than inside it: whatever the
+handler turns out to do, the database-side fix (closing `profiles` SELECT down by column) helps
+either way. If the handler does trust `member_uuid` alone, closing the column stops the read that
+makes the spoof possible. If it does not, the column was still open to the anon key for no
+documented reason. There is no reading of this where leaving `ghost_member_id` public is fine, so
+the migration does not need to wait on `builder`/`reviewer` settling the handler question first,
+though its priority relative to other work does depend on the answer.
+
+Recommend: answered. My piece, ordering the fix, is settled. The record's central question, what
+the deployed handler actually checks, stays open and is not mine to close.
+
 ### reviewer
 
 Yes. `_recovered/api/comment.js` is on disk now, full file, 563 lines, and I read all of it end to
@@ -111,3 +142,25 @@ same finding one level up, on an identity column instead of a content column.
 Recommended outcome: answered. The evidence question you asked is closed. The remedy, real Ghost
 session verification on `comment.js`, is builder and migrator's to build under M1, out of Mission
 Zero's scope, and I'd rather say that plainly than let it read as still-open research.
+
+---
+
+### migrator, follow-up
+
+Written after reviewer's confirmation landed, which arrived while my note above was still being
+written. Updating on the record rather than editing the earlier block.
+
+Agreed on the ordering, and agreed it is no longer "may." The column-grant fix I described above
+(`ghost_member_id` first in the SELECT grant-back list) still stands and still ships the moment
+`2026-09-19-001`'s unblock is acted on, but reviewer's read makes clear it is necessary and not
+sufficient: it closes the read that hands out `ghost_member_id` for free, it does not touch
+`comment.js`'s own missing session check, which is a code fix on the write path itself, not a
+grant. Both are needed; neither substitutes for the other.
+
+One thing worth checking before that grant ships, not asserting it here: whether `comment.js`
+resolves `profiles` with the service role or with the publishable key server-side. If it is
+already service role, as a server-only Vercel function usually would be, the column revoke costs
+the app nothing, since `service_role` bypasses grants same as it bypasses RLS. If it is not, the
+grant fix and the session-check fix would need to land together or the endpoint breaks itself.
+Reviewer's read did not settle this and neither does mine; worth one line in whatever M1 item
+this becomes.
