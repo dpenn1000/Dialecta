@@ -11,6 +11,24 @@
 > work that appears done. Read `docs/handoffs/dialecta-handoff-2026-09-19-supabase-reality.md`
 > and `exchange/open/2026-09-19-001-advice-supabase-schema-collision.md` before starting any of
 > them. Do not run `supabase db push`.
+>
+> **2026-09-19 update: the question in `2026-09-19-001` is answered, pending Dan's confirmation.**
+> The September migrations were written without knowledge of the live database. The scaffold
+> arrived from a Cowork chat as a zip whose own install handoff tells Dan to create
+> `dialecta-staging` and `db push` into it, and the live project was first read 35 minutes after
+> the scaffold was committed. Evidence appended to the record; detail in
+> `docs/handoffs/dialecta-handoff-2026-09-19-env-and-rls.md`. On that record's logic the repo
+> adopts the live schema and these rows get rewritten around what exists.
+>
+> **Live RLS is measured**, in `team/migrator/knowledge/2026-live-rls-surface.md`. Nine tables are
+> closed to the anonymous key and six are fully public. Two consequences already visible: **A-5
+> renders empty for logged-out visitors**, because anon reads zero of three comments, and **every
+> column on live `profiles` is readable without authentication**, including `is_admin`. That second
+> one is the first migration to write once this unblocks.
+>
+> The environment on studio-pc is loaded and verified: run `node scripts/check-env.mjs --rls` from
+> the repo root. The Supabase CLI needs no install, since `npx --yes supabase` resolves 2.117.0.
+> The read-only reconnaissance sequence is `team/migrator/p0-2-runbook.md` Part 1.
 
 | Id | Item | Spec | Blocked by | State |
 | --- | --- | --- | --- | --- |

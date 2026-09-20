@@ -14,32 +14,4 @@
 
 - 2026-09-19 (supabase reality): P0-2 does not hold as written. The live Dialecta project is `mguulnibvzusfvyuowwh` in the Pennington Media Group org, with 32 tables and 20 applied migrations from April and May 2026, and 10 of the 13 tables this repo's migrations create already exist there with rows. Generated `supabase/types.ts` from live, repointed the broken `npm run types` (it passed `--local`, which needs Docker, and called a `supabase` binary that is not installed). Created nothing, applied nothing, deleted nothing. Full detail in `dialecta-handoff-2026-09-19-supabase-reality.md`; the open question is `exchange/open/2026-09-19-001`.
 
-- 2026-09-19 20:09 UTC, branch `claude/vigorous-pike-a8b098`, 0 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-19 21:22 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:26 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:30 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:32 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:37 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:39 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:40 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:42 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:46 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:47 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:48 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:48 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:49 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
-
-- 2026-09-20 00:51 UTC, branch `claude/vigorous-pike-a8b098`, 1 uncommitted change(s). Session ended; fill in: item, state, next.
+- 2026-09-19 (migrator training, env, RLS): `2026-09-19-001` is answered. The two September migrations were written without knowledge of the live database: the scaffold came from a Cowork chat as a zip, its own install handoff tells Dan to `db push` into a new project, root `CLAUDE.md` then described Supabase as four tables and Live, no session on studio-pc wrote the SQL, and the live project was first read 35 minutes after the scaffold was committed. On that record's logic the repo should adopt the live schema. Measured the live RLS surface: nine tables are closed to the anon key, six are fully public, so `028_pre_launch_security_hardening` did real work. **Defect: every column on live `profiles` is readable without authentication, including `is_admin`.** A-5 renders empty for logged-out visitors. Env files on studio-pc are loaded and all three keys verified against live. Added `scripts/check-env.mjs` and a narrow Bash allow rule. Filed seven migrator knowledge notes, `team/migrator/p0-2-runbook.md`, and exchange `2026-09-19-002`. Nothing written to the live database; `supabase/migrations/` untouched. Full detail: `dialecta-handoff-2026-09-19-env-and-rls.md`. Next: close `2026-09-19-001`, then fix the `profiles` exposure.
