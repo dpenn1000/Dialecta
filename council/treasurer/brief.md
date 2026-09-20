@@ -59,7 +59,20 @@ evidence behind it. The acquisition position was corrected twice in one day and 
 optimistic than it started: the funnel cannot deliver 16 paying members, because at measured rates
 that needs roughly 14,500 visitors against 269 all time.
 
-One thing is open and it matters. Dan reports a prior subscription model plan that real effort went
+**Closed 2026-09-20: the prior subscription work was found.** It is
+`subscription-command-center`, a deployed dashboard in `Downloads/subscription-dashboard` tracking
+the 44 recurring subscriptions Dan pays, $12,906 a year in total. It is the expense side. There are
+no membership tiers, no prices Dialecta would charge, and Dan confirmed the Ghost console has no
+tiers either. **Dialecta's monetization model has still never been designed**, so nothing this
+advisor wrote is competing with earlier work.
+
+It did answer the charter's outstanding question. Spend is now measured from Dan's statements:
+about $78 a month excluding Supabase, $110 including it. Two modelled lines were wrong. The domain
+was carried at $15 a year and is $242. Resend was carried at $0 and is $240 a year already being
+spent on a service that has delivered two emails. Break-even moves from 16 memberships to 19, or 28
+if Supabase belongs to Dialecta.
+
+The old open item, kept because it still matters: Dan reports a prior subscription model plan that real effort went
 into. An exhaustive search on 2026-09-20 did not find it, recorded in
 `research/2026-search-for-the-subscription-plan.md`. Three places were unreachable: Ghost Admin's
 tier settings, which is the highest-probability location and a quick check for Dan, claude.ai
@@ -68,9 +81,9 @@ position is provisional until that plan is found or ruled out.** Dan said he wou
 
 ## Next three
 
-1. Find the prior subscription plan, or rule it out, **before** the council argues monetization.
-   Check Ghost Admin, Settings, Tiers first: an empty `tiers` column on members does not mean no
-   tier is configured. Arguing a model against a decision Dan already made would waste the debate.
+1. **Cancel Resend.** $240 a year, two emails delivered, and Magic Pages already bundles 10,000 a
+   month. Then settle whether the $32 Supabase line is Dialecta's or Trinity's, which is the last
+   thing standing between this advisor and a final floor.
 2. Argue. Run `/dialecta-council` on monetization and on P0-D2 once that is settled. Nothing in
    `positions.md` has met a counter-argument, and an advisor that has only ever agreed with itself
    is not trained.

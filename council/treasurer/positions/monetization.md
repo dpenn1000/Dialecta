@@ -2,7 +2,7 @@
 
 *Written 2026-09-19, sprint 1. The Project Brief lists monetization as an open design question with no ADR behind it. The charter calls it "open question 8"; in `docs/Dialecta_Project_Brief.md` as it stands it is number 7 of seven, under "Open Design Questions". Same question, and this note is about the question rather than its number.*
 
-> **Provisional, pending a prior plan. Added 2026-09-20.** Dan reports that a subscription model plan exists and that real effort went into it. An exhaustive search did not find it, and three places were unreachable: Ghost Admin's tier settings, claude.ai conversation history, and Gmail. See `../research/2026-search-for-the-subscription-plan.md`. **If that plan turns up and names tiers or prices, this position may be arguing against a decision already made, and it yields to the earlier work until the two are reconciled.** Nothing here should be treated as settled while that is open.
+> **Resolved 2026-09-20.** The prior subscription work was found: `subscription-command-center`, a deployed dashboard tracking the 44 recurring subscriptions Dan pays. **It is the expense side, not a Dialecta revenue model**, and Dan confirmed no tiers are configured in the Ghost console. No membership model has ever been designed, so this position is not competing with earlier work. It did hand over actual spend, and the floor below is corrected from vendor list prices to Dan's statements. See `../research/2026-subscription-command-center.md`.
 
 **Confidence: medium-high on the cost side, medium on the revenue side, low on anything past year two.** Every infrastructure price below was fetched from the vendor on 2026-09-19 and is filed. Every revenue number is a model rather than a measurement, because Dialecta has no membership revenue to measure. The charter says this advisor's numbers are estimates until Dan supplies current spend and member count. They still are.
 
@@ -18,17 +18,24 @@ Dialecta should fund itself with a **voluntary annual membership, billed once a 
 
 Fixed monthly floor, from vendor pages fetched 2026-09-19:
 
-| Line | Now | After Ghost cutover | Source |
-| --- | --- | --- | --- |
-| Supabase Pro | $25 | $25 | `../research/2026-supabase-pricing.md` |
-| Supabase Small compute add-on | $15 | $15 | `../research/2026-dialecta-supabase-scaling-spec.md` |
-| Vercel Pro | $20 | $20 | `../research/2026-vercel-pricing.md` |
-| Magic Pages (Ghost) | $15 | $0 | `../research/2026-ghost-magicpages-hosting.md` |
-| Resend | $0 | $0 until 100 emails a day | `../research/2026-resend-pricing.md` |
-| Anthropic, at 1,000 comments | $2 | $2 | `../research/2026-anthropic-api-pricing.md` |
-| **Total** | **$77** | **$62** | |
+*Measured 2026-09-20 from Dan's own statement data in `../research/2026-subscription-command-center.md`, replacing the vendor list prices this position previously modelled.*
 
-Annualised: about **$924 now, $744 after cutover**.
+| Line | Actual now | After Ghost cutover | Note |
+| --- | --- | --- | --- |
+| Vercel | $20.20 | $20.20 | Shared across three Vercel projects |
+| **GoDaddy, the Dialecta stack** | **$20.17** | **$20.17** | $242/yr. Domain plus M365 email for editor@dialecta.org, Conversations Deluxe, and a Domain Alert Pro or Auctions membership |
+| Magic Pages (Ghost) | $15.65 | $0 | |
+| **Resend** | **$20.00** | $20.00 | **Already being paid. Two emails sent, each to one recipient** |
+| Anthropic API, at 1,000 comments | about $2 | about $2 | Metered, separate from Dan's personal Claude plan |
+| **Subtotal** | **$78** | **$62** | |
+| Supabase | $32 | $32 | **Attribution unresolved.** The ledger says it powers Trinity tools |
+| **Total if Supabase is Dialecta's** | **$110** | **$94** | |
+
+Annualised: about **$936 now excluding Supabase, $1,320 including it.** After Ghost cutover, $744 or $1,128.
+
+Two lines in the previous model were wrong. The domain was carried at about $15 a year and unverified; it is **$242**, because it is not only a domain. Resend was carried at $0 on the free tier; it is **$240 a year already being spent**, on a service that has delivered two emails to one recipient each. Vercel and Magic Pages were almost exactly right, which is the useful part: the list-price method held everywhere it had been verified and failed on both lines where it had not.
+
+**Cancelling Resend saves $240 a year today**, which is a quarter of the floor and roughly five of the members the floor requires. Magic Pages already bundles 10,000 emails a month. Resend is redundant until Ghost is gone.
 
 *Corrected 2026-09-19, same day. The first version of this table omitted the Supabase compute add-on and read $62 and $47. Supabase Pro ships a Micro instance, and `docs/Dialecta_Supabase_Scaling.md` puts "Compute tier upgraded from Micro to Small" on its pre-launch checklist, because the `axis_scores` replay pattern is RAM-sensitive. Small is $15. The floor was understated by $15 a month and every figure derived from it has been re-run below.* Two of those lines are less optional than they look. Supabase Free pauses a project after a week of inactivity, so a live site cannot use it. Vercel Hobby is "for personal, non-commercial use", so the first paid membership takes Hobby off the table as a licence matter rather than a capacity one.
 
@@ -36,13 +43,13 @@ Variable cost is one line: the Stage 1 classification call. At Haiku 4.5 rates a
 
 Two savings that look available and are not. Prompt caching does not apply, because Haiku 4.5 needs a 4,096-token prefix and Dialecta's system prompt is about 670 tokens, so caching is skipped silently, and padding the prompt to reach the minimum costs more than it saves at low volume. The Batch API's 50 percent discount cannot serve Stage 1, because the Project Brief specifies pre-analysis as instant and on submit, and a batch may take an hour. Both in `../research/2026-anthropic-caching-batch-limits.md`.
 
-**Dialecta's problem is not that it is expensive. It is that nobody has decided who pays the $62.**
+**Dialecta's problem is not that it is expensive. It is that nobody has decided who pays the $78.**
 
 ## What that means the question is
 
-Kelly's arithmetic run backwards: 1,000 true fans at $100 a year is $100,000, and Dialecta needs $744. That is **eight true fans**, or sixteen annual memberships at $50, or 68 gifts at Wikimedia's average of $11. Sources: `../research/2008-kelly-1000-true-fans.md`, `../research/2026-wikimedia-fundraising.md`.
+Kelly's arithmetic run backwards: 1,000 true fans at $100 a year is $100,000, and Dialecta needs about $936, or $1,320 if Supabase is its own. That is **nine to thirteen true fans**, or **nineteen to twenty-eight annual memberships** at $50, or 85 to 120 gifts at Wikimedia's average of $11. Sources: `../research/2008-kelly-1000-true-fans.md`, `../research/2026-wikimedia-fundraising.md`.
 
-The monetization question is not "how does this become a business". It is "how does this cover a bill of about $62 a month without changing what the platform rewards". That question has answers the first one does not, and the council should frame it that way before it argues about models.
+The monetization question is not "how does this become a business". It is "how does this cover a bill of about $78 a month without changing what the platform rewards". That question has answers the first one does not, and the council should frame it that way before it argues about models.
 
 ## What is ruled out, and why
 

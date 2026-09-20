@@ -8,7 +8,12 @@
 
 | Position | Confidence | Evidence | Last changed |
 | --- | --- | --- | --- |
-| Dialecta's fixed floor is about $62 a month after Ghost cutover, $77 before. Annualised, about $744 and $924. Includes the Supabase Small compute add-on the Scaling spec requires before launch | High | `research/2026-supabase-pricing.md`, `research/2026-dialecta-supabase-scaling-spec.md`, `research/2026-vercel-pricing.md`, `research/2026-ghost-magicpages-hosting.md`, `research/2026-resend-pricing.md` | 2026-09-19, corrected same day |
+| **Measured floor**, from Dan's statements rather than list prices: about $78 a month now and $62 after Ghost cutover, excluding Supabase. Annualised $936 and $744. With Supabase attributed to Dialecta, $110 and $94, or $1,320 and $1,128 | High | `research/2026-subscription-command-center.md` | 2026-09-20, measured |
+| **Cancel Resend today. It costs $240 a year and has delivered two emails, each to one recipient.** Magic Pages already bundles 10,000 a month. That is a quarter of the floor and about five of the members it requires | High | `research/2026-subscription-command-center.md`, `research/2026-ghost-native-analytics-all-time.md` | 2026-09-20 |
+| The domain line was wrong by 16 times. Carried at about $15 a year unverified; it is $242, covering the domain plus M365 email for editor@dialecta.org, Conversations Deluxe and a Domain Alert Pro or Auctions membership | High | `research/2026-subscription-command-center.md` | 2026-09-20 |
+| Break-even moves from 16 annual memberships to **19**, or **28** if Supabase is Dialecta's | High | `positions/monetization.md` | 2026-09-20 |
+| Supabase attribution is unresolved and the floor is not final until it is settled. The ledger says the $32 powers Trinity tools, and Dialecta's project sits in a different organisation from this session's token | Medium | `research/2026-subscription-command-center.md` | 2026-09-20 |
+| The list-price method held everywhere it had been verified and failed on both lines where it had not. Vercel and Magic Pages were almost exact; the domain and Resend were the two unverified lines and both were wrong | High | `research/2026-subscription-command-center.md` | 2026-09-20 |
 | Fund the platform with a voluntary annual membership plus a patronage line, gating nothing, and rule grants out of the operating base | Medium | `positions/monetization.md`, `research/2026-wikimedia-fundraising.md`, `research/2025-inn-index-revenue-mix.md` | 2026-09-19 |
 | Bill annually, never monthly. Stripe's fixed 30 cents makes a $5 monthly membership cost 9.6 percent in fees against 4.2 percent for $50 a year | High | `research/2026-stripe-processing-fees.md` | 2026-09-19 |
 | Never price a single charge below about $5. At $3 the processor takes 13.6 percent, at $1 it takes a third | High | `research/2026-stripe-processing-fees.md` | 2026-09-19 |
@@ -84,7 +89,7 @@
 | Whether asking contributors for money changes what they do. The monetization position assumes it does not and has no evidence either way | `exchange/open/2026-09-19-002-blindspot-membership-intrinsic-motivation.md` |
 | Whether a membership billing row must land before Phase C retires Ghost's subscription management | `exchange/open/2026-09-19-003-blindspot-no-billing-row-before-ghost-shutdown.md` |
 | Whether P0-6 should exclude Dan's account and three test aliases, and why `profiles` says 14 when the export says 10 | `exchange/open/2026-09-20-004-blindspot-p0-6-would-import-test-accounts.md` |
-| **A prior subscription model plan may exist that this advisor has not read.** Searched exhaustively 2026-09-20 and not found. Unreachable: Ghost Admin tiers, claude.ai conversations, Gmail. Every monetization position is provisional until it is found or ruled out | `research/2026-search-for-the-subscription-plan.md` |
+| ~~A prior subscription model plan may exist that this advisor has not read.~~ **Closed 2026-09-20.** Found: it is an expense tracker, not a revenue model, and Ghost has no tiers configured. No membership model has ever been designed | `research/2026-subscription-command-center.md` |
 
 ## Corrected the same day it was written
 

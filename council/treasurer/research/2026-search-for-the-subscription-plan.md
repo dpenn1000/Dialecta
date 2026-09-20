@@ -1,5 +1,7 @@
 # Search for the prior subscription model plan: where it is not
 
+> **ANSWERED 2026-09-20.** Found at `C:\Users\dan\Downloads\subscription-dashboard`, deployed as the Vercel project `subscription-command-center`. It tracks the 44 subscriptions Dan **pays**, not a model for what Dialecta would **charge**. Dan separately confirmed no tiers are configured in the Ghost console. See `2026-subscription-command-center.md`. The search below stands as the record of where it was not, and of a miss: the Vercel project appeared in a `list_projects` result this advisor had already read on the same day and did not register.
+
 **Source:** Exhaustive search run 2026-09-20 after Dan said a subscription model plan exists and that significant effort went into it. A negative result, recorded so the next session does not repeat the search.
 
 ## Why this note exists
