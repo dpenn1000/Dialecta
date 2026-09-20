@@ -13,6 +13,33 @@ The Next.js 15 (App Router, TypeScript) front end. Root `CLAUDE.md` holds the lo
 - **Ids are `uuid`.** `articles.ghost_post_id` (`text`) is legacy, only the import script touches it. See `supabase/CLAUDE.md`.
 - **Route params are promises** in Next 15: `const { slug } = await params;`.
 - Voice rules apply to anything a contributor sees. Observational, never evaluative. "This reads as Heat", never "classified as".
+- **The site origin lives in `src/lib/site.ts`** (`SITE_URL`, from `NEXT_PUBLIC_SITE_URL`, falling back to `https://dialecta.org`). `sitemap.ts`, `robots.ts` and the article route's `generateMetadata` all need an absolute URL and none of them run with a request to read one from; do not hardcode the domain a second time anywhere else.
+- **A share card carries the article, never a judgement about the person who wrote it.** No tier badge and no fingerprint-derived descriptor on any `opengraph-image`, ever. Legal and philosopher ruled on this independently and agreed: `exchange/open/2026-09-20-circulation-01-blindspot-share-card-off-platform-exposure.md`, `council/philosopher/positions/2026-09-20-path-to-launch.md`. A card's basis cannot travel off-platform with it, so nothing that needs a basis belongs on one.
+- **`twitter:card` is set explicitly to `summary` wherever `openGraph` is set**, in `layout.tsx` and in the article route's `generateMetadata`. Next infers `summary_large_image` on its own the moment any image is present (`node_modules/next/dist/lib/metadata/resolvers/resolve-opengraph.js`), which is the format X has repeatedly stopped rendering a headline on (`council/circulation/research/2026-opengraph-and-x-card-share-surface.md`). Leaving `card` unset silently reverts to the format the research argued against.
+
+## Analytics
+
+Plausible (self-hostable, cookie-free, captures arrivals by source out of the box) is wired as an
+integration point in `src/lib/analytics.ts`, loaded from `layout.tsx` via `next/script`. It ships
+inert: no script tag renders until `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` is set. This exists because
+Ghost's own analytics disappear at the Ghost cutover with nothing named to replace them
+(`council/circulation/research/2026-plausible-analytics-tool.md`), and the first strangers a
+shared article reaches are the one cohort that cannot be measured retroactively.
+
+Two ways to give it a real value, and the choice between them is treasurer's, not decided here
+(priced against Plausible Cloud's tiers, which this repo does not carry):
+
+1. **Plausible Cloud.** Dan creates an account at plausible.io, adds `dialecta.org` as a site, and
+   sets `NEXT_PUBLIC_PLAUSIBLE_DOMAIN=dialecta.org` in the deploy environment. No code change; the
+   default `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` already points at Plausible Cloud's script.
+2. **Self-hosted.** Someone stands up the Plausible stack (its own Postgres and ClickHouse, per
+   its self-hosting docs) somewhere reachable from the browser, then `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`
+   is still the site's registered name and `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` points at that
+   instance's own `/js/script.js`. That deployment is infrastructure outside this app and outside
+   what a Claude Code session in `apps/web` can stand up.
+
+Neither step above happens on its own; both need a person, an account, or a server this repo does
+not contain. Until one of them happens, the integration point sits ready and silent.
 
 ## Pages and the spec each implements
 
@@ -25,6 +52,10 @@ The Next.js 15 (App Router, TypeScript) front end. Root `CLAUDE.md` holds the lo
 | `/community` | Dialecta_Social_UX_Architecture.md |
 | `/profile/[id]` | Dialecta_Contributor_Identity.md, Dialecta_Growth_Scroll.md |
 | `/api/health` | Proves the `@dialecta/core` workspace link |
+| `/sitemap.xml` | `sitemap.ts`; static pages plus every published article, from Supabase |
+| `/robots.txt` | `robots.ts`; allows everything but `/api/` and `/auth/`, points at the sitemap |
+| `/opengraph-image` | Site-wide default share card, `next/og` |
+| `/articles/[slug]/opengraph-image` | Per-article share card: title and byline only, see "Conventions" above on what a card may carry |
 
 ## Run
 
