@@ -1,4 +1,5 @@
 import { getPublishedArticle, isSupabaseConfigured } from '@/lib/articles';
+import { sanitizeArticleHtml } from '@/lib/sanitize-html';
 import { strings } from '@/strings';
 
 interface ArticlePageProps {
@@ -40,7 +41,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         Implements docs/Dialecta_Article_Editorial_Template.md and the Discourse Layer from
         docs/Dialecta_Discourse_Layer_UX.md.
       </p>
-      <article dangerouslySetInnerHTML={{ __html: article.body_html }} />
+      {/*
+        Sanitized immediately before render, with nothing in between (the
+        mutation-XSS timing rule in lib/sanitize-html.ts). body_html is
+        reachable through more than the editor: see that module's own
+        comment for why storage cleanliness alone would not be enough here.
+      */}
+      <article dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(article.body_html) }} />
     </main>
   );
 }

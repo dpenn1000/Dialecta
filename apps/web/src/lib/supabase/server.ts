@@ -23,7 +23,26 @@ export async function createClient() {
       getAll() {
         return cookieStore.getAll();
       },
-      setAll(cookiesToSet) {
+      // @supabase/ssr's setAll takes the cookie array AND a headers object
+      // (Cache-Control, Expires, Pragma) that must land on the response
+      // whenever a cookie write happens, or a CDN/reverse proxy in front of
+      // this app can serve one visitor's session to another (confirmed
+      // directly against the installed package: node_modules/@supabase/ssr/src/types.ts,
+      // team/builder/knowledge/2026-supabase-ssr-setall-signature.md). This
+      // helper only ever gets the cookie half applied. A Server Component
+      // cannot write cookies or headers at all (the catch below). A Route
+      // Handler or Server Action can write cookies through this same
+      // cookieStore, but Next gives no equivalent mutable jar for arbitrary
+      // response headers the way it does for cookies, only whatever the
+      // handler's own returned Response carries, so `headers` is accepted
+      // (an honest signature, not a silently dropped one) and left unused
+      // here. middleware.ts is what runs on every request with both a
+      // request and a response in hand, and it is what actually attaches
+      // these headers (lib/supabase/middleware.ts). The one route that
+      // creates a session outside that refresh cycle, auth/callback,
+      // attaches them itself on its redirect for the same reason.
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept to match the real, two-argument setAll signature; see the comment above
+      setAll(cookiesToSet, _headers) {
         try {
           for (const { name, value, options } of cookiesToSet) {
             cookieStore.set(name, value, options);

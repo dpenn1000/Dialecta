@@ -34,6 +34,19 @@ export const strings = {
     articleNotFound: 'No article has that address.',
     noArticlesYet: 'No articles are published yet.',
   },
+
+  login: {
+    heading: 'Sign in',
+    tagline: 'Sign in to comment, and to keep your Thinking Fingerprint attached to your name.',
+    emailLabel: 'Email',
+    emailPlaceholder: 'you@example.com',
+    sendLink: 'Send me a sign in link',
+    sending: 'Sending',
+    magicLinkSent: (email: string) => `Check ${email || 'your email'} for a link to finish signing in.`,
+    magicLinkFailed: 'That link could not be sent. Check the address and try again.',
+    continueWithGoogle: 'Continue with Google',
+    signInFailed: 'That sign in link was not valid or has expired. Try again.',
+  },
 } as const;
 
 export type Strings = typeof strings;
