@@ -206,3 +206,79 @@ it adopts the spec, and reach nothing that is live today.
 | Newsletter | `Dialecta`, **10 subscribers, 2 delivered** |
 | Analytics | **Tinybird**, cookie-free and first party. This is what vanishes at cutover |
 | Active theme | `dialecta-theme v1.0.0` |
+
+---
+
+## Layer 0b: the front-end source, recovered 2026-09-20
+
+The gap this document named two hours ago is closed. Dan asked whether the React source was in
+Vercel. It was, in a **fourth project nobody had mentioned**.
+
+`vercel projects` on the team returns four, not one: `dialecta`, `committee-api`,
+`subscription-command-center`, and **`dialecta-next`**, framework `nextjs`, last deployed
+2026-05-06 via CLI. CLI deployments carry the source tree, which is why this was retrievable at
+all.
+
+Recovered from `dpl_3ZRBaGX4rKEUnuc87zAm7YHHB7VQ` into gitignored `_recovered-next/`. 113 files,
+zero failures. **76,674 lines of front-end source.**
+
+| Largest components, `lib/theme/` | Lines |
+| --- | --- |
+| `dialecta-editor.jsx` | **4,727** |
+| `dialecta-profile.jsx` | 2,865 |
+| `dialecta-dev-admin.jsx` | 2,367 |
+| `dialecta-private-draft.jsx` | 1,796 |
+| `dialecta-sidebar.jsx` | 1,595 |
+| `dialecta-discourse-layer.jsx` | 1,251 |
+| `dialecta-profile-identity-edit.jsx` | 1,075 |
+| `dialecta-opinion-map.jsx` | 958 |
+| `dialecta-quotes-app.jsx` | 932 |
+| `dialecta-fingerprint-engine.jsx` | 910 |
+
+51 files under `lib/theme/`, including `_archive/2026-05-02/index.jsx` at 791 lines, **the exact
+file `page-profile.hbs` names in its own comment.**
+
+### `components/` is an older snapshot, not the source
+
+Measured rather than assumed, on the two files that appear in both:
+
+| | `components/` | Recovered |
+| --- | --- | --- |
+| `dialecta-fingerprint-engine.jsx` | 780 | **910** |
+| `dialecta-discourse-layer.jsx` | 692 | **1,251** |
+
+The recovered copies are newer and larger. Treat `components/` as a dated snapshot and
+`_recovered-next/lib/theme/` as the source of record.
+
+### The Next.js migration was already started, and further than anyone knew
+
+`_recovered-next/app/` is an App Router tree, from May 2026:
+
+```
+app/layout.js, page.js, globals.css, robots.js, sitemap.js
+app/article/[slug]/opengraph-image.js
+app/comment/[id]/opengraph-image.js
+app/contributor/[handle]/page.js, opengraph-image.js
+app/contributor/[handle]/moment/[id]/page.js, opengraph-image.js, MomentShareButtons.js
+app/quote/[slug]/page.js, opengraph-image.js
+app/components/SiteNav.js
+app/api/health/route.js, app/api/debug/profile/[handle]/route.js
+```
+
+**`sitemap.js`, `robots.js` and four `opengraph-image.js` routes already existed.** `builder`
+rebuilt equivalents of the first three today, from scratch, because nobody knew this project was
+there. That is the cost of not having had this document.
+
+It also holds surfaces nothing else in this repository mentions: `contributor/[handle]`,
+per-contributor **moments** with their own share buttons and OG images, and `quote/[slug]`.
+
+### What this does to the estimate
+
+`builder` estimated 6 to 10 weeks for a full rebuild, and 3 weeks for a vertical slice, both on
+the measurement that `apps/web` is 315 lines against 38 production routes. Neither estimate knew
+that **76,674 lines of front-end source and a started App Router migration were recoverable.**
+
+The estimate should be re-run. Porting is not writing, the recovered code is five months old and
+carries Ghost assumptions that are dying, and none of it has been read yet. But the difference
+between writing `dialecta-editor.jsx` and porting 4,727 existing lines of it is not a rounding
+error.
