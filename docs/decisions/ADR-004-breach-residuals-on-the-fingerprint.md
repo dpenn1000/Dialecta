@@ -83,3 +83,71 @@ Three states, each meaning something different, and no two reusing a channel:
 What spiked variation means geometrically, how a residual scales against petal growth so that
 dilution is visible rather than merely true, and whether oxblood on a petal needs its own value
 distinct from the card's.
+
+---
+
+## Amendment, 2026-09-20: the visibility choice belongs in the Pact
+
+Both seats were asked for recommendations on the visibility decision and both came back wanting
+the same change: do not let public be inherited. `philosopher` on default effects, that a buried
+toggle will not be used by most people and opting out then becomes its own tell. `legal` on
+consent, that the factory default should be self-visible so public is always chosen.
+
+**Dan's answer is better than either and it resolves both objections.** In his words: this
+decision should not be buried, it "comes up as an independent decision as part of the initial Pact
+process. The user is given the choice of opting out but also encouraged to embrace the spirit of
+the community to commit to constructive dialogue, transparency, and growth."
+
+That is not a compromise between the two recommendations. It answers a question neither asked: not
+*what should the default be*, but *where does this decision belong*. In the Pact, it stops being a
+default at all. There is nothing to inherit, because there is no unattended state.
+
+It also puts the question where the platform already explains itself. The Pact is Dialecta's
+mutual agreement, the document that says what this place is. Visibility of a durable
+characterisation is exactly that kind of question, and it reads differently in a settings pane
+than beside a commitment to transparency and growth.
+
+**Measured 2026-09-20, and it makes this cheap now:** of 14 profiles, **3 have ever signed a Pact**
+and 11 carry a null `pact_version`. The process is effectively unrun. Adding this to the Pact
+costs almost nothing in re-consent today, and grows more expensive with every member who signs the
+version that lacks it.
+
+### The one gap this leaves, which is real
+
+`legal` wanted the choice made "after seeing the rendered card, residual included." **At Pact time
+there is no card.** A new contributor has no comments, no axis events, no Archetype and no
+residual. They are consenting to the visibility of something that does not exist yet and whose
+eventual content they cannot preview.
+
+That is not a reason to move the decision back out of the Pact. It is a reason for **two moments
+rather than one**:
+
+| Moment | What it asks | Why there |
+| --- | --- | --- |
+| **The Pact**, at joining | The decision, in principle, beside the commitments it belongs with | Not buried, actively chosen, framed by what the platform is rather than by a settings label |
+| **First render**, when an Archetype or residual first exists | A confirmation, showing the actual artifact | Supplies the informed half that the Pact cannot, because the thing did not exist yet |
+
+The second is not a second consent gate to click through. It is the first time the person can see
+what they agreed about, and the moment their earlier answer becomes checkable.
+
+### What stands from the two recommendations
+
+- **`legal`, adopted:** every level except self-visible ships disabled until the predicate policy
+  exists. A setting the database does not enforce is worse than none, because it tells a person
+  their restriction worked when it did not.
+- **`legal`, adopted:** the Breach residual, not the Breach card, is the first artifact the
+  Arizona opinion-privilege hour examines. It aggregates suppressed-text classifications into a
+  permanent person-level mark, which is closer to a checkable factual assertion than a tier badge.
+- **Both, still open:** the contest path. `philosopher` holds it is more necessary now rather than
+  less, since it sits behind a choice rather than a platform gate. `legal` frames the same fact as
+  the one that reads worst: publishing about a person before giving them a way to answer back.
+  Neither blocks, both want it on the same timeline as the session-verified auth.
+- **`legal`, noted rather than adopted:** the factory-default flip to self-visible is superseded by
+  putting the question in the Pact, where there is no factory default to flip.
+
+### Consequences this adds
+
+- **The Pact needs a version bump** and the new version carries the question. `profiles.pact_version`
+  already exists and is already `1.0`, so the mechanism is there.
+- The 3 members who signed 1.0 answered a Pact that did not ask this, and are asked at first render.
+- `apps/web/src/app/pact/page.tsx` is 11 lines. The Pact is a placeholder, not a built surface.
