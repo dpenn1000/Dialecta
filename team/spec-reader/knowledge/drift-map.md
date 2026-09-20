@@ -30,6 +30,8 @@ reworded.
 | Classification weighting percentages | No spec states them. See F1 |
 | An entity table type in `Dialecta_Data_Architecture.md` | The entity tables contradict the Identity Types section of the same file. See B2 |
 | Any spec not named in the index | 10 real specs are off the map. See D5 |
+| A comment-side Stage 2.5, anywhere it is cited (A-3, `CLAUDE.md`'s weighting, the Editorial Template's symmetry table, the Delta Mechanic Spec) | Named in four places, defined in none. See I4 |
+| The article aesthetic/polish pass (`aesthetic-suggest.js`) as a designed feature | No governing spec. Two docs name the file in passing; neither specifies it. See J1 |
 
 ---
 
@@ -497,6 +499,54 @@ One of its four inputs, `stage25Quality`, has no comment-side spec to source it 
 `docs/Dialecta_Discourse_Layer_UX.md` has no Stage 2.5, confirmed by grep; only the article side
 does. Full account: `2026-dialecta-classification-weighting-provenance.md`.
 
+### I4. A fourth document assumes a comment-side Stage 2.5, and none of the four defines it
+
+`docs/Dialecta_Delta_Mechanic_Spec.md` line 33 and line 160 both reference "Stage 2.5" as an
+existing step in comment classification ("mirror the comment classification system's Stage 1 /
+Stage 2 / Stage 2.5 / Stage 3 structure"; a DELTA ACKNOWLEDGED comment "passes through the normal
+classification engine (Stage 1 → Stage 2 → Stage 2.5)"). The spec's own mechanic is six stages
+labeled A through F and is a different system, article-level position tracking, not comment
+classification. It never says what a commenter sees or does at a comment-side Stage 2.5.
+
+That makes four citations of a comment-side Stage 2.5 and zero definitions of one: this spec,
+`docs/plans/backlog.md` A-3 ("Discourse Layer UX, Stage 2 and 2.5"), root `CLAUDE.md`'s locked 10
+percent for "Stage 2.5 response quality," and `Dialecta_Article_Editorial_Template.md`'s symmetry
+table (line 33: `| **2.5** | **Amendment Window** | **Amendment Window** |`). The Editorial
+Template is the only document that ever writes out Stage 2.5 content, and its detailed section
+("## Stage 2.5 — The Amendment Window," from line 94) describes only the article side: Amend,
+Respond for the Record, Post As-Is, `amend_until`. Full account:
+`2026-dialecta-delta-mechanic-spec.md`.
+
+---
+
+## J. A feature with working production code and no governing spec
+
+### J1. `aesthetic-suggest.js` is real, deliberate code. No spec in `docs/` designs it.
+
+`_recovered/api/article/aesthetic-suggest.js`, flagged by `designer`
+(`2026-09-19-005-blindspot-aesthetic-suggest-exists-in-production.md`): a Haiku-backed article
+polish engine, four levels (light, standard, editorial, custom), server-side at submit time,
+`polished_html` plus `change_log` output, byte-for-byte prose preservation outside a fixed set of
+policy transforms (punctuation hygiene, a hard one-way em-dash and en-dash removal policy, smart
+quotes, layout-cruft removal, sources-section and pseudo-header tagging, and at higher levels
+thematic breaks, pullquote extraction, list conversion, emphasis additions).
+
+`docs/Dialecta_Article_Editorial_Template.md`, the document that specs what happens when an author
+submits an article, never mentions it. Grepped for "polish," "aesthetic," "pullquote," "thematic
+break," "change_log," "em-dash": zero hits, every term.
+
+Two documents name the file without designing it. `Dialecta_Tuning_Engine_Spec_v1.md`, section "5.
+Polish Engine (future)," treats it as existing, "TUNING-marked" code and scopes only a future
+admin panel to expose its length budgets, suggestion caps, and distribution rules as knobs, v3
+priority. `Dialecta_Project_Index.md`'s own build-log entries (its running session history, not a
+governing section) record after the fact that Polish v2 shipped with four levels, server-side at
+submit, byte-for-byte preservation, matching the code closely, which is history, not a spec that a
+builder could build from or a reviewer could check code against.
+
+Backlog A-10 and A-11 cite the Article Editorial Template as their governing spec; that spec is
+silent on this entire feature. A builder working A-10 from the cited spec alone would not know
+this code, or the design intent behind it, exists.
+
 ---
 
 ## What this map does not cover
@@ -508,4 +558,5 @@ does. Full account: `2026-dialecta-classification-weighting-provenance.md`.
   `exchange/open/2026-09-19-001` own that question.
 
 *Filed 2026-09-19. Read against commit `9a355c0`. Re-verify line numbers after any spec edit;
-D3 is what happens when they move. Section I appended 2026-09-20.*
+D3 is what happens when they move. Section I appended 2026-09-20. I4 and section J appended
+2026-09-20, Mission Zero pass.*

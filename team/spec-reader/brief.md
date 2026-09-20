@@ -15,17 +15,22 @@ for the mandate; this file is the state of the training and what comes next.
 
 ## Where it is now
 
-Nineteen practices, ten filed notes, two standing artifacts (`drift-map.md`, `design-tensions.md`).
-Two sprints run: 2026-09-19 against commit `9a355c0` (five seed leads, four filed clean, one
-corrected), and 2026-09-20 (the six leads that were left open, all filed, none dead).
+Twenty-two practices, twelve filed notes, two standing artifacts (`drift-map.md`,
+`design-tensions.md`). Three passes run: 2026-09-19 against commit `9a355c0` (five seed leads, four
+filed clean, one corrected), 2026-09-20 (the six leads left open, all filed, none dead), and a third
+2026-09-20 pass answering Mission Zero's exchange drain directly rather than a self-directed sprint.
 
 The drift map exists: `knowledge/drift-map.md`. It covers the ADR overrides (sections A to C), the
 index's six internal defects (D), the retired vocabulary sweep in four classes (E), a locked decision
-that no spec states (F), two table name collisions (G), the cloud only files (H), and, new this
-sprint, a fourth kind of drift entirely (I): a spec whose own shipped implementation quietly replaced
-its rules, and a spec whose own status line hedges a name root `CLAUDE.md`'s lock treats as settled.
+that no spec states (F), two table name collisions (G), the cloud only files (H), a fourth kind of
+drift (I): a spec whose own shipped implementation quietly replaced its rules, a spec whose own
+status line hedges a name root `CLAUDE.md`'s lock treats as settled, and, found closing the Mission
+Zero exchange records, a fourth document that cites a comment-side Stage 2.5 without defining it
+(I4). Section J is new and a different class again: a feature with working, deliberate production
+code and no governing spec anywhere in `docs/` (`aesthetic-suggest.js`, the article polish engine).
 Lead with its quick reference table before quoting any spec on stack, identity, articles, vocabulary,
-classification weighting, the axis-mapping trigger rules, or Stance/Breach naming.
+classification weighting, the axis-mapping trigger rules, Stance/Breach naming, a comment-side Stage
+2.5, or the article aesthetic pass.
 
 The three deferred tensions are answered in `knowledge/design-tensions.md`, with both sides cited and
 none resolved. Tension 1 (archetype against the three voice principle) now has independent
@@ -51,22 +56,37 @@ real, cited both, did not resolve it. Added the `resolution.ts` evidence to the 
 on classification weighting. Cast a ballot on the council-guard vote now that a research sprint, the
 vote's own stated unblock condition, has run.
 
+**Mission Zero pass, 2026-09-20.** Answered all four exchange records addressed to this seat.
+Closed the last seed-batch lead: `Dialecta_Delta_Mechanic_Spec.md` is not a comment-side Stage 2.5,
+it is a fourth document that cites one without defining it (`builder`'s
+`2026-09-20-builder-01-blindspot-discourse-stage-2-5-missing.md`, now `drift-map.md` I4). Corrected
+this seat's own earlier hedge on `advice-a1-composer-request-path` after a full read of
+`Dialecta_Supabase_Scaling.md`: that document endorses the blocking design Stage 1 specifies, it
+does not justify A-1's enqueue design, which moves the open question from spec-reading to a product
+call only Dan or `decider` can make. Answered `designer`'s direct question on
+`2026-09-19-005`: no spec in `docs/` designs the article aesthetic pass; working production code
+exists for a feature nobody wrote a governing spec for (`drift-map.md` J1, new section). Reframed
+this seat's own open blindspot on the 40/35/15/10 classification weighting
+(`2026-09-19-002-blindspot-adr-spec-drift.md`) into a form the Council can debate, per Dan's
+instruction not to resolve it from this seat. Checked the council-guard vote before touching it:
+already cast, did not re-vote.
+
 Nothing in `docs/`, `apps/`, or `packages/` was edited. Everything above is reported, not fixed.
 Corrections still owed to files this agent cannot write: root `CLAUDE.md` line 83 and its cloud only
 list, `docs/Dialecta_Project_Index.md` on four counts plus the ten omitted specs,
-`docs/plans/backlog.md` P0-5 and A-4's spec citations, and whichever spec should carry the
-classification weighting, if one ever does.
+`docs/plans/backlog.md` P0-5 and A-4's spec citations, A-3's Stage 2.5 citation (now confirmed
+unspecified four ways over), and whichever spec should carry the classification weighting or the
+aesthetic pass, if either ever does.
 
 ## Next three
 
 1. `docs/Dialecta_Editorial_Voice.md` v1.2 end to end, as a constraint on this agent's own output.
-   Carried over from the seed batch, the one lead not yet worked.
-2. `docs/Dialecta_Delta_Mechanic_Spec.md` in full, to confirm or correct whether it is where a
-   comment-side Stage 2.5 actually lives, which would close part of the gap
-   `2026-dialecta-classification-weighting-provenance.md` found.
-3. `packages/core/src/classification.ts` against the Classification Engine Spec's Stage A fields,
+   Carried over from the seed batch, the one lead still not worked.
+2. `packages/core/src/classification.ts` against the Classification Engine Spec's Stage A fields,
    the natural next place to check for the kind of spec-versus-code drift `axis-mapping.ts` turned
    out to have.
+3. `docs/Dialecta_Data_Architecture.md` in full. Cited piecemeal across drift-map A1, A2, B1, B2,
+   C3, and G2, never read end to end or filed as its own source.
 
 ## What this agent posts to the exchange
 

@@ -24,6 +24,9 @@ Evidence names the file in `knowledge/` that backs it, or `(unsourced)` when not
 | A locked decision can outrun its own governing spec into shipped code. Check `packages/core` for a `CLAUDE.md`-cited constant before calling a locked value merely undocumented | high | `knowledge/2026-dialecta-classification-weighting-provenance.md` | 2026-09-20 |
 | A spec's own status line can contradict a later locked-decisions summary of the same fact. Both are real; cite both and name which document is being asked | medium | `knowledge/2026-dialecta-tier-psychology.md` | 2026-09-20 |
 | `drift-map.md` D5's one-line guesses at what an omitted spec owns are a starting point, not a citation. Read the file before repeating the guess | high | `knowledge/2026-dialecta-omitted-specs-map.md` | 2026-09-20 |
+| A document's own heading or topic sentence is not the document. A hedge built on the heading alone can reverse completely once the body is read; read the full document before citing it as support, even under time pressure from another agent's blocking question | high | `2026-09-19-002-advice-a1-composer-request-path.md`, correction dated 2026-09-20 | 2026-09-20 |
+| Naming a file and designing a feature are different claims. A spec that references another artifact by name (a "TUNING-marked" file, an API route) is not a spec for that artifact's behavior. When asked whether a spec "describes" something, check for design content, not just a mention | high | `drift-map.md` J1 | 2026-09-20 |
+| When a spec-versus-backlog disagreement turns out to be spec-versus-spec-versus-backlog, with every governing document on one side, the leftover question is no longer which citation is right. It is whether the outlying artifact encodes real undocumented intent, which only Dan or decider can settle | high | `2026-09-19-002-advice-a1-composer-request-path.md` | 2026-09-20 |
 
 ## What moved 2026-09-19, and why
 
@@ -54,3 +57,20 @@ significantly wider than written: the Axis Mapping lead asked only about Ghost-e
 the answer included a full scoring-scheme divergence the lead did not anticipate, and the
 weighting-provenance lead asked where a number came from and the answer became "it is now code, not
 just a locked bullet." Read a lead as a question to verify, not as a bound on what the note covers.
+
+## What moved 2026-09-20, Mission Zero pass
+
+Three new practices, all sourced to answering four exchange records addressed to this seat directly
+rather than to a self-directed reading-list sprint. The exchange forced two corrections a standing
+sprint would not have: a prior hedge in `2026-09-19-002-advice-a1-composer-request-path.md`, that
+`Dialecta_Supabase_Scaling.md`'s connection-saturation section might justify backlog A-1's async
+design on the merits, was built on the section heading alone and reversed completely on a full
+read, the document's own write-amplification table and its "already working in your favor" section
+both endorse the blocking design Stage 1 specifies. And `designer`'s direct question, whether any
+spec describes the article aesthetic pass, needed the new distinction between a document naming a
+file and a document designing what it does; `Dialecta_Tuning_Engine_Spec_v1.md` does the former for
+`aesthetic-suggest.js` and could be misread as the latter under time pressure.
+
+The last seed-batch lead, `Dialecta_Delta_Mechanic_Spec.md`, closed clean and came back worse than
+queued: not a comment-side Stage 2.5 definition, but a fourth document assuming one exists without
+defining it. See `knowledge/2026-dialecta-delta-mechanic-spec.md` and `drift-map.md` I4.

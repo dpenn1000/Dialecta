@@ -36,14 +36,23 @@ directly, with an algorithm no document describes.
 | filed | `docs/Dialecta_Classification_Engine_Specification.md`: the claim threshold, the 0 to 3 spectrum, the tier boundary rules | `2026-dialecta-classification-engine-spec.md`. Filed clean. **New finding:** the spec does not cover final-tier resolution at all, though backlog row A-4 cites it for exactly that |
 | filed | Where the classification weighting percentages in root `CLAUDE.md` came from | `2026-dialecta-classification-weighting-provenance.md`. Confirmed: no spec, anywhere. **New since the lead was written:** the numbers are now implemented in `packages/core/src/resolution.ts`, sourced from `CLAUDE.md` directly, and the resolution algorithm itself has no prose spec at all |
 
+## Worked 2026-09-20, Mission Zero pass
+
+One seed lead closed, plus one unqueued finding filed as a byproduct of answering the exchange
+directly (`exchange/README.md`'s learning loop: a record that closes without teaching anyone
+something was overhead).
+
+| State | Lead | Outcome |
+| --- | --- | --- |
+| filed | `docs/Dialecta_Delta_Mechanic_Spec.md` in full, to confirm or correct whether it is where a comment-side Stage 2.5 lives | `2026-dialecta-delta-mechanic-spec.md`. **Confirmed false, and worse than the lead framed it.** Not a Stage 2.5 definition; it is a fourth document that cites "Stage 2.5" as an existing comment-classification step (twice) without ever defining it. `drift-map.md` I4 |
+| filed (unqueued) | Whether any spec in `docs/` describes the article aesthetic/polish pass, asked directly by `designer` in `2026-09-19-005-blindspot-aesthetic-suggest-exists-in-production.md` | `drift-map.md` J1. No governing spec. Two documents name `aesthetic-suggest.js` in passing (`Dialecta_Tuning_Engine_Spec_v1.md`, `Dialecta_Project_Index.md`'s build log); neither specifies its design. Working production code for a feature nobody wrote a spec for |
+
 ## Open
 
-One lead left from the seed batch, plus new leads found while working the six above. Each one is a
-question this agent will be asked and cannot currently answer from a filed note.
+Two leads left from the seed batch and the six worked 2026-09-20.
 
 | State | Lead | Why this agent needs it |
 | --- | --- | --- |
 | todo | `docs/Dialecta_Editorial_Voice.md` v1.2 as a constraint on this agent's own output | This agent writes notes that Voice v1.2 governs. It has never read the governing spec end to end, only run the regex subset in `scripts/voice_check.py` |
-| todo | `docs/Dialecta_Delta_Mechanic_Spec.md` in full | Only ever read in fragments, via `design-tensions.md` Tension 3. Builder's advice record `2026-09-19-002-advice-a1-composer-request-path.md` cites it as describing the comment flow as Stage 1, 2, 2.5, 3, which would be the only place a comment-side Stage 2.5 is named anywhere. If true, it closes part of the gap `2026-dialecta-classification-weighting-provenance.md` found in `Dialecta_Discourse_Layer_UX.md`. Not yet confirmed by a direct read |
 | todo | `packages/core/src/classification.ts` against `docs/Dialecta_Classification_Engine_Specification.md`'s Stage A output fields | `axis-mapping.ts` turned out to implement a different scheme than its own spec, undocumented (`2026-dialecta-axis-mapping-v1.md`). `classification.ts` is the natural next file to check for the same kind of drift, since `axisDeltasFor()` takes a `ClassificationResult` from it as its only input |
 | todo | `docs/Dialecta_Data_Architecture.md` in full | Cited more than almost any other spec, piecemeal, across `drift-map.md` A1, A2, B1, B2, C3 and G2. Never read end to end or filed as its own source, despite being the file every entity-table and identity-type question eventually routes to |
