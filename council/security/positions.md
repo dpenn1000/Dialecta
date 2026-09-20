@@ -38,6 +38,12 @@ against what they cost, and each names the note that backs it. None of them is d
 | Treat any MFA claim on a future insurance application as a statement about scope, and answer it from what is actually enforced | high | In Travelers v. International Control Services the insurer rescinded the policy rather than denying a claim, because the application overstated where MFA applied. Enrolment is not enforcement, and in Supabase the difference is whether a restrictive policy reads the `aal` claim | `2022-travelers-mfa-warranty-rescission.md`, `2026-supabase-auth-mfa.md` |
 | Decide P0-D2 with the verification question answered rather than assumed | medium | Automatic identity linking by email is on by default in Supabase, and neither Supabase doc states whether an unverified Google email can trigger it. If it can, then Google sign in is an account takeover path for any address a contributor already used | `2026-supabase-google-oauth.md` |
 
+### Per debate
+
+| Debate | File | Standing |
+| --- | --- | --- |
+| The Next.js rebuild | [positions/nextjs-rebuild.md](positions/nextjs-rebuild.md) | Written 2026-09-20 ahead of the mission. Eleven sections. The load bearing one is the first: the two migrations the rebuild starts from carry 30 policies and zero `GRANT` or `REVOKE`, so column privileges are the thing that turns reviewer blocker B2 from a policy bug into an impossibility |
+
 ## What this agent does not hold
 
 Defamation, harassment and the question of which obligations the platform owes at all. Those are
