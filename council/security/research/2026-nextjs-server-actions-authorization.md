@@ -1,0 +1,22 @@
+# Server Actions as a public HTTP endpoint
+
+**Source:** Next.js (Vercel), "Guides: Data Security", official documentation, read 2026-09-20, together with the original post "How to Think About Security in Next.js" (Sebastian Markbage, October 23, 2023). https://nextjs.org/docs/app/guides/data-security ; https://nextjs.org/blog/security-nextjs-server-components-actions
+
+## Summary
+
+Every part of the claim is confirmed directly in the current docs, in close to the same words. The Data Security guide states it as a fact about the framework's default behavior, not a warning about misuse: "By default, when a Server Action is created and exported, it is reachable via a direct POST request, not just through your application's UI. This means, even if a Server Action or utility function is not imported elsewhere in your code, it can still be called externally." That second sentence answers the admin-only-component question directly. Importing an action only into a gated component does not protect it. The action is reachable by anyone who has the id, regardless of which component imports it, because the id is a property of the build, not of the import graph.
+
+Two built-in protections exist and both are described with an explicit limit on what they buy. Secure action ids: "Next.js creates encrypted, non-deterministic IDs to allow the client to reference and call the Server Action. These IDs are periodically recalculated between builds." Dead code elimination: "Unused Server Actions (referenced by their IDs) are removed from client bundle to avoid public access." The docs immediately qualify both: "This security improvement reduces the risk in cases where an authentication layer is missing. However, you should still treat Server Actions as reachable via direct POST requests and verify authentication and authorization inside each one."
+
+Closures are encrypted, not only obfuscated, and the docs are precise about the threat model: "To prevent sensitive data from being exposed to the client, Next.js automatically encrypts the closed-over variables. A new private key is generated for each action every time a Next.js application is built." Then the same caveat pattern again: "We don't recommend relying on encryption alone to prevent sensitive values from being exposed on the client." The 2023 post adds a detail the current guide does not restate: values passed with `.bind()` instead of a closure are not encrypted at all, and must be validated as hostile input the same as a closure or a form field.
+
+The worked example in the current guide is the clearest statement of the whole finding: a page-level redirect for non-admins sits directly above a form whose action still deletes all records if invoked directly, because "the page-level redirect on line 6 controls which UI is rendered, but the Server Action is a separate entry point and must verify the caller on its own."
+
+## Implies for Dialecta
+
+- No file in `apps/web` currently has a `'use server'` directive (confirmed by search across `apps/web/src` on 2026-09-20), so this is a standard to build to from the start rather than a retrofit. Every Server Action written for comments, votes, the Thinking Fingerprint, or the article editor needs its own auth and ownership check inside the action body, not a gated page or a hidden button around the form that calls it.
+- Put the check inside `apps/web/src/lib/supabase` or a new data access module next to it, following the Data Access Layer pattern the docs recommend, so the current user is resolved once per action rather than trusted from a prop or from whatever rendered the form.
+- This is the same shape as the write-side finding already filed against `supabase/migrations/20260919000000_foundation.sql`: `comments.final_tier`, `comments.status`, `articles.status`, and `aspirations.expires_at` are all writable by their own owner because the for-update policy only checks the row, not the column (`team/reviewer/knowledge/2026-postgresql-create-policy.md`, blockers B1 and B2 in `exchange/open/2026-09-19-002-handoff-pr-3-review.md`). RLS is the database's version of "the page did not render the button." A Server Action calling into that table needs its own authorization check for the same reason the database needs a column grant; one does not cover for the other.
+- If any action uses `.bind()` to carry an id (for example a delete or vote action bound to a specific row id), treat that id as unencrypted and re-validate it server side. It travels to the client in the clear, unlike a closure.
+
+*Filed 2026-09-20*

@@ -1,0 +1,24 @@
+# CVE-2025-29927, the Next.js middleware authorization bypass
+
+**Source:** Vercel, "Postmortem on Next.js Middleware bypass", Vercel Blog, read 2026-09-20, corroborated against GitHub Security Advisory GHSA-f82v-jwr5-mffw and the NVD entry for CVE-2025-29927. https://vercel.com/blog/postmortem-on-next-js-middleware-bypass ; https://github.com/advisories/GHSA-f82v-jwr5-mffw ; https://nvd.nist.gov/vuln/detail/CVE-2025-29927
+
+## Summary
+
+The CVE id, mechanism, and the claim it should be checked against are all confirmed. CVE-2025-29927 is real, assigned GHSA-f82v-jwr5-mffw, published March 21, 2025, CVSS 3.1 score 9.1 (critical), vector AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N, classified under CWE-863 (Incorrect Authorization) as primary and CWE-285 (Improper Authorization) as secondary per NVD. The mechanism: Next.js used an internal x-middleware-subrequest header to detect and prevent Middleware recursion. Vercel's own postmortem states it plainly: "Next.js uses an internal x-middleware-subrequest header to detect and prevent recursion, and bypass the execution of Middleware." A request carrying a forged copy of that header could make Next.js skip Middleware entirely, so any authorization check placed only in Middleware never ran.
+
+Patched versions, read directly from the GitHub advisory: 12.x at 12.3.5, 13.x at 13.5.9, 14.x at 14.2.25, 15.x at 15.2.3. Dialecta's pinned next@15.5.25 is well past 15.2.3 and is not affected.
+
+One place NVD and GHSA disagree with each other, not with the original claim: GHSA lists 11.x as having no patched version at all, only a workaround (block the header at the edge). NVD's own description folds 11.x into the 12.x range as one continuous span, "11.1.4 <= version < 12.3.5", which reads as though upgrading to 12.3.5 fixes an 11.x app. It does not; an 11.x app has no fixed version to move to and needs the header-blocking workaround or an upgrade past 11.x entirely. Neither source is wrong about Dialecta, since apps/web is on 15.x, but the two disagree with each other on this point.
+
+The critical downstream question is confirmed three ways rather than one. Vercel's postmortem states it directly: "We do not recommend Middleware to be the sole method of protecting routes in your application." The current Next.js Authentication guide restates the same rule independently: "While Proxy can be useful for initial checks, it should not be your only line of defense in protecting your data. The majority of security checks should be performed as close as possible to your data source." This is architectural guidance that holds regardless of patch status, not only a lesson from one incident.
+
+One correction to file separately from the CVE itself: every current Next.js code sample for this file, including the CSP nonce guide and the Authentication guide, is written against proxy.ts, the name Next.js 16.0.0 (October 21, 2025) gave this file. The convention arrived in 16.0.0, so no release on the 15.5 line carries it whatever its patch number. Do not reason from the patch date: 15.5.25 is a late patch on a line that was maintained past the 16.0.0 release, so it can postdate the rename in calendar time while still not implementing it. What decides the filename here is the major version, which is 15.
+
+## Implies for Dialecta
+
+- `apps/web` has no `middleware.ts` today (confirmed absent from `apps/web` on 2026-09-20), so there is nothing yet for this CVE to bypass. The finding is about the file Dialecta is about to create, not one that exists.
+- When `apps/web` gets its first middleware, on `next@15.5.25` the file has to be named `middleware.ts` with an exported `middleware` function, not `proxy.ts`. Next.js only recognizes `proxy.ts` starting at 16.0.0. A `proxy.ts` file dropped into this app today would be inert, never invoked, and any auth check inside it would silently never run. Every current official code sample, including the ones cited in `2026-nextjs-security-headers-csp.md` and in `2026-nextjs-csp-nonce-strict-dynamic.md`, is written for `proxy.ts` and needs renaming back to `middleware.ts` before use here.
+- Whatever P0 auth work builds first, do not let `middleware.ts` be the only place a route gets gated. This is the same shape of mistake already found one layer down, in the database: an owner-writes-own-row policy that does not stop at the row it should (`team/reviewer/knowledge/2026-postgresql-create-policy.md`). Re-check authorization inside the Server Action or Route Handler itself, per `2026-nextjs-server-actions-authorization.md`.
+- Confirm the deployed version stays current once this app ships. Patches for this class of bug shipped as forced out-of-cycle backports outside normal LTS policy (13.5.9 and 12.3.5 both did), so a pinned version that falls behind on patch releases is a real way to walk back into a bug of this shape, not only this specific one.
+
+*Filed 2026-09-20*

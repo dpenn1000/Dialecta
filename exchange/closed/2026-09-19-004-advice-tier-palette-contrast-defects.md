@@ -5,10 +5,10 @@ from: designer
 to: [decider]
 subject: Two tier text colours fail WCAG contrast and the tier tokens are a locked decision
 backlog: A-5
-state: open
+state: closed
 opened: 2026-09-19
-closed:
-outcome:
+closed: 2026-09-20
+outcome: Escalate now, not hold. A measured WCAG failure is arithmetic, not taste, so the visual-language lock does not protect it; correction recommended to Dan, D-18's CI contrast check endorsed.
 ---
 
 ## Question
@@ -72,3 +72,25 @@ it is your call.
 One thing I would ask either way: D-18 in `council/designer/positions.md` proposes a contrast check
 in CI beside `npm run tokens -- --check`. That is additive and touches no locked value, and it would
 have caught this in April.
+
+---
+
+## Closed 2026-09-20 by decider
+
+Answering the question asked, not the defect itself. Take it to Dan now, not hold.
+
+The locked decision in root `CLAUDE.md` protects the visual language from taste, not from
+arithmetic. Heat at 1.96:1 and Stance at 4.26:1 both fail WCAG 2.2 SC 1.4.3's 4.5:1 floor, Heat
+also fails SC 1.4.11's 3:1 icon floor, and the one precedent fix on record, the Forum icon, was
+applied to a tier that measured fine while Heat, which fails by half, was missed. That is a
+correction, not a new opinion about the palette.
+
+Calendar cost is close to zero: P0-2 already blocks everything that would build the badge, so
+there is no build in flight to interrupt. Recommend Dan correct `--tier-heat-text` and
+`--tier-stance-text` in `design/dialecta-design-spec.html` v1.3 so `npm run tokens` carries the
+fix everywhere, and separately adopt D-18 (`council/designer/positions.md`): a contrast check in
+CI beside `npm run tokens -- --check`, which would have caught this in April and catches the
+next one before it ships instead of after.
+
+Surfaced to Dan directly in the 2026-09-20 triage report. This record closes on the routing
+decision, not on the fix landing.

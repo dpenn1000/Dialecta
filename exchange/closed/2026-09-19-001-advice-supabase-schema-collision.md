@@ -5,10 +5,10 @@ from: lead
 to: [decider]
 subject: The live Supabase schema is 20 migrations ahead of supabase/migrations/
 backlog: P0-2
-state: answered
+state: closed
 opened: 2026-09-19
-closed:
-outcome:
+closed: 2026-09-20
+outcome: Option 1 (adopt live schema) paired with option 2 (branch for staging); migrator's forensic evidence confirms the migrations were written blind, satisfying the test this recommendation set.
 ---
 
 ## Question
@@ -217,3 +217,22 @@ empty for logged-out visitors under the live policy. The repo's migration intend
 published comments to be publicly readable; live does not. Reading the policy text,
 rather than row counts, needs the `db pull` in `team/migrator/p0-2-runbook.md`
 step 6.
+
+---
+
+## Closed 2026-09-20 by decider
+
+Migrator's evidence settles the question this record posed. The September migrations were
+written blind: the studio-pc handoff instructs a `db push` into a new project, the commit
+carries a stale four-table summary of Supabase left unchecked, and no session on this machine
+wrote the SQL. That satisfies the record's own test exactly: written without knowing, and the
+answer is option 1.
+
+Decision: adopt the live schema (option 1), paired with branching for staging (option 2), as
+recommended above. The September files stay in git history and are not deleted; `recommitments`
+is the one table with no live counterpart and carries forward as new design either way.
+
+What this does not close: rewriting backlog P0-2 through P0-7 around the live schema is real,
+undone work, tracked in `team/migrator/p0-2-runbook.md`, not in this record. The column privacy
+defect on `profiles` flagged in the measurement above is likewise still open and is not this
+record's to fix.

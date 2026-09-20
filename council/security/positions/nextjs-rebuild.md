@@ -285,25 +285,80 @@ None of these is a blocker. All of them are a paragraph now and a migration late
   `throw new Error(\`articles query failed: ${error.message}\`)`, which is fine for a query error and
   worth a second look once the same pattern wraps a write that includes user input.
 
-## 10. Framework specifics, in verification
+## 10. Framework specifics
 
-Held back rather than written from memory, because this seat's first practice is to cite what was
-read. Six items are being checked against primary sources and will be filed as notes in
-`council/security/research/` before they appear here as recommendations:
+Six notes filed in `council/security/research/`, all verified against primary sources.
 
-- Whether middleware can be relied on as an authorization boundary in Next.js 15.5.25, and the
-  version range of the middleware bypass advisory I believe exists. If it holds, the conclusion is
-  that auth checks belong in the data access layer and middleware refreshes sessions only.
-- Server Actions as public HTTP endpoints, and what Next.js's own guidance says about each one
-  needing its own check regardless of which component imports it.
-- The `server-only` package and the React taint API. `apps/web/src/lib/articles.ts` says
-  "Server-only" in a comment today, which is documentation rather than a build error.
-- The current official CSP recipe with a nonce, and its cost: a nonce forces dynamic rendering,
-  which is a real tradeoff against a mostly static publication.
-- `getClaims()` against `getSession()` against `getUser()` in `@supabase/ssr` server side, and which
-  of them actually verifies the JWT rather than trusting a cookie.
-- Whether a `security_invoker` view is Supabase's own recommended shape for the public profile
-  projection in section 3, and the traps in it.
+**The filename trap, which is the one that would cost a day.** Next.js renamed `middleware.ts` to
+`proxy.ts` in 16.0.0. `apps/web` is on 15.5.25, a patch on the 15.5 line, and the convention arrived
+in a major version rather than a date, so no 15.5 release carries it whatever its patch number.
+Every current official sample, for the CSP nonce recipe, the Authentication guide and the CVE
+mitigation alike, is written as `proxy.ts` exporting `proxy`. Copied verbatim into this app that
+file is never invoked. An authorization check inside it would silently never run, and nothing in a
+build, a type check or a code review would say so. Copy the logic, rename the file and the export.
+
+**Middleware is not an authorization boundary, and this is settled independently of any CVE.**
+CVE-2025-29927 let a request skip middleware entirely with an `x-middleware-subrequest` header. It
+was fixed in 15.2.3, so 15.5.25 is patched and this is not a live vulnerability here. The
+architectural rule outlives the patch and is stated by two sources rather than one. Vercel's
+postmortem: "We do not recommend Middleware to be the sole method of protecting routes in your
+application." The current Next.js Authentication guide: "it should not be your only line of defense
+in protecting your data. The majority of security checks should be performed as close as possible
+to your data source."
+
+That lines up exactly with section 1. Middleware refreshes the Supabase session and does nothing
+else. Authorization lives in the data access layer, next to the query.
+
+**Server Actions are public HTTP endpoints.** Anyone who knows the action id can call one. Next.js
+says so in its own docs, and the consequence is the part people miss: importing an action into a
+component that only renders for admins does not protect the action. Every Server Action carries its
+own authorization check, in its own body, as its first statement. In this rebuild that is not a
+detail, because section 1 routes every trust carrying write through a Server Action. Those actions
+are the new perimeter.
+
+**Adopt `server-only`, skip the taint API.** `apps/web/src/lib/articles.ts` opens with a comment
+saying "Server-only: uses the cookie-aware server client." A comment is documentation. The
+`server-only` package makes the same statement a build error the moment a client component imports
+the module. It belongs at the top of every module that touches privileged columns or a service key.
+React's taint API is a different answer to a related question and is not ready: Next.js's own
+documentation calls it not recommended for production, and it would not have prevented the
+`profiles` column leak anyway, because that leak is a grant, not a value crossing a boundary.
+
+**On CSP, start simpler than a nonce.** The instinct is to reach for the nonce recipe. The filed
+note argues against it for now and I agree with it: nothing in `apps/web` renders an inline script
+today, no analytics and no tag manager, so a static header set in `next.config.ts` costs nothing and
+`unsafe-inline` is not being paid for something nobody is using. Two facts to keep for when the
+Tiptap editor makes a nonce necessary. The policy needs `strict-dynamic` rather than a host
+allowlist, or Next.js's own chunked script loading breaks under it. And every page carrying a nonce
+becomes dynamically rendered, which on a publication that is mostly static pages is a real cost
+rather than a formality.
+
+**`apps/web/src/lib/supabase/server.ts` is already right, checked rather than assumed.** Its
+`getAll` and `setAll` pattern, including the try that swallows the Server Component cookie write,
+matches Supabase's guide almost word for word. Nothing to fix there. The gap is upstream: there is
+no middleware at all, so nothing refreshes the session on a request, and that is the one job a
+Server Component's try/catch cannot do. When auth is built, that file comes before `server.ts` does
+anything beyond read a cookie nobody is renewing.
+
+Wherever the app reads who the contributor is, call `getClaims`. Not `getSession`, and not `getUser`
+by default. Reach for `getUser` when the check needs the live Auth record, such as confirming an
+account has not been banned since the token was issued.
+
+Versions, since the manifest is misleading here. `apps/web/package.json` says `^2.0.0`, and the
+installed `@supabase/supabase-js` is 2.116.0 with `@supabase/ssr` at 0.12.7. That clears the 2.105.0
+floor passkeys need, so passkeys are a live option for P0-D2 rather than an upgrade. What is not
+established is the minimum version for getClaims's local verification path, and recency is not
+evidence of sufficiency.
+
+**Column level security is confirmed as the mechanism for section 1, with one caveat.** Supabase
+documents column scoped `REVOKE` and `GRANT` for the write leak and a `security_invoker` view for
+the read projection, which is the shape section 3 proposes. The caveat is worth carrying: Supabase's
+own page only works the UPDATE case and never shows a SELECT column restriction, so the SELECT half
+rests on general Postgres `GRANT` semantics rather than a Supabase worked example. It holds, and it
+is one step further from the documentation than the UPDATE half.
+
+The filed note also reaches section 2's ordering independently: both the view and the column grants
+have to land with the policy change rather than after it.
 
 ## 11. What I need decided
 

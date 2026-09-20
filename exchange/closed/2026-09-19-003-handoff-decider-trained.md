@@ -5,10 +5,10 @@ from: decider
 to: [lead]
 subject: decider trained; P0-D2 framed, council composition and mandates waiting on Dan
 backlog: P0-D2
-state: open
+state: closed
 opened: 2026-09-19
-closed:
-outcome:
+closed: 2026-09-20
+outcome: Superseded. "lead" is now "convener" per docs/GLOSSARY.md, and convener has since dispatched security and legal and recovered the deployment artifact. Open items live on in team/decider/practices.md and brief.md, not lost by this close.
 ---
 
 ## Done
@@ -108,3 +108,20 @@ and finish what they start. The overlap is deliberate and the difference is the 
 brings. Recorded in the mandates frame; `decider` had proposed a boundary and was overruled.
 
 When the roster rules and the charters settle, both frames become ADR-004 together.
+
+---
+
+## Closed 2026-09-20 by decider
+
+The role this handoff addressed, `lead`, is retired. `docs/GLOSSARY.md`, written today, renames
+it `convener`. The convener has since acted well past what this handoff reported: it dispatched
+`security` and `legal`, recovered the deployment artifact into `_recovered/`, and posted its own
+handoff back to this seat (`exchange/open/2026-09-20-convener-01`). The transfer this record
+exists to make happened.
+
+One item in the original "Waiting on Dan" table is now settled: whether the September
+migrations were written knowing about the live schema is resolved on the evidence in
+`exchange/closed/2026-09-19-001`. The rest, the council mandate and composition frames and the
+ADR `## Holds while` field, are still Dan's and still open. They are not lost by this close:
+they are carried live in `team/decider/practices.md` and `team/decider/brief.md`, which this
+handoff's own content was already folded into, rather than only in this dated snapshot.

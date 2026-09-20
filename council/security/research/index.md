@@ -67,6 +67,20 @@ cannot reproduce from a search.
 | [2026-nextjs-security-headers-csp.md](2026-nextjs-security-headers-csp.md) | Next.js CSP guide, `OWASP/www-project-secure-headers` | The `headers()` the reviewer's should-fix asks for in `apps/web/next.config.ts`. Nonce path unnecessary while there are no inline scripts |
 | [2026-owasp-standards-for-dialecta.md](2026-owasp-standards-for-dialecta.md) | `OWASP/ASVS`, `OWASP/CheatSheetSeries`, the LLM Top 10 project | Which sheets match findings already on record. The LLM Top 10 repo named in the lead is now a legacy archive, superseded by `GenAI-Security-Project/GenAI-LLM-Top10` |
 
+## The Next.js rebuild
+
+Filed 2026-09-20 ahead of the rebuild. The position they support is
+[positions/nextjs-rebuild.md](../positions/nextjs-rebuild.md).
+
+| File | Source | Implies for |
+| --- | --- | --- |
+| [2026-nextjs-middleware-cve.md](2026-nextjs-middleware-cve.md) | Vercel postmortem, GHSA-f82v-jwr5-mffw, NVD CVE-2025-29927 | 15.5.25 is patched, so this is not live. The rule outlives the patch: middleware is never the sole gate. Carries the `proxy.ts` rename trap, which arrived in 16.0.0 and would make a copied sample inert here |
+| [2026-nextjs-server-actions-authorization.md](2026-nextjs-server-actions-authorization.md) | Next.js "Data Security", "How to Think About Security in Next.js" | Every Server Action is a public endpoint and needs its own check in its own body. Importing it into a gated component protects nothing |
+| [2026-react-taint-server-only.md](2026-react-taint-server-only.md) | react.dev taint reference, Next.js `taint` config, Data Security guide | Adopt `server-only` now. Taint is not recommended for production by Next.js itself, and would not have prevented the `profiles` leak, which is a grant rather than a value crossing a boundary |
+| [2026-nextjs-csp-nonce-strict-dynamic.md](2026-nextjs-csp-nonce-strict-dynamic.md) | Next.js CSP guide, MDN `script-src` | `strict-dynamic` is what makes Next's chunked loading work under a nonce, and a nonce forces dynamic rendering. Start with the static header set instead, since nothing renders inline script yet |
+| [2026-supabase-ssr-server-auth-methods.md](2026-supabase-ssr-server-auth-methods.md) | Supabase Next.js SSR guide, `getClaims` and `getUser` reference | `server.ts` is already correct. The gap is that no middleware refreshes the session. `getClaims` by default, `getUser` only for the live record. Installed versions resolved: ssr 0.12.7, supabase-js 2.116.0 |
+| [2026-supabase-column-level-security.md](2026-supabase-column-level-security.md) | Supabase "Column Level Security" and "Row Level Security" (Views) | The mechanism behind the position's section 1. Column scoped grants for the write leak, a `security_invoker` view for the read projection, both landing with the policy change rather than after |
+
 *`live-surface-inventory.md` is written by this agent rather than filed from a source, as
 `team/reviewer/knowledge/review-checklist.md` is in its own tree. It is listed here so the index is
 the whole folder.*
