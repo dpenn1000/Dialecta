@@ -12,7 +12,7 @@ numbers in them are measured; two of the estimates are known to be wrong and are
 | The axis mapping needed writing | It existed in production. Now ported, all six axes, 54 tests |
 | The Pact is a placeholder | **1,854-line template**, live, eight sections, signed by 3 |
 | The Ghost theme is lost | **Exported.** 42 files, every template |
-| The front end must be written | **76,674 lines recovered** from a fourth Vercel project |
+| The front end must be written | **~30,400 portable lines recovered** from a fourth Vercel project |
 | Articles live in Supabase | `articles` is a classification sidecar keyed on `ghost_post_id` |
 | The funnel is 269 to 6, so 17,000 visitors | **Retired.** Measured on a site with zero published comments |
 | 315 lines against 38 routes, so 6 to 10 weeks | **Re-running.** The estimate did not know a started App Router migration existed |
@@ -51,7 +51,7 @@ code.
 
 *Needs Phase 1. This is the decision the recovery forces and it cannot be argued from ignorance.*
 
-**Port or rewrite.** 76,674 lines that work, five months old, carrying Ghost assumptions that are
+**Port or rewrite.** About 30,400 portable lines that work, five months old, carrying Ghost assumptions that are
 dying, against a clean build that is 315 lines in. Every seat has a stake and none can answer it
 alone.
 

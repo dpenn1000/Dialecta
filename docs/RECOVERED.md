@@ -23,7 +23,7 @@ merging 44 recovered migrations wholesale would be the same mistake pointed the 
 | Directory | What | Size | Source |
 | --- | --- | --- | --- |
 | `_recovered/` | **The production API.** 163 files, 52 under `api/` of which 38 are real routes, plus 46 migrations, 50+ scripts and the `opinion-mapper` skill | 1.6 MB | Vercel `dialecta`, deployment `dpl_HPsXrGxyeCSCRBSHF9fBHExGjrR7` |
-| `_recovered-next/` | **The front-end source.** 113 files, 76,674 lines, 51 components under `lib/theme/`, plus a started Next.js App Router tree under `app/` | 6.1 MB | Vercel `dialecta-next`, deployment `dpl_3ZRBaGX4rKEUnuc87zAm7YHHB7VQ`, 2026-05-06 |
+| `_recovered-next/` | **The front-end source.** 113 files, 51 components under `lib/theme/` totalling about **30,400 portable lines**, plus a 43,517-line compiled `bundle.js` in a dated archive folder, plus a started Next.js App Router tree under `app/` | 6.1 MB | Vercel `dialecta-next`, deployment `dpl_3ZRBaGX4rKEUnuc87zAm7YHHB7VQ`, 2026-05-06 |
 | `_theme/` | **The Ghost theme.** `dialecta-theme v1.0.0`, 42 files: 15 Handlebars templates, 9 minified React bundles, a 3,286-line stylesheet | 6.5 MB | Ghost admin export, `www.dialecta.org` |
 
 Full analysis of all three: `docs/SITE-INVENTORY.md`.

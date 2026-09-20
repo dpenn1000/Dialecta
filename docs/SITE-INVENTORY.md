@@ -220,7 +220,7 @@ Vercel. It was, in a **fourth project nobody had mentioned**.
 all.
 
 Recovered from `dpl_3ZRBaGX4rKEUnuc87zAm7YHHB7VQ` into gitignored `_recovered-next/`. 113 files,
-zero failures. **76,674 lines of front-end source.**
+zero failures. **76,674 lines, of which 43,517 are a compiled `bundle.js` in a dated `_archive/` folder.** The real portable surface is about **30,400 lines** of hand-written components. `builder` caught the inflation on 2026-09-20; the convener had been quoting the headline figure.
 
 | Largest components, `lib/theme/` | Lines |
 | --- | --- |
@@ -276,7 +276,7 @@ per-contributor **moments** with their own share buttons and OG images, and `quo
 
 `builder` estimated 6 to 10 weeks for a full rebuild, and 3 weeks for a vertical slice, both on
 the measurement that `apps/web` is 315 lines against 38 production routes. Neither estimate knew
-that **76,674 lines of front-end source and a started App Router migration were recoverable.**
+that **about 30,400 portable lines and a started App Router migration were recoverable.**
 
 The estimate should be re-run. Porting is not writing, the recovered code is five months old and
 carries Ghost assumptions that are dying, and none of it has been read yet. But the difference
