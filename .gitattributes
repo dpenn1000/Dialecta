@@ -1,0 +1,5 @@
+# Append-only records. Nine agents in nine worktrees append to these at once, and a
+# union merge is the correct resolution: every line is someone's entry and none
+# supersedes another. Ordering within the file is not load bearing.
+docs/handoffs/current.md   merge=union
+exchange/ledger.md         merge=union
