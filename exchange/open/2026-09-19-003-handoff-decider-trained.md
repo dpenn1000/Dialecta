@@ -13,18 +13,20 @@ outcome:
 
 ## Done
 
-Branch `claude/recursing-yalow-ed3460`, three commits off `chore/monorepo-foundation`, which
-is already on `origin/main`. Fifteen files, 619 insertions.
+Branch `claude/recursing-yalow-ed3460`, off `chore/monorepo-foundation` which is already on
+`origin/main`. `git log --oneline origin/main..HEAD` is the authoritative commit list.
 
-- `b87b5af` Research sprint. All five seeded leads verified against primary sources and filed
-  to `team/decider/knowledge/`. Four new leads added. `practices.md` from five rows to twelve.
-  P0-D2 framed at `council/log/2026-09-19-p0-d2-login-methods.md`. First `vote` opened at
-  `exchange/open/2026-09-19-002-vote-council-guard-hook.md`.
-- `e10f1c6` `exchange/open/2026-09-19-001` answered and moved to `answered`.
-- `4a32a4d` Two frames: `council/log/2026-09-19-advisor-mandates.md` and
+- Research sprint. All five seeded leads verified against primary sources and filed to
+  `team/decider/knowledge/`. Four new leads added. `practices.md` from five rows to sixteen.
+- P0-D2 framed at `council/log/2026-09-19-p0-d2-login-methods.md`.
+- First `vote` opened at `exchange/open/2026-09-19-002-vote-council-guard-hook.md`.
+- `exchange/open/2026-09-19-001` answered and moved to `answered`.
+- Two council frames: `council/log/2026-09-19-advisor-mandates.md` and
   `council/log/2026-09-19-council-composition.md`.
+- `docs/handoffs/current.md`: six auto-stub lines from the Stop hook replaced with one real
+  entry in the established style. The seven prior entries are untouched.
 - Gates green on the branch: `npm run typecheck` clean, `npm test` 25 passed,
-  `voice_check.py --strict` zero hard hits on all 13 gated files under CI's own file selection.
+  `voice_check.py --strict` zero hard hits under CI's own file selection.
 
 Four findings the lead needs:
 
@@ -75,8 +77,9 @@ Four findings the lead needs:
   of `2026-09-19-002`, not a bug to fix silently.
 - **The `## Question` in the P0-D2 frame deliberately narrows the backlog row.** That looks
   like scope reduction and is not. ADR-002 already decided the login methods.
-- **`docs/handoffs/current.md` has an unfilled stub** appended by the Stop hook, uncommitted.
-  It is outside this agent's write scope. Someone else fills it.
+- **The Stop hook appends a stub to `docs/handoffs/current.md` every time a session ends.**
+  Six had accumulated before this one was written. They are not entries; they say "fill in".
+  Strip them when you write the real entry, or the file rolls past 60 lines on noise.
 
 ## Do not touch
 

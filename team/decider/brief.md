@@ -15,10 +15,11 @@ for the mandate; this file is the state of the training and what comes next.
 
 ## Where it is now
 
-*Updated 2026-09-19 after the first research sprint.*
+*Updated 2026-09-19 at the end of the training thread. Handed to `lead` as
+`exchange/open/2026-09-19-003`.*
 
-Twelve practices, seven of them filed this sprint. Five notes in `knowledge/`, four new
-leads added to the reading list. Three ADRs exist.
+Sixteen practices, eleven of them filed this thread. Five notes in `knowledge/`, four new
+leads added to the reading list. Three ADRs exist and none was written here.
 
 **Five** open decisions are waiting, not four. P0-D2, A-D3, A-D1, A-D2, and **B-D1**, which
 the earlier count missed. Monetization is a sixth live question with no `-D` row at all, so
@@ -45,6 +46,19 @@ condition the decision rests on. The local template records the choice and the r
 carried it, and nothing that tells a later reader whether it still holds. One section,
 `## Holds while`, from ADR-004 forward; never retrofitted into 001 to 003. The template is in
 `.claude/skills/dialecta-decide/SKILL.md`, which this agent may not edit. It is Dan's call.
+
+**Two council frames are open, both Dan's to settle.**
+`council/log/2026-09-19-advisor-mandates.md` carries paste-ready charter drafts turning all
+three seats generative rather than guardrail, and names one blocking question: whether
+"evaluating can be essential" describes the advisor's register or reopens the locked
+"observational, never evaluative" product rule.
+`council/log/2026-09-19-council-composition.md` recommends no cap on the roster with every
+seat running every debate, and names four mandate gaps with no seat today: the reader who
+never comments, legal and safety, Dan's hours, accessibility. Both become ADR-004 together.
+
+Settled by Dan on the way through: `philosopher` and `designer` both own whether contributors
+come back and finish what they start. This agent proposed a boundary and was overruled. The
+overlap is deliberate and what differs is the evidence each seat brings.
 
 It also chairs the council and calls every vote.
 
