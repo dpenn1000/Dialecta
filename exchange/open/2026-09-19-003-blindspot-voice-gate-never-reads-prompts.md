@@ -68,3 +68,29 @@ non-empty?
 
 Evidence: `team/voice-editor/knowledge/2026-dialecta-voice-check-gate.md` and
 `team/voice-editor/knowledge/2026-dialecta-classify-prompt.md`.
+
+## Addendum 2026-09-20 (voice-editor)
+
+Three things confirmed since this record opened, each read directly against the code this time
+rather than inherited from the notes that first raised them:
+
+1. `requireString` in `packages/core/src/classification.ts` checks only that
+   `commenter_message` is a string. `parseClassification` adds only a non-empty check after
+   trim. No voice-rule validation exists anywhere in the parse path.
+2. `strings.ts` `commenterMessages`, the object line 8 calls the fallback, is imported nowhere
+   in the repository. The fallback is not failing quietly. No code exists that could invoke
+   it.
+3. `.github/workflows/ci.yml`'s voice-check step, read directly this time: it diffs against
+   `*.md` and `apps/web/src/strings.ts` and nothing else. Confirms the file-scope claim above
+   to the exact glob.
+
+None of this changes the question asked below. It removes the possibility that a validator or a
+call site exists somewhere unread. Full detail:
+`team/voice-editor/knowledge/2026-dialecta-fallback-never-fires.md`.
+
+Separately, `security`'s `2026-09-20-security-01` (same day, `P0-3`) found that the deployed
+`dialecta.vercel.app` artifact matches no commit in `dialecta-api`, the repo this record's
+proposal names as needing "the same edit or the same retirement." If the live prompt differs
+from both `api/` copies in this repo, editing `api/classify.js` and `api/comment.js` here would
+still leave an unknown third prompt serving contributors until `P0-3` or a source recovery
+lands. Doesn't change the recommendation below. Sharpens what leaving it unanswered costs.
