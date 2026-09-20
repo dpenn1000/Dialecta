@@ -1,4 +1,4 @@
-# Standing practices
+# Standing positions and practices
 
 A practice is settled until evidence moves it. Confidence is the agent's own read.
 Evidence names the file in `knowledge/` that backs it, or `(unsourced)` when nothing does.

@@ -48,8 +48,8 @@ if (!TOKEN || TOKEN.length < 24) {
   process.exit(1);
 }
 
-const COUNCIL = ['treasurer', 'designer', 'philosopher'];
-const TEAM = ['builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider', 'security'];
+const COUNCIL = ['treasurer', 'designer', 'philosopher', 'security', 'legal'];
+const TEAM = ['builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider'];
 const ALL = [...COUNCIL, ...TEAM];
 
 const resolveAgents = (spec) => {
