@@ -56,6 +56,40 @@ File a tool the same way you file a source, with `implies` naming what it would 
 this seat do that it cannot do today. A tool note that cannot finish that sentence is a bookmark,
 and bookmarks do not go in the tree.
 
+## Finish the research before the build, and question your own finding
+
+Dan, 2026-09-20: **"Always complete research, question the findings, do a second pass if
+necessary, and then build when we are confident."**
+
+That is the house pace and it is not caution for its own sake. One day's work produced six things
+that already existed, four line counts that were false, and three traps where the plausible
+reading was the wrong one. Every one of them was cheap to catch by looking again and expensive to
+carry forward.
+
+**What a second pass actually means here.** Not re-reading your own note. Re-deriving the finding
+by a different method and seeing whether it lands in the same place.
+
+| The first pass | The second pass |
+| --- | --- |
+| A grep count of files matching a term | Reading enough of them to say what the match means |
+| A line count | A line count that excludes compiled output, minified bundles and vendored code |
+| What a document says a system does | What the implementation does |
+| A number another seat reported | The number re-derived from the source, with your method stated |
+
+**State your method.** A count without a stated method cannot be reconciled with a different count,
+and two seats reporting different numbers for the same thing is common and usually means they
+measured different things. `builder` and `security` both measured Ghost coupling in the recovered
+front end on 2026-09-20 and reported figures that look contradictory and may not be. Neither
+stated its method precisely enough to tell.
+
+**When two seats disagree on a number, that is a finding rather than an error.** Say so, name the
+other seat's figure, and say what would distinguish them. Do not average, do not defer, and do not
+quietly adopt the other number.
+
+**Confidence is a thing you are allowed to lack.** A brief that says the evidence does not reach
+the question is a result. `circulation` refused to invent a replacement funnel figure and that
+refusal was worth more than a number would have been.
+
 ## When a control depends on the answer, read the source
 
 Three separate traps on 2026-09-20, all the same shape: **the thing that looks like the answer is
