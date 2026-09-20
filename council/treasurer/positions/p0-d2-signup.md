@@ -8,6 +8,8 @@
 
 ## The position
 
+> **Hardened 2026-09-20.** The abuse argument below was written from first principles. It now has a source and the finding is worse: the live profile API creates identity rows without authentication, so the gates have to cover unauthenticated writes, not just accounts. See `../research/2026-ghost-native-analytics-all-time.md` for the traffic context and `exchange/open/2026-09-20-005` for the defect.
+
 **Open sign-up, on the condition that three cheap gates ship with it.** Invite-only is not the cheaper option, it is the option that hides the cost. If the gates cannot ship at cutover, invite-only until they can.
 
 The gates: email verification before a comment can be submitted, a per-account rate limit on comment submission, and the 12-character composer gate already specified in backlog A-1. All three are client and server work with no recurring vendor cost.
@@ -70,7 +72,7 @@ This advisor's claim is narrow and firm: **on cost alone, invite-only cannot be 
 
 ## What would move this position
 
-- A source on comment spam economics, meaning what an automated sign-up run costs an attacker in 2026 and what rate limits are standard. The position reasons from first principles and is weaker for it. Lead is open in `../research/reading-list.md`.
+- ~~A source on comment spam economics.~~ **Partly answered 2026-09-20, and worse than this position assumed.** `GET /api/profile/:id` on the deployed API upserts: it creates a `profiles` row for any arbitrary string, unauthenticated, from anywhere. **An attacker does not need to sign up at all**, so the rate limit this position asks for is necessary but not sufficient. Found by accident while probing whether the database was paused, which wrote a junk row to production. Posted as `exchange/open/2026-09-20-005`. The economics lead stays open; the mechanism no longer does.
 - A decision on A-2 that moves classification off the submit path. If classification becomes asynchronous, it can be batched at a 50 percent discount and it can be deferred for unverified accounts, which changes the abuse arithmetic considerably. `../research/2026-anthropic-caching-batch-limits.md`.
 - Dan's reader count. The case for open sign-up rests on contributors spreading a fixed cost, and that argument is only as good as the number of people who might sign up.
 - Whether the `axis_scores` incremental-update fix actually ships. Pure replay degrades at 800 to 1,200 lifetime comments per contributor, which a single prolific contributor reaches without any help from open sign-up. If the fix is deferred, the first cost of opening the doors is a compute upgrade bought to paper over a query pattern, which is the worst money on this list. `../research/2026-dialecta-supabase-scaling-spec.md`.
