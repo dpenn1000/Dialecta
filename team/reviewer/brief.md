@@ -12,17 +12,61 @@ for the mandate; this file is the state of the training and what comes next.
 | Knowledge | `team/reviewer/knowledge/` |
 | Leads | `team/reviewer/knowledge/reading-list.md` |
 | Skills it owns | None yet; it runs `voice_check.py`, `npm test`, and `npm run typecheck` |
+| Checklist | `team/reviewer/knowledge/review-checklist.md` |
 
 ## Where it is now
 
-Five practices from its mandate. Zero filed notes. There is a real diff to review: PR #3,
-merged as `47fab54`, three commits and 199 files plus the voice gate change.
+Three sprints on 2026-09-19. Nine next-three tasks set and all nine done.
+
+Twenty-two practices, twenty backed by a filed note or by a finding rather than by the mandate
+alone. Eleven files in `knowledge/`: ten sprint notes and the review checklist, which now runs
+to seventeen rows and puts the grant layer before the policy layer.
+
+Twelve leads filed, none dead. Eight open, so the list has grown as fast as it has shrunk.
+Three leads corrected something rather than confirming it, which is the better result of the
+two: the OWASP chapter is `V8 Authorization` in ASVS 5.0.0 and not `V4 Access Control`; the
+Next.js lead bundled two claims and was filed on the half that was read; and the CSP lead
+withdrew a benefit this agent had already claimed in the review.
+
+PR 3 has a real review on it: `exchange/open/2026-09-19-002-handoff-pr-3-review.md`, thirteen
+findings, three blockers, plus an appended correction. The two that matter are a stored XSS at
+`apps/web/src/app/articles/[slug]/page.tsx:43` and row level update policies that let a
+contributor set their own `final_tier` and `status`. Both are the same underlying gap: Postgres
+RLS cannot restrict columns, which OWASP calls BOPLA and puts at 8.2.3, a separate requirement
+at a separate level from the object-level one the policies do satisfy.
+
+The corrected shape of that PR, for anyone reading the old line here: four commits and 235
+files, not three and 199. The fourth is `116dc60`, the voice gate.
+
+Record 002 carries two appended corrections, because records are append-only while open. What
+the later sprints changed about the review rather than adding to it:
+
+- The grants assumption under B2 was flagged as reasoned and is now read and confirmed. It does
+  not expire either: Supabase retires the default grants for existing projects on 2026-10-30,
+  but the change reaches future objects only and existing tables keep their grants.
+- B2 and B1 both have worked remedies, which neither had when the review was written.
+- A fourth reachable path was found while writing the B2 remedy. Every column named in it is
+  also settable at insert time, so a fix covering `UPDATE` alone leaves the hole open.
+- Finding S7 overclaimed and was corrected on the record. A Content Security Policy does not
+  turn B1 into a broken image unless it is the nonce form or the experimental SRI form. The
+  `next.config.js` recipe most readers reach for sets `script-src 'self' 'unsafe-inline'`,
+  which permits the exact inline handler the B1 payload uses.
+- A fourteenth finding was added: `comments.hardened_at` is read by nothing, and the 60 minute
+  window it exists for is unimplemented and carries a spec tension against the append-only rule.
+
+Every check the repo runs before a merge is green on that diff. Typecheck clean, 25 tests
+passing, the voice gate reporting zero hard hits. None of them reads a policy or a grant.
+
+The known weakness, recorded because nothing on the checklist fixes it: ASVS 8.1.1 and 8.1.2
+ask for documented field-level authorization rules and Dialecta has none. The row policies are
+the only record of who may write what, and they are the artifact under review, so every row of
+the checklist is this agent reconstructing intent from the code it is checking.
 
 ## Next three
 
-1. Run `/dialecta-research reviewer`. The RLS leads are the ones that matter; check 2 is the check that ships a breach if it is wrong.
-2. Review PR #3 for real and post the findings as a `handoff` record. It merged as `47fab54` on 2026-09-19, so read it with `gh pr diff 3` or `git show 47fab54`. Nothing blocks on the result; a blocker becomes a follow-up item rather than a merge block. First live exercise of the report format.
-3. Write the review checklist as a file under `knowledge/` so check 2 is a list of named failure modes rather than a paragraph.
+1. The two spec tensions on record 002, S6 and the fourteenth finding, are both unresolved and both belong with `spec-reader` or `decider`. This agent did not file them because an `advice` record blocks its poster and the reviewer was not blocked. Decide whether that reasoning holds, or whether a reviewer needs a non-blocking way to raise a spec conflict, and take it to `exchange/` either way. Two questions means two records.
+2. Server action and route handler authorization in Next.js App Router, the unread half of the original Next.js lead. Rows 9, 11 and 12 of the checklist all assume something about what the framework does and does not do for you, and none of them can cite it. This is the largest remaining hole in check 2 for the application layer.
+3. Run `supabase db lint` once a local stack exists, and read the rule set. It is the one acceptance command in the mandate's orbit that has never been run here, the `set_updated_at` finding is reasoned from a rule name rather than observed, and knowing the rules tells this agent which findings the tooling already catches and which ones only a reader will.
 
 ## What this agent posts to the exchange
 
