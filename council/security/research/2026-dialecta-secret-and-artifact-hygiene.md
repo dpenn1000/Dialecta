@@ -35,9 +35,14 @@ carries `CLAUDE.md`, `.mcp.json`, `.claude/settings.local.json`, `docs/`, `supab
 all of `scripts/`, none of which Vercel routes or serves. They are retrievable by anyone with read
 access to the Vercel project.
 
-Two of those were worth opening. `.mcp.json` holds one server and no credential:
-`https://mcp.supabase.com/mcp?read_only=false`. `.claude/settings.local.json` is a Claude Code
+Two of those were worth opening, and both belong to `dialecta-api` as it stood in May 2026 rather
+than to this repository. The artifact's `.mcp.json` holds one server and no credential,
+`https://mcp.supabase.com/mcp?read_only=false`. Its `.claude/settings.local.json` is a Claude Code
 permission allowlist with no credential in it. Neither leaks a secret.
+
+Say which repository a file came from when it came out of an artifact. `C:\Dialecta/.mcp.json`
+today holds one server, `dialecta-local-research`, and no Supabase entry at all. The two files have
+the same name and nothing else in common.
 
 `scripts/` does leak something else. The backfill logs committed alongside the scripts,
 `backfill-fp-snapshots-2026-05-07T01-23-15-089Z-apply.log.json` among about twenty others, contain
@@ -81,10 +86,25 @@ on this note. What is set on the project, and on which environments, is unread.
   cheap and it caught the repeat of a known mistake, but it is a second layer rather than the first.
 - Bring `dialecta-api/.gitignore` up to the same block as `C:\Dialecta`, in the same change that
   recovers the source. It is three lines and the repository is about to receive roughly 29 files.
-- `read_only=false` on the Supabase MCP server means an agent session in this repo can write to the
-  production database. That is a working posture choice rather than a deployed hole, and it is
-  Dan's to make, but it belongs in the same conversation as the practice that says never to exploit
-  against production. The tooling currently permits exactly what the practice forbids.
+- **Corrected 2026-09-20, same day, before this reached a position.** This bullet first read that
+  `read_only=false` on the Supabase MCP server meant an agent session in this repo could write to
+  production. That was wrong, and wrong in the way this seat's own first practice exists to catch.
+  The file was read out of the `dialecta-api` deployment artifact and then described as though it
+  were this repository's live configuration. `C:\Dialecta/.mcp.json` carries no Supabase server.
+  Neither does `mcpServers` at user scope or under the Dialecta project in `C:\Users\dan\.claude.json`.
+  The only `read_only` string in the repository is in `docs/handoffs/dialecta-handoff-2026-04-27.md`,
+  recording `read_only=true` at user scope. A second session's Supabase connection refused a DELETE
+  this morning with `25006: cannot execute DELETE in a read-only transaction`, which is behavioural
+  confirmation rather than another file read.
+- What the artifact actually shows is a four month old development configuration of a different
+  repository, shipped to Vercel because nothing excluded it. It is one more reason for the
+  `.vercelignore` above and it is not a statement about anyone's current access.
+- What stays open, narrowly. This session ran read only catalog queries against
+  `mguulnibvzusfvyuowwh` through a Supabase connector and never attempted a write, so whether this
+  session's connector would have permitted one is untested and will stay untested. Connectors are
+  per session rather than per repository, so a session's own access is not knowable from anything
+  in the tree. If that matters, the thing to record is that no file in the repository states which
+  mode a given session holds.
 - Re-run the Vercel environment variable listing when a connection with that permission exists. The
   unanswered part is what is set on Preview and Development, since a preview deployment of
   `apps/web` reading a production `SUPABASE_SERVICE_KEY` would put a bypassrls credential behind a
