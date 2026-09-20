@@ -64,3 +64,19 @@ export {
   type AxisScore,
   type AxisScores,
 } from './axis-mapping';
+
+export {
+  GRADUATION_HORIZON,
+  HORIZON_SOFTNESS,
+  RADIUS_POWER,
+  TRADEOFF_PAIRS,
+  TRADEOFF_PENALTY,
+  TRADEOFF_PENALTY_CAP,
+  axisCeiling,
+  axisExtent,
+  fingerprintExtents,
+  horizonProgress,
+  ringCount,
+  tradeoffFactor,
+  type AxisTotals,
+} from './fingerprint-geometry';
