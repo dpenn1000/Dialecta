@@ -64,6 +64,56 @@ Not yet run. Step 3.
 Not yet written. Step 4. Options, costs now and later, what each forecloses, and one
 recommendation.
 
-## Outcome
 
-Open. Dan decides. ADR link recorded here when it is written.
+---
+
+## Reframed 2026-09-20 by the convener, before running
+
+This frame is two days old and predates everything below. Read this section as the live question;
+the original frame above is the record of what was asked before any of it was known.
+
+**Dan's actual ask, verbatim, given to the `security` session on 2026-09-20:** "I would like the
+user to be able to login using familiar credentials (Google, facebook, X, etc..) Please
+investigate that from your perspective." The "etc." is his. **It is sourced to a session and not
+to this repository**, which is a finding in its own right: ADR-002 records magic link plus Google
+and nothing else, so a decision the Council cannot see has been steering the work.
+
+**The verification gate is real, and only as honest as each adapter.** `security` read
+`DetermineAccountLinking` in supabase/auth at `2e9ce6c8`. An email joins the match pool only when
+`email.Verified || config.Mailer.Autoconfirm`. But the adapters differ:
+
+| Pass the provider's real claim through | Hardcode `Verified` true |
+| --- | --- |
+| Google, GitHub, GitLab, Discord, Azure, Keycloak, generic OIDC | **Facebook** (both paths), **X**, Twitter, Apple's native ID token path, about eight smaller |
+
+Carry the caveat as `security` wrote it: hardcoded true is not the same as false. Supabase assumes
+those platforms only return confirmed emails. X's adapter has a comment asserting it, Facebook's
+has none, and whether it holds lives outside Supabase's source and is unestablished.
+
+**What is already settled and is not this debate's to reopen:**
+
+- The **claim token** protects the 14 legacy accounts whatever ships. `security` established it,
+  M1 carries it as its first requirement, and it depends on no provider's behaviour. So this
+  debate is about **new contributors only**.
+- `auth.users` and `auth.identities` are both **0**. Nobody has ever signed in, so there is no
+  migration of existing linkages to design around.
+- The second control reads `auth.users.email_confirmed_at`, not `identity_data`, which `security`
+  withdrew after reading the source. And `config.Mailer.Autoconfirm` bypasses the gate for every
+  provider at once, Google included.
+
+**Three things nobody has costed:**
+
+1. **X has been pay-per-use since February 2026 with no free tier.** It is the only provider on
+   Dan's list carrying a recurring bill against a $78 monthly floor. `treasurer`'s call.
+2. **Reddit has never been considered as a login provider.** It appears in this repository only
+   as a distribution channel in `circulation`'s work. If it is in scope, it is unresearched.
+3. **Each provider is a surface, a consent screen and a set of claims handed over.** `legal` on
+   what each hands over, `designer` on what each costs a first-time contributor, `philosopher` on
+   what choosing a provider does to a person, `circulation` on whether familiar logins measurably
+   increase arrival or are assumed to.
+
+**The question, restated:** which login methods ship for new contributors, and what has to be true
+of a provider before it is added?
+
+
+## Outcome
