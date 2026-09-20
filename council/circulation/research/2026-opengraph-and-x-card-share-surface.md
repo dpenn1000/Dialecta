@@ -58,3 +58,37 @@ it. **Facebook's Sharing Debugger is confirmed still operational**
   what the card may say about a named person is neither a spec question nor a look question.
 
 *Filed 2026-09-20*
+
+---
+
+## Convener check, 2026-09-20
+
+This seat flagged its own weakest claim rather than leaving it to be found, so it was checked the
+same day, in a browser, against the live pages.
+
+**Corroborated, with a different mechanism than reported.** This note recorded X's Card
+documentation as paywalled, HTTP 402. What is actually there now:
+
+| URL | Result |
+| --- | --- |
+| `developer.x.com/en/docs/x-for-websites/cards/overview/abouts-cards` | Redirects to `docs.x.com/overview`, a generic developer landing page with no Cards section anywhere in it |
+| `docs.x.com/x-for-websites/cards/overview/abouts-cards` | **404, Page Not Found** |
+
+So the Card specification is not behind a paywall. It is gone. The practical conclusion is the
+same and arguably stronger: **nobody outside X can read the specification that governs how a
+shared Dialecta article renders there**, so every claim about X card behaviour now rests on
+observation rather than on a document, including this note's.
+
+**Not corroborated: the headline-stripping behaviour itself.** That still rests on one
+independent commentator plus tech press from 2023 and 2024, and a browser check of the docs
+cannot settle it because the docs no longer exist. It remains the weakest load-bearing claim in
+this note and the seat was right to say so.
+
+**What that does to the recommendation.** `twitter:card=summary` over `summary_large_image` now
+has a second and better reason: when the specification governing a surface cannot be read, prefer
+the more conservative option, because there is no way to check what the aggressive one does until
+it is live. That reasoning holds whether or not the headline-stripping report was accurate.
+
+**What would actually settle it:** publishing one article and looking at the rendered card. That
+is a Phase 2 observation, not a research task, and it belongs on the reading list as such rather
+than as a source to go and find.
