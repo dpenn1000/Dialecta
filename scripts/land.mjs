@@ -74,17 +74,27 @@ say(`agent:  ${agent}`);
 say(`home:   ${home}`);
 
 // ── Commit anything outstanding, inside the fence only ─────────────────────────
+// Stage only what is inside the fence, and leave everything else alone. An earlier version
+// refused outright on any dirty path, which meant one stray untracked file belonging to
+// nobody blocked an agent from landing work it had finished. Not the agent's file, not the
+// agent's problem: it is reported and skipped.
 const dirty = tryGit('status', '--porcelain').out.split('\n').filter(Boolean);
 if (dirty.length) {
   const paths = dirty.map(statusPath);
+  const mine = paths.filter(permitted);
   const stray = paths.filter((p) => !permitted(p));
-  if (stray.length) die(`uncommitted files outside ${home}:\n  ${stray.join('\n  ')}`);
-  if (DRY) {
-    say(`would commit ${paths.length} file(s)`);
-  } else {
-    git('add', '--', ...paths);
-    git('commit', '-q', '-m', String(flag('message') || `${agent}: land working changes`));
-    say(`commit: ${paths.length} file(s)`);
+  if (stray.length) {
+    say(`skipped: ${stray.length} dirty file(s) outside ${home}, left untouched`);
+    stray.forEach((p) => say(`  ${p}`));
+  }
+  if (mine.length) {
+    if (DRY) {
+      say(`would commit ${mine.length} file(s)`);
+    } else {
+      git('add', '--', ...mine);
+      git('commit', '-q', '-m', String(flag('message') || `${agent}: land working changes`));
+      say(`commit: ${mine.length} file(s)`);
+    }
   }
 }
 

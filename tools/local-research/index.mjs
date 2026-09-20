@@ -1,4 +1,4 @@
-// Builds a local embedding index over council/*/research/*.md.
+// Builds a local embedding index over council/*/research/*.md and team/*/knowledge/*.md.
 // Output: tools/local-research/.index/index.json
 //   { version, model, builtAt, files: { [relPath]: { mtimeMs, size } }, chunks: [{ advisor, file, chunk, text, vector }] }
 // Incremental: files whose mtime and size match the stored record are not re-embedded.
@@ -47,18 +47,27 @@ export function chunkText(text, size = CHUNK_SIZE) {
   return chunks;
 }
 
-/** Lists research markdown files as { advisor, rel, abs } excluding each advisor's index.md. */
+/** Lists research notes as { advisor, rel, abs }, across both agent families, excluding index.md. */
 export async function listResearchFiles(root = ROOT) {
-  const councilDir = path.join(root, 'council');
+  // Two families, one index. An advisor keeps notes in council/<name>/research/, a working
+  // agent in team/<name>/knowledge/. Indexing only the first left every team agent's tree
+  // invisible to local search: 54 files indexed against 144 on disk on 2026-09-20.
+  const families = [
+    { base: path.join(root, 'council'), leaf: 'research' },
+    { base: path.join(root, 'team'), leaf: 'knowledge' },
+  ];
   const out = [];
-  let advisors = [];
-  try {
-    advisors = (await fs.readdir(councilDir, { withFileTypes: true })).filter((d) => d.isDirectory()).map((d) => d.name);
-  } catch {
-    return out;
+  const pairs = [];
+  for (const { base, leaf } of families) {
+    let names = [];
+    try {
+      names = (await fs.readdir(base, { withFileTypes: true })).filter((d) => d.isDirectory()).map((d) => d.name);
+    } catch {
+      continue;
+    }
+    for (const name of names) pairs.push({ advisor: name, dir: path.join(base, name, leaf) });
   }
-  for (const advisor of advisors) {
-    const dir = path.join(councilDir, advisor, 'research');
+  for (const { advisor, dir } of pairs) {
     let entries = [];
     try { entries = await fs.readdir(dir); } catch { continue; }
     for (const name of entries.sort()) {
