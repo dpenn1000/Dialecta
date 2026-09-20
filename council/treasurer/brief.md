@@ -51,17 +51,33 @@ WebFetch throughout. And `/dialecta-research` is not registered as an invocable 
 Code session even though `.claude/skills/dialecta-research/SKILL.md` exists; sprint 1 read the
 SKILL.md and followed it by hand.
 
+Second day, 2026-09-20. Dan supplied the Ghost member export and the Ghost 6 analytics, so the
+tree now holds measurement rather than models: 269 unique visitors all time, 10 member records of
+which 6 are real people and 3 are arm's length, 0 paying and no Stripe customer ever created, and
+a ten-person list that has never been emailed. Facebook is the only acquisition channel with
+evidence behind it. The acquisition position was corrected twice in one day and is now much less
+optimistic than it started: the funnel cannot deliver 16 paying members, because at measured rates
+that needs roughly 14,500 visitors against 269 all time.
+
+One thing is open and it matters. Dan reports a prior subscription model plan that real effort went
+into. An exhaustive search on 2026-09-20 did not find it, recorded in
+`research/2026-search-for-the-subscription-plan.md`. Three places were unreachable: Ghost Admin's
+tier settings, which is the highest-probability location and a quick check for Dan, claude.ai
+conversation history, and Gmail, whose connector authorisation is invalid. **Every monetization
+position is provisional until that plan is found or ruled out.** Dan said he would get back to it.
+
 ## Next three
 
-1. Argue. Run `/dialecta-council` on the monetization question and on P0-D2 now that positions exist.
-   Nothing in `positions.md` has met a counter-argument, and an advisor that has only ever agreed
-   with itself is not trained.
-2. Answer the charter's outstanding request. Get Dan's current monthly spend, member count and any
-   revenue to date, then replace the modelled figures in `positions/monetization.md` with measured
-   ones and re-state the confidence.
-3. Work the remaining leads, starting with comment spam economics (the P0-D2 position reasons from
-   first principles and has no source behind it) and the cost of a legal entity for receiving
-   recurring money, which the floor model does not yet carry.
+1. Find the prior subscription plan, or rule it out, **before** the council argues monetization.
+   Check Ghost Admin, Settings, Tiers first: an empty `tiers` column on members does not mean no
+   tier is configured. Arguing a model against a decision Dan already made would waste the debate.
+2. Argue. Run `/dialecta-council` on monetization and on P0-D2 once that is settled. Nothing in
+   `positions.md` has met a counter-argument, and an advisor that has only ever agreed with itself
+   is not trained.
+3. Answer what is left of the charter's request. Member count and readership are now measured.
+   **Monthly spend is not.** Vercel billing returns 403 on this session's token and the Supabase MCP
+   is scoped to the wrong organisation, so the floor is still vendor list prices rather than Dan's
+   actual invoices.
 
 ## What this agent posts to the exchange
 

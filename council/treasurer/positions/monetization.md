@@ -2,6 +2,8 @@
 
 *Written 2026-09-19, sprint 1. The Project Brief lists monetization as an open design question with no ADR behind it. The charter calls it "open question 8"; in `docs/Dialecta_Project_Brief.md` as it stands it is number 7 of seven, under "Open Design Questions". Same question, and this note is about the question rather than its number.*
 
+> **Provisional, pending a prior plan. Added 2026-09-20.** Dan reports that a subscription model plan exists and that real effort went into it. An exhaustive search did not find it, and three places were unreachable: Ghost Admin's tier settings, claude.ai conversation history, and Gmail. See `../research/2026-search-for-the-subscription-plan.md`. **If that plan turns up and names tiers or prices, this position may be arguing against a decision already made, and it yields to the earlier work until the two are reconciled.** Nothing here should be treated as settled while that is open.
+
 **Confidence: medium-high on the cost side, medium on the revenue side, low on anything past year two.** Every infrastructure price below was fetched from the vendor on 2026-09-19 and is filed. Every revenue number is a model rather than a measurement, because Dialecta has no membership revenue to measure. The charter says this advisor's numbers are estimates until Dan supplies current spend and member count. They still are.
 
 ---

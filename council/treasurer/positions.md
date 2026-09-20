@@ -84,6 +84,7 @@
 | Whether asking contributors for money changes what they do. The monetization position assumes it does not and has no evidence either way | `exchange/open/2026-09-19-002-blindspot-membership-intrinsic-motivation.md` |
 | Whether a membership billing row must land before Phase C retires Ghost's subscription management | `exchange/open/2026-09-19-003-blindspot-no-billing-row-before-ghost-shutdown.md` |
 | Whether P0-6 should exclude Dan's account and three test aliases, and why `profiles` says 14 when the export says 10 | `exchange/open/2026-09-20-004-blindspot-p0-6-would-import-test-accounts.md` |
+| **A prior subscription model plan may exist that this advisor has not read.** Searched exhaustively 2026-09-20 and not found. Unreachable: Ghost Admin tiers, claude.ai conversations, Gmail. Every monetization position is provisional until it is found or ruled out | `research/2026-search-for-the-subscription-plan.md` |
 
 ## Corrected the same day it was written
 
