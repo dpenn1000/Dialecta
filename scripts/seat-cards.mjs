@@ -114,8 +114,44 @@ function seatData(name, bench) {
   }
   const cited = notes.filter((f) => /https?:\/\//.test(read(join(notesDir, f)) ?? '')).length;
 
+  // The shelf itself, not just its size. Dan asked to see what each seat has actually read, and
+  // a count answers "how much" while hiding the only question that matters: what.
+  const shelf = notes
+    .map((f) => {
+      const src = read(join(notesDir, f)) ?? '';
+      const fm = frontmatter(src);
+      // Title: frontmatter, else the first `# heading`, else the slug made readable.
+      const h1 = body(src).match(/^#\s+(.+)$/m)?.[1]?.trim();
+      const title = (fm.title ?? h1 ?? f.replace(/\.md$/, '').replace(/-/g, ' ')).replace(/\s+/g, ' ');
+      // House format is `**Source:** ...` with the colon inside the bold. Accept both.
+      const cite =
+        fm.citation ??
+        fm.source ??
+        body(src).match(/^\*\*(?:Source|Citation):?\*\*:?\s*(.+)$/im)?.[1]?.trim() ??
+        null;
+      // The first `## Implies for Dialecta` bullet. This is the column worth having: it answers
+      // why the seat holds the source, which a citation repeating the title never does.
+      const impliesBlock = section(body(src), /implies/i) ?? '';
+      const implies =
+        impliesBlock
+          .split('\n')
+          .find((l) => /^\s*[-*]\s+\S/.test(l))
+          ?.replace(/^\s*[-*]\s+/, '')
+          .trim() ?? null;
+      const url = src.match(/https?:\/\/[^\s)>\]"']+/)?.[0] ?? null;
+      const year = f.match(/^(\d{4})/)?.[1] ?? null;
+      return { file: f, title, cite, implies, url, year };
+    })
+    .sort((a, b) => (a.year ?? '') .localeCompare(b.year ?? '') || a.title.localeCompare(b.title));
+
   const rl = read(join(notesDir, 'reading-list.md')) ?? '';
   const count = (re) => (rl.match(re) ?? []).length;
+  // Outstanding leads, so a card shows what the seat still means to read.
+  const pending = rl
+    .split(/\r?\n/)
+    .filter((l) => /^\|\s*todo/i.test(l))
+    .map((l) => l.split('|').map((c) => c.trim()).filter(Boolean).slice(1, 3).join(' — '))
+    .filter(Boolean);
 
   const ledger = read(join(ROOT, 'exchange', 'ledger.md')) ?? '';
   const raised = ledger.split(/\r?\n/).filter((l) => new RegExp(`\\|\\s*${name}\\s*->`).test(l)).length;
@@ -137,6 +173,9 @@ function seatData(name, bench) {
     hasBrief: Boolean(brief),
     notes: notes.length,
     cited,
+    shelf,
+    pending,
+    notesDir: `${b.dir}/${name}/${b.notes}`,
     standingRows: rows(standing),
     todo: count(/^\|\s*todo/gm),
     filed: count(/^\|\s*filed/gm),
@@ -228,6 +267,35 @@ for (const [bench, cfg] of Object.entries(BENCHES)) {
     L.push(`| Brief | ${s.hasBrief ? `\`${cfg.dir}/${s.name}/brief.md\`` : '**missing**'} |`);
     L.push(`| Exchange | raised ${s.raised}, addressed ${s.addressed} |`);
     L.push('');
+
+    // The shelf, listed. A count says how much a seat has read and hides what.
+    if (s.shelf.length) {
+      L.push(`**What it has read.** ${s.shelf.length} filed in \`${s.notesDir}/\`.`);
+      L.push('');
+      L.push('| Source | What it changes here |');
+      L.push('| --- | --- |');
+      for (const n of s.shelf) {
+        const name = n.url ? `[${n.title}](${n.url})` : n.title;
+        const why = (n.implies ?? n.cite ?? '*no implies section*')
+          .replace(/\|/g, '\\|')
+          .replace(/\s+/g, ' ');
+        L.push(`| ${name} | ${why.length > 190 ? `${why.slice(0, 187)}...` : why} |`);
+      }
+      L.push('');
+    } else {
+      L.push(`**What it has read.** Nothing filed yet in \`${s.notesDir}/\`.`);
+      L.push('');
+    }
+
+    if (s.pending.length) {
+      L.push(`<details><summary>Still to read: ${s.pending.length} lead(s)</summary>`);
+      L.push('');
+      for (const t of s.pending.slice(0, 40)) L.push(`- ${t}`);
+      if (s.pending.length > 40) L.push(`- *and ${s.pending.length - 40} more*`);
+      L.push('');
+      L.push('</details>');
+      L.push('');
+    }
 
     const gaps = [];
     if (!webArmed(s)) gaps.push('cannot reach the web, so it cannot verify an external claim');
