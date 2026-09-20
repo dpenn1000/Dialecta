@@ -396,3 +396,40 @@ Phase 4 running now, not after Phase 3, is not itself contested by any seat; tre
 and nobody opposes it. The live fork is between the top two rows.
 
 ## Outcome
+
+**Dan, 2026-09-20, verbatim:** "Build the thing. We can look at cutting things when I get back
+(Phase 1) but I do not want to stifle progress. My vote is that we just push forward and get this
+live so we can become profitable ASAP. This is an investment phase."
+
+**Decided: build, and keep the fork open.**
+
+The fork the chair presented is three weeks against six to ten. Dan has declined to take it now,
+and the convener's reading is that he does not have to, because **both paths share the same
+foundation and the choice is not load-bearing until that foundation is done.**
+
+`builder`'s own decomposition puts the shared work at 25 to 34 focused days: session-verified
+auth, the claim token, the sanitizer, storage plumbing, and the comment write path rebuilt
+against a real session. Every line of that is required by the three-week vertical slice and by
+the ten-week rebuild alike. The fork is the question "do we stop here", and it cannot be asked
+until there is a here to stop at.
+
+So the build starts on the shared foundation and the decision stays open on purpose rather than
+by neglect. The chair's fork is not overruled; it is deferred to the moment it becomes real.
+
+**What this decides now**
+
+| | |
+| --- | --- |
+| Read-only horizontal cut | **Dead.** Ruled out by the seat that proposed it |
+| Phase 4, publishing and audience | **Runs now, in parallel.** Uncontested by any seat |
+| The three existing comments | Publishable today. `security` confirmed it is a status change on existing rows, not a trip through the exploitable create path |
+| Build order | Shared foundation first, in the order the debate established |
+| The fork | Open, and asked when the foundation lands |
+
+**What stays unresolved, and is not closed by this**
+
+`philosopher`'s discourse-volume objection, its Archetype visibility fix (which `security`
+measured as real but not enforceable as a flag), its Phase-1 payment-wall ask, and its doubt
+about deferring the price to Phase 6. `legal` was silent and its absence left three questions
+open. None of that is settled by a decision to start building, and this record says so rather
+than letting a green light imply consent to the whole plan.
