@@ -17,6 +17,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ALL } from '../tools/roster.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -74,8 +75,9 @@ process.stdout.write(`council-smoke against ${BASE}\n\n`);
 const health = await expect('health, no token', '/health', {}, 200);
 if (health) {
   const n = health.agents?.length ?? 0;
-  const ok = n === 12;
-  process.stdout.write(`  ${ok ? 'pass' : 'FAIL'}  roster is 12 seats -> ${n}\n`);
+  // Compared against the derived roster, so adding a seat cannot leave this assertion stale.
+  const ok = n === ALL.length;
+  process.stdout.write(`  ${ok ? 'pass' : 'FAIL'}  roster matches the repo -> ${n}\n`);
   ok ? pass++ : fail++;
   process.stdout.write(`        ${(health.agents ?? []).join(', ')}\n`);
 }

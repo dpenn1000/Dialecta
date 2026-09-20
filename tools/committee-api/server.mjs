@@ -51,9 +51,9 @@ if (!TOKEN || TOKEN.length < 24) {
   process.exit(1);
 }
 
-const COUNCIL = ['treasurer', 'designer', 'philosopher', 'security', 'legal', 'circulation'];
-const TEAM = ['builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider'];
-const ALL = [...COUNCIL, ...TEAM];
+// Roster comes from tools/roster.mjs, which derives it from disk. Four files carried their own
+// copy until 2026-09-20 and two were wrong.
+import { COUNCIL, TEAM, ALL } from '../roster.mjs';
 
 const resolveAgents = (spec) => {
   if (!spec || spec === 'council') return COUNCIL;

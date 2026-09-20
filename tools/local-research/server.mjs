@@ -8,27 +8,9 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { z } from 'zod';
 import { embed, generate, isUp, listModels, hasModel, EMBED_MODEL, CHAT_MODEL, OLLAMA_HOST, SETUP_HINT } from './ollama.mjs';
 import { buildIndex, loadIndex, indexStats, ROOT, INDEX_FILE } from './index.mjs';
+import { SEATS } from '../roster.mjs';
 
-// Every seat, and where each one's notes live. This list said three names until 2026-09-20:
-// treasurer, designer, philosopher. It had never been updated for security or legal, and it had
-// never known the working bench existed at all, so `research_file` refused eight of eleven seats
-// and `research_search` could only filter to three. index.mjs already walked both families, so
-// the index held every seat's notes and the tools in front of it could not reach most of them.
-// Found when a builder sprint reported that research_file would not accept its own name.
-const SEATS = {
-  treasurer: 'council/treasurer/research',
-  designer: 'council/designer/research',
-  philosopher: 'council/philosopher/research',
-  security: 'council/security/research',
-  legal: 'council/legal/research',
-  circulation: 'council/circulation/research',
-  builder: 'team/builder/knowledge',
-  reviewer: 'team/reviewer/knowledge',
-  'voice-editor': 'team/voice-editor/knowledge',
-  migrator: 'team/migrator/knowledge',
-  'spec-reader': 'team/spec-reader/knowledge',
-  decider: 'team/decider/knowledge',
-};
+// Roster comes from tools/roster.mjs, which derives it from disk rather than repeating it.
 const ADVISORS = Object.keys(SEATS);
 const MAX_FETCH_CHARS = 60_000;
 

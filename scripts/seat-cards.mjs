@@ -16,32 +16,13 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { BENCHES } from '../tools/roster.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'docs', 'COUNCIL.md');
 const CHECK = process.argv.includes('--check');
 
-const BENCHES = {
-  advisory: {
-    seats: ['treasurer', 'designer', 'philosopher', 'security', 'legal', 'circulation'],
-    dir: 'council',
-    notes: 'research',
-    standing: 'positions.md',
-    noun: 'position',
-    blurb:
-      'Advisors hold positions, argue them, and write no code. A position is contested by design.',
-  },
-  working: {
-    seats: ['builder', 'reviewer', 'voice-editor', 'migrator', 'spec-reader', 'decider'],
-    dir: 'team',
-    notes: 'knowledge',
-    standing: 'practices.md',
-    noun: 'practice',
-    blurb:
-      'Practitioners do the work and hold practices. A practice is settled until evidence moves it.',
-  },
-};
-
+// Roster from tools/roster.mjs, derived from disk.
 const read = (p) => (existsSync(p) ? readFileSync(p, 'utf8') : null);
 
 /** Pull `key: value` out of a leading --- fenced block. */
