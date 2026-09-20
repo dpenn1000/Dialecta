@@ -36,32 +36,62 @@ public, the resolution is faithful and the attribution is still wrong.
 `_cors.js` does not close it either. Its allowlist governs browser cross origin reads. A request
 made with `curl`, from a server, or with no `Origin` header at all never consults it.
 
-## What is not established
+## Confirmed 2026-09-20, against the recovered source
 
-The handler body is unread. The Vercel MCP file reader truncates every result at roughly two
-thousand characters and `api/comment.js` is around 23 KB, so what is quoted above is the docblock
-and not the code under it. A check the docblock does not mention could exist: a Ghost session
-cookie verified through `_ghost-admin.js`, a shared secret header, or a signature.
+The deployed source was pulled under record `2026-09-20-security-01` and sits at
+`_recovered/api/comment.js`, 563 lines. `reviewer` read it end to end and answered record
+`2026-09-20-security-02`. I read it again independently rather than take that on trust, and it
+holds.
 
-Two things argue against that. The docblock is detailed enough to enumerate the POST body field by
-field and to explain why `member_email` is accepted from the request, which is not the shape of a
-document that omits an authentication step. And the same file in the repository at `9238a9c` takes
-`author_id` directly from `req.body` with no verification at all, behind nothing but `applyCors`
-and a method check, so the endpoint's history is of auth being added rather than present.
+The resolution is a lookup, not a verification. Lines 185 to 189:
 
-Reading the handler settles it. That needs the deployment source pulled with a Vercel token, which
-needs Dan's account.
+```js
+const { data: profile, error: profileErr } = await supabase
+  .from('profiles')
+  .select('ghost_member_id, display_name, handle')
+  .eq('ghost_member_id', member_uuid)
+  .maybeSingle();
+```
 
-## Blast radius if it holds
+Its own comment reads "Step 1: verify the member has a Dialecta profile", which is what it does.
+Nothing between that query and the insert establishes that the caller supplying `member_uuid` is
+the session it claims to be. `requireCompleteProfile` in `_profile-validation.js` checks that the
+row exists and that `display_name` is non-empty.
+
+A grep of all 563 lines for `authorization`, `x-ghost`, `ghostAdmin`, `signature`, `verifyMember`,
+`session`, `jwt` and `hmac` returns four hits and none of them is a check: the docblock's own claim
+of a session on line 11, an error string on line 125, and the signature *font* for the celebration
+modal on lines 519 and 527, which is a typeface. `_cors.js` permits an `Authorization` header in
+`Access-Control-Allow-Headers` and nothing ever reads one.
+
+The docblock describes the defense its author believed they had built. It is not the one in the
+file.
+
+**The precondition is lower than this note first assumed.** It does not need a signed up user. The
+publishable key is public by design, `profiles_select` is `USING (true)`, so the whole sequence is a
+public SELECT followed by a POST, by anyone, with no account on the attacker's side at all.
+
+## Blast radius, and the one thing bounding it
 
 Posting a comment attributed to any of the eight members. Each post also runs a classification
 through `/api/classify`, which the treasurer prices at roughly $0.002, so the same call is a spend
 path as well as an attribution path.
 
-Two things bound it. Comments insert with `status = 'pending_review'` per the docblock, and the
-read policy on `comments` is `USING (status = 'published')`, so an injected comment is not publicly
-visible until something promotes it. The corpus is affected before the public page is. That is the
-difference between this and a defacement, and it is why this ranks high rather than critical.
+One thing bounds it, and it is a table default rather than a control. Comments insert with
+`status = 'pending_review'`, confirmed in the recovered source where the insert sets no status and
+takes the column default, and the read policy on `comments` is `USING (status = 'published')`. An
+injected comment is therefore not publicly visible until something promotes it. The corpus is
+affected before the public page is, which is the difference between this and a defacement.
+
+That is the whole of the containment, and it is worth being precise about what it is. It is not a
+check anyone wrote for this purpose. It is the default value of a column, holding because the
+promotion pipeline does not exist yet. The docblock says promotion belongs to the Wait Window and
+Stage 2.5 pipeline in Phase 2 of the Discourse Layer, "not this endpoint". **The day that pipeline
+ships, this finding stops being bounded**, and nothing in the pipeline's own design would flag that,
+because from its side it is promoting comments exactly as intended.
+
+Rank it high rather than critical on the containment, and treat the containment as expiring on a
+known date rather than as a property of the system.
 
 The platform sells its judgment on that corpus. A row anyone can create is a row anyone can use to
 move a contributor's axis scores, which is the failure the mandate names as data integrity being a

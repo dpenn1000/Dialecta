@@ -25,7 +25,7 @@ own primary text is the one to trust.
 
 Discord requires its `email` scope to return an email address at all. Discord's own issue tracker
 (`discord/discord-api-docs`) carries open, acknowledged reports that its documentation is
-inconsistent about which scope actually gates the `verified` boolean on the user object, a rare
+inconsistent about which scope gates the `verified` boolean on the user object, a rare
 case of a provider's own repository flagging its docs as unreliable on the exact question this
 research asks.
 

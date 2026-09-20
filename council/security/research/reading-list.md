@@ -36,6 +36,20 @@ States: `todo`, `filed`, `dead`.
 | todo | Vercel's "Mitigating Denial of Wallet risks with Vercel" post, surfaced under the DDoS mitigation doc, URL not captured | Vercel naming the attack by the same term OWASP and the Kelly paper use suggests a fourth corroborating source, and it may describe a Vercel specific mitigation the filed note does not carry |
 | todo | Betterleaks, the gitleaks successor by the same author | Too new to recommend over gitleaks today. Worth a follow up in a few months if it stabilises, since `2026-gitleaks-secret-scanning.md` records gitleaks itself as feature complete and receiving patches only |
 
+## Opened by the P0-D2 login-methods sprint, 2026-09-20
+
+Seven notes filed on Google, Meta, X, Apple, GitHub, LinkedIn, Discord, the pre-hijacking paper,
+RFC 9700, and NIST 800-63-4. See the new section in `index.md`. Five threads came up short of a
+primary source and are carried here rather than left silent in the notes.
+
+| State | Lead | Why this agent needs it |
+| --- | --- | --- |
+| todo | Meta's own Permissions Reference (`developers.facebook.com/docs/permissions/` and `/reference/email`) | Returned HTTP 500 on every fetch attempt this sprint. `2026-meta-facebook-login-identity.md` reports `email` as a no-review default permission on secondary sources only; needs a direct read before P0-D2 relies on it |
+| todo | Apple's identity token claims reference, for the current data type of `email_verified` and `is_private_email` | Apple's DocC-based pages returned only a title to this sprint's fetch tool. `2026-apple-sign-in-with-apple.md` carries the string-versus-boolean question as secondary-sourced; a Postman call against a live Apple client would settle it directly |
+| todo | Discord's own scope requirement for the `verified` field on the user object | `discord/discord-api-docs` has open issues admitting the documentation disagrees with itself. `2026-github-linkedin-discord-identity.md` flags this rather than resolves it; a live test against a registered Discord app would resolve it |
+| todo | Whether X bills OAuth 2.0 authentication-only calls under the same per-resource pay-per-use pricing as data reads and writes | `docs.x.com/x-api/getting-started/pricing` prices posts and reads and is silent on sign-in traffic. `2026-x-oauth-identity.md` cannot say whether "Sign in with X" is free to operate at any volume |
+| todo | A Google-authored statement about Workspace administrators minting or reassigning addresses inside their own domain, as distinct from the third-party-email-ownership-drift caveat Google does state | Three searches and two primary-page reads this sprint found the latter caveat but not the former. `2026-google-oauth-identity.md` reports the gap rather than guessing at it |
+
 ## Corrections made while reading
 
 | Seeded or assumed | Correction |

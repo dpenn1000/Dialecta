@@ -4,9 +4,9 @@ Leads live in `reading-list.md`; a sprint files them here, one file per source,
 named `YYYY-<author>-<slug>.md` with citation, summary, and what it implies for a
 named Dialecta surface or a named practice.
 
-Thirty-three notes, filed 2026-09-20 in one sprint across five sections. Six of them measure this
-estate rather than citing an outside source; those are marked below and are the ones another agent
-cannot reproduce from a search.
+Forty-one notes, filed 2026-09-20 across six sections, in two sprints run the same day. Six of
+them measure this estate rather than citing an outside source; those are marked below and are the
+ones another agent cannot reproduce from a search.
 
 ## This estate, measured
 
@@ -15,7 +15,7 @@ cannot reproduce from a search.
 | [2026-vercel-deployed-api-provenance.md](2026-vercel-deployed-api-provenance.md) | This agent, from the Vercel and GitHub APIs | The production API's commit does not exist on GitHub and about 29 of its endpoints exist in no repository. The deployment artifact is the only copy. Blocks P0-3 |
 | [live-surface-inventory.md](live-surface-inventory.md) | This agent, from the deployment file tree | Thirty-eight routes, the repository named as their source holds 11 files. Thirty are marked `unread` and why. `_cors.js` in full, `_capabilities.js` in part |
 | [2026-live-grant-and-policy-surface.md](2026-live-grant-and-policy-surface.md) | This agent, from `pg_class`, `pg_policies`, `has_table_privilege` | All 30 public tables grant full CRUD to `anon` and `authenticated`. Settles the reviewer's premise: B2 does not drop. Carries the `information_schema` trap |
-| [2026-dialecta-comment-credential-chain.md](2026-dialecta-comment-credential-chain.md) | This agent, joining the deployed docblock to the live RLS policy | `/api/comment` authorizes on `member_uuid`, and `profiles.ghost_member_id` is world readable. Eight of 14 rows carry the matching shape. Handler unread |
+| [2026-dialecta-comment-credential-chain.md](2026-dialecta-comment-credential-chain.md) | This agent, from the recovered source, corroborated by `reviewer` | **Confirmed, not "may be".** `/api/comment` authorizes on `member_uuid` and `profiles.ghost_member_id` is world readable, so a public SELECT plus a POST posts as any member, with no account on the attacker's side. Bounded only by the `pending_review` column default, which expires when the promotion pipeline ships |
 | [2026-live-storage-surface.md](2026-live-storage-surface.md) | This agent, from `storage.buckets` and `storage.objects` | One bucket, `feedback-screenshots`, public read, empty. `article-media` does not exist live. Zero storage policies is doing the work a policy should |
 | [2026-dialecta-secret-and-artifact-hygiene.md](2026-dialecta-secret-and-artifact-hygiene.md) | This agent, from both repositories and the artifact | Nothing credential shaped is in history. The deploy artifact carries contributor names and Ghost ids. No `.vercelignore` |
 
@@ -80,6 +80,24 @@ Filed 2026-09-20 ahead of the rebuild. The position they support is
 | [2026-nextjs-csp-nonce-strict-dynamic.md](2026-nextjs-csp-nonce-strict-dynamic.md) | Next.js CSP guide, MDN `script-src` | `strict-dynamic` is what makes Next's chunked loading work under a nonce, and a nonce forces dynamic rendering. Start with the static header set instead, since nothing renders inline script yet |
 | [2026-supabase-ssr-server-auth-methods.md](2026-supabase-ssr-server-auth-methods.md) | Supabase Next.js SSR guide, `getClaims` and `getUser` reference | `server.ts` is already correct. The gap is that no middleware refreshes the session. `getClaims` by default, `getUser` only for the live record. Installed versions resolved: ssr 0.12.7, supabase-js 2.116.0 |
 | [2026-supabase-column-level-security.md](2026-supabase-column-level-security.md) | Supabase "Column Level Security" and "Row Level Security" (Views) | The mechanism behind the position's section 1. Column scoped grants for the write leak, a `security_invoker` view for the read projection, both landing with the policy change rather than after |
+
+## Federated login (P0-D2)
+
+Filed 2026-09-20 for the login-methods half of P0-D2 (the open-versus-invite-only half is
+`legal`'s and `treasurer`'s ground, not researched here). Ranks the four providers the founder
+named, plus three quick alternatives, on whether each returns a verified email and what it costs
+to operate.
+
+| File | Source | Implies for |
+| --- | --- | --- |
+| [2022-sudhodanan-prehijacked-accounts.md](2022-sudhodanan-prehijacked-accounts.md) | Sudhodanan and Paverd, USENIX Security 22 | Five pre-hijacking attack variants that apply directly once Dialecta offers password and federated signup on the same email. The academic grounding for the open question in `2026-supabase-google-oauth.md` |
+| [2026-google-oauth-identity.md](2026-google-oauth-identity.md) | Google, OpenID Connect and ID token verification docs | `email_verified` is defined and mostly trustworthy; the real caveat is verified-at-creation versus verified-now for non-Google-hosted addresses. Cheapest provider to operate: no review for a basic sign-in scope |
+| [2026-meta-facebook-login-identity.md](2026-meta-facebook-login-identity.md) | Meta, Business Verification and Graph API User reference | Meta never calls the email field verified, and it can be absent outright. Business Verification, not App Review, is the real gate, and Dialecta looks small enough to sit under it |
+| [2026-x-oauth-identity.md](2026-x-oauth-identity.md) | X Developer Community and X API pricing docs | Email retrieval now works via OAuth 2.0 but carries no stated verification definition. Pay-per-use since February 2026 with no free tier; ranked last of the four on both verification clarity and operational stability |
+| [2026-apple-sign-in-with-apple.md](2026-apple-sign-in-with-apple.md) | Apple, App Store Review Guidelines and Sign in with Apple docs | Guideline 4.8 does not reach a website, confirmed from the Guidelines' own preamble. Private relay is adding a third valid domain in 2026 |
+| [2026-ietf-oauth-security-bcp.md](2026-ietf-oauth-security-bcp.md) | IETF, RFC 9700 (BCP 240) | Final, not draft, as of January 2025. PKCE mandatory for public clients, exact redirect URI matching, and the condition under which `state` is still required rather than optional |
+| [2026-nist-800-63c-federation-privacy.md](2026-nist-800-63c-federation-privacy.md) | NIST SP 800-63-4, Federation and Assertions | Consent, minimization and non-correlation requirements for any relying party accepting a federated identity. `sub`, not email, is the key to store |
+| [2026-github-linkedin-discord-identity.md](2026-github-linkedin-discord-identity.md) | GitHub, LinkedIn (Microsoft Learn) and Discord's own issue tracker | Three quick alternatives. GitHub is cleanest on verified email; LinkedIn explicitly disclaims identity verification; Discord's own docs disagree with themselves on the point |
 
 *`live-surface-inventory.md` is written by this agent rather than filed from a source, as
 `team/reviewer/knowledge/review-checklist.md` is in its own tree. It is listed here so the index is
