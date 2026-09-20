@@ -82,6 +82,51 @@ What is already known and does not depend on that research: Google's consent scr
 surface ADR-002 accepts not owning, and each further provider is one more. The login UI being ours
 is a locked consequence in ADR-002, and social buttons are the part of it that is not.
 
+## Can the fourteen be protected whatever Dan picks
+
+Yes, and the reason is a boundary that has not been named yet: **linking is Supabase's decision, but
+the claim is ours.**
+
+Supabase decides whether two identities are the same user. P0-6 decides whether a user is one of the
+14 Ghost members and hands them an existing profile with existing comments. Those are two different
+decisions, made by two different pieces of code, and only the second one is in this repository.
+Whatever Supabase does or does not check at the identity layer, the moment a new `auth.users` row is
+matched to a member's profile is Dialecta's own code running, and that code can refuse.
+
+Measured 2026-09-20: `auth.identities` carries `provider text not null` and
+`identity_data jsonb not null`. The provider that asserted an identity and the claims it made are
+both readable at claim time. Which claims land in `identity_data` varies by provider and should be
+confirmed against a real sign in rather than assumed, but the column is there and it is not empty.
+
+Three controls, ranked, none of which depends on the provider list.
+
+**1. Stop using an email address as the claim.** Issue each of the 14 a one time claim token out of
+band, and require it on first sign in to take over a legacy profile. The token is a secret Dan
+issues; an email address is a fact an attacker can assert. This is the strongest of the three
+because it does not depend on any provider telling the truth, and it is the only one that is still
+correct if a provider's verification is itself compromised. It is also a small build: one table, one
+column, one check.
+
+**2. Gate the claim on the provider's own verification, checked here rather than trusted upstream.**
+At the moment of claim, read `auth.identities.provider` and `identity_data` for the identity making
+it, and refuse the legacy profile link unless the provider asserted a verified email. This works
+even if Supabase's automatic linking does not check, because it runs later and separately. Its limit
+is that it trusts the provider's assertion, which is exactly the thing that differs between Google
+and the weaker providers, so it narrows the hole rather than closing it.
+
+**3. Hold the second provider until the 14 have claimed.** Launch with one provider that verifies
+email, let the legacy members claim, then widen. This is a hedge rather than a control. It shrinks
+the window and does nothing for a member who never claims, and the ones who never claim are the ones
+nobody is watching.
+
+**What I would put in front of the council: 1, with 2 as defence in depth.** Together they make the
+provider decision a question about new contributors rather than about the 14, which is the point of
+the peer's ask. A control that holds whatever Dan picks is worth more than a finding that narrows
+what he can pick.
+
+Neither depends on the `email_verified` research landing. Both can be specified now and neither
+changes shape when it does.
+
 ## What I expect to argue
 
 *Held until the research lands, because the shape of the recommendation depends on whether the
