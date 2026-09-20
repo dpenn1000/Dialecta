@@ -65,9 +65,16 @@ Three states, each meaning something different, and no two reusing a channel:
 ## Consequences
 
 - **No rework.** The axis mapping landed on 2026-09-20 is correct as built. Rule 1 stands.
-- **The fingerprint has no visual language yet.** `design/dialecta-design-spec.html` mentions the
-  fingerprint zero times and carries no petal or fingerprint token of any kind. This ADR is the
-  first thing that will define one, rather than a modification to an existing surface.
+- **Corrected 2026-09-20 by the site sweep.** This read that the fingerprint has no visual language
+  and that this ADR would be the first thing to define one. Wrong, and wrong the same way the Pact
+  claim was: true of `design/dialecta-design-spec.html`, which does mention the fingerprint zero
+  times, and false of the project. `components/dialecta-fingerprint.jsx` is **2,595 lines** and
+  already carries petals, per-axis ring counts, the wave texture the Contributor Identity doc
+  describes, smoothing, and a palette including `#200404`, which is `--tier-breach-bot`.
+  `components/dialecta-fingerprint-engine.jsx` is another 780 lines holding the compute half.
+  **The Breach residual is an addition to an existing visual language, not the founding of one**,
+  and `designer` should start from that prototype rather than from this ADR. Full map:
+  `docs/SITE-INVENTORY.md`.
 - **Oxblood is already spoken for.** `--tier-breach-top: #6A1818` and `--tier-breach-bot: #380808`
   are the Breach comment card. Reusing the exact values on a petal risks reading as "this is a
   breach" rather than "this history contains one." `designer` owns resolving that.
