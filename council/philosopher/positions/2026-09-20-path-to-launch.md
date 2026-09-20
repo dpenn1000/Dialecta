@@ -55,3 +55,31 @@ exactly there. No tier badge, no fingerprint-derived descriptor, on any share ca
 legal's answer but because the psychology needs no permission. The standing test for every
 later circulation tactic: would it read, in the founding essay's own terms, as the thing it
 indicts.
+
+## Rebuttal
+
+Security's correction lands. "A visibility default, not new engineering" was wrong: no live
+session exists to key a predicate to, so self-visible-only isn't a flag, it's a migration against
+auth that doesn't exist yet. I called it cheap. It isn't.
+
+**Resized, not defeated.** The migration needs the same session-verified auth `builder` is already
+building as shared foundation. The fix rides there, named inside it, not a separate Phase-2 gate.
+Security made the identical move on the comment hole: retracted "ahead of phase one" for a fix
+riding inside the feature itself, the same task, not an addition. The Archetype policy takes that
+seat too.
+
+**Sharper, not softer.** I wrote "self-visible" as if a default already held. Security measured it
+doesn't: `USING (true)`, full anon SELECT, no column narrowing. Any Archetype row that exists is
+already readable by anyone holding the anon key, the key every browser tab loads. That's
+`ghost_member_id`'s own sentence again: live now, not at launch. Six real people, three arm's
+length: a present condition, not a future risk.
+
+**Cuts both ways, and I take the cut.** My own objection to trusting classification off one thread
+applies harder to the artifact itself: an Archetype built on a handful of comments is a worse
+characterization than one built on hundreds, before anyone asks who can see it. Thin data and open
+visibility compound into one problem.
+
+**The other three, one line each.** Payment wall, Phase 1: still pressing, unanswered, cheap, a
+rule about what not to build. Phase 6 order: still pressing; treasurer priced the decision, never
+the risk of charging last after two unpaid-norm phases. Discourse volume: letting it go as a gate
+since no seat can name the number, kept as a standing constraint.
