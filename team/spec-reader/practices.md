@@ -5,7 +5,7 @@ Evidence names the file in `knowledge/` that backs it, or `(unsourced)` when not
 
 | Practice | Confidence | Evidence | Last changed |
 | --- | --- | --- | --- |
-| Start from `docs/Dialecta_Project_Index.md` to find which spec owns the topic, then read only that section | medium | `knowledge/2026-dialecta-project-index.md` | 2026-09-19 |
+| Start from `docs/Dialecta_Project_Index.md` to find which spec owns the topic, then read only that section | medium | `knowledge/2026-dialecta-project-index.md`, `knowledge/2026-dialecta-omitted-specs-map.md` | 2026-09-20 |
 | Ten specs in `docs/` are named nowhere in the index. Before answering that no spec owns a topic, list the tree | high | `knowledge/2026-dialecta-project-index.md`, `knowledge/drift-map.md` D5 | 2026-09-19 |
 | Check `docs/decisions/` before quoting any spec on stack, identity, articles, or phasing. The specs predate the ADRs and none carries a marker | high | `knowledge/drift-map.md` A to C | 2026-09-19 |
 | Quote the spec's own words for anything that constrains a build, and cite file and section heading | high | `.claude/agents/spec-reader.md` | 2026-09-19 |
@@ -20,8 +20,12 @@ Evidence names the file in `knowledge/` that backs it, or `(unsourced)` when not
 | Treat `components/` as April exports, never as spec. Three of them still define a pillar as Charity | high | `knowledge/drift-map.md` E7, H2 | 2026-09-19 |
 | Never write a file outside `team/spec-reader/` and `exchange/` | high | `.claude/agents/spec-reader.md`, `.claude/hooks/guard-docs.mjs` | 2026-09-19 |
 | Voice v1.2 forbids em dashes, en dashes and `--` as a pause. When a quoted spec passage contains one, clip the quote at the dash and resume it rather than altering the spec's words | high | `scripts/voice_check.py`, root `CLAUDE.md` "Locked decisions" | 2026-09-19 |
+| A spec being current and a spec's own implementation being current are not the same claim. Check `packages/` against a spec before citing the spec as what the platform does today | high | `knowledge/2026-dialecta-axis-mapping-v1.md` | 2026-09-20 |
+| A locked decision can outrun its own governing spec into shipped code. Check `packages/core` for a `CLAUDE.md`-cited constant before calling a locked value merely undocumented | high | `knowledge/2026-dialecta-classification-weighting-provenance.md` | 2026-09-20 |
+| A spec's own status line can contradict a later locked-decisions summary of the same fact. Both are real; cite both and name which document is being asked | medium | `knowledge/2026-dialecta-tier-psychology.md` | 2026-09-20 |
+| `drift-map.md` D5's one-line guesses at what an omitted spec owns are a starting point, not a citation. Read the file before repeating the guess | high | `knowledge/2026-dialecta-omitted-specs-map.md` | 2026-09-20 |
 
-## What moved this sprint, and why
+## What moved 2026-09-19, and why
 
 The first practice dropped from high to **medium**. The mandate makes the index the entry point, and
 the index is missing ten of the twenty three top level specs, including
@@ -34,3 +38,19 @@ Two practices are new and carry no precedent in the mandate: the three way disti
 specified, not present and superseded, and the four way classification of retired vocabulary. Both
 came out of leads whose premises turned out to be wrong, which is the argument for verifying a lead
 before filing on it.
+
+## What moved 2026-09-20, and why
+
+Four new practices, all sourced to this sprint's notes: code can outrun its own spec silently
+(`2026-dialecta-axis-mapping-v1.md`), a locked decision can graduate into shipped code sourced only
+from `CLAUDE.md` (`2026-dialecta-classification-weighting-provenance.md`), a spec's status line and
+a later locked-decisions summary can disagree about the same fact
+(`2026-dialecta-tier-psychology.md`), and `drift-map.md` D5's one-line guesses need the same
+verification as any other lead before they are repeated as fact
+(`2026-dialecta-omitted-specs-map.md`).
+
+None of the six reading-list leads worked this sprint turned out dead, but two came back
+significantly wider than written: the Axis Mapping lead asked only about Ghost-era field names and
+the answer included a full scoring-scheme divergence the lead did not anticipate, and the
+weighting-provenance lead asked where a number came from and the answer became "it is now code, not
+just a locked bullet." Read a lead as a question to verify, not as a bound on what the note covers.

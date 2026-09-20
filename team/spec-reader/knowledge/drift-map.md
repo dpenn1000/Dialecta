@@ -468,6 +468,37 @@ Nothing in this repo can recover these files.
 
 ---
 
+## I. Found during the 2026-09-20 sprint, not from the ADR/vocabulary sweep
+
+### I1. Axis Mapping v1.1's own implementation replaced its rules, not just its Ghost fields
+
+`docs/Dialecta_Axis_Mapping_v1.md`'s two Ghost-era citations (line 102 `ghost_post_id`, line 104
+`api/article/publish.js`) are dead per ADR-001/003 and the port at
+`packages/core/src/axis-mapping.ts` never carried them forward, confirmed by a full-file grep.
+But the port also does not implement the spec's binary, tier-gated trigger table at all: every one
+of the six axes uses different input fields and continuous rather than binary deltas, and
+Consistency is hardcoded to 0 pending a history rule the spec does not need. Neither the spec nor
+a version bump records this. Full account: `2026-dialecta-axis-mapping-v1.md`.
+
+### I2. Tier Psychology's own status line marks Stance and Breach provisional; the lock does not
+
+`docs/Dialecta_Tier_Psychology.md` v1.1's closing status line: "The Stance and The Breach names
+are still provisional pending user testing." Root `CLAUDE.md` "Locked decisions" states the same
+two names with no caveat. The reverse of F1: here a spec hedges a name the lock treats as settled,
+rather than a lock with no spec behind it at all. Full account:
+`2026-dialecta-tier-psychology.md`.
+
+### I3. The classification weighting is no longer just unspecified, it is now shipped code sourced straight from CLAUDE.md
+
+F1 established the percentages are in no spec. `packages/core/src/resolution.ts` now implements
+them (`RESOLUTION_WEIGHTS`), with a doc comment that cites root `CLAUDE.md` as the only source,
+honestly, and a weighted-sum-with-AI-tie-break algorithm that exists in no prose document at all.
+One of its four inputs, `stage25Quality`, has no comment-side spec to source it from:
+`docs/Dialecta_Discourse_Layer_UX.md` has no Stage 2.5, confirmed by grep; only the article side
+does. Full account: `2026-dialecta-classification-weighting-provenance.md`.
+
+---
+
 ## What this map does not cover
 
 - `docs/handoffs/` and `docs/reviews/` are write once records, read as history rather than as
@@ -477,4 +508,4 @@ Nothing in this repo can recover these files.
   `exchange/open/2026-09-19-001` own that question.
 
 *Filed 2026-09-19. Read against commit `9a355c0`. Re-verify line numbers after any spec edit;
-D3 is what happens when they move.*
+D3 is what happens when they move. Section I appended 2026-09-20.*
