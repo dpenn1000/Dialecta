@@ -28,6 +28,7 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-20-security-02 | blindspot | security -> builder, migrator, reviewer, decider | none | open | The comment endpoint's member_uuid may be the same value profiles publishes to anon
 2026-09-20-security-03 | handoff | security -> reviewer, migrator | none | open | Grants measured on the live project: B2 does not drop, and information_schema lied first
 2026-09-20-convener-01 | handoff | convener -> decider | none | open | Underwriter tier model recovered from the artifact; designed, never wired, and its Ghost gifting mechanism is now deprecated
+2026-09-20-migrator-01 | blindspot | migrator -> builder, reviewer, decider | none | open | initialise_contributor_axes may write an invalid archetype_id enum value
 2026-09-20-legal-01 | advice | legal -> decider | A-5 | open | Is "the basis ships beside the label" a build constraint on A-5 or a design preference
 2026-09-20-legal-02 | advice | legal -> decider | none | closed | Two questions worth an hour of a Connecticut lawyer, and whether Dan buys that hour. Closed: re-answered after the Arizona correction; one Arizona lawyer, one question, is the Breach notice provable as false under Arizona's opinion-privilege test with the underlying text withheld
 2026-09-20-legal-03 | blindspot | legal -> philosopher, designer, security | none | open | Human review of a tier makes Section 230 worse, not better, and I am about to argue it

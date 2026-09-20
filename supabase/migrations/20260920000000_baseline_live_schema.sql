@@ -36,6 +36,46 @@
 -- named in that note defaults to RLS-enabled-with-no-select-policy, i.e. closed,
 -- which is the safe default and matches nothing being disproven, not a measurement).
 --
+-- VERIFIED AGAINST REAL SQL, 2026-09-20 (migrator, same session as the two migrations
+-- below dated 20260920192954 and 20260920193044). supabase_migrations.schema_migrations'
+-- own `statements` column was read directly with read-only SQL, recovering the verbatim
+-- text of all 20 migrations applied and recorded before today plus the 2 the convener
+-- applied today. This is the evidence the runbook's Part 1 Step 9 called for; full
+-- write-up and the complete table-by-table trace:
+-- team/migrator/knowledge/2026-migration-fetch-verification.md.
+--
+-- Seven LIVE UNVERIFIED markers below turned out right and now say CONFIRMED with the
+-- migration version that proves it. One was wrong (profiles.signature_font's default was
+-- guessed 'default'; live corrected itself to 'Mrs Saint Delafield' in April, before this
+-- file existed). One was wrong in a way the marker did not anticipate (axis_events.article_id
+-- was guessed uuid; live is text, matching articles.ghost_post_id which it references without
+-- an FK). One is upgraded from a blind guess to an evidenced one without becoming a full
+-- confirmation (archetypes.archetype_label: no DEFAULT clause was recovered, but the only
+-- function that creates an archetypes row always writes 'Pattern Still Forming' into it).
+--
+-- Every other marker's table is never touched by any of the 22 recorded migrations, so it
+-- predates 2026-04-29 (the earliest recorded version) the same way `articles` does per
+-- 2026-live-migration-history.md, or the one migration that touches the table does not reach
+-- the marked column. Those markers are unedited below. Being unreached is now a checked fact,
+-- not an assumption of convenience.
+--
+-- Three findings beyond the 34 markers, because the recorded SQL settled things this file
+-- never marked as guesses in the first place:
+-- (1) axis_events' select policy below was wrong in the dangerous direction: this file had it
+-- `using (true)` ("measured open"), the language that is true of axis_scores and archetypes but
+-- not of axis_events, which 2026-live-rls-surface.md's own table already listed as 0-of-27,
+-- closed, and migration 20260502161725 confirms with an explicit `using (false)` policy. Fixed
+-- below.
+-- (2) handle_history was missing two real policies (authenticated may read it; nobody may
+-- write it) that migration 20260502184334 shows live actually has. The missing SELECT policy
+-- would have silently broken the SEO-redirect read path this table exists for. Fixed below.
+-- (3) axis_scores already carries `unique (member_id, axis)`, named `axis_scores_member_axis_unique`,
+-- added 2026-04-29 by the same migration that created axis_events (20260429222558). This
+-- file's own note below and the exchange record behind companion migration
+-- 20260920000100_axis_scores_contributor_axis_unique.sql both assumed that uniqueness was
+-- missing. It is folded into the table below under its real name; the companion migration is
+-- superseded, not landed. See that file's header and the runbook's revised Part 4.
+--
 -- WRITE POLICIES: this file adds NO insert, update, or delete policy anywhere, on
 -- purpose. practices.md's 2026-09-20 row (from the security seat's B2 finding) found
 -- that live is safe today only because it combines open table-level grants with zero
@@ -129,14 +169,14 @@ create table public.profiles (
   is_gifted boolean not null default false,
   gifted_by_member_id text,
   gift_expires_at timestamptz,
-  subscription_tier text not null default 'free',  -- LIVE UNVERIFIED: default value guessed
+  subscription_tier text not null default 'free',  -- CONFIRMED: migration 20260504131944 (profiles_subscription_tier)
   subscription_tier_set_by text,
   subscription_tier_updated_at timestamptz,
   pact_agreed_at timestamptz,
   pact_path text,
   pact_signed_name text,
   pact_version text,
-  signature_font text not null default 'default',  -- LIVE UNVERIFIED: default value guessed; CHANGELOG says nine hand-script faces, actual default name unknown
+  signature_font text not null default 'Mrs Saint Delafield',  -- CORRECTED (was guessed 'default'): migration 20260502000642 (026_signature_font) first set the default to 'Pinyon Script' from a stale comment; 20260502000907 (026b_signature_font_default_fix), same day, fixed it forward to 'Mrs Saint Delafield' and backfilled every row still on the wrong default. This file adopts the corrected, currently-live value.
   order_id text,
   order_family text,
   order_label text,
@@ -159,6 +199,33 @@ create table public.profiles (
 create trigger profiles_set_updated_at
   before update on public.profiles
   for each row execute function public.set_updated_at();
+
+-- CONFIRMED: migration 20260504131944 (profiles_subscription_tier). Not previously marked
+-- LIVE UNVERIFIED (types.ts cannot show check constraints at all, so this file simply had
+-- none here), recovered alongside the default on the same line above.
+alter table public.profiles
+  add constraint profiles_subscription_tier_check
+  check (subscription_tier in ('free', 'pro'));
+
+-- CONFIRMED: same migration. Keeps subscription_tier_updated_at accurate without the
+-- application having to set it on every write.
+create or replace function public.profiles_subscription_tier_touch()
+returns trigger
+language plpgsql
+set search_path = public
+as $$
+begin
+  if new.subscription_tier is distinct from old.subscription_tier then
+    new.subscription_tier_updated_at := now();
+  end if;
+  return new;
+end;
+$$;
+
+create trigger profiles_subscription_tier_touch
+  before update on public.profiles
+  for each row
+  execute function public.profiles_subscription_tier_touch();
 
 alter table public.profiles enable row level security;
 
@@ -183,8 +250,9 @@ create table public.admin_capabilities (
 );
 
 alter table public.admin_capabilities enable row level security;
--- RLS state unmeasured (outside 2026-live-rls-surface.md's 15-table scope). Left
--- closed by default: no select policy.
+-- CONFIRMED closed: migration 20260502161725 (028_pre_launch_security_hardening) adds an
+-- explicit `admin_capabilities_service_only ... for select using (false)` policy. This file
+-- reaches the same access result without the redundant policy object.
 
 create table public.admin_roles (
   id text primary key,  -- natural key, same pattern as admin_capabilities
@@ -195,7 +263,9 @@ create table public.admin_roles (
 );
 
 alter table public.admin_roles enable row level security;
--- Measured closed to anon: 2026-live-rls-surface.md (0 of 4 rows visible).
+-- Measured closed to anon: 2026-live-rls-surface.md (0 of 4 rows visible). CONFIRMED by the
+-- mechanism too: migration 20260502161725 (028_pre_launch_security_hardening) adds an
+-- explicit `admin_roles_service_only ... for select using (false)` policy.
 
 create table public.admin_role_capabilities (
   role_id text not null references public.admin_roles (id) on delete cascade,
@@ -204,7 +274,8 @@ create table public.admin_role_capabilities (
 );
 
 alter table public.admin_role_capabilities enable row level security;
--- RLS state unmeasured. Left closed by default.
+-- CONFIRMED closed: migration 20260502161725 (028_pre_launch_security_hardening) adds an
+-- explicit `admin_role_capabilities_service_only ... for select using (false)` policy.
 
 create table public.admin_audit_log (
   id uuid primary key default gen_random_uuid(),
@@ -218,7 +289,9 @@ create table public.admin_audit_log (
 create index admin_audit_log_actor_idx on public.admin_audit_log (actor_id, created_at desc);
 
 alter table public.admin_audit_log enable row level security;
--- RLS state unmeasured. Left closed by default: an audit log should not be anon-readable regardless.
+-- CONFIRMED closed: migration 20260502161725 (028_pre_launch_security_hardening) adds an
+-- explicit `admin_audit_log_service_only ... for select using (false)` policy. An audit log
+-- should not be anon-readable regardless; the guess and the evidence agree.
 
 -- ---------------------------------------------------------------------------
 -- profile_admin_capability_grants, profile_admin_roles
@@ -236,7 +309,8 @@ create table public.profile_admin_capability_grants (
 );
 
 alter table public.profile_admin_capability_grants enable row level security;
--- RLS state unmeasured. Left closed by default.
+-- CONFIRMED closed: migration 20260502161725 (028_pre_launch_security_hardening) adds an
+-- explicit `profile_admin_capability_grants_service_only ... for select using (false)` policy.
 
 create table public.profile_admin_roles (
   profile_id uuid not null references public.profiles (id) on delete cascade,
@@ -249,7 +323,8 @@ create table public.profile_admin_roles (
 );
 
 alter table public.profile_admin_roles enable row level security;
--- RLS state unmeasured. Left closed by default.
+-- CONFIRMED closed: migration 20260502161725 (028_pre_launch_security_hardening) adds an
+-- explicit `profile_admin_roles_service_only ... for select using (false)` policy.
 
 -- ---------------------------------------------------------------------------
 -- reserved_handles, handle_history
@@ -258,12 +333,14 @@ alter table public.profile_admin_roles enable row level security;
 create table public.reserved_handles (
   handle text primary key,
   reason text,
-  added_by uuid references public.profiles (id) on delete set null,
+  added_by uuid references public.profiles (id),  -- CORRECTED: migration 20260502184334 (profiles_handle) declares this FK with no ON DELETE clause (defaults to NO ACTION). This file had guessed "on delete set null" without a marker; that guess was wrong.
   added_at timestamptz not null default now()
 );
 
 alter table public.reserved_handles enable row level security;
--- Measured closed to anon: 2026-live-rls-surface.md (0 of 89 rows visible).
+-- Measured closed to anon: 2026-live-rls-surface.md (0 of 89 rows visible). CONFIRMED by the
+-- mechanism: migration 20260502184334 adds `reserved_handles_service_only ... for all using
+-- (false) with check (false)`.
 
 create table public.handle_history (
   id uuid primary key default gen_random_uuid(),
@@ -275,9 +352,26 @@ create table public.handle_history (
 );
 
 create index handle_history_profile_idx on public.handle_history (profile_id, changed_at desc);
+-- CONFIRMED, second index also live: migration 20260502184334 (profiles_handle) additionally
+-- has `idx_handle_history_old on handle_history (lower(old_handle))`, for the reverse lookup
+-- (does this candidate handle collide with someone's old one). This file was missing it.
+create index handle_history_old_handle_idx on public.handle_history (lower(old_handle));
 
 alter table public.handle_history enable row level security;
--- RLS state unmeasured. Left closed by default.
+-- CORRECTED (was "RLS state unmeasured. Left closed by default"): migration 20260502184334
+-- shows live actually has two policies here, not zero. Both added below. The missing SELECT
+-- policy in particular would have silently broken the SSR /contributor/<handle> redirect path
+-- this table exists for (its own COMMENT ON TABLE, carried into this file's create table
+-- above, says so directly).
+create policy "handle history readable by authenticated"
+  on public.handle_history for select
+  to authenticated
+  using (true);
+
+create policy "handle history has no direct writes"
+  on public.handle_history for all
+  using (false)
+  with check (false);
 
 -- ---------------------------------------------------------------------------
 -- notification_prefs, notifications
@@ -297,7 +391,8 @@ create trigger notification_prefs_set_updated_at
   for each row execute function public.set_updated_at();
 
 alter table public.notification_prefs enable row level security;
--- RLS state unmeasured. Left closed by default.
+-- CONFIRMED closed: migration 20260502161725 (028_pre_launch_security_hardening) adds an
+-- explicit `notification_prefs_service_only ... for select using (false)` policy.
 
 create table public.notifications (
   id uuid primary key default gen_random_uuid(),
@@ -318,7 +413,9 @@ create table public.notifications (
 create index notifications_recipient_idx on public.notifications (recipient_member_id, created_at desc);
 
 alter table public.notifications enable row level security;
--- Measured closed to anon: 2026-live-rls-surface.md (0 of 6 rows visible).
+-- Measured closed to anon: 2026-live-rls-surface.md (0 of 6 rows visible). CONFIRMED by the
+-- mechanism too: migration 20260502161725 adds an explicit `notifications_service_only ...
+-- for select using (false)` policy.
 
 -- ---------------------------------------------------------------------------
 -- articles
@@ -374,7 +471,8 @@ create table public.opinion_map_overrides (
 );
 
 alter table public.opinion_map_overrides enable row level security;
--- RLS state unmeasured. Left closed by default.
+-- CONFIRMED closed: migration 20260502161725 (028_pre_launch_security_hardening) adds an
+-- explicit `opinion_map_overrides_service_only ... for select using (false)` policy.
 
 create table public.opinion_map_positions (
   id uuid primary key default gen_random_uuid(),
@@ -463,7 +561,11 @@ create table public.classifications (
 );
 
 alter table public.classifications enable row level security;
--- Measured closed to anon: 2026-live-rls-surface.md (0 of 3 rows visible).
+-- Measured closed to anon: 2026-live-rls-surface.md (0 of 3 rows visible). CONFIRMED by the
+-- mechanism too: migration 20260502161725 adds an explicit `classifications_service_only ...
+-- for select using (false)` policy. specificity_score's own check range (line above) is not
+-- reached by any recorded migration and stays unverified; the migration that touches this
+-- table (20260429222635) only adds the unrelated `strength` column.
 
 -- ---------------------------------------------------------------------------
 -- axis_events (ledger) and axis_scores
@@ -474,10 +576,10 @@ create table public.axis_events (
   member_id text not null,
   comment_id uuid references public.comments (id) on delete cascade,
   classification_id uuid references public.classifications (id) on delete cascade,
-  article_id uuid,  -- LIVE UNVERIFIED: no foreign key declared
+  article_id text,  -- CORRECTED (was guessed uuid): migration 20260429223033 (axis_events_article_source) declares this `text`, holding the Ghost post id, matching articles.ghost_post_id, which it references the same way articles.ghost_post_id itself does: without a declared FK. No FK is still right, which this file had already guessed.
   axis public.axis not null,
   tier public.tier not null,
-  source text not null default 'comment',  -- LIVE UNVERIFIED: default guessed; comment_id and classification_id both nullable live, which this repo's diff note reads as room for axis events to originate somewhere other than a comment
+  source text not null default 'comment',  -- CONFIRMED: migration 20260429223033 (axis_events_article_source)
   topic text,
   created_at timestamptz not null default now()
   -- No delta column. Confirmed absent live (2026-live-schema-diff.md, "axis_events"):
@@ -489,14 +591,31 @@ create table public.axis_events (
 
 create index axis_events_member_idx on public.axis_events (member_id, axis, created_at);
 
+-- CONFIRMED, not previously marked: migration 20260429223033 pairs the source default above
+-- with this discriminator check, guarding that a comment-sourced row carries comment_id and
+-- classification_id and no article_id, and an article-sourced row is the reverse.
+alter table public.axis_events
+  add constraint axis_events_source_check
+  check (
+    (source = 'comment' and comment_id is not null and classification_id is not null and article_id is null)
+    or
+    (source = 'article' and article_id is not null and comment_id is null)
+  );
+
 alter table public.axis_events enable row level security;
 
--- Append-only ledger rule (supabase/CLAUDE.md, mandate): select only, no update or
--- delete policy, on purpose. Measured open to anon for select:
--- 2026-live-rls-surface.md.
-create policy "axis events are public to read"
+-- CORRECTED, the one finding in this file worth escalating on its own. This line previously
+-- read "Measured open to anon for select: 2026-live-rls-surface.md" and granted `using (true)`.
+-- That is wrong on two independent counts: 2026-live-rls-surface.md's own table lists
+-- axis_events at 0 of 27 rows visible to anon, closed, in the same document this comment cited
+-- as its source; and migration 20260502161725 (028_pre_launch_security_hardening) adds an
+-- explicit `axis_events_service_only ... for select using (false)` policy. The open language
+-- here is true of axis_scores and archetypes (below) and reads like it was copied onto this
+-- table by mistake. The append-only, select-only rule (supabase/CLAUDE.md, mandate: no update
+-- or delete policy) still holds; what changes is that select is closed too, not open.
+create policy "axis events are service role only"
   on public.axis_events for select
-  using (true);
+  using (false);
 
 create table public.axis_scores (
   id uuid primary key default gen_random_uuid(),
@@ -507,14 +626,26 @@ create table public.axis_scores (
   tier_mix jsonb not null default '{}'::jsonb,
   topic_history jsonb not null default '[]'::jsonb,  -- LIVE UNVERIFIED: shape guessed
   last_updated timestamptz not null default now()
-  -- No raw_total column and no (member_id, axis) uniqueness yet. Confirmed: id is
-  -- the only key live carries today. The missing uniqueness is exactly what
-  -- 20260920000100_axis_scores_contributor_axis_unique.sql adds next.
+  -- No raw_total column. Confirmed absent, as before.
 );
 
 create trigger axis_scores_set_last_updated
   before update on public.axis_scores
   for each row execute function public.set_last_updated();
+
+-- CORRECTED (was "no (member_id, axis) uniqueness yet... the missing uniqueness is exactly
+-- what 20260920000100_axis_scores_contributor_axis_unique.sql adds next"). That was wrong:
+-- migration 20260429222558 (axis_events, the same one that creates the table above) already
+-- adds this exact constraint, guarded `if not exists` against pg_constraint, so live has
+-- carried it since 2026-04-29. id stays the primary key; this is additional, matching live.
+-- 20260920000100_axis_scores_contributor_axis_unique.sql is superseded, not landed: applying
+-- it would have added a second, differently-named unique constraint on the same two columns,
+-- and if only repair-marked applied without ever running (the runbook's own Part 3 mechanism),
+-- it would leave the tracking table asserting a constraint that does not actually exist under
+-- that name. See the runbook's revised Part 4.
+alter table public.axis_scores
+  add constraint axis_scores_member_axis_unique
+  unique (member_id, axis);
 
 alter table public.axis_scores enable row level security;
 
@@ -531,7 +662,7 @@ create table public.archetypes (
   id uuid primary key default gen_random_uuid(),
   member_id text not null,
   archetype_id public.archetype_id not null,
-  archetype_label text not null default '',  -- LIVE UNVERIFIED: default guessed
+  archetype_label text not null default 'Pattern Still Forming',  -- LIVE UNVERIFIED, but upgraded (was guessed ''): migration 20260502161725's rewrite of initialise_contributor_axes() always inserts archetype_label = 'Pattern Still Forming' when it creates a member's first archetypes row. That is the value every new row actually gets, which is better evidence than a blind guess, but it is a value the one writer supplies, not a recovered DEFAULT clause on the column, so this stays marked rather than becoming CONFIRMED. Worth reading alongside the note on `archetype_id` in this file's verification doc: the same INSERT writes the literal 'forming' into archetype_id, which is not a member of the archetype_id enum below (it is a value of archetype_confidence instead) and looks like a live bug, not a baseline error.
   confidence public.archetype_confidence not null default 'forming',
   axis_pattern jsonb,
   history jsonb not null default '[]'::jsonb,
@@ -562,8 +693,8 @@ create table public.tier_nominations (
   id uuid primary key default gen_random_uuid(),
   comment_id uuid not null references public.comments (id) on delete cascade,
   member_id text not null,
-  target_tier text not null,  -- LIVE UNVERIFIED: plain text live, not the public.tier enum. Confirmed from types.ts showing `string`, not an Enums reference, unlike every classifications.*_tier column. Worth a second look once migration fetch confirms whether this is deliberate.
-  reason_key text not null,  -- LIVE UNVERIFIED: candidate list is the "seven reasons" backlog A-7 describes
+  target_tier text not null,  -- CONFIRMED plain text, not the public.tier enum: migration 20260501030623 (tier_nominations). It is deliberate, not an oversight: the same migration pairs it with the check constraint below, a "shadow enum" of the same seven values rather than a reference to the real type.
+  reason_key text not null,  -- CONFIRMED: migration 20260501030623 (tier_nominations), exact seven values in the check constraint below
   note text check (note is null or length(note) <= 140),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -572,14 +703,38 @@ create table public.tier_nominations (
   -- 2026-live-schema-diff.md, "comment_votes against tier_nominations".
 );
 
+-- CONFIRMED, not previously marked: migration 20260501030623 declares both checks and a
+-- uniqueness constraint this file was missing entirely.
+alter table public.tier_nominations
+  add constraint tier_nominations_target_tier_check
+  check (target_tier in ('forum', 'spark', 'echo', 'fog', 'heat', 'stance', 'breach'));
+
+alter table public.tier_nominations
+  add constraint tier_nominations_reason_key_check
+  check (reason_key in (
+    'specific_claim', 'engages_content', 'new_idea', 'emotional_only',
+    'group_signal', 'unclear', 'other'
+  ));
+
+-- Named to match what Postgres itself generates for an unnamed table-level UNIQUE, since
+-- migration 20260501030623's `UNIQUE (comment_id, member_id)` does not name it explicitly and
+-- app code may reference the constraint by name (an ON CONFLICT ON CONSTRAINT clause, if one
+-- exists, was not checked this session).
+alter table public.tier_nominations
+  add constraint tier_nominations_comment_id_member_id_key
+  unique (comment_id, member_id);
+
 create index tier_nominations_comment_idx on public.tier_nominations (comment_id);
+create index tier_nominations_member_idx on public.tier_nominations (member_id);
+create index tier_nominations_comment_target_idx on public.tier_nominations (comment_id, target_tier);
 
 create trigger tier_nominations_set_updated_at
   before update on public.tier_nominations
   for each row execute function public.set_updated_at();
 
 alter table public.tier_nominations enable row level security;
--- RLS state unmeasured (outside 2026-live-rls-surface.md's 15-table scope).
+-- CORRECTED (was "RLS state unmeasured"): migration 20260502161725 (028_pre_launch_security_hardening)
+-- adds an explicit `tier_nominations_service_only ... for select using (false)` policy.
 
 -- ---------------------------------------------------------------------------
 -- feed_events, follows, sparring_partners
@@ -684,10 +839,15 @@ create table public.self_descriptions (
   recorded_at timestamptz not null default now()
 );
 
-create index self_descriptions_member_idx on public.self_descriptions (member_id, recorded_at desc);
+-- CORRECTED (was `(member_id, recorded_at desc)`): migration 20260507011113
+-- (035_growth_engine_schema) indexes `(member_id, prompt_id, recorded_at desc)`; the middle
+-- column matters because reads are almost always "this member's answer to this prompt", per
+-- the table's own history-of-revisions comment above.
+create index self_descriptions_member_idx on public.self_descriptions (member_id, prompt_id, recorded_at desc);
 
 alter table public.self_descriptions enable row level security;
--- RLS state unmeasured. Left closed by default.
+-- CORRECTED (was "RLS state unmeasured"): migration 20260507011113 adds an explicit
+-- `self_descriptions_service_only ... for all using (false) with check (false)` policy.
 
 -- ---------------------------------------------------------------------------
 -- share_events, celebration_events, feedback_items
@@ -696,19 +856,33 @@ alter table public.self_descriptions enable row level security;
 create table public.share_events (
   id uuid primary key default gen_random_uuid(),
   member_id text,
-  surface_type text not null,
+  surface_type text not null,  -- CONFIRMED, not previously marked: check constraint below, migration 20260503050315 (share_events)
   surface_id text not null,
-  channel text not null,
+  channel text not null,  -- CONFIRMED, not previously marked: check constraint below. migration 20260503050315 shipped a shorter list; 20260503051119 (share_events_channel_expand) widened it the same week. This file carries the current, widened list.
   created_at timestamptz not null default now()
 );
 
+alter table public.share_events
+  add constraint share_events_surface_type_check
+  check (surface_type in ('profile', 'article', 'comment', 'quote', 'celebration'));
+
+alter table public.share_events
+  add constraint share_events_channel_check
+  check (channel in ('link', 'x', 'twitter', 'facebook', 'linkedin', 'reddit', 'email', 'native'));
+
+create index share_events_surface_idx on public.share_events (surface_type, surface_id);
+create index share_events_member_idx on public.share_events (member_id) where member_id is not null;
+create index share_events_created_idx on public.share_events (created_at desc);
+
 alter table public.share_events enable row level security;
--- Measured closed to anon: 2026-live-rls-surface.md (0 of 7 rows visible).
+-- Measured closed to anon: 2026-live-rls-surface.md (0 of 7 rows visible). CONFIRMED by the
+-- mechanism too: migration 20260503050315 adds `share_events_service_only ... for all using
+-- (false) with check (false)`.
 
 create table public.celebration_events (
   id uuid primary key default gen_random_uuid(),
   member_id text not null,
-  event_type text not null,
+  event_type text not null,  -- CONFIRMED, not previously marked: check constraint below, migration 20260504224631 (celebration_events)
   context jsonb not null default '{}'::jsonb,
   occurred_at timestamptz not null default now(),
   modal_dismissed_at timestamptz,
@@ -716,10 +890,24 @@ create table public.celebration_events (
   created_at timestamptz not null default now()
 );
 
-create index celebration_events_member_idx on public.celebration_events (member_id, created_at desc);
+alter table public.celebration_events
+  add constraint celebration_events_event_type_check
+  check (event_type in (
+    'first_comment', 'first_article', 'first_quote', 'delta_acknowledged',
+    'tier_promoted', 'follower_milestone', 'became_steward'
+  ));
+
+-- CORRECTED (was `(member_id, created_at desc)`): migration 20260504224631 indexes
+-- `(member_id, occurred_at desc)`, a different column, not just a different name.
+-- occurred_at is when the milestone happened; created_at is when the row was written, and
+-- the two can differ if a celebration is ever backfilled.
+create index celebration_events_member_idx on public.celebration_events (member_id, occurred_at desc);
 
 alter table public.celebration_events enable row level security;
--- RLS state unmeasured. Left closed by default.
+-- CORRECTED (was "RLS state unmeasured"): migration 20260504224631 grants `for all to
+-- service_role using (true) with check (true)` and nothing to anon or authenticated, which
+-- leaves them with no matching policy, the same closed result as this file's usual "enable
+-- RLS, add no policy" pattern.
 
 create table public.feedback_items (
   id uuid primary key default gen_random_uuid(),
@@ -742,7 +930,10 @@ create table public.feedback_items (
 );
 
 alter table public.feedback_items enable row level security;
--- RLS state unmeasured. Left closed by default.
+-- CORRECTED (was "RLS state unmeasured"): migration 20260502161725 (028_pre_launch_security_hardening)
+-- adds an explicit `feedback_items_service_only ... for select using (false)` policy. The
+-- three LIVE UNVERIFIED defaults above are not reached by this or any other recorded
+-- migration; feedback_items is never CREATEd in the 22-row history and stays unverified.
 
 -- ---------------------------------------------------------------------------
 -- fp_snapshots
@@ -763,9 +954,15 @@ create table public.fp_snapshots (
 );
 
 create index fp_snapshots_member_idx on public.fp_snapshots (member_id, captured_at desc);
+-- CONFIRMED, second index also live: migration 20260507011113 (035_growth_engine_schema)
+-- additionally indexes `(reason)` alone, for the Growth History Scroll reading "every
+-- recommitment across all members" style queries. This file was missing it.
+create index fp_snapshots_reason_idx on public.fp_snapshots (reason);
 
 alter table public.fp_snapshots enable row level security;
--- Measured closed to anon: 2026-live-rls-surface.md (0 of 4 rows visible).
+-- Measured closed to anon: 2026-live-rls-surface.md (0 of 4 rows visible). CONFIRMED by the
+-- mechanism too: migration 20260507011113 adds `fp_snapshots_service_only ... for all using
+-- (false) with check (false)`.
 
 -- ---------------------------------------------------------------------------
 -- aspirations
@@ -781,7 +978,7 @@ create table public.aspirations (
   declaration_fingerprint_id uuid references public.fp_snapshots (id) on delete set null,
   declared_at timestamptz not null default now(),
   expires_at timestamptz not null default (now() + interval '90 days'),
-  status text not null default 'active',  -- LIVE UNVERIFIED: candidate list active/expired/archived per the archived September migration
+  status text not null default 'active',  -- CONFIRMED default, CORRECTED candidate list: migration 20260507011113 (035_growth_engine_schema). Real list is active / archived / recommitted / lapsed, not active/expired/archived as guessed; there is no 'expired' value live, and 'recommitted' and 'lapsed' were not anticipated.
   coaching_consent boolean not null default false,
   research_consent boolean not null default false,  -- Live's own gap against the spec, not fixed here: the spec wants null = "not yet asked" plus a research_consent_at timestamp; live has neither. Queued in brief.md's "Next three", item 4.
   created_at timestamptz not null default now(),
@@ -791,16 +988,29 @@ create table public.aspirations (
   -- against this table as it stands. Also queued in brief.md's "Next three", item 4.
 );
 
+-- CONFIRMED, not previously marked: migration 20260507011113 pairs the default above with
+-- this check constraint.
+alter table public.aspirations
+  add constraint aspirations_status_check
+  check (status in ('active', 'archived', 'recommitted', 'lapsed'));
+
 create index aspirations_member_idx on public.aspirations (member_id, status);
+-- CONFIRMED, second index also live: migration 20260507011113 additionally indexes
+-- `(member_id, declared_at desc)`, for "this member's aspiration history in order".
+create index aspirations_member_declared_idx on public.aspirations (member_id, declared_at desc);
+-- CONFIRMED, not previously marked: the same migration enforces "one active aspiration per
+-- member" with this partial unique index, not with application logic alone.
+create unique index aspirations_one_active_per_member on public.aspirations (member_id) where status = 'active';
 
 create trigger aspirations_set_updated_at
   before update on public.aspirations
   for each row execute function public.set_updated_at();
 
 alter table public.aspirations enable row level security;
--- RLS state unmeasured (outside 2026-live-rls-surface.md's 15-table scope). Left
--- closed by default, which the spec's own private-by-default framing supports even
--- without a direct measurement.
+-- CORRECTED (was "RLS state unmeasured... left closed by default"): migration 20260507011113
+-- adds an explicit `aspirations_service_only ... for all using (false) with check (false)`
+-- policy. The guess and the evidence agree on the result; this upgrades it from an inference
+-- to a confirmation.
 
 -- ---------------------------------------------------------------------------
 -- Deferred foreign key: profiles.current_aspiration_id -> aspirations.id

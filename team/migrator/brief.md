@@ -169,6 +169,54 @@ is for, and this seat routed it to `/dialecta-council` rather than deciding it. 
 currently has no `-D` marker flagging it as open; this seat cannot edit `docs/plans/backlog.md` to
 add one (outside this session's write scope) and said so in the exchange record instead.
 
+## Updated 2026-09-20, migration-fetch verification session
+
+The gap the schema-squash session left open ("not yet diffed against real `migration
+fetch` output... unstarted") is closed. This session read
+`supabase_migrations.schema_migrations.statements` directly with read-only SQL against
+project `mguulnibvzusfvyuowwh` and checked all 34 `LIVE UNVERIFIED` markers against it.
+Full trace: `knowledge/2026-migration-fetch-verification.md`.
+
+**7 of 34 resolved, 1 upgraded without becoming a full confirmation, 24 stay marked**
+because their table or column predates the recorded history (earliest row 2026-04-29,
+same gap `2026-live-migration-history.md` already found for `articles`) or the one
+migration touching the table doesn't reach the marked column. One guess was flatly
+wrong (`profiles.signature_font`'s default), one was wrong in a way the marker didn't
+anticipate (`axis_events.article_id` is `text`, guessed `uuid`).
+
+**Three corrections beyond the 34, none of them previously marked as guesses:**
+`axis_events`'s select policy was open when it should be closed (the RLS-surface
+document it cited already said so; looks copied from a neighboring table by mistake),
+`handle_history` was missing two real policies live actually has, and `axis_scores`
+already carries the uniqueness item 6 (below) asked for, since 2026-04-29, under a
+different name than the companion migration gave it.
+
+**Item 6's companion migration, `20260920000100_axis_scores_contributor_axis_unique.sql`,
+is superseded, not landed.** The uniqueness it added is real and already live under the
+name `axis_scores_member_axis_unique`; Dan's decision stands, only the mechanism
+changed, the same way `026b` fixed `026` forward. Archived at
+`supabase/migrations/_archived_2026-09-20/`. The baseline carries the real constraint
+directly now.
+
+**One finding flagged, not fixed, outside this seat's reach:** the recorded SQL for
+`028_pre_launch_security_hardening`'s rewrite of `initialise_contributor_axes()` inserts
+the literal `'forming'` into `archetypes.archetype_id`, an 8-value enum that does not
+contain `'forming'` (that value belongs to the separate `archetype_confidence` enum on
+the same table). Read as a live bug that would surface as a Postgres enum error the
+next time a brand-new member's archetype row is initialized, not confirmed by actually
+running it. Worth someone checking `api/` for the call path and whether any later,
+unrecorded change already patched it.
+
+**All four files this touched are in `supabase/migrations/`**, none applied, none
+pushed, per this task's own hard rule against running the repair: the corrected
+baseline (`20260920000000`), the two migrations the convener applied live today and
+this session recovered verbatim and wrote as local files
+(`20260920192954_close_ghost_member_id_as_public_credential.sql`,
+`20260920193044_publish_the_three_existing_comments.sql`), and the now-archived
+`20260920000100`. `2026-schema-squash-runbook.md` Part 3 is rewritten with the real
+20-version list (no more placeholder) and now repair-marks three versions applied, not
+one.
+
 ## What this agent posts to the exchange
 
 An `advice` record to Dan through `decider` for any spec field that will not map.

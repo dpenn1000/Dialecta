@@ -12,6 +12,41 @@ Create Baseline for Existing Production Database", fetched 2026-09-20). No comma
 this file has been run against any database. Login, link, and every write step are
 Dan's or a later session's to run, not this one's.
 
+## Updated 2026-09-20, later the same day: migration fetch ran
+
+The verification Part 1 Step 9 called for is done: a direct read-only SQL query against
+`supabase_migrations.schema_migrations`, reading the same `statements` column the CLI's
+own `migration fetch` reads (this session's mandate was read-only SQL through the
+Supabase MCP, not the CLI). Full trace and every finding:
+`2026-migration-fetch-verification.md`; the corrections themselves are already applied
+to `20260920000000_baseline_live_schema.sql`.
+
+**The plan below survives, with three changes.**
+
+1. **Part 3 Step 1's placeholder is now real.** The 20 versions are listed exact, no
+   more "copy it from the output."
+2. **Part 3 Step 3 now repair-marks three versions applied, not one.** Two more
+   migrations landed on the live project today, after this runbook was first written
+   and after the baseline was first drafted: `20260920192954_close_ghost_member_id_as_public_credential.sql`
+   and `20260920193044_publish_the_three_existing_comments.sql`. The convener applied
+   both directly through the Supabase MCP's `apply_migration`, which this session's
+   mandate does not have access to; both are now written to `supabase/migrations/` with
+   the exact SQL that ran. They need the same `repair --status applied` treatment as
+   the baseline, for the same reason the baseline does: they already happened.
+3. **`20260920000100_axis_scores_contributor_axis_unique.sql` is out of the plan.** The
+   uniqueness it adds already exists live, under a different name
+   (`axis_scores_member_axis_unique`), added 2026-04-29 by one of the 20 migrations
+   Step 2 reverts. The baseline now carries that constraint directly, under its real
+   name. Repair-marking the standalone file applied without ever running it, which is
+   what Step 3 always does, would have left the tracking table asserting a constraint
+   that does not exist under the name the file gives it. Archived unchanged at
+   `supabase/migrations/_archived_2026-09-20/`, the same way the two September files
+   were archived rather than deleted.
+
+The mechanism itself, `migration repair` touching only the tracking table and never
+running real SQL, is unchanged and still the right tool. Nothing found today argues for
+a different mechanism, only a corrected file list and a corrected baseline.
+
 ## Read this before running anything
 
 **This runbook supersedes Part 2 of `p0-2-runbook.md`.** That file's Part 1
@@ -199,47 +234,91 @@ project from a guess; run it after the verification above, or after Dan says the
 baseline is close enough that the remaining `LIVE UNVERIFIED` gaps can be closed with
 follow-up migrations instead of blocking this landing.
 
-### Step 1. Confirm which 20 versions are live
+### Step 1. The 20 versions live, confirmed exact
 
-From Part 1 Step 5's `migration list --linked` output (already captured if
-`p0-2-runbook.md` Part 1 has been run), read the **remote** column. It is a list of
-14-digit timestamps, e.g. `20260427000000`. This runbook cannot hardcode them: no
-session has read them yet, and `2026-live-migration-history.md` is explicit that its 19
-reconstructed names are "not authoritative." Copy the real list from that output before
-the next step.
+Read directly off `supabase_migrations.schema_migrations` (migrator, 2026-09-20; see
+`2026-migration-fetch-verification.md`), not reconstructed and not a placeholder:
+
+```
+20260429222558  axis_events
+20260429222635  classifications_strength
+20260429223033  axis_events_article_source
+20260430010303  polish_v2_levels
+20260501030623  tier_nominations
+20260502000642  026_signature_font
+20260502000907  026b_signature_font_default_fix
+20260502035134  aspirational_archetype
+20260502161725  028_pre_launch_security_hardening
+20260502161837  028b_pin_search_path_post_replace
+20260502184334  profiles_handle
+20260502184509  profiles_handle_security_hardening
+20260503050315  share_events
+20260503051119  share_events_channel_expand
+20260504131944  profiles_subscription_tier
+20260504131947  profiles_is_charter
+20260504224631  celebration_events
+20260505010345  profiles_is_gifted
+20260506170239  profiles_gift_expires_at
+20260507011113  035_growth_engine_schema
+```
+
+Twenty rows, matching `team/migrator/brief.md`'s "live project reports 20 applied
+migrations" exactly. None of these names match `2026-live-migration-history.md`'s
+19-name reconstruction except `026_signature_font`, `026b_signature_font_default_fix`,
+`028_pre_launch_security_hardening` and `035_growth_engine_schema`; the rest of that
+reconstruction (`000_baseline_documentation` through `027_aspirational_archetype`'s
+neighbours) describes migrations older than any of these 20, none of them recorded.
+The earliest row here is 2026-04-29; `articles`, `profiles`, `comments`,
+`classifications`, `axis_scores`, `archetypes` and more are never `CREATE TABLE`d
+anywhere in this list, confirming `2026-live-migration-history.md`'s own finding that
+roughly the first 25 migrations predate what the history table remembers.
 
 ### Step 2. Mark the 20 old versions reverted
 
 ```bash
-npx --yes supabase migration repair 20260427000000 20260427000001 ... --status reverted --linked
+npx --yes supabase migration repair \
+  20260429222558 20260429222635 20260429223033 20260430010303 20260501030623 \
+  20260502000642 20260502000907 20260502035134 20260502161725 20260502161837 \
+  20260502184334 20260502184509 20260503050315 20260503051119 20260504131944 \
+  20260504131947 20260504224631 20260505010345 20260506170239 20260507011113 \
+  --status reverted --linked
 ```
 
-Substitute the real 20 timestamps from Step 1 for the placeholder list above. The CLI
-accepts multiple versions in one call (`migration repair [<version...>]`).
+The CLI accepts multiple versions in one call (`migration repair [<version...>]`); this
+is the full real list from Step 1, no substitution needed.
 
 **Expected:** a line per version confirming the tracking row was deleted.
 **Writes:** deletes 20 rows from `supabase_migrations.schema_migrations` on the live
 project. **Runs no SQL against any table.** The columns, rows, and constraints those 20
 migrations created are untouched; only the CLI's memory of having run them is cleared.
 **Undo:** `migration repair <version> --status applied --linked` re-inserts the row for
-any version this step removed by mistake. Keep the exact list from Step 1 until this
-whole runbook is confirmed complete, specifically so this undo is possible.
+any version this step removed by mistake.
 
-### Step 3. Mark the new baseline applied, without running it
+### Step 3. Mark the baseline and today's two real migrations applied, without running any of them
 
 ```bash
-npx --yes supabase migration repair 20260920000000 --status applied --linked
+npx --yes supabase migration repair \
+  20260920000000 20260920192954 20260920193044 \
+  --status applied --linked
 ```
 
-**Expected:** confirms the row was inserted for `20260920000000_baseline_live_schema`.
-**Writes:** inserts one row into `supabase_migrations.schema_migrations`, marking this
-version as applied. **This does not execute the migration file.** That is the point:
-the baseline's `create table` statements describe tables that already exist on the live
-project, so running them for real would fail on the first statement exactly the way the
-original September collision did. `repair --status applied` tells the CLI "this already
-happened," which is true, since the baseline is a transcription of what live already is,
-not a change to it.
-**Undo:** `migration repair 20260920000000 --status reverted --linked`.
+**Expected:** confirms three rows inserted: `20260920000000_baseline_live_schema`,
+`20260920192954_close_ghost_member_id_as_public_credential`,
+`20260920193044_publish_the_three_existing_comments`.
+**Writes:** inserts three rows into `supabase_migrations.schema_migrations`, marking
+all three versions applied. **This does not execute any of the three files.** That is
+the point for the baseline, whose `create table` statements describe tables that
+already exist on the live project (running it for real would fail on the first
+statement, exactly the way the original September collision did), and it is *also*
+true, differently, for the other two: they do not need executing because the convener
+already executed them for real, live, through `apply_migration`, hours before this
+step runs. `repair --status applied` tells the CLI "this already happened" for all
+three, which is true of each for its own reason.
+**Undo:** `migration repair 20260920000000 20260920192954 20260920193044 --status reverted --linked`.
+
+**`20260920000100_axis_scores_contributor_axis_unique.sql` gets no repair command.** It
+is archived at `supabase/migrations/_archived_2026-09-20/`, not part of the applied set;
+see "Updated 2026-09-20" at the top of this file for why.
 
 ### Step 4. Confirm the repair worked
 
@@ -247,17 +326,22 @@ not a change to it.
 npx --yes supabase migration list --linked
 ```
 
-**Expected:** local and remote columns both show exactly `20260920000000` and, once
-Part 4 below lands, `20260920000100`. No stragglers from the old 20, no `20260919000000`
-or `20260919000100` from the retired September files (they were moved out of
-`supabase/migrations/` in this session, see Part 4's own note, so they cannot appear
-here regardless).
+**Expected:** local and remote columns both show exactly `20260920000000`,
+`20260920192954` and `20260920193044`. No stragglers from the old 20, no
+`20260919000000` or `20260919000100` from the retired September files (moved out of
+`supabase/migrations/` in the schema-squash session, so they cannot appear here
+regardless), and no `20260920000100` (archived, per Step 3's note). Whether
+`20260920000200_profile_claim_tokens.sql`, a fourth local file this session found
+already sitting in `supabase/migrations/` and unrelated to the squash, belongs in this
+same landing or a separate one is not this runbook's call; it shows up in this output
+as local-only (no remote row) either way, and that is expected, not a fault in the
+repair above.
 
 **After this step, and only after it, `db push` becomes a normal, safe operation again**
-for any future migration: the remote history has exactly the two files this repo now
-carries, so a `db push` compares against a short, accurate list instead of an unrelated
-20-entry one. This runbook does not run one; it only re-establishes the ground it would
-run on safely.
+for any future migration: the remote history has exactly the versions this repo's
+`supabase/migrations/` carries (plus whatever `profile_claim_tokens` resolves to), so a
+`db push` compares against a short, accurate list instead of an unrelated 20-entry one.
+This runbook does not run one; it only re-establishes the ground it would run on safely.
 
 ### If this goes wrong
 
@@ -269,9 +353,9 @@ list from there; the command is idempotent per version (repairing an already-rev
 version again is a no-op, not an error, per its own doc text describing it as bringing
 the table to a target status).
 
-## Part 4: the two migrations this session wrote
+## Part 4: what is in `supabase/migrations/` now, and why
 
-Both are in `supabase/migrations/`, both unapplied anywhere, both waiting on Part 3.
+Four files wait on Part 3; a fifth was written and superseded the same day.
 
 **`20260920000000_baseline_live_schema.sql`.** Adopts live's schema wholesale: all 30
 public tables read from `supabase/types.ts`, RLS enabled on every one, `select using
@@ -293,20 +377,45 @@ file already carries the fix the task asked for. There is no separate migration 
 see the report for why writing one anyway would be a redundant, ruleless change against
 a file that already matches the rule.
 
-**`20260920000100_axis_scores_contributor_axis_unique.sql`.** The single additive
-statement from `2026-09-19-002`'s appendix, using live's real column name
-(`member_id`, not the repo's `contributor_id`) since the baseline it lands on top of is
-live's shape:
+**`20260920000100_axis_scores_contributor_axis_unique.sql`, written this session,
+superseded the same day, now at `supabase/migrations/_archived_2026-09-20/`.** It
+carried the single additive statement from `2026-09-19-002`'s appendix, using live's
+real column name (`member_id`, not the repo's `contributor_id`) since the baseline it
+was meant to land on top of is live's shape:
 
 ```sql
 alter table public.axis_scores
   add constraint axis_scores_one_member_per_axis unique (member_id, axis);
 ```
 
-Dan's decision names this exact constraint. `archetypes` is deliberately not given the
-same treatment here: the appendix flagged it as needing a one-line confirmation first
-(whether the archetype monitor should write history, in which case a uniqueness
-constraint would be wrong), and no answer to that is on record.
+Dan's decision named this exact constraint, and the constraint itself is not wrong: one
+row per member per axis is the real rule. What changed is that this session's migration
+fetch pass found live already enforces it, has since 2026-04-29, under the name
+`axis_scores_member_axis_unique`, added by one of the 20 migrations Part 3 Step 2
+reverts (see `2026-migration-fetch-verification.md`). Applying this file, even only as a
+`repair --status applied` mark that never runs it for real, would have asserted a
+constraint that does not exist under the name the file gives it. The baseline now
+carries `axis_scores_member_axis_unique` directly, citing that migration. Dan's decision
+still stands; only the mechanism that satisfies it changed, the same way `026b` fixed
+`026` forward rather than reopening whether `026` should have shipped. `archetypes` was
+and still is deliberately not given the equivalent treatment: the appendix flagged it as
+needing a one-line confirmation first (whether the archetype monitor should write
+history, in which case a uniqueness constraint would be wrong), and no answer to that is
+on record.
+
+**`20260920192954_close_ghost_member_id_as_public_credential.sql` and
+`20260920193044_publish_the_three_existing_comments.sql`, added this session, not
+written by it.** The convener applied both directly to the live project through the
+Supabase MCP's `apply_migration` earlier the same day, closing the identity-spoofing
+column-grant gap on `profiles` and publishing the three comments that had sat at
+`pending_review` since April. Neither had a local file until this session recovered
+their exact SQL from `supabase_migrations.schema_migrations` and wrote it verbatim; see
+`2026-migration-fetch-verification.md`. The baseline's `profiles` table already
+describes the narrower, closed-off shape (it was authored the same day, after the
+`028_pre_launch_security_hardening` history but before this grant change), so the two
+files are additive on top of it, exactly like `20260920000100` was meant to be, except
+these two are not superseded: their effect is real, already live, and not otherwise
+carried anywhere else in this repo.
 
 **The two September files, `20260919000000_foundation.sql` and
 `20260919000100_articles_native.sql`, move to
