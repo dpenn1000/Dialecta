@@ -16,6 +16,12 @@ Evidence names the file in `knowledge/` that backs it, or `(unsourced)` when not
 | RLS policy changes are written by hand in the migration and never generated. Declarative schemas and `db diff` do not capture policies, and a missing policy looks identical to an intended absence | high | `2026-supabase-declarative-schemas.md` | 2026-09-19 |
 | Bounded values stay column check constraints rather than domains, until the same bound appears on a second table. A domain constraint is not revalidated when it changes | medium | `2026-postgresql-domains-vs-checks.md` | 2026-09-19 |
 | Before writing a migration for a spec entity, check whether the entity already exists live and under what name. Ten of the thirteen tables in `supabase/migrations/` already existed | high | `2026-live-schema-diff.md` | 2026-09-19 |
+| A diff engine is named explicitly (`--diff-engine pg-delta` on `db pull`, `--use-pg-delta` on `db diff`), never left to default. The Supabase CLI's default is still `migra`, and upstream `migra` is self-described deprecated with no commits in over a year | high | `2026-supabase-db-pull-diff-engines.md` | 2026-09-20 |
+| A populated column's type is never changed with a bare `ALTER COLUMN ... TYPE`. Add the new column, backfill in batches, dual-write from the app, cut reads over, then drop the old column. A naive cast also fails outright wherever the value is not castable, which this schema has by design (Ghost-sourced text ids) | high | `2026-postgresql-column-type-remap.md` | 2026-09-20 |
+| A ledger table's rows are corrected by appending a compensating row, never by patching the total in place. This is `supabase/CLAUDE.md`'s replay lock; this is the sourced reason for it | high | `2026-event-sourcing-ledger-replay.md` | 2026-09-20 |
+| A Supabase branch used for staging is created with data explicitly included. The default branch flow clones configuration and Edge Functions automatically but starts with no data or storage objects | high | `2026-supabase-branching.md` | 2026-09-20 |
+| RLS policy shape gets a `policies_are()` / `policy_roles_are()` / `policy_cmd_is()` pgTAP assertion once Docker is available, run via `supabase test db`, in addition to the hand-written migration. Not yet run locally; Docker is not installed on studio-pc | medium | `2026-supabase-pgtap-rls-testing.md` | 2026-09-20 |
+| A third-party schema-diff tool (Atlas, sqldef, sqitch) is not adopted to replace the Supabase CLI for authoring: each tracks its own applied-state separately from `supabase_migrations.schema_migrations`, which this repo already depends on. Atlas is a live candidate for drift detection specifically, as a supplement, pending a price/fit check not yet done | medium | `2026-schema-diff-tool-landscape.md` | 2026-09-20 |
 
 ## Note on the fourth row
 
@@ -26,3 +32,10 @@ keys every child table on `member_id` with no foreign key to `profiles`, and
 cannot be read from `supabase/types.ts`. The rule holds for new work and does not
 describe the database as it stands. See `2026-live-schema-diff.md`, "The one
 structural fact under all of it".
+
+**Added 2026-09-20.** The mechanical path for closing this gap, whenever it is
+opened, is now costed: expand-contract, not a single `ALTER COLUMN TYPE`, and the
+backfill step needs `profiles.ghost_member_id` to resolve every live `member_id` to a
+real `profiles.user_id` before it can run cleanly. Whether it resolves all of them is
+unmeasured and is now an open reading-list lead. See
+`2026-postgresql-column-type-remap.md`.
