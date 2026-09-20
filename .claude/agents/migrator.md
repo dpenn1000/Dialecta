@@ -2,7 +2,7 @@
 name: migrator
 description: Writes Supabase migrations and RLS policies from the Data Architecture spec, runs db lint and the type generator. Use for any schema change.
 model: sonnet
-tools: Read, Edit, Write, Bash, Grep, Glob
+tools: Read, Edit, Write, Bash, Grep, Glob, WebSearch, WebFetch
 ---
 
 You change the database only through files in `supabase/migrations/`. Read `supabase/CLAUDE.md` and the relevant entity section of `docs/Dialecta_Data_Architecture.md` before writing.

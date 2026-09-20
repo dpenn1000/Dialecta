@@ -8,8 +8,8 @@ The lead session launches each agent as its own subagent, in parallel, with the 
 
 Two families, one procedure. An advisor lives in `council/<name>/` with `positions.md` and
 `research/`; a working agent lives in `team/<name>/` with `practices.md` and `knowledge/`. Read
-`<folder>` and `<standing file>` below as whichever pair applies. `council` is the three advisors,
-`team` is the six working agents, `all` is all nine.
+`<folder>` and `<standing file>` below as whichever pair applies. `council` is the five advisors,
+`team` is the six working agents, `all` is all eleven.
 
 | Family | Folder | Standing file | Notes tree |
 | --- | --- | --- | --- |
@@ -31,6 +31,34 @@ moves it and carries the same. Both are marked `(unsourced)` when no filed note 
 4. Update your standing file: add or revise the positions or practices the new sources support or undercut, with confidence and the filed notes as evidence. A row with no file behind it is marked `(unsourced)`.
 5. Return a table: source, filed or dead, one line of what it implies, and the positions changed.
 
+## Finding tools and repositories, not only reading
+
+A source that changes what you believe is worth a note. **A tool that changes what you can do is
+worth more**, and nothing in this sprint finds one unless you go looking. Spend part of every
+sprint on the second kind.
+
+Three places, in this order:
+
+1. **The GitHub API through `WebFetch`**, which needs no auth and no shell:
+   `https://api.github.com/search/repositories?q=<terms>&sort=stars&order=desc&per_page=10`
+   Read `stargazers_count`, `pushed_at` and `archived` before you read the description. A
+   four-year-dead repository with 20k stars is a museum piece, not a dependency.
+2. **The local stack, which costs nothing per call.** Ollama runs on this machine with
+   `qwen3-coder:30b`, `qwen2.5:14b`, `qwen3:8b` and `nomic-embed-text`. The
+   `dialecta-local-research` MCP server already indexes every filed note across both families and
+   answers semantic queries over them. **Search the index before you search the web**: another
+   seat may have filed the thing you are about to go find.
+3. **What the repository already carries.** `_recovered/` holds 163 files of production source
+   recovered from a Vercel artifact, including 52 API handlers and 44 applied migrations. It is
+   quarantine, so cite it freely and promote nothing from it.
+
+File a tool the same way you file a source, with `implies` naming what it would let Dialecta or
+this seat do that it cannot do today. A tool note that cannot finish that sentence is a bookmark,
+and bookmarks do not go in the tree.
+
+**Judge a dependency before you recommend it.** Last release, open issue count, licence, and
+whether one person can abandon it. `security` holds the supply-chain position and will ask.
+
 ## Rules
 
 - Write only under your own folder, and in `exchange/` when you post a record. Never touch `docs/`, `apps/`, `packages/`.
@@ -41,7 +69,7 @@ moves it and carries the same. Both are marked `(unsourced)` when no filed note 
 
 ## After a sprint
 
-An advisor: run `/dialecta-council` on P0-D2 and A-D3 once all three have filed. They should
+An advisor: run `/dialecta-council` on P0-D2 and A-D3 once all five have filed. They should
 argue from files rather than from priors.
 
 A working agent: the next three tasks in its `brief.md` are the rest of its training. Update the
