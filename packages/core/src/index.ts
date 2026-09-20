@@ -60,6 +60,7 @@ export {
   replayAxisScores,
   type AxisDelta,
   type AxisEvent,
+  type AxisMappingContext,
   type AxisScore,
   type AxisScores,
 } from './axis-mapping';
