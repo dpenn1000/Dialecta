@@ -77,13 +77,31 @@ page states that Acuity trades against Reach and Discourse trades against Calibr
 Magnanimity, so "the trade-offs make a true circle structurally impossible and force every
 fingerprint into a real shape."
 
-`philosopher` and `designer` disagree about whether that is honest, and the disagreement is real
-rather than an error. `philosopher` judges the ring by what it signifies, and finds it earns its
-claim: it sits equidistant from every contributor and reads as horizon rather than reproach.
-`designer` judges whether the copy matches the render math, and finds the engine normalises every
-axis on 22 (lines 158, 163, 276, 287) while the documented data range is 0 to 20, so a contributor
-with no trade-off penalty at all still falls short by construction. Both hold on their own axis.
-What separates them is whether an unreachable potential reads as encouragement, which is Dan's call.
+`philosopher` and `designer` read that ring opposite ways, and both were right. `philosopher`
+looked at a newborn and found a horizon: equidistant from everyone, inviting rather than
+reproachful. `designer` looked at a veteran's 23rd graduation and found a wall, because
+`Math.min(graduations, 22)` appears at four separate lines and past 22 the only channel a viewer
+can judge stopped moving. The object changed meaning depending on where you stood on it, and only
+the early half matched the copy.
+
+**Resolved 2026-09-20 by Dan, on `designer`'s item 3.** The clamp is gone and progress now
+saturates toward the ring without arriving, so "potential" is true at both ends. The port lives in
+`packages/core/src/fingerprint-geometry.ts`, not in the recovered engine, because editing
+quarantine in place would promote it without review.
+
+What the change actually buys, measured at a 170px radius by asking where one more graduation stops
+moving the boundary half a pixel: the recovered engine stops at graduation 22 as a hard edge, the
+port stops at 29 as a fade. It removes the cliff. It does not deliver unbounded visible growth, and
+no value of `HORIZON_SOFTNESS` will, because the ring is a fixed radius and a curve that fills most
+of it by graduation 22 has little left to spend. **Carrying a veteran's 200th graduation needs a
+different channel rather than a different exponent**, and ring density, texture and the resonance
+halo are all unsaturated.
+
+*An earlier version of this section had `designer` finding the ring unreachable, on a "data range
+is 0 to 20 against a render cap of 22" argument. That argument was the convener's, not
+`designer`'s, built by welding a stale `graduations: int 0-20` docstring in the engine onto
+`designer`'s claim. Both layers cap at 22, and `designer`'s actual finding was the opposite: too
+reachable, and a wall once reached.*
 
 ## The three live fingerprints run on the fallback
 
@@ -166,7 +184,8 @@ that argument does not currently survive.
 | The axis-colour legend teaching a mapping the engine calls a fallback | `designer` |
 | Builder and Empiricist sharing a green | `designer` |
 | Turbulence being a full-size signal rather than an avatar-scale one | `designer` |
-| Whether an unreachable potential ring reads as encouragement | Dan |
+| Which channel carries growth past graduation 29, now that radius cannot | `designer` |
+| Whether Consistency keeps its exemption from the trade-off pairs | settled by Dan, it does |
 | P-11, no contest path for a rendered characterisation | `philosopher`, `legal` |
 | Re-baking the examples after any change | `build-archetype-svgs.jsx` exists for this |
 
