@@ -60,3 +60,23 @@ platform's signature visual element. This half of the tree starts here.*
 | todo | WCAG 2.2 SC 1.4.10 Reflow and SC 1.4.4 Resize Text | The normative half of the Responsive Foundations debt the charter says is mine to keep raising | |
 | todo | The `ch` unit and the measure: how the design spec's own `50ch` / `52ch` / `64ch` rules were chosen | The spec already knows about `ch` and `apps/web` does not. Find out which rule was deliberate | Found while filing `2001-dyson-haselgrove-line-length.md` |
 | todo | Tufte, data-ink ratio, applied to the topology bar | The topology bar is a data visualisation and has never been read as one | |
+
+## Added in sprint 3: repositories
+
+*Scanned 2026-09-19 via `gh`. The best finds were Dan's own repos, not external ones. Generic
+keyword searches for paper grain, noise texture and colour-blind-safe palettes returned nothing
+above noise, which is recorded as a dead end rather than retried.*
+
+| State | Lead | Why it matters here | Note |
+| --- | --- | --- | --- |
+| filed | `dpenn1000/trinity-platform`, `Tools/APEX/docs/` design system | The spacing scale, the direction rule and the fill-versus-ink law, already written by Dan | `2026-trinity-apex-design-system.md`. Private repo. Take the laws, never the palette |
+| filed | Radix Colors, the twelve step scale and its contrast guarantee | A scale is a set of promises between its own steps. The idea that makes D-19 possible | `2026-radix-colors-scale-roles.md` |
+| filed | GitHub scan: tokens, colour science, accessibility engines, font stacks | Nine verified repos with stars, licences and push dates | `2026-external-design-repos-scan.md` |
+| todo | `dpenn1000/dialecta-api`, `api/article/` | Five endpoints this repo lacks, one of them a formatting assistant in Editorial Voice | Read `aesthetic-suggest.js` only. Raised as exchange 2026-09-19-005 |
+| todo | `dpenn1000/trinity-platform`, `Tools/APEX/assets/apex-design.css` | The grain, the float shadow stack and the convex control treatment, as shipped CSS | Read the intent doc, not the CSS. The technique is the transferable part |
+| todo | `dpenn1000/trinity-platform`, `Tools/APEX/docs/DESIGN-ROLLOUT.md` | How a design system was rolled across an existing product without stopping it | Directly relevant if the spacing and type scales are accepted |
+| todo | `dpenn1000/penningtonmediagroup`, `img/dialecta/` and `assets/styles.css` | A Dialecta logo and a stylesheet living outside both Dialecta repos | Check it against `design/logos/` before anyone reconstructs anything |
+| todo | W3C Design Tokens Community Group specification | The standard shape for spacing and type tokens, before Dialecta invents a private one | `design-tokens/community-group`, 2,126 stars |
+| todo | `Evercoder/culori` or `gka/chroma.js` | Would replace the hand-rolled CIEDE2000 in `tier-palette-audit.py` if the audit moves into CI | Weigh against the script currently having zero dependencies |
+| todo | `dequelabs/axe-core` or `pa11y/pa11y` | The rendered-page half of D-18. Catches what a token file cannot, such as opacity on dimmed filter buttons | MPL-2.0 and LGPL-3.0 respectively |
+| todo | `system-fonts/modern-font-stacks`, CC0 | What Dialecta's four webfaces fall back to before they load, classified by typeface style | Bears on whether the page feels native in the first 200ms |

@@ -53,6 +53,41 @@ gold, the grain and the nav gradient are not in play, and every craft position i
 a number that is wrong against a normative W3C criterion. Most of the audit is fixable with the tier
 icons the design spec already defines, which is why only the two text colours went to `decider`.
 
+Sprint 3 scanned for repositories rather than papers, and the best finds were Dan's own. The APEX
+design system in `dpenn1000/trinity-platform` already solves D-15 in his idiom, with a direction
+rule this advisor did not have, and already states the colour law that the Heat badge violates.
+`dpenn1000/dialecta-api` carries five article endpoints this repo does not, including
+`aesthetic-suggest.js`, which is a formatting assistant written in Editorial Voice before v1.2
+existed. Raised as 2026-09-19-005. Externally, Radix Colors supplied the one idea that turns the
+palette audit into something fixable: a scale is a set of promises between its own steps.
+
+The boundary on Trinity needs restating every time it comes up. Root `CLAUDE.md` says the voice
+guides descend from Trinity and the two are "kept separate on purpose". The same holds for design:
+take the laws and the method, never the palette or the cockpit look.
+
+## Proposed charter amendment, for Dan
+
+`guard-docs.mjs` blocks this advisor from editing `charter.md`, correctly. This is the proposal, to
+accept, change or refuse.
+
+The charter is written entirely in defensive terms: what it fights for, what it would veto, what
+constrains it, what it measures. Three sprints produced two audits and one scan, which is what that
+charter asks for. Nothing in it says this advisor may propose something new, and nothing names
+craft. The mandate says the site should feel "native and inevitable" and then never mentions colour,
+space, type or beauty again.
+
+Two clauses would fix it, in the charter's existing register:
+
+> **I propose, not only object.** A council seat that only ever says no is a filter. I bring fresh
+> work: a surface nobody asked for, a mechanic that fits the thesis better than the one in the spec,
+> a way to make the thing people will actually love. I argue for it with the same evidence I demand
+> of others.
+
+> **Fit and finish are mine.** Colour that survives real eyes, space that carries meaning, type a
+> person reads without noticing, and the organic native feel that makes this place look like nowhere
+> else. Tokens are locked and I do not iterate on them for taste, but a number that is measurably
+> wrong is mine to raise, and a system with no rule behind it is mine to propose one for.
+
 The standing ask from the charter is unchanged and now blocks its own positions. D-7 says plainly
 that nothing about the composer can be settled until first-comment completion is instrumented. That
 is the next thing worth buying.

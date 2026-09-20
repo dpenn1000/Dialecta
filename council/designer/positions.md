@@ -29,6 +29,11 @@ reproducible from `research/tier-palette-audit.py`.
 | D-16 | Article prose in `apps/web` renders in the sans at roughly 85 characters per line. P0-5 is where both get fixed | Medium to high | `2001-dyson-haselgrove-line-length`, `2026-dialecta-space-and-scale-audit` | 2026-09-19 |
 | D-17 | The brightness ladder is right and I am not asking to re-pick the gold, the grain or the nav gradient. Every craft position above is additive or a measured defect | High | charter, "Constraints I argue inside"; `.claude/agents/designer.md` | 2026-09-19 |
 | D-18 | A contrast check belongs in CI beside `npm run tokens -- --check`, which guards colour drift and cannot see contrast | Medium | `2026-dialecta-tier-palette-audit`, `2021-somers-apca-contrast-whitepaper` | 2026-09-19 |
+| D-19 | Each tier needs four tokens with named roles and a contract between them, not four values that happen to sit together. Ink clears 4.5:1 against the lightest point of its own fill; border clears 3:1 against the card | High | `2026-radix-colors-scale-roles`, `2026-trinity-apex-design-system`, `2026-dialecta-tier-palette-audit` | 2026-09-19 |
+| D-20 | Dialecta's spacing scale should take the shape Trinity already uses: four numbers, snap everything to them, and one direction rule so gaps never double. Dan picks the numbers | High | `2026-trinity-apex-design-system`, `2026-dialecta-space-and-scale-audit` | 2026-09-19 |
+| D-21 | The article editor should carry an aesthetic pass, and it already exists at `dialecta-api/api/article/aesthetic-suggest.js`. A-10 is written as though it does not | Medium to high | exchange 2026-09-19-005 | 2026-09-19 |
+| D-22 | The Contrast Strip is the most distinctive element on a comment card and is given the least visual weight. It is the reclassification story made visible, styled as a footnote | Medium | Discourse Layer UX, "Contrast Strip"; Social UX Architecture, "Viral Mechanics"; `2026-trinity-apex-design-system` | 2026-09-19 |
+| D-23 | This advisor's charter is written entirely in defensive terms and should carry a generative clause. Raised for Dan; `guard-docs.mjs` correctly blocks me from editing it | Medium | charter.md; `.claude/agents/designer.md` | 2026-09-19 |
 
 ---
 
@@ -156,6 +161,64 @@ and the spec elsewhere uses `ch`. Adding the two scales takes nothing away and g
 built from A-1 onward something to be checked against.
 
 ---
+
+## Proposal: give the tier tokens roles and a contract
+
+Two systems reached the same conclusion independently, and one of them is Dan's.
+
+Radix Colors defines a scale as twelve named roles rather than twelve values, and binds the text
+steps to the background steps of their own scale: steps 11 and 12 are "guaranteed to Lc 60 and Lc 90
+APCA contrast ratio on top of a step 2 background from the same scale". Accessibility is a property
+of how the scale is built. The APEX Design Intent puts the same idea in Dan's words: fills ride
+their own grades, "decoupled from the AA text hues, so the light theme's bubbles and bars stay vivid
+while its text stays compliant", because "a text hue doing a fill's job is how a slider's center
+turns to mud".
+
+Dialecta's Heat badge is that mud case exactly. `--tier-heat-text` is the badge ink and, through
+`currentColor`, the icon fill, and nothing binds it to `--tier-heat-top`. No rule was broken. No rule
+existed.
+
+So write the rule, and change no value that satisfies it:
+
+| Role | Job | Contract |
+| --- | --- | --- |
+| `top` and `bot` | The fill. Carries the brightness ladder | None. Stays expressive |
+| `border` | Tier identity, and the topology segment | 3:1 against `--bg-white` |
+| `ink` | Badge text and icon | 4.5:1 against the lightest point of its own fill |
+
+Five of the seven tiers already pass both. The gold, the grain, the nav gradient and the ladder are
+untouched. D-18 then has something to check, because a contract is testable and "pick nice colours"
+is not.
+
+The same move fixes space. Trinity snaps every margin, gap and padding to four numbers and adds the
+rule this advisor did not have: blocks space downward, section heads own the space above, so gaps
+never double. "If a layout only works off-scale, the layout is wrong, not the scale." Dialecta should
+take the shape and let Dan pick its own four numbers, because 48px before a section is a cockpit
+rhythm and a reading page may want more.
+
+## Proposal: the Contrast Strip is buried
+
+This one is not a defect, it is an argument, and I would rather be argued out of it than leave it
+unsaid.
+
+When a commenter's declared tier and the engine's read differ, a strip appears under the comment
+footer: "Commenter declared X. Engine read Y. Community voting will settle it." It is permanent and
+public. The Social UX Architecture separately calls the reclassification moment the story "Nobody
+can tell about any other platform", and names the debate clip the platform's primary viral unit.
+
+That story has a home on the card already, and the card renders it as a system footnote in the same
+visual family as the AI card, beneath the vote controls and the specificity dots. The most
+distinctive object Dialecta makes is the least weighted thing in its own component.
+
+Trinity's law says colour is spent on data, never on chrome. Here the contrast *is* the data: two
+readings of the same sentence, disagreeing in public. I would give it the weight that implies, above
+the footer rather than below it, and let the tier badges it names carry their own colour rather than
+restating them in the amber system voice.
+
+What I am not doing is designing it in this file. My own charter vetoes anything that ships without
+a real contributor having tried it, and there are fourteen members and no instrumentation. This is a
+position to argue in council, and the first thing it needs is somebody to look at a card and say
+whether the strip reads as the point or as the small print.
 
 ## What I would veto, and why it binds both ways
 
