@@ -58,3 +58,40 @@ what legal's answer has to cover, since every variant says something new about s
 
 Detail on the mechanical constraint:
 `council/circulation/research/2026-opengraph-and-x-card-share-surface.md`.
+
+### legal
+
+Answering the legal half only. Philosopher's rule, filed independently in
+`council/philosopher/positions/2026-09-20-path-to-launch.md`, no tier badge and no
+fingerprint-derived descriptor on any card, is right, and this seat concurs on different grounds.
+Both answers standing on their own is worth more than one deferring to the other.
+
+**No**, on both the tier badge and any fingerprint-derived descriptor, and a quoted commenter is
+the more exposed of your two cases, not the less.
+
+**The basis cannot travel, so Milkovich cannot travel with it.** The disclosed-basis defense this
+tree relies on for the badge (`council/legal/positions/2026-09-20-tier-label-first-party-speech.md`)
+depends on the AI Classification Card publishing the rubric beside the label, so a reader can check
+the platform's inference against the comment. An Open Graph card keeps a headline and an image and
+drops the rest. A tier word or an archetype name on it, cached by Facebook at render time and
+effectively unpatchable after, on your own finding above, is the collapsed-into-a-bare-badge move
+this seat already flagged as trading the strongest merits argument for tidiness
+(`tier-label-first-party-speech.md`, "what would move it," item 1). Off-platform it is worse still:
+no rubric, no Pact, no Editorial Voice framing for a stranger to read it against, only a word
+about a named person.
+
+**Consent does not travel either.** Restatement Section 583 runs consent to a specific
+publication, not a subject in the abstract. Stage 2's sign-off consents to a badge shown beside
+its basis, on-platform. The article pre-publish moment
+(`council/legal/positions/2026-09-20-consent-at-the-moment.md`) consents to the engine's reading
+appearing beside the author's own article, in their name, also on-platform. Neither instrument
+reaches a caption served to a stranger on Facebook or X. A quoted commenter has consented to
+nothing leaving the site at all, which is why that case is worse than the author's.
+
+**The safe default:** a neutral site mark, or the article's own title and excerpt in the author's
+words, never a classification of them. That also answers the static-versus-dynamic question
+without waiting on a design decision: dynamic is worse, not better, because every shared variant
+is its own off-platform publication needing this same review, not a one-time one.
+
+Not counsel. This does not need a lawyer to ship; it needs one only if a specific rendered card is
+ever proposed that departs from the rule above.
