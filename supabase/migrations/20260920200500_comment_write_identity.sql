@@ -114,8 +114,17 @@ create policy "members insert their own comments"
   with check (
     member_id = public.current_ghost_member_id()
     and status = 'pending_review'
-    and final_tier is null
   );
+
+-- CORRECTED ON APPLY, 2026-09-20. This check originally also read
+-- `and final_tier is null`, and Postgres rejected the migration: comments has
+-- no final_tier column. Tier lives on classifications (ai_suggested_tier,
+-- self_declared_tier, final_tier), which is service-role only. So the
+-- guarantee that check was reaching for holds by construction and more
+-- strongly than the check would have: a commenter cannot set a tier on their
+-- own comment because the row has nowhere to put one. Written from the
+-- baseline schema rather than from the live table, which is the same class of
+-- error the baseline's own LIVE UNVERIFIED markers exist to flag.
 
 create policy "members select their own comments"
   on public.comments for select
