@@ -120,12 +120,17 @@ function toArticle(row: ArticleRow): CommunityArticle {
   };
 }
 
-/** The directory: every profile, alphabetical, as /api/profile/_list ordered it. */
+/**
+ * The directory: every real profile, alphabetical, as /api/profile/_list
+ * ordered it. Seeded personas (profiles.is_seed) never appear: backlog B-5,
+ * "real members only ... no seeded personas". A null flag counts as real.
+ */
 export async function getContributors(): Promise<Contributor[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('profiles')
     .select(PROFILE_COLUMNS)
+    .not('is_seed', 'is', true)
     .order('display_name', { ascending: true, nullsFirst: false });
   if (error) throw new Error(`contributors query failed: ${error.message}`);
   return ((data ?? []) as unknown as ProfileRow[]).map(toContributor);
@@ -133,7 +138,12 @@ export async function getContributors(): Promise<Contributor[]> {
 
 export async function getContributor(id: string): Promise<Contributor | null> {
   const supabase = await createClient();
-  const { data, error } = await supabase.from('profiles').select(PROFILE_COLUMNS).eq('id', id).maybeSingle();
+  const { data, error } = await supabase
+    .from('profiles')
+    .select(PROFILE_COLUMNS)
+    .eq('id', id)
+    .not('is_seed', 'is', true)
+    .maybeSingle();
   if (error) throw new Error(`contributor query failed: ${error.message}`);
   return data ? toContributor(data as unknown as ProfileRow) : null;
 }
@@ -166,6 +176,10 @@ export async function getFeedEvents(limit = 50): Promise<FeedEvent[]> {
     .from('feed_events')
     .select('id, event_type, display_payload, created_at')
     .eq('visibility', 'public')
+    // No event about a seeded persona (B-5). Seed members carry ids like
+    // 'seed:maya', which no real Ghost id matches; an event with no member
+    // at all still shows.
+    .or('primary_member_id.is.null,primary_member_id.not.like.seed:*')
     .order('created_at', { ascending: false })
     .limit(limit);
   if (error) throw new Error(`feed events query failed: ${error.message}`);
