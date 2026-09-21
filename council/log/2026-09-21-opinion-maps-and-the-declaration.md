@@ -227,3 +227,215 @@ fields on screen beside the dot. Keep the Strongest Objection open.
 Designer's uncaptioned target: when row 4 reveals the mark, caption it on every map.
 
 ## Chair
+
+### The roll-call
+
+**philosopher.** Argued that the maps work against the platform's thesis at two points the engine's
+prompt controls, and that the overlay's problem is order and ownership rather than length: retire
+the binary as a reader-facing shape, since a bipolar scale's midpoint confounds holding both ends
+with holding neither (Kaplan 1972) and Far Shore's author holds both ends while the line plots him
+at 0.82; name every pole as the people who hold it would name it, against four honesty tests; rank
+candidates by fit to the article's own tensions; caption the author's dot as the engine's estimate
+until an author can set it; lead the overlay with the Strongest Objection; take the Note to the
+Author off every reader surface; show the detected core claim only when the alignment is partial or
+divergent; write one engine tier per page. **Carried**, with two corrections. The seat conceded its
+own minimal-group transfer (Hartstone and Augoustinos 1995; Spielman 2000) as unmeasured here, and
+the binary case is stronger without it, resting on Kaplan plus the skill's own requirement of three
+to five tensions per article, which keeps a second debate always in hand
+(`_recovered/skills/opinion-mapper/SKILL.md`, "Shape preference order" and the candidate-set rules).
+Its citation of the design spec's Advocate Card overreaches: that card's spec'd surfaces are the
+compose flow, the pre-publish reflection and the Advocate archetype profile, never the published
+overlay (`design/dialecta-design-spec.html`, Section 11). The reorder survives on Lord, Lepper and
+Preston; the spec does not already authorize it, which moves it to Dan.
+
+**designer.** Argued that the overlay reads at about 307 words on dev and 314 on live before any
+click, so Dan's 685 is a database count rather than a render; that the opinion maps have no section
+anywhere in the design spec's twelve; that the three pole-marker fills are hardcoded hex off a
+private paper, brass and wood palette the spec never names, with the gold marker at 2.12:1 against
+its own card, under the 3:1 floor for a graphical object; and that the author's marker is captioned
+once, under a multi-map article's last map only. **Carried.** Checked in source: `AiDisclosure` is a
+native `<details>` with no `open` attribute (`apps/web/src/components/article-declaration/declaration.tsx:93`);
+`POLE_COLORS` is three literals (`apps/web/src/components/opinion-map/engine.tsx:50-53`) plus a
+fourth axis set carrying a green the platform uses nowhere else (`:62`); `--brass-warm` in
+`styles/dialecta-surfaces.css` and `--gold` in the generated `styles/tokens.css` are both `#d4a84a`
+under two names in two files, so the next retune of one misses the other; the author legend renders
+once per section after every figure (`declaration.tsx:172-179`). Half of its row 4 is already done:
+the port dropped live's "tap to place yourself" line on purpose (`apps/web/src/strings.ts`, the
+`opinionMap` docblock), so that broken promise belongs to live alone and dies at cutover.
+
+**circulation.** Argued that specificity is an arrival problem, because a share-driven stranger
+meets "Fixed tradition" against "Open inquiry" as the first proof the platform differs from a stock
+quiz; and that the wordiness half is smaller than the raw count, because about three quarters of
+Declare sits behind one click on both hosts. **Conceded.** Both findings carried, and three of five
+recommendations came back changed by the seat's own hand: rec 3 (fold the author's three fields)
+withdrawn, rec 1's fifteen-line validator withdrawn as undecidable by regex, rec 4's carve-out for an
+honestly binary article dropped. Recs 2 and 5 stand. Its measurement is the discipline the rest of
+this log runs under: `opinion_map_positions` holds 9 rows and `share_events` 7, none after
+2026-05-06, so no recommendation here may claim reader behaviour as evidence, including its own.
+
+**legal.** Argued that the locked sentence ("disclosed alongside the article, never used to gate
+publication") renders only inside the collapsed toggle on both builds, so the constraint holds in
+markup and not on the screen of a reader who opens Declare; that the disclosed-basis and consent
+defences extend to the author's dot and the flagged passages; that a candidate map on a religion
+axis is an inferred special category under GDPR Article 9 and the California definition, and should
+say so in its `rationale` before the author's Save; that the quoted passages, their stated reasons
+and the closing sentence are the disclosed basis and may not be trimmed away; and that
+`admin-resetup-maps.js` can silently outdate a sign-off. **Carried.** Checked in source: the footer
+sits inside `.ad-disclosure-body` (`declaration.tsx:128`), and the re-setup writes `declaration`,
+`ai_analysis` and `updated_at` and never `ai_suggested_tier`
+(`_recovered/api/article/admin-resetup-maps.js:99-106`), which is the mechanism behind Far Shore's
+two readings. Row 1 conceded in part, correctly: `normalizeRecommendedMap` copies `author_position`
+through untouched (`_recovered-next/lib/theme/dialecta-opinion-map-picker.jsx:67,83,92`) and the
+editor only reads it for preview (`dialecta-editor.jsx:1865,1876,1889`), so the Save consents to a
+placement nobody authored, and the caption has to change.
+
+**voice-editor demonstration, evidence and not a seat.** Rewrote Far Shore's overlay at the shortest
+length that keeps every claim: the author's three fields from 239 words to 98, the engine's reading
+from 443 to 99, and a label-by-label audit of every static heading. Its Part A is adoptable as the
+author-side budget, and it demonstrates that 34, 27 and 37 words hold every claim the originals
+make. Its Part B is not adoptable as written: it compresses the three marked passages to a single
+naming line, dropping the quotes and their reasons, which legal names as the disclosed basis itself
+and philosopher independently keeps whole. Two findings in it stand on their own. The Scope Boundary
+on that article argues a critic's case in all three sentences and duplicates the Strongest
+Objection, which is the convener's first observation confirmed field by field. And the live
+Strongest Objection carries an em dash, a hard-rule miss sitting in author-entered data.
+
+### The synthesis
+
+**One fact nobody priced, and it reorders everything.** Three seats wrote engine-side
+recommendations and costed them as small edits: "roughly fifteen lines in `classify.js`", "a prompt
+edit, one smoke run". The article-classification path exists in this repo only under `_recovered/`,
+which is quarantine, read and never edit. Root `api/` holds comment classification alone
+(`classify.js`, `comment.js`, `profile/`). No backlog row ports the article path: A-1 to A-4 are the
+comment pipeline, D-1 was the render port that shipped. Production runs from a different repo at a
+May commit (root `CLAUDE.md`, "Where things live"). Every map recommendation below is blocked on
+where that code lives and who deploys it.
+
+**Where the seats converged.** The pole rule: all four want a check that each pole answers the
+stated question in the first person, and the skill has no such check today (its nine cover the
+18-year-old test, ternary and cartesian, and nothing for binary). The fold stays: designer, circulation and philosopher all keep the engine's reading collapsed. The
+locked sentence comes out of it: legal proposed, designer and circulation backed it, philosopher
+conceded its reorder had left the constraint true in markup only. The quotes and their reasons stay
+whole. And one measured item settles the pole complaint at its root: three of twenty live poles
+("Free for all", "Pay your way", "Trust the data") are verbatim copies from a calibration list whose
+own text reads "Do NOT copy any of these verbatim into your output" (`SKILL.md`, "What concise pole
+labels look like"). The list teaches generic. Delete it.
+
+**Where two seats looked opposed and were not.** Circulation priced the fold as cutting the forced
+read; legal priced the same element as hiding the locked sentence. Both are true of one `<details>`,
+and each conceded the other's half. Nothing needs a further round.
+
+**The options on the maps.**
+
+| Option | Now | Later | Forecloses |
+| --- | --- | --- | --- |
+| A. App only: caption, contrast, question, the closing sentence | A day in `apps/web`, no smoke run | Poles stay generic, since nothing that proposes them changed | Nothing |
+| B. A, plus the engine rules, after the classifier has a home | The port, a prompt edit, a smoke run against the calibration set | New maps get specific; the seven live ones do not until a versioned re-run | Nothing |
+| C. B, plus retiring the binary and re-setting Far Shore now | One published article's map set changes after publication | The Reflect binary prompt copy goes unused | The yes-or-no map; a two-sided article becomes a cartesian carrying a second tension |
+
+**Recommendation: B now, C once versioning lands, and the overlay changes in the same pass.**
+
+The reason that carried it is a collision the seats did not name. Philosopher's row 1 requires
+re-setting Far Shore's maps. Legal's row 6 shows an un-versioned re-set is what produced Far Shore's
+two readings, a page whose badge says Forum while its overlay says Spark. Retiring the binary before
+the versioned path exists reproduces, on the same article, the defect this council just diagnosed.
+The order is forced.
+
+On the maps: delete the calibration list, add the answers-its-own-question check with a
+`pole_statements` field so the validator has something checkable, rank candidates by fit to the
+article's tensions and tag each with the tensions it covers, and name a sensitive-inference category
+in the candidate's `rationale` before the author's Save. The tensions are the one artifact already
+specific to the article, and the engine's own better material sits there: "Updated data versus
+projection skepticism" against the shipped "Trust the data".
+
+On the overlay: a reader sees the Strongest Objection, then the maps with their question drawn on
+every figure, then the Core Claim and Scope Boundary, then one summary row carrying the tier and the
+sentence that says the reading never gates publication, with the engine's reading folded behind it
+and its quoted passages intact. Author-side budget: 35, 30 and 40 words, enforced by a counter at
+compose time, never by the engine rewriting a declaration. That is about 150 words before a click,
+roughly 40 seconds, against 307 today.
+
+### What is Dan's
+
+1. **Does the article-classification path get a home in this repo, with a named deploy target?**
+   Recommend yes. Unlocks every map recommendation here; without it they are edits to quarantined
+   files that reach no author.
+2. **Retire the binary as a reader-facing shape?** Recommend yes, sequenced after item 10. Unlocks
+   philosopher's row 1 and returns the prompt to the Project Brief's own launch recommendation.
+3. **Do the opinion maps get a section in the design spec?** Recommend yes. Unlocks designer's
+   palette fix, circulation's arrival passage and philosopher's field order, all of which currently
+   land on a surface the spec does not describe.
+4. **Does the author's dot get captioned as the engine's estimate?** Recommend yes; the copy is
+   yours. The picker proves the claim: the coordinate passes through untouched and no editor
+   affordance moves it. Unlocks designer's row 3, which is waiting on this string.
+5. **Do authors set their own mark before publishing?** Recommend yes, after item 4. Unlocks the
+   true version of "Where the author lands" and gives legal's specific-consent reading something
+   real to rest on.
+6. **Does the Note to the Author leave the reader's page?** Recommend yes. The spec calls that card
+   the reflection prompt "between submission and publishing" (Section 10), and no seat argued to
+   keep it. Unlocks 57 words and takes a verdict on the author off a reader surface.
+7. **Does the overlay lead with the Strongest Objection?** Recommend yes, and note it as a spec
+   extension rather than something the Advocate Card already covers. Unlocks the reorder.
+8. **Does the engine name a sensitive-inference category in the candidate's rationale before Save?**
+   Recommend yes. Cheap, and "On Doubt and Devotion" shows the exposure outlives the binary.
+   Unlocks a Pact sentence later, if a candidate ever triggers it.
+9. **Do the author's three fields get word budgets at compose time, at 35, 30 and 40?** Recommend
+   yes. Unlocks the voice demonstration's Part A as a standard instead of a demonstration.
+10. **Does a substantive re-run require a fresh Stage 2.5 sign-off and a logged prior version?**
+    Recommend yes. Unlocks item 2 safely and closes the two-readings hole.
+11. **Does Far Shore's page settle on Forum, the tier its author was shown and the final tier, with
+    the overlay's Spark overwritten?** Recommend yes. Unlocks one reading per page today, before any
+    of the above ships.
+12. **Adopt the voice-editor's label corrections?** Recommend yes for "The Claim", "The Engine's
+    Reading" and cutting "Two debates this article opens."; the "Author's Position" row waits on
+    item 4, since the honest caption today is the engine's estimate. Copy is yours.
+
+### What can be built now without a ruling
+
+**Engine prompt and classification.** A different kind of change: it alters what the model proposes,
+and it needs `smoke-classify.mjs` against the calibration set (4 to 10 minutes) before anything
+reaches an author. All of it depends on question 1, and the smoke script is quarantined alongside
+the code it tests.
+
+- Delete the calibration example list. `_recovered/skills/opinion-mapper/SKILL.md`, "What concise
+  pole labels look like", and its deployed twin `_recovered/api/_skills/opinion-mapper.js`.
+- Add honesty check 10 (each pole answers the stated question in the first person) plus a
+  `pole_statements` field in the output schema, and a presence-and-form case in
+  `_recovered/api/article/classify.js` `validateAnalysis`. A regex cannot judge the answer, only
+  that the statement exists and parses; circulation conceded this and it should not be oversold.
+- Rank candidates by fit to the article's tensions, and tag each candidate with the tensions it
+  covers. `SKILL.md`, "Shape preference order" and "Candidate set rules".
+- Add the sensitive-inference sentence to the `rationale` instructions. `SKILL.md`, output schema
+  section. Depends on question 8.
+- Remove binary from the shape list and the candidate rules, plus a validator case.
+  `SKILL.md`, "Binary (last resort)" and "Candidate set rules". Depends on questions 2 and 10.
+- Version the re-setup write: log the prior `declaration` and `ai_analysis` into `admin_audit_log`,
+  write `ai_suggested_tier` alongside `ai_analysis`, and route a substantive change through Stage
+  2.5. `_recovered/api/article/admin-resetup-maps.js:86-107`. Depends on question 10.
+
+**App only.** No engine change, no smoke run.
+
+- Promote the closing disclosure sentence into the summary row beside the tier, and make the whole
+  row the control. `declaration.tsx:93-102` and `:128`, `declaration.css`,
+  `strings.ts` `opinionMap.declaration.aiDisclosure.footer`. Depends on nothing.
+- Condition the detected core claim on the alignment value rather than a raw string inequality. The
+  current guard at `declaration.tsx:140-143` hides the field only on a byte-identical match, which
+  is why 57 restated words render on an article marked `aligned`. `declaration.tsx`,
+  `components/opinion-map/data.ts`.
+- Draw the question on the interactive figures. A signed-in reader placing in Declare sees no
+  question; a signed-out one does, through `MapTopicCaption` (`engine.tsx:201-207`). The caption
+  renders only when a `prompt` is passed (`placement-client.tsx:704-711`) and Declare passes none
+  (`declaration.tsx:164`).
+- Give the Declare placement a privacy line. The string already exists and renders in Reflect
+  (`article-spine/spine.tsx:112`), and the post-read placement carries none.
+- Caption every map's marker, not only the last. `declaration.tsx:172-179`, or move the legend into
+  `OpinionMapFigure`. The string itself depends on question 4.
+- Swap the three bright marker fills for their muted twins, already built two lines away.
+  `engine.tsx:50-63`.
+- Resolve the token drift: point the map at canonical tokens, or document the mapping on purpose.
+  `engine.tsx`, `styles/dialecta-surfaces.css`, `styles/tokens.css`. Depends on question 3 for
+  which direction.
+- Fix the em dash in Far Shore's stored Strongest Objection. Data, not code:
+  `articles.declaration` on project `mguulnibvzusfvyuowwh`.
+- Reorder the fields, and remove the Note to the Author. `declaration.tsx:149-151` and `:183-193`.
+  Depends on questions 6 and 7.
