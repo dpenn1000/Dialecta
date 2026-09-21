@@ -71,18 +71,25 @@ The dev server is at **`http://localhost:3050`**, in its own minimised console w
 "Dialecta dev server (port 3050)". If it is not running, `npm -w apps/web run dev -- --port 3050`
 from `C:\Dialecta`.
 
+Every page sits inside the ported header, drawer and footer.
+
 | Page | State |
 | --- | --- |
-| `/` | **Five real articles from Supabase, not Ghost.** Real titles, real authors, real excerpts |
-| `/articles/<slug>` | Each renders on the paper sheet with the drop cap from `post.hbs`. A missing slug is a real 404 |
-| `/write` | **The publishing engine.** Nine stages from blank page to publish, on the same paper as the reader sees. Publishing itself stops at three named preconditions, section 2 |
+| `/` | The live front page, ported: five real articles from Supabase, then the join card for anyone signed out |
+| `/articles` | The live "Every Article" index |
+| `/articles/on-the-far-shore-of-fear` | An article on the paper sheet, then **the conversation**: its two real comments with their tiers (Echo, Forum), the topology filter, sorts, and the composer. Reply and posting need a signed-in, claimed profile (2.1). `?composer=preview` walks every composer stage without sending anything |
+| `/pact` | All eight sections on the parchment, the tier-reading exercise working without script, and the signature and font picker. Signing is disabled and says so |
+| `/guidebook`, `/community`, `/about`, `/stewards` | Ported from their live templates. Community lacks archetypes and feed names until the identity work (section 4) |
+| `/profile/dpenn1000` | Your profile: signature, Order, articles, book covers. The fingerprint says it could not be read, because it needs the service key on this machine (2.4) |
+| `/profile/fingerprint-lab` | **The fingerprint on real data**: three demo profiles' real `axis_scores` rows, plus Newborn and Early. `?example=wen-zhao&size=760` draws one large. Development only |
+| `/write` | The publishing engine: nine stages from blank page to publish. Publishing needs 2.1 |
 | `/analytics` | Platform analytics with real numbers, every card naming the decision it changes. Open under `next dev`, gated in production |
 | `/login` | Magic link and Google |
 
-All 20 routes return 200 or the correct redirect. None 500.
+Still being built as you read this, if it has not landed: `/fingerprint`, the explainer page, with its
+renders compared side by side against the live one you liked.
 
-**It is a prototype, as you asked.** The type is loaded site-wide now, so pages look different from
-yesterday, and most pages still have no layout beyond the paper and the fonts.
+**It is a prototype, as you asked.** Nothing here is deployed, and nothing can be until the cutover.
 
 ---
 
