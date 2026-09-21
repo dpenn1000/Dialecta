@@ -72,6 +72,46 @@
   --on-paper-brass: var(--brass-deep);   /* 7.27  on --paper */
   --rule-brass:     var(--brass-mid);    /* 3.15  on --paper, clears 1.4.11 */
 
+  /* ── The membership mark ──
+     Three independent columns in the member record (is_charter, the tier,
+     is_gifted) render as three independent marks, so the mark composes the
+     way the record does and a person in two cohorts needs no fourth badge.
+       seat ring   every member
+       brass ring  is_charter, heavier stroke
+       dot         Underwriter access, paid or given
+       seal        Honored: a PEER bought the year (migration 033's word)
+
+     The seal follows 033's definition, which is narrower than the cohort
+     model's use of the same column. 033 says is_gifted means another
+     member paid; the cohort table also sets it for house comps (Charter
+     Writers, Founding Voices). An Honored seal on a comped writer would
+     claim a peer paid when nobody did, so on this page house comps carry no
+     seal. gifted_by_member_id IS NULL is the column that separates them.
+
+     Every member carries a seat ring, and brass is what makes it a Charter
+     ring. That choice came out of a render: with a ring only on Charter
+     members, the dot-only states floated in an empty box, which broke the
+     family and the alignment at once.
+
+     The Charter ring is ALSO heavier than the seat ring, 2.6 against 1.5.
+     Hue alone failed the greyscale test: the two rings are deliberately
+     luminance-matched (3.18 and 3.19 on --bg-white), so desaturated they
+     were the same ring. Weight is the redundant channel that survives it.
+
+     Light-surface values, measured on --bg-white:
+       Charter ring  #b8862e  3.18   seat ring   #948e88  3.19
+       dot  --brass-deep      7.34   seal --terra         6.59
+     Dark-surface values, measured on --dark-card. Two substitutions are
+     mandatory here rather than optional: --brass-deep measures 1.90 and
+     --terra measures 2.12 on dark, both far under the 3:1 floor.
+       Charter ring  #b8862e  4.39   seat ring   #9a948d  4.40
+       dot  --brass-warm      6.43   seal #c06a44         3.65 */
+  --mark-ring-charter: var(--brass-mid);
+  --mark-ring-seat:    #948e88;
+  --mark-dot:          var(--brass-deep);
+  --mark-seal:         var(--terra);
+  --mark-halo:         var(--bg-white);
+
   /* Plinth brass. Anchored at --brass-warm rather than --brass-mid on both
      edges, which is the one change that makes it safe at 11px. The plinth is
      a radial gradient whose lightest point is #33353a, and measured there
@@ -89,6 +129,15 @@
   font-family: var(--font-body);
   color: var(--on-paper-body);
 }
+
+/* Orphan control. The hero lede set "today." alone on its last line at
+   1440, which is the single most common way editorial type reads as
+   unfinished. pretty on prose and balance on headings fix it at the source
+   instead of copy being rewritten to dodge a line break at one width. */
+.mb p, .mb li, .mb td, .mb th, .mb blockquote { text-wrap: pretty; }
+.mb h1, .mb h2, .mb h3 { text-wrap: balance; }
+/* A proper noun never breaks at its own hyphen. */
+.mb-nobr { white-space: nowrap; }
 
 .mb *:focus-visible {
   outline: 2px solid var(--brass-deep);
@@ -175,6 +224,26 @@
   padding: var(--section) clamp(16px, 4vw, 48px);
   position: relative; z-index: 1;
 }
+
+/* The composed Charter mark, at plate size, in the plinth's empty right half.
+   It carries the page's one piece of artwork and it introduces the mark
+   system three sections before the legend explains it, so the legend reads
+   as a caption for something already seen rather than as new vocabulary.
+   Decorative, so it is aria-hidden and nothing depends on it. */
+.mb-plate {
+  position: absolute;
+  right: clamp(16px, 4vw, 48px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(160px, 20vw, 260px);
+  height: auto;
+  /* 0.58 rather than 0.5. Brass thinned over a cool grey slides toward olive
+     well before it reads as faint, so the plate holds its hue here and gets
+     its recession from scale and from sitting behind the type instead. */
+  opacity: 0.58;
+  pointer-events: none;
+}
+@media (max-width: 900px) { .mb-plate { display: none; } }
 .mb-eyebrow {
   font-family: var(--font-mono);
   font-size: var(--t-meta);
@@ -297,6 +366,15 @@
   -webkit-text-fill-color: transparent; color: transparent;
   font-style: italic;
 }
+/* Lining figures on every number that is money. Cormorant Garamond sets
+   oldstyle figures by default, which are handsome in running prose and wrong
+   on a price: the 5 and the 0 drop below the baseline and a reader has to
+   look twice at $50. Prose keeps the oldstyle default. */
+.mb-tier-price, .mb-ladder-v, .mb-count b, .mb-section-title {
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+}
+
 .mb-tier-price {
   font-family: var(--font-display);
   font-size: 2.6rem;
@@ -343,6 +421,40 @@
 .mb-tier-free .mb-tier-list li::before { background: var(--brass-mid); }
 .mb-tier-paid .mb-tier-list li { color: var(--on-dark-strong); }
 .mb-tier-paid .mb-tier-list li::before { background: var(--brass-warm); }
+
+/* Built versus funded, in the tier cards. The same two marks the matrix uses,
+   a filled dot for built and an open ring for funded, so a reader learns the
+   vocabulary once. Shape and lightness both carry it: the ring is open and
+   the text drops a step, so it survives CVD and greyscale without leaning on
+   hue. Paper: ring --brass-mid 3.15, text --tertiary 4.71 at 15px. Dark:
+   ring --brass-warm 6.43, text --on-dark-soft 6.47. */
+.mb-tier-list li.is-pending::before {
+  background: transparent;
+  border: 1.5px solid var(--brass-mid);
+}
+.mb-tier-free .mb-tier-list li.is-pending { color: var(--on-paper-mute); }
+.mb-tier-paid .mb-tier-list li.is-pending { color: var(--on-dark-soft); }
+.mb-tier-paid .mb-tier-list li.is-pending::before { border-color: var(--brass-warm); }
+
+.mb-tier-key {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  margin: 0;
+}
+.mb-tier-key::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid var(--brass-mid);
+}
+.mb-tier-free .mb-tier-key { color: var(--on-paper-meta); }
+.mb-tier-paid .mb-tier-key { color: var(--on-dark-soft); }
+.mb-tier-paid .mb-tier-key::before { border-color: var(--brass-warm); }
 
 .mb-tier-foot { margin-top: auto; padding-top: var(--s1); }
 
@@ -460,7 +572,11 @@
 .mb-ladder-note strong { color: var(--on-paper-head); font-weight: 500; }
 
 /* ─── CAPABILITY MATRIX ─────────────────────────────────────────────────── */
-.mb-group { margin-top: var(--s3); }
+/* The group is the primary structure here, so it gets the widest step on the
+   scale. Rows inside a group sit on 10px of leading and the groups sit 48
+   apart, which is the Gestalt proximity argument doing the grouping instead
+   of a box (Wagemans 2012). */
+.mb-group { margin-top: var(--s4); }
 .mb-group-head {
   display: flex;
   align-items: baseline;
@@ -507,6 +623,8 @@
 .mb-table { width: 100%; border-collapse: collapse; }
 .mb-table caption { text-align: left; }
 .mb-table th, .mb-table td { text-align: left; padding: 10px var(--s2) 10px 0; }
+/* One rule per group, not two. The brass rule under the group title is the
+   divider; the column labels float under it with no second hairline. */
 .mb-table thead th {
   font-family: var(--font-mono);
   font-size: var(--t-meta);
@@ -514,7 +632,6 @@
   text-transform: uppercase;
   font-weight: 500;
   color: var(--on-paper-meta);
-  border-bottom: 1px solid var(--border-light);
   padding-bottom: var(--s1);
 }
 .mb-table tbody th {
@@ -535,6 +652,25 @@
 }
 .mb-table td.is-out { color: var(--on-paper-mute); }
 .mb-table td.is-open { color: var(--on-paper-brass); font-weight: 500; }
+
+/* A row where both tiers get the same thing is not a comparison, and printing
+   "Yes" twice asks the reader to compare two identical words and conclude
+   nothing. One cell across both columns says it in a glance: this is not a
+   paid capability, and a membership pays for it to exist. */
+.mb-table td.is-both {
+  width: 54%;
+  color: var(--on-paper-head);
+  font-weight: 500;
+  position: relative;
+  padding-left: var(--s3);
+}
+.mb-table td.is-both::after {
+  content: "";
+  position: absolute;
+  left: 0; top: 50%;
+  width: 14px; height: 1px;
+  background: var(--brass-mid);
+}
 .mb-dep {
   display: block;
   font-family: var(--font-mono);
@@ -570,6 +706,10 @@
     min-width: 46%;
     vertical-align: top;
   }
+  /* The spanning cell needs neither the tie-dash nor the indent once the
+     columns are gone: its own label already says it covers both tiers. */
+  .mb-table tbody td.is-both { padding-left: 0; }
+  .mb-table tbody td.is-both::after { display: none; }
   .mb-table tbody td::before {
     content: attr(data-label);
     display: block;
@@ -624,12 +764,15 @@
   color: var(--terra);                  /* 6.52 on --paper */
   margin-bottom: 4px;
 }
+/* Mono at 11px needs a shorter measure than the serif does. 78ch of DM Mono
+   is about the same physical line length as 62ch of Source Serif. */
 .mb-cite {
   font-family: var(--font-mono);
   font-size: var(--t-meta);
   letter-spacing: 0.06em;
   line-height: 1.7;
   color: var(--on-paper-meta);
+  max-width: 78ch;
   margin: var(--s3) 0 0;
   padding-top: var(--s2);
   border-top: 1px solid var(--border-light);
@@ -659,6 +802,19 @@
   box-shadow: 0 4px 16px rgba(74, 40, 16, 0.1);
 }
 .mb-mark { width: 34px; height: 34px; display: block; margin-bottom: var(--s1); }
+.mb-mark-ring-charter { fill: none; stroke: var(--mark-ring-charter); stroke-width: 2.6; }
+.mb-mark-ring-seat    { fill: none; stroke: var(--mark-ring-seat);    stroke-width: 1.5; }
+.mb-mark-dot          { fill: var(--mark-dot); }
+.mb-mark-seal         { fill: var(--mark-seal); }
+.mb-mark-halo         { fill: var(--mark-halo); }
+/* The paid tier card is the one dark surface a mark can land on, and two of
+   the four values have to change there or they fall under the 3:1 floor. */
+.mb-tier-paid {
+  --mark-ring-seat: #9a948d;
+  --mark-dot:  var(--brass-warm);
+  --mark-seal: #c06a44;
+  --mark-halo: #292b2d;
+}
 .mb-cohort-name {
   font-family: var(--font-display);
   font-size: 1.32rem;
@@ -687,14 +843,20 @@
 
 /* The mark legend. Three independent columns in the database render as
    three independent marks, so the marks compose the way the record does. */
+/* Explicit column counts rather than auto-fit. Four items under auto-fit land
+   as three and an orphan across a wide band of widths, and an orphan under a
+   legend is the kind of thing that reads as unfinished without anyone being
+   able to say why. 1, then 2, then 4. Never 3. */
 .mb-legend {
   margin-top: var(--s3);
   border-top: 1px solid var(--rule-brass);
   padding-top: var(--s2);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: 1fr;
   gap: var(--s2) var(--s3);
 }
+@media (min-width: 560px)  { .mb-legend { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .mb-legend { grid-template-columns: repeat(4, 1fr); } }
 .mb-legend-item { display: flex; gap: var(--s2); align-items: flex-start; }
 .mb-legend-item svg { width: 28px; height: 28px; flex: none; }
 .mb-legend-item p { font-size: 0.875rem; line-height: 1.55; color: var(--on-paper-body); margin: 0; }
@@ -785,14 +947,31 @@
     <span class="mb-eyebrow">Membership</span>
     <h1 class="mb-title">Underwriters keep Dialecta <em>free to read</em></h1>
     <p class="mb-lede">
-      Every surface that says who you are is free. Your snapshot, your history, your declared
-      aspiration, your place in the argument. None of it sits behind a payment.
+      Every part of Dialecta that says who you are is free, including the parts still being
+      built. The record of what you have argued, and the tools for reflecting on it, will never
+      sit behind a payment.
     </p>
     <p class="mb-lede">
-      Underwriting pays for the place to keep running and for the parts of it that are still
-      being built. Two limits lift the day you join. The rest of what your membership funds is
-      named below, with the state it is actually in.
+      Underwriting pays to keep the place running and to finish it. Two limits lift the day you
+      join, and eight more capabilities are funded and not yet built, four of them free to
+      everyone.
     </p>
+
+    <svg class="mb-plate" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="mb-plate-ring" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%"   stop-color="#d4a84a"/>
+          <stop offset="48%"  stop-color="#f5dfa0"/>
+          <stop offset="100%" stop-color="#b8862e"/>
+        </linearGradient>
+      </defs>
+      <!-- The Charter Underwriter mark at plate size: the exact state the $50
+           button sells to the first hundred. No Honored seal, because a plate
+           showing a state the page never offers would teach the wrong mark. -->
+      <circle cx="100" cy="100" r="84" fill="none" stroke="url(#mb-plate-ring)" stroke-width="5"/>
+      <circle cx="100" cy="100" r="72" fill="none" stroke="#d4a84a" stroke-width="0.75" opacity="0.35"/>
+      <circle cx="100" cy="100" r="34" fill="#dcae50"/>
+    </svg>
   </div>
 </section>
 
@@ -814,16 +993,17 @@
           Read, write, comment, and keep a full public record of what you have argued.
         </p>
         <ul class="mb-tier-list">
+          <li>Read every article and comment</li>
           <li>Publish articles and comments</li>
-          <li>Your self-snapshot, in full</li>
-          <li>Your history, all of it</li>
-          <li>Declare an aspiration</li>
           <li>Two opinion-map candidates per classification</li>
           <li>Two polish runs per session</li>
+          <li class="is-pending">Your self-snapshot and full history <span class="mb-visually-hidden">(funded, not built yet)</span></li>
+          <li class="is-pending">Declaring an aspiration <span class="mb-visually-hidden">(funded, not built yet)</span></li>
         </ul>
+        <p class="mb-tier-key" aria-hidden="true">Funded, not built yet</p>
         <div class="mb-tier-foot">
-          <a class="mb-btn mb-btn-quiet" href="#">Start reading</a>
-          <p class="mb-fineprint">No card. No trial that ends.</p>
+          <a class="mb-btn mb-btn-quiet" href="#">Join free</a>
+          <p class="mb-fineprint">No card, and it never expires.</p>
         </div>
       </article>
 
@@ -831,20 +1011,21 @@
         <h3 class="mb-tier-name">Underwriter</h3>
         <p class="mb-tier-price">$50<span>a year</span></p>
         <p class="mb-tier-claim">
-          Everything in Free, without the two editor limits, and the archive depth and coaching
-          that arrive with the Growth Layer.
+          Everything in Free with both editor limits lifted, and the archive depth and coaching
+          the Growth Layer will bring.
         </p>
         <ul class="mb-tier-list">
-          <li>Opinion-map candidates without a cap</li>
+          <li>Three opinion-map candidates, the engine's default</li>
           <li>Polish runs without a cap</li>
-          <li>Snapshot annotations, the whole archive</li>
-          <li>Practice Layer coaching, opt in</li>
-          <li>The ninety day recommitment cycle</li>
           <li>A Charter ring, if you are inside the first hundred</li>
+          <li class="is-pending">Snapshot annotations, the whole archive <span class="mb-visually-hidden">(funded, not built yet)</span></li>
+          <li class="is-pending">Practice Layer coaching, opt in <span class="mb-visually-hidden">(funded, not built yet)</span></li>
+          <li class="is-pending">The ninety day recommitment cycle <span class="mb-visually-hidden">(funded, not built yet)</span></li>
         </ul>
+        <p class="mb-tier-key" aria-hidden="true">Funded, not built yet</p>
         <div class="mb-tier-foot">
           <div class="mb-count">
-            <b>99</b> <span>of 100 charter places open</span>
+            <b>100</b> <span>of 100 charter places open</span>
           </div>
           <p class="mb-fineprint" style="margin-bottom:var(--s2)">
             Counted live from the member record. The rate changes when the hundredth is taken.
@@ -862,7 +1043,7 @@
       <span class="mb-section-label">The price</span>
       <h2 class="mb-section-title" id="h-price">$50 now, $100 after the first hundred</h2>
       <p class="mb-section-lede">
-        The founding rate is a mechanic in the member record rather than a launch promotion.
+        The founding rate belongs to the first hundred members rather than to a launch window.
         A Charter Underwriter keeps $50 for as long as the membership runs.
       </p>
     </div>
@@ -877,14 +1058,12 @@
         <div class="mb-ladder-cell is-later">
           <span class="mb-ladder-k">Everyone after</span>
           <span class="mb-ladder-v">$100 a year</span>
-          <p class="mb-ladder-n">The same ten years costs $1,000, and the gap is the whole of the offer.</p>
+          <p class="mb-ladder-n">The same ten years costs $1,000.</p>
         </div>
       </div>
       <p class="mb-ladder-note">
         <strong>No date is attached to the change.</strong> The rate moves when the hundredth
-        membership is taken, which may be next month or next year. Nothing on this page counts
-        down, because a count of members is the real trigger and a clock would be a decoration
-        over it.
+        membership is taken, which may be next month or next year.
       </p>
     </div>
   </section>
@@ -896,13 +1075,13 @@
       <h2 class="mb-section-title" id="h-matrix">What a membership buys, and when</h2>
       <p class="mb-section-lede">
         Ten capabilities sit in the tier matrix and <strong>two of them work today</strong>. The
-        other eight wait on the Self-Snapshot Engine and the History Scroll, neither of which is
+        other eight wait on the Growth Layer engine, which is the
+        <span class="mb-nobr">Self-Snapshot Engine</span> and the History Scroll, and neither is
         built.
       </p>
       <p class="mb-section-lede">
         Four of those eight are free to everyone the day they land. A membership pays for them to
-        exist rather than buying access to them, which is what underwriting means and is the
-        reason the free column below is nearly full.
+        exist rather than buying access to them, which is what underwriting means.
       </p>
     </div>
 
@@ -923,9 +1102,12 @@
         </thead>
         <tbody>
           <tr>
-            <th scope="row">Opinion-map candidates per classification</th>
+            <th scope="row">
+              Opinion-map candidates per classification
+              <span class="mb-dep">Underwriter follows the engine's own default</span>
+            </th>
             <td data-label="Free">2</td>
-            <td data-label="Underwriter" class="is-open">No cap</td>
+            <td data-label="Underwriter" class="is-open">3</td>
           </tr>
           <tr>
             <th scope="row">Polish runs per session</th>
@@ -944,13 +1126,12 @@
       </div>
       <table class="mb-table">
         <caption class="mb-visually-hidden">
-          Capabilities a membership funds and nobody pays to use, by tier
+          Capabilities a membership funds and nobody pays to use
         </caption>
         <thead>
           <tr>
             <th scope="col">Capability</th>
-            <th scope="col">Free</th>
-            <th scope="col">Underwriter</th>
+            <th scope="col" colspan="2">Free and Underwriter alike</th>
           </tr>
         </thead>
         <tbody>
@@ -959,32 +1140,28 @@
               Your self-snapshot, visible in full
               <span class="mb-dep">Waits on Self-Snapshot Engine</span>
             </th>
-            <td data-label="Free">Yes</td>
-            <td data-label="Underwriter">Yes</td>
+            <td data-label="Free and Underwriter" class="is-both" colspan="2">Everyone</td>
           </tr>
           <tr>
             <th scope="row">
               Your history scroll, the whole archive
               <span class="mb-dep">Waits on History Scroll</span>
             </th>
-            <td data-label="Free">Yes</td>
-            <td data-label="Underwriter">Yes</td>
+            <td data-label="Free and Underwriter" class="is-both" colspan="2">Everyone</td>
           </tr>
           <tr>
             <th scope="row">
               Declaring an aspiration
-              <span class="mb-dep">Waits on Self-Snapshot Engine</span>
+              <span class="mb-dep">Waits on the Growth Layer engine</span>
             </th>
-            <td data-label="Free">Yes</td>
-            <td data-label="Underwriter">Yes</td>
+            <td data-label="Free and Underwriter" class="is-both" colspan="2">Everyone</td>
           </tr>
           <tr>
             <th scope="row">
               The Voice One scaffold, your own words about yourself
               <span class="mb-dep">Waits on Self-Snapshot Engine</span>
             </th>
-            <td data-label="Free">Yes</td>
-            <td data-label="Underwriter">Yes</td>
+            <td data-label="Free and Underwriter" class="is-both" colspan="2">Everyone</td>
           </tr>
         </tbody>
       </table>
@@ -1019,7 +1196,7 @@
           <tr>
             <th scope="row">
               Snapshot annotations, the full archive
-              <span class="mb-dep">Waits on History Scroll</span>
+              <span class="mb-dep">Waits on Self-Snapshot Engine</span>
             </th>
             <td data-label="Free" class="is-out">Not included</td>
             <td data-label="Underwriter" class="is-open">Included</td>
@@ -1027,7 +1204,7 @@
           <tr>
             <th scope="row">
               Practice Layer coaching, opt in at every step
-              <span class="mb-dep">Waits on Growth Layer</span>
+              <span class="mb-dep">Waits on the Growth Layer engine</span>
             </th>
             <td data-label="Free" class="is-out">Not included</td>
             <td data-label="Underwriter" class="is-open">Included</td>
@@ -1035,7 +1212,7 @@
           <tr>
             <th scope="row">
               Ninety day recommitment prompts
-              <span class="mb-dep">Waits on Growth Layer</span>
+              <span class="mb-dep">Waits on the Growth Layer engine</span>
             </th>
             <td data-label="Free" class="is-out">Not included</td>
             <td data-label="Underwriter" class="is-open">Included</td>
@@ -1054,14 +1231,13 @@
 
     <div class="mb-wall">
       <p class="mb-section-lede" style="margin-top:0">
-        Paying changes what the editor lets you do and changes nothing about how your writing is
-        read. Payment status never reaches the classifier, the vote weight or the nomination
+        Paying changes two limits in the editor and nothing about how your writing is read. Payment status never reaches the classifier, the vote weight or the nomination
         panel, and holding that wall up is part of what the money is for.
       </p>
       <ul class="mb-wall-list">
-        <li><b>The classifier</b>Your tier is read from the comment. Your subscription is not an input.</li>
+        <li><b>The classifier</b>A comment's classification is read from the comment. Your subscription is not an input.</li>
         <li><b>Vote weight</b>An Underwriter's vote counts once, the same as everyone else's.</li>
-        <li><b>The nomination panel</b>Seats come from the record you have built, never from the ledger.</li>
+        <li><b>The nomination panel</b>Seats come from the record you have built. Paying does not put you on it.</li>
         <li><b>Reach</b>No boost, no priority placement, no paid visibility of any kind.</li>
       </ul>
       <p class="mb-cite">
@@ -1078,47 +1254,43 @@
       <span class="mb-section-label">Roles</span>
       <h2 class="mb-section-title" id="h-cohorts">Founding cohorts</h2>
       <p class="mb-section-lede">
-        Three groups are being seated at the start, and a member can belong to more than one. Each
-        is a separate column in the record rather than a rank, so the marks compose the way the
-        record does.
+        Three groups are seated at the founding. None of them is a rank, and a member can belong
+        to more than one.
       </p>
     </div>
 
     <div class="mb-cohorts">
 
       <article class="mb-cohort">
-        <svg class="mb-mark" viewBox="0 0 32 32" role="img" aria-label="Charter ring, Underwriter dot, and a peer seal">
-          <circle cx="16" cy="16" r="13" fill="none" stroke="#b8862e" stroke-width="1.5"/>
-          <circle cx="16" cy="16" r="6" fill="#7a4a10"/>
-          <circle cx="24.5" cy="24.5" r="4.6" fill="#fffdf8"/>
-          <circle cx="24.5" cy="24.5" r="3.2" fill="#8c4a2f"/>
+        <svg class="mb-mark" viewBox="0 0 32 32" role="img" aria-label="Charter ring and Underwriter dot">
+          <circle class="mb-mark-ring-charter" cx="16" cy="16" r="12.2"/>
+          <circle class="mb-mark-dot" cx="16" cy="16" r="5"/>
         </svg>
         <h3 class="mb-cohort-name">Charter Writers</h3>
         <span class="mb-cohort-who">First 25 published authors</span>
         <p class="mb-cohort-gets">
-          <b>Lifetime, free.</b> Underwriter access for as long as the account exists, with the
-          Charter ring set at the moment the first article publishes.
+          <b>Lifetime, free.</b> Underwriter access for as long as the account exists, and a
+          Charter ring that stays with it.
         </p>
       </article>
 
       <article class="mb-cohort">
         <svg class="mb-mark" viewBox="0 0 32 32" role="img" aria-label="Charter ring and Underwriter dot">
-          <circle cx="16" cy="16" r="13" fill="none" stroke="#b8862e" stroke-width="1.5"/>
-          <circle cx="16" cy="16" r="6" fill="#7a4a10"/>
+          <circle class="mb-mark-ring-charter" cx="16" cy="16" r="12.2"/>
+          <circle class="mb-mark-dot" cx="16" cy="16" r="5"/>
         </svg>
         <h3 class="mb-cohort-name">Charter Underwriters</h3>
         <span class="mb-cohort-who">First 100 paying members</span>
         <p class="mb-cohort-gets">
-          <b>$50 a year, held permanently.</b> The rate never moves for them, and the Charter ring
-          stays even if the membership stops.
+          <b>$50 a year, held permanently.</b> The Charter ring stays even if the membership
+          stops.
         </p>
       </article>
 
       <article class="mb-cohort">
-        <svg class="mb-mark" viewBox="0 0 32 32" role="img" aria-label="Underwriter dot and a peer seal, no Charter ring">
-          <circle cx="16" cy="16" r="6" fill="#7a4a10"/>
-          <circle cx="24.5" cy="24.5" r="4.6" fill="#fffdf8"/>
-          <circle cx="24.5" cy="24.5" r="3.2" fill="#8c4a2f"/>
+        <svg class="mb-mark" viewBox="0 0 32 32" role="img" aria-label="Seat ring and Underwriter dot">
+          <circle class="mb-mark-ring-seat" cx="16" cy="16" r="12.6"/>
+          <circle class="mb-mark-dot" cx="16" cy="16" r="5"/>
         </svg>
         <h3 class="mb-cohort-name">Founding Voices</h3>
         <span class="mb-cohort-who">First 50 active commenters</span>
@@ -1132,23 +1304,33 @@
 
     <div class="mb-legend">
       <div class="mb-legend-item">
-        <svg viewBox="0 0 32 32" role="img" aria-label="A brass ring">
-          <circle cx="16" cy="16" r="13" fill="none" stroke="#b8862e" stroke-width="1.5"/>
+        <svg viewBox="0 0 32 32" role="img" aria-label="A thin seat ring on its own">
+          <circle class="mb-mark-ring-seat" cx="16" cy="16" r="12.6"/>
         </svg>
-        <p><b>The ring</b>Charter. Set once, never removed, including when a membership lapses.</p>
+        <p><b>A member</b>Everyone carries a seat ring from the day they join.</p>
       </div>
       <div class="mb-legend-item">
-        <svg viewBox="0 0 32 32" role="img" aria-label="A filled dot">
-          <circle cx="16" cy="16" r="6" fill="#7a4a10"/>
+        <svg viewBox="0 0 32 32" role="img" aria-label="A seat ring with a filled dot inside">
+          <circle class="mb-mark-ring-seat" cx="16" cy="16" r="12.6"/>
+          <circle class="mb-mark-dot" cx="16" cy="16" r="5"/>
         </svg>
-        <p><b>The dot</b>Underwriter access, whether it was paid for or given.</p>
+        <p><b>An Underwriter</b>The dot fills when the seat carries Underwriter access.</p>
       </div>
       <div class="mb-legend-item">
-        <svg viewBox="0 0 32 32" role="img" aria-label="A small terracotta seal">
-          <circle cx="24.5" cy="24.5" r="4.6" fill="#fffdf8"/>
-          <circle cx="24.5" cy="24.5" r="3.2" fill="#8c4a2f"/>
+        <svg viewBox="0 0 32 32" role="img" aria-label="A seat ring, a filled dot, and a small seal at the lower right">
+          <circle class="mb-mark-ring-seat" cx="16" cy="16" r="12.6"/>
+          <circle class="mb-mark-dot" cx="16" cy="16" r="5"/>
+          <circle class="mb-mark-halo" cx="24.8" cy="24.8" r="5"/>
+          <circle class="mb-mark-seal" cx="24.8" cy="24.8" r="3.4"/>
         </svg>
-        <p><b>The seal</b>The seat was given by someone rather than bought.</p>
+        <p><b>Honored</b>A peer bought the year. The seal records the gift and never the price.</p>
+      </div>
+      <div class="mb-legend-item">
+        <svg viewBox="0 0 32 32" role="img" aria-label="A heavy brass Charter ring with a filled dot inside">
+          <circle class="mb-mark-ring-charter" cx="16" cy="16" r="12.2"/>
+          <circle class="mb-mark-dot" cx="16" cy="16" r="5"/>
+        </svg>
+        <p><b>Charter</b>The ring turns to brass and thickens. Set once, never removed.</p>
       </div>
     </div>
   </section>
@@ -1157,31 +1339,36 @@
   <section class="mb-section" aria-labelledby="h-gift">
     <div class="mb-section-head">
       <span class="mb-section-label">Peer gifting</span>
-      <h2 class="mb-section-title" id="h-gift">Buy a year for someone else</h2>
+      <h2 class="mb-section-title" id="h-gift">A year for someone else</h2>
     </div>
 
     <div class="mb-gift">
       <div>
         <p class="mb-section-lede" style="margin-top:0">
-          A member can buy a year for another member, and the record keeps both names. Gifting
-          sits in its own column rather than inside the tier, because the two are different facts
-          about a person and collapsing them would lose the one that matters.
+          A member can buy a year for another member, and the record keeps both names. The gift
+          stays recorded as a gift, because being given a year by a peer is a different fact from
+          buying one.
         </p>
         <p class="mb-section-lede">
-          A gifted year carries the seal, and the seal says how the seat arrived rather than what
-          it is worth. When the year ends the account returns to Free and every word written
-          during it stays exactly where it was.
+          A gifted year carries the Honored seal. It shows how the seat arrived and never what it
+          cost. When the year ends the account returns to Free and every word written during
+          it stays exactly where it was.
         </p>
         <p style="margin-top:var(--s3)">
           <a class="mb-btn mb-btn-quiet" href="#">Gift a year</a>
         </p>
       </div>
       <blockquote class="mb-gift-card">
+        <svg class="mb-mark" viewBox="0 0 32 32" role="img" aria-label="The Honored mark: seat ring, Underwriter dot, and a peer's seal">
+          <circle class="mb-mark-ring-seat" cx="16" cy="16" r="12.6"/>
+          <circle class="mb-mark-dot" cx="16" cy="16" r="5"/>
+          <circle class="mb-mark-halo" cx="24.8" cy="24.8" r="5"/>
+          <circle class="mb-mark-seal" cx="24.8" cy="24.8" r="3.4"/>
+        </svg>
         <p>
-          Someone who cannot pay themselves, but is honored by a peer's gift, which is a different
-          thing.
+          The recipient didn't pay themselves but is honored by a peer's gift.
         </p>
-        <cite>Migration 034, on why gifting is its own column</cite>
+        <cite>Migration 033, which names the Honored badge</cite>
       </blockquote>
     </div>
   </section>
@@ -1191,8 +1378,8 @@
     <b>Prototype</b>
     <ul>
       <li>Built by the designer seat, 20 September 2026. Not a route, not wired to payment, and no phase number yet.</li>
-      <li>Content from docs/SUBSCRIPTION-MODEL.md and _recovered/api/_subscription-tier.js. Prices are Dan's open decision, shown here as the ladder under discussion.</li>
-      <li>The charter count reads 99 from the live member record, where one profile currently holds the paid tier.</li>
+      <li>Content from docs/SUBSCRIPTION-MODEL.md, _recovered/api/_subscription-tier.js and migration 033. Prices are Dan's open decision, shown here as the ladder under discussion.</li>
+      <li>The charter count reads 100 open. The one profile on the paid tier today was toggled by an admin rather than by a payment (migration 031, subscription_tier_set_by), so it is not a Charter Underwriter. A shipped count reads is_charter true, is_gifted false and set_by 'system'.</li>
       <li>Styled on _theme/assets/css/style.css. Every colour pair on this page was computed, and the workings are in the stylesheet comments.</li>
     </ul>
   </div>

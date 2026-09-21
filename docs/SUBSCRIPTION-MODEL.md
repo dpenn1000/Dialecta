@@ -4,7 +4,14 @@
 live database. It exists, it is more complete than anyone remembered, and it has never been wired.*
 
 **Live today:** 14 profiles, 1 on `pro`, 13 on `free`, 1 carrying the Charter flag, 0 gifted. No
-payment integration anywhere. `getTierCapabilities` has no caller. `upgrade_url` is `null` in both
+payment integration anywhere.
+
+**Zero people have paid.** The one `pro` profile carrying `is_charter` looks like a Charter
+Underwriter by its flags and is not one by provenance: its `subscription_tier_set_by` is an admin's
+member id, and migration 031 reserves `'system'` for changes made by a payment webhook. It was
+switched on by hand. So the first real Charter Underwriter is still to come, and all 100 founding
+places are open, not 99. A naive count of `is_charter` would get this wrong. Found by `designer`,
+verified against live 2026-09-21. `getTierCapabilities` has no caller. `upgrade_url` is `null` in both
 tiers with the note `TUNING: set when /pricing or /upgrade exists`.
 
 ---
@@ -39,7 +46,7 @@ identity surface.** The paid gates are depth, coaching and the cycle.
 
 | Capability | Free | Underwriter |
 | --- | --- | --- |
-| Opinion-map candidates | 2 | Unlimited, skill default of 3 applies |
+| Opinion-map candidates | 2 | **3**, the skill's default. `null` removes the client cap; it does not mean unlimited |
 | Polish runs per session | 2 | Unlimited |
 | Self-snapshot visible | Yes | Yes |
 | Full history scroll | Yes | Yes |
@@ -74,8 +81,19 @@ renders it as a faint brass ring around the Underwriter dot.
 ## Peer gifting
 
 `is_gifted` plus `gifted_by_member_id` records that another member bought a year for this one. The
-migration's own words on why it is separate from the tier: it is for someone who "cannot pay
-themselves but is honored by a peer's gift, which is a different thing."
+migration's own words on why it is separate from the tier: "the recipient didn't pay themselves but
+is honored by a peer's gift, which is a different semantic from self-purchased support." The badge
+renders an "Honored" variant rather than "Underwriter".
+
+*Corrected 2026-09-21. This paragraph first quoted the migration as saying "cannot pay themselves",
+inside quotation marks, which it never said. "Cannot" reads as hardship; "didn't" reads as an
+honour, and the migration means the second. `designer` caught it while building the membership
+page. The misquote had already reached `legal` and `philosopher` through the charter-badge brief.*
+
+**One more thing `designer` found here, and it is a defect rather than a wording problem.**
+`is_gifted` means two things. Migration 033 defines it as a gift from another member. Migration 034
+also sets it for the free seats the platform hands out, Charter Writers and Founding Voices. And when
+a gift expires the tier drops but `is_gifted` stays set, so the flag outlives the thing it records.
 
 ## What has to exist before anyone can pay
 
