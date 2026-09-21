@@ -68,6 +68,12 @@ def check(text):
 
 
 def main(argv):
+    # Piped output on Windows defaults to cp1252, which cannot encode an arrow
+    # or most other symbols a context line can carry. Without this the gate
+    # crashed on the first one and exited 1 with zero hard hits, which reads
+    # as a failure.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     strict = "--strict" in argv
     files = [a for a in argv if not a.startswith("--")]
     total_hard = 0
