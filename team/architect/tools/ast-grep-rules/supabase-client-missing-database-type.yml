@@ -1,0 +1,49 @@
+# A Supabase client created without the generated Database type argument.
+# Every query through such a client is unchecked, which is how builder wrote an invalid
+# enum value and a nonexistent column into the classification insert and watched tsc exit 0
+# (exchange/open/2026-09-21-builder-01). First drafted in
+# team/architect/knowledge/2026-module-boundaries-and-structural-rules.md.
+#
+# Calibrated 2026-09-21. The first version matched callees by name and flagged 14 sites, 10
+# of them calls to the app's own wrapper, which is also called createClient. This version
+# binds the callee ($F) to an import from @supabase/* in the same file, under its own name or
+# an alias, so the wrapper's callers drop out and a renamed import is still caught.
+# Controls: team/architect/tools/controls/supabase-client.ts (expect lines 6 and 7 only).
+id: supabase-client-missing-database-type
+language: TypeScript
+severity: warning
+message: >-
+  Supabase client created without <Database>. Pass the generated Database type from
+  supabase/types.ts, or every query through this client is unchecked.
+rule:
+  pattern: $F($$$ARGS)
+  not:
+    has:
+      kind: type_arguments
+  inside:
+    kind: program
+    stopBy: end
+    has:
+      kind: import_statement
+      all:
+        - has:
+            field: source
+            regex: "@supabase/(supabase-js|ssr)"
+        - has:
+            stopBy: end
+            kind: import_specifier
+            has:
+              field: name
+              regex: ^(createClient|createServerClient|createBrowserClient)$
+            any:
+              - has:
+                  field: alias
+                  pattern: $F
+              - all:
+                  - not:
+                      has:
+                        field: alias
+                        kind: identifier
+                  - has:
+                      field: name
+                      pattern: $F

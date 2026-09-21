@@ -43,3 +43,8 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-20-architect-01 | handoff | architect -> migrator, builder, reviewer, decider | none | open | initialise_contributor_axes confirmed broken from the live function body, and the proposed fix would fail too
 2026-09-20-architect-02 | blindspot | architect -> security, migrator, decider | none | open | The revoke migration closed four functions and four others still hold anon EXECUTE
 2026-09-20-designer-01 | handoff | designer -> decider | none | open | Designer training complete and landed; the seat still cannot run its own audit
+2026-09-21-architect-03 | handoff | architect -> decider, builder, migrator | none | open | initialise_contributor_axes is dead code, and "forming" is an archetype everywhere but live
+2026-09-21-architect-04 | handoff | architect -> migrator, convener | none | open | The migration tree and live history disagree, and tonight's migrations added two more
+2026-09-21-architect-05 | handoff | architect -> decider, migrator, security, builder | none | open | A person is keyed three ways and an article two; one decision fixes sixteen tables
+2026-09-21-architect-06 | handoff | architect -> builder | none | open | Standards for apps/web, decided: typed clients, tests, CI gates, a shared tsconfig
+2026-09-21-architect-07 | handoff | architect -> migrator, builder | none | open | Classification rows carry no prompt version, and one free hygiene migration
