@@ -1,0 +1,430 @@
+/*
+ * The live theme's surface layer: paper, wood, brass, and the fluid type and
+ * layout scale.
+ *
+ * Hand written, and deliberately NOT tokens.css. tokens.css is generated from
+ * design/dialecta-design-spec.html and apps/web/CLAUDE.md forbids editing it by
+ * hand. designer ruled _theme/assets/css/style.css authoritative over the spec
+ * (48 of 49 referenced tokens resolve there against 10), and the Council
+ * sequenced the generator flip behind two open decisions that are Dan's
+ * (council/log/2026-09-20-port-or-rewrite.md, "What is Dan's to decide", items
+ * 4 and 5). This file is the additive half that needs neither: every value below
+ * is copied from the live stylesheet, and every NAME below is one tokens.css
+ * does not already define, so nothing here overrides anything generated.
+ *
+ * The two forked names, --amber and --border-light, are the exception and are
+ * left alone on purpose. tokens.css keeps the spec's values for both; the live
+ * site's values arrive here under their real names instead (--brass-mid,
+ * --wood-edge), and the ported components reference those. When Dan names which
+ * fork is real, this file loses two aliases rather than gaining a conflict.
+ *
+ * Source: _theme/assets/css/style.css, the Ghost admin export, read 2026-09-20.
+ * Copy from that file, never from _recovered-next/lib/theme/style.css, which is
+ * a five-month-stale mirror that happens to be byte identical today.
+ */
+
+:root {
+  /* Surface and text. --cream is the page, --paper is an article sheet,
+     --paper-bright is an engine card (the compose workbench is one). */
+  --ink: #1c1814;
+  --ink-soft: #2c2620;
+  --body-ink: #3a342c;
+  --secondary: #5a5248;
+  --tertiary: #7a7068;
+  --cream: #f7f2e8;
+  --paper: #fefcf5;
+  --paper-bright: #fffdf8;
+
+  /* Brass, five stops from deep bronze to pale gold cream. */
+  --brass-deep: #7a4a10;
+  --brass-mid: #b8862e;
+  --brass-warm: #d4a84a;
+  --brass-bright: #ecb438;
+  --brass-pale: #f5dfa0;
+
+  /* The canonical Dialecta brass gradient: a symmetric seven stop sweep that
+     returns to deep bronze on both edges with a pale cream peak at 50%. Built
+     for italic display text, where diagonal strokes catch the sweep. Pair with
+     --brass-shadow, which is sharp on purpose: blur reads as fuzz on type. */
+  --brass-gradient: linear-gradient(
+    95deg,
+    var(--brass-deep) 0%,
+    var(--brass-mid) 18%,
+    var(--brass-warm) 36%,
+    var(--brass-pale) 50%,
+    var(--brass-warm) 64%,
+    var(--brass-mid) 82%,
+    var(--brass-deep) 100%
+  );
+  --brass-shadow: drop-shadow(0 2px 0 rgba(28, 24, 20, 0.2));
+
+  /* Wood: a rim, not a plank. The reflection bar is the one component that
+     paints --wood-grain as a full surface. Everywhere else wood is the
+     one pixel --wood-edge rim, which is how it actually ships. */
+  --wood-warm: #c48040;
+  --wood-mid: #9a5c28;
+  --wood-deep: #7a3e16;
+  --wood-edge: rgba(154, 92, 40, 0.22);
+  --wood-grain: repeating-linear-gradient(
+      91deg,
+      transparent 0,
+      transparent 9px,
+      rgba(0, 0, 0, 0.042) 9px,
+      rgba(0, 0, 0, 0.042) 10px,
+      transparent 10px,
+      transparent 21px,
+      rgba(255, 255, 255, 0.052) 21px,
+      rgba(255, 255, 255, 0.052) 22px
+    ),
+    repeating-linear-gradient(
+      88deg,
+      transparent 0,
+      transparent 22px,
+      rgba(0, 0, 0, 0.022) 22px,
+      rgba(0, 0, 0, 0.022) 23px
+    ),
+    linear-gradient(
+      180deg,
+      var(--wood-warm) 0%,
+      var(--wood-deep) 36%,
+      var(--wood-deep) 54%,
+      var(--wood-mid) 74%,
+      var(--wood-warm) 100%
+    );
+
+  /* Paper grain: one fractalNoise overlay at 0.045 opacity, the same value the
+     live article card uses, so a draft on the workbench and the published
+     article read as the same sheet. */
+  --paper-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");
+
+  /* Fluid type. Comments are min to max in px. */
+  --type-display: clamp(1.625rem, 0.875rem + 3.2vw, 4.5rem); /* 26 to 72 */
+  --type-h1: clamp(1.75rem, 1rem + 2.4vw, 3.5rem); /* 28 to 56 */
+  --type-h2: clamp(1.25rem, 0.95rem + 1.4vw, 2.25rem); /* 20 to 36 */
+  --type-h3: clamp(1.125rem, 1rem + 0.6vw, 1.5rem); /* 18 to 24 */
+  --type-body: clamp(1rem, 0.9rem + 0.3vw, 1.25rem); /* 16 to 20 */
+  --type-meta: clamp(0.75rem, 0.7rem + 0.15vw, 0.9rem); /* 12 to 14.4 */
+
+  /* Layout. */
+  --max-width: 1180px;
+  --page-pad: clamp(16px, 2vw + 8px, 56px);
+  --gutter: clamp(20px, 1.5vw + 12px, 40px);
+  --reading-max: clamp(560px, 50vw, 920px);
+  --rail-w: clamp(280px, 18vw, 380px);
+}
+
+/* ---------------------------------------------------------------------------
+   Surface primitives, copied rule for rule from the live stylesheet.
+   --------------------------------------------------------------------------- */
+
+/* Polished brass display type. Italic is not decoration here: the gradient
+   only catches on diagonal strokes. */
+.dialecta-brass {
+  font-style: italic;
+  background: var(--brass-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: var(--brass-shadow);
+}
+
+.dialecta-paper {
+  background-color: var(--paper-bright);
+  background-image: var(--paper-grain);
+}
+
+.dialecta-wood-frame {
+  border: 1px solid var(--wood-edge);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 1px rgba(245, 223, 160, 0.22),
+    0 1px 3px rgba(28, 24, 20, 0.06),
+    0 2px 8px rgba(28, 24, 20, 0.04);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.22s ease;
+}
+
+.dialecta-wood-frame:hover {
+  border-color: rgba(154, 92, 40, 0.34);
+  box-shadow:
+    inset 0 0 0 1px rgba(245, 223, 160, 0.34),
+    0 2px 6px rgba(184, 134, 46, 0.1),
+    0 4px 16px rgba(28, 24, 20, 0.08);
+}
+
+/* The article sheet, from .post-article. Same paper, same grain, same brass
+   hairline ring and gold top edge lift, so what the writer types on and what a
+   reader reads are one surface. */
+.dialecta-sheet {
+  --sheet-pad-x: clamp(24px, 3.5vw + 12px, 88px);
+  --sheet-pad-top: clamp(28px, 2vw + 16px, 56px);
+  --sheet-pad-bottom: clamp(44px, 2.5vw + 24px, 80px);
+  background-color: var(--paper);
+  background-image: var(--paper-grain);
+  padding: var(--sheet-pad-top) var(--sheet-pad-x) var(--sheet-pad-bottom);
+  border-radius: 4px;
+  box-shadow:
+    0 4px 24px rgba(28, 24, 20, 0.1),
+    0 1px 4px rgba(28, 24, 20, 0.06),
+    inset 0 1px 0 rgba(245, 223, 160, 0.35),
+    0 0 0 0.5px rgba(184, 134, 46, 0.18);
+  position: relative;
+}
+
+/* Reading typography, from .post-content. The editor's own prose area wears
+   this too, which is the whole point of writing on the sheet. */
+.dialecta-reading {
+  font-family: var(--font-reading);
+  font-size: var(--type-body);
+  line-height: 1.75;
+  color: var(--body-ink);
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga", "dlig", "onum";
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+.dialecta-reading p {
+  margin: 0 0 1.4em;
+}
+
+.dialecta-reading > p:first-of-type {
+  margin-top: 0;
+}
+
+.dialecta-reading h2 {
+  font-family: var(--font-display);
+  font-size: var(--type-h2);
+  font-weight: 600;
+  color: var(--ink);
+  margin: 2.4em 0 0.6em;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.dialecta-reading h3 {
+  font-family: var(--font-display);
+  font-size: var(--type-h3);
+  font-weight: 600;
+  color: var(--ink);
+  margin: 1.8em 0 0.5em;
+  line-height: 1.25;
+}
+
+.dialecta-reading blockquote {
+  margin: 1.8em 0;
+  padding-left: 20px;
+  border-left: 2px solid var(--brass-mid);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.dialecta-reading ul,
+.dialecta-reading ol {
+  margin: 0 0 1.4em 1.4em;
+}
+
+.dialecta-reading li {
+  margin-bottom: 0.5em;
+}
+
+.dialecta-reading a {
+  color: var(--brass-deep);
+  text-underline-offset: 2px;
+}
+
+.dialecta-reading hr {
+  border: 0;
+  border-top: 1px solid var(--wood-edge);
+  margin: 2.4em 0;
+}
+
+.dialecta-reading code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: rgba(154, 92, 40, 0.08);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+
+.dialecta-reading pre {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--dark-card);
+  color: var(--text-on-dark, #f0ebe0);
+  padding: 1em 1.2em;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0 0 1.4em;
+}
+
+.dialecta-reading pre code {
+  background: none;
+  padding: 0;
+}
+
+/* The lede, from .post-lede. */
+.dialecta-lede {
+  font-family: var(--font-reading);
+  font-size: var(--type-body);
+  font-weight: 300;
+  color: var(--text-lede);
+  line-height: 1.72;
+  font-style: italic;
+  padding-left: 16px;
+  border-left: 2px solid var(--brass-mid);
+}
+
+/* The meta rule, from .post-meta. */
+.dialecta-meta {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--secondary);
+}
+
+/* ---------------------------------------------------------------------------
+   The published article, from post.hbs and the live .post-* rules: the same
+   sheet the writer drafts on, at the live 820px reading width, with the brass
+   hero title, the justified body, the paragraph indent and the drop cap.
+   --------------------------------------------------------------------------- */
+
+.dialecta-article {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.dialecta-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 20px;
+}
+
+.dialecta-breadcrumb a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.dialecta-breadcrumb a:hover {
+  color: var(--brass-mid);
+}
+
+.dialecta-article-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 0.9rem + 3.5vw, 3.5rem);
+  font-weight: 600;
+  line-height: 1.18;
+  margin-bottom: 16px;
+  padding-bottom: 0.05em;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+  font-feature-settings: "kern", "liga", "dlig", "salt", "ss01", "lnum";
+}
+
+.dialecta-article .dialecta-lede {
+  margin-bottom: 24px;
+}
+
+.dialecta-byline-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--wood-edge);
+}
+
+.dialecta-byline-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  color: var(--ink-soft);
+}
+
+.dialecta-byline-row a {
+  color: var(--brass-deep);
+}
+
+.dialecta-reading--article {
+  text-align: justify;
+  hanging-punctuation: first last;
+  word-spacing: 0.01em;
+}
+
+.dialecta-reading--article p + p {
+  text-indent: 1.5em;
+}
+
+.dialecta-reading--article h2 + p,
+.dialecta-reading--article h3 + p,
+.dialecta-reading--article ul + p,
+.dialecta-reading--article ol + p,
+.dialecta-reading--article blockquote + p,
+.dialecta-reading--article hr + p {
+  margin-top: 0;
+  text-indent: 0;
+}
+
+.dialecta-reading--article h2,
+.dialecta-reading--article h3 {
+  text-align: left;
+}
+
+.dialecta-reading--article > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 500;
+  font-size: clamp(3rem, 1.6rem + 4vw, 6rem);
+  line-height: 0.82;
+  float: left;
+  padding: 0.05em 0.14em 0 0;
+  margin-top: 0.05em;
+  color: var(--ink);
+}
+
+@media print {
+  .dialecta-brass {
+    background: none;
+    -webkit-text-fill-color: var(--ink);
+    color: var(--ink);
+    filter: none;
+  }
+}
+
+/* The reflection bar's shimmer. The recovered component injected this into
+   document.head at mount (dialecta-reflection-bar.jsx, ensureKeyframes); it
+   lives here instead so it renders with the page. Same name, same sweep. */
+@keyframes dialecta-reflection-bar-shim {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(210%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="dialecta-reflection-bar-shim"] {
+    animation: none !important;
+  }
+}
+
+/* globals.css caps every <main> at 44rem, which is right for a reading column
+   and wrong for a workbench with a stage rail beside it. One opt-in class
+   rather than loosening the global rule for every page. */
+main.dialecta-wide {
+  max-width: var(--max-width);
+  padding: 2rem var(--page-pad) 4rem;
+}
