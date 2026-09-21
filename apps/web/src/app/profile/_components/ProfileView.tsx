@@ -11,7 +11,7 @@ import type { ProfilePageData } from '../_lib/data';
 import { displayName, initialsOf, totalGraduations } from '../_lib/view';
 import { Feed } from './Feed';
 import { Hero } from './Hero';
-import { AboutPane, ArticlesPane, EngagementPane, InfluencesPane } from './panes';
+import { AboutPane, ArticlesPane, EngagementPane, GrowthPane, InfluencesPane } from './panes';
 import { ProfileTabs, type TabSpec } from './ProfileTabs';
 import styles from './profile.module.css';
 
@@ -44,6 +44,10 @@ export function ProfileView({ data, initialTab, dev }: { data: ProfilePageData; 
     ...(showArticles
       ? [{ key: 'articles', label: S.tabs.articles, content: <ArticlesPane articles={data.articles} /> }]
       : []),
+    // Always last, regardless of isAuthor: matches live's own tab array
+    // (_theme/assets/js/home.js), where Growth follows the conditional
+    // Articles tab rather than replacing it.
+    { key: 'growth', label: S.tabs.growth, content: <GrowthPane /> },
   ];
 
   return (

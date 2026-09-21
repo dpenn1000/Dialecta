@@ -374,6 +374,8 @@ export const strings = {
     setAspiration: 'Set aspiration',
     seeWriting: { own: 'See my writing', other: 'See their writing' },
     handle: (slug: string) => `@${slug}`,
+    /** The contributor card's meta line: "Joined April 2026". */
+    joined: (date: string) => `Joined ${date}`,
     /** The contributor card's glyph when no Order is assigned. The recovered fallback. */
     orderFallbackOrnament: '✒',
 
@@ -404,7 +406,7 @@ export const strings = {
 
     // Tabs and the Engagement pane.
     tabsLabel: 'Profile sections',
-    tabs: { engagement: 'Engagement', about: 'About', influences: 'Influences', articles: 'Articles' },
+    tabs: { engagement: 'Engagement', about: 'About', influences: 'Influences', articles: 'Articles', growth: 'Growth' },
     stats: {
       comments: 'Comments',
       // Replaces the recovered "Forum density", which needs each comment's
@@ -488,6 +490,21 @@ export const strings = {
     articles: {
       heading: 'Articles',
       untitled: 'Untitled article',
+    },
+
+    // The Growth pane: live's two sections (home.js), structure and empty
+    // states only until fp_snapshots and the self-snapshot are ported.
+    growth: {
+      scroll: {
+        heading: 'Growth Scroll',
+        empty: 'The record begins. Future moments will be added as they fire, starting from your first contribution.',
+      },
+      selfSnapshot: {
+        heading: 'Self-Snapshot',
+        intro:
+          "The contributor's own words sit at the center. The engine's indicators and the community's reflection sit alongside. Where the voices diverge is honest information; what to do with it is theirs.",
+        empty: "Self-snapshots aren't shown here yet.",
+      },
     },
 
     // The feed under the tabs, "what's alive" on this profile.

@@ -7,16 +7,21 @@
  * Left out, each because what it called does not exist in apps/web: the
  * settings drawer the name opened, the Share and Edit controls, the Follow
  * button (its PATCH trusted a member id from the client), the Welcome card
- * and the Order negotiation card. "Joined" is gone too: profiles has no
- * created_at, and the recovered page only ever showed it on the viewer's own
- * profile, from the Ghost session.
+ * and the Order negotiation card.
+ *
+ * "Joined" is back (2026-09-21): profiles still has no created_at, but live's
+ * own version never read one either, it reads the Ghost member session's
+ * created_at, gated to the viewer's own profile (page-profile.hbs, home.js).
+ * data.ts's joinedAt is that same gate under Supabase Auth: the viewer's own
+ * auth.users.created_at, read only once this profile is already known to be
+ * theirs. Null for every profile but the viewer's own, same as live.
  */
 import Link from 'next/link';
 import { ARCHETYPE_IDS, fingerprintSalt } from '@dialecta/core';
 import { Fingerprint } from '@/components/fingerprint';
 import { strings } from '@/strings';
 import type { ProfilePageData } from '../_lib/data';
-import { displayName, fingerprintCaption, fingerprintLabel, initialsOf, orderDisplay } from '../_lib/view';
+import { displayName, fingerprintCaption, fingerprintLabel, initialsOf, joinedDate, orderDisplay } from '../_lib/view';
 import { ArchetypeControls, type ArchetypeCopy, type ArchetypeControlsCopy } from './ArchetypeControls';
 import { Avatar, MemberHero, OrderHero, Signature } from './bits';
 import styles from './profile.module.css';
@@ -62,6 +67,7 @@ export function Hero({ data, dev }: { data: ProfilePageData; dev: boolean }) {
   const readable = data.fingerprintStatus === 'ok';
   const hasWriting = data.articles.length > 0;
   const meta = p.location;
+  const joined = joinedDate(data.joinedAt);
 
   return (
     <section className={`${styles.brassCard} ${styles.hero}`} aria-label={name}>
@@ -90,7 +96,13 @@ export function Hero({ data, dev }: { data: ProfilePageData; dev: boolean }) {
           </div>
           <div className={styles.cardBody}>
             <p className={styles.cardHandle}>{p.handle ? S.handle(p.handle) : name}</p>
-            {meta ? <p className={styles.cardMeta}>{meta}</p> : null}
+            {joined || meta ? (
+              <p className={styles.cardMeta}>
+                {joined ? S.joined(joined) : null}
+                {joined && meta ? ' · ' : null}
+                {meta}
+              </p>
+            ) : null}
           </div>
         </div>
 

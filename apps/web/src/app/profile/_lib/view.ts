@@ -97,6 +97,18 @@ export function shortDate(iso: string | null): string | null {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 }
 
+/**
+ * "April 2026", for the "Joined" line. Same month/year format live uses
+ * (home.js: `toLocaleDateString("en-US",{month:"long",year:"numeric"})`),
+ * pinned to UTC like shortDate so the server's zone cannot move the month.
+ */
+export function joinedDate(iso: string | null): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+}
+
 /** The recovered feedTimeAgo, against a clock the caller passes so a render is one instant. */
 export function timeAgo(iso: string | null, now: number): string {
   if (!iso) return '';

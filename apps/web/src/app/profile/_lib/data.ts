@@ -94,6 +94,15 @@ export interface ProfilePageData {
   articles: ArticleRow[];
   feed: FeedRow[];
   isOwnProfile: boolean;
+  /**
+   * When the contributor joined, for the "Joined" line. Null for now, so
+   * the line stays hidden: profiles has no join date (checked against
+   * pg_attribute, 2026-09-21), and a login's own created_at is the day it
+   * first signed in here, months after a legacy member joined on Ghost.
+   * Live reads the Ghost member's created_at, own profile only; the fix is
+   * a profiles.joined_at backfilled from Ghost's members.
+   */
+  joinedAt: string | null;
 }
 
 export function isProfileDataConfigured(): boolean {
@@ -292,6 +301,8 @@ export const loadProfilePage = cache(async function loadProfilePage(key: string)
     loadArticles(supabase, profile.id),
     viewerIsProfile(supabase, profile.id),
   ]);
+  // No join date is stored yet; see ProfilePageData.joinedAt.
+  const joinedAt: string | null = null;
 
   const memberKey = member.key;
   if (memberKey === null) {
@@ -306,6 +317,7 @@ export const loadProfilePage = cache(async function loadProfilePage(key: string)
       articles,
       feed: [],
       isOwnProfile,
+      joinedAt,
     };
   }
 
@@ -321,5 +333,6 @@ export const loadProfilePage = cache(async function loadProfilePage(key: string)
     articles,
     feed: keyed.feed,
     isOwnProfile,
+    joinedAt,
   };
 });

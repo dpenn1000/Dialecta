@@ -1,6 +1,6 @@
 /**
- * The four tab panes, server-rendered and passed into ProfileTabs as props.
- * Ported from the tab content in dialecta-profile.jsx.
+ * The tab panes, server-rendered and passed into ProfileTabs as props. Most
+ * are ported from the tab content in dialecta-profile.jsx.
  *
  * What changed from the recovered panes, each for a reason the data forces:
  *   - The stat tiles read Comments, Graduations, Articles, Readers. The
@@ -13,6 +13,18 @@
  *     nothing records either. The recovered pane rendered a hardcoded mock
  *     list for every author.
  *   - No section edit buttons: the editors they opened are not ported.
+ *
+ * GrowthPane is not in the recovered file at all (2026-09-21): live added a
+ * Growth tab after that export, always last regardless of isAuthor
+ * (_theme/assets/js/home.js). It stacks two widgets neither of which this app
+ * can read yet: the Growth Scroll (Dialecta_Growth_Scroll.md) reads
+ * fp_snapshots, keyed on ghost_member_id and closed to the anon key; the
+ * Self-Snapshot calls a legacy Vercel endpoint keyed the same way, and its
+ * three-voice mechanic is its own listed design tension (root CLAUDE.md,
+ * "Known drift and open work"). GrowthPane ports the structure, an eyebrow
+ * and live's own empty-state line for the Scroll, and a shorter, honestly
+ * empty section for the Self-Snapshot, rather than fabricating either one's
+ * data or attempting its interactive form.
  */
 import Link from 'next/link';
 import { topicLabel } from '@/lib/topics';
@@ -244,5 +256,28 @@ export function ArticlesPane({ articles }: { articles: readonly ArticleRow[] }) 
         );
       })}
     </ul>
+  );
+}
+
+/** See the file header: structure and empty state only, for both of live's Growth widgets. */
+export function GrowthPane() {
+  const G = S.growth;
+  return (
+    <div>
+      <section className={`${styles.paperCard} ${styles.shelfCard}`} aria-labelledby="profile-growth-scroll">
+        <h2 id="profile-growth-scroll" className={styles.eyebrow} style={{ marginBottom: 6 }}>
+          {G.scroll.heading}
+        </h2>
+        <p className={styles.quiet}>{G.scroll.empty}</p>
+      </section>
+
+      <section className={`${styles.paperCard} ${styles.shelfCard}`} aria-labelledby="profile-self-snapshot">
+        <h2 id="profile-self-snapshot" className={styles.eyebrow} style={{ marginBottom: 6 }}>
+          {G.selfSnapshot.heading}
+        </h2>
+        <p className={styles.notesSub}>{G.selfSnapshot.intro}</p>
+        <p className={styles.quiet}>{G.selfSnapshot.empty}</p>
+      </section>
+    </div>
   );
 }

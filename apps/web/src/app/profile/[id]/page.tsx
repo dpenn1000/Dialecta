@@ -23,7 +23,7 @@ interface ProfilePageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-const TABS = new Set(['engagement', 'about', 'influences', 'articles']);
+const TABS = new Set(['engagement', 'about', 'influences', 'articles', 'growth']);
 
 export async function generateMetadata({ params }: ProfilePageProps): Promise<Metadata> {
   if (!isProfileDataConfigured()) return {};
