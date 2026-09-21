@@ -21,10 +21,22 @@ because none exist yet; the first one is.
 are public, so the check proves nothing; a live upload route also brings the federal reporting duty
 for child sexual abuse material with it (`exchange/open/2026-09-21-legal-02`).
 
-Fixing either is a production deploy, so both wait for you. `security` is preparing the narrowed
-handler with tests, a map of what the live theme reads from it, whether the recovered tree
-reproduces production file for file, and the steps with a rollback:
-`council/security/hotfix-2026-09-21-api-comments/`.
+Fixing either is a production change, so both wait for you. **`security` has the fix ready**, in
+`council/security/hotfix-2026-09-21-api-comments/README.md`, with the commands and the rollback:
+
+- **Now, recommended:** two Vercel firewall rules, one per route. No build, works on any plan,
+  undone in one command. The cost is visible: every article's comments section shows an error and
+  uploads fail until the next step.
+- **Then, if you want comments back before the cutover:** deploy the narrowed `comments.js` and the
+  disabled `upload-image.js` from a clean copy of the recovered tree, under four conditions the
+  README lists. Tests pass 20 of 20, and 17 of them fail against the deployed originals. The tree
+  now reproduces production byte for byte (160 of 160 files); two had lost their line endings when
+  committed, one of them the classifier's prompt file, and that is fixed.
+- **Check the Vercel plan first.** On Hobby the rebuild is refused outright: 38 functions against a
+  limit of 12, and an hourly cron.
+- **Check Settings, Deployment Protection.** At least 43 older production builds are still live at
+  their own `*.vercel.app` addresses with the old handlers, and promoting a new deployment does not
+  touch them. Standard Protection closes those and leaves `dialecta.vercel.app` public.
 
 ## 0B. The terms beside the Pact, drafted
 

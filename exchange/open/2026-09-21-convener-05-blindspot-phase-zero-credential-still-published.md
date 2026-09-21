@@ -76,3 +76,9 @@ why the `profiles` fix revoked the table grant and re-granted every column but
 one. The same shape is needed here, and it needs the full column list for each
 table rather than the two lines above. Test against the front page and the
 comment route before and after.
+
+## Added 2026-09-21 by the convener, from `security`'s hotfix work
+
+The revoke list above misses `comments.mentions`: its entries carry member ids, so the credential is
+readable there too. The production handler returned the same ids inside `mentions` and `author`;
+the prepared fix drops both (`council/security/hotfix-2026-09-21-api-comments/`).
