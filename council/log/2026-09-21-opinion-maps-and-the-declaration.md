@@ -451,13 +451,22 @@ Dan, 2026-09-21, in the session, against the chair's twelve questions.
 | 3 | The opinion maps get a section in the design spec | Yes |
 | 4 | Caption the author's dot as the engine's estimate | **Only if the author did not select one.** "The Author should be encouraged to select opinions, and build out the options before it is published. We had an AI suggestion tool in the old model, with the Author having control over the final axes." |
 | 5 | Authors set their own mark before publishing | Yes |
-| 6 | The Note to the Author leaves the reader's page | Asked what it is; answer pending |
+| 6 | The Note to the Author leaves the reader's page | Yes: "I agree 100%" |
 | 7 | The overlay leads with the Strongest Objection | Sure |
 | 8 | The engine names a sensitive-inference category in the rationale before Save | Sure |
 | 9 | Word budgets of 35, 30 and 40 on the author's three fields, at compose time | Yes |
 | 10 | A substantive re-run needs a fresh Stage 2.5 sign-off and a logged prior version | Yes |
-| 11 | "On the Far Shore of Fear" settles on one tier | Asked for clarification; answer pending |
-| 12 | Adopt the voice-editor's label corrections | Asked for an explanation; answer pending |
+| 11 | "On the Far Shore of Fear" settles on one tier | Spark, for now: "I plan to rewrite these before launch, and add a few more. They are test runs." Later: "Let me re-write it again when I have time, and we will re-run it." Applied as migration `20260921183144`; the badge, final tier and reading all say Spark. The versioned re-run supersedes it |
+| 12 | Adopt the voice-editor's label corrections | Yes, "perfect", then asked whether there is a more enlightened word than "the Engine". Open: the name |
+
+**Answers to the architect's four questions** (`architect-10`), 2026-09-21:
+
+| | Question | Dan |
+| --- | --- | --- |
+| A | The article classifier's home: a route handler in apps/web on Vercel | Not yet: "I need a better understanding of the Vercel/Next.JS stack. This is my first Next.JS build." Open until he has it |
+| B | Commit the five calibration essays to the repository | Later: "Let's do this as a targeted effort when I have time" |
+| C | The author's own mark: required or encouraged | "Highly encouraged, with authenticated awareness that the Engine will add one if they do not." Not required. The author is told before publishing that the engine will supply an estimate, captioned as one, if they don't set their own |
+| D | Far Shore's one reading | See item 11: Spark now, rewrite and versioned re-run later |
 
 **How the convener read item 4.** "Select one" means the author set their own position on the map.
 Today no author has: all seven live marks equal the engine's proposal exactly (philosopher, checked
@@ -473,4 +482,5 @@ map, or add a blank one, up to two. What the author never had was control of the
 Question 5 ("Suggest 2 to 3 axes or poles you think readers will actually split on", author-seeded,
 engine refines) never reached the build either.
 
-**Not yet decided:** items 6, 11 and 12. The ADR and each seat's `positions.md` follow those answers.
+**Not yet decided:** the name for "the engine" (item 12) and question A above. The ADR and each seat's
+`positions.md` follow those answers.
