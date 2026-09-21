@@ -45,6 +45,21 @@ removed from both sides:
 So no tracked file changes behaviour against what live ran. One documents a function differently from
 the comment the database actually holds.
 
+## Re-run the same night, about two hours later
+
+Three more migrations were applied while this note was being written, by a session that already knew
+about the drift. `checks/migration-history.sql` against the tracked files:
+
+| Live version | File | Same SQL |
+| --- | --- | --- |
+| `20260921043008` | same version | **No**, cause not established |
+| `20260921043631` | `20260921050000_revoke_public_execute_on_initialise_contributor_axes.sql` | Yes |
+| `20260921044120` | `20260921051000_close_comments_member_email_to_public.sql` | **No**: live ends with `notify pgrst, 'reload schema';` and the file does not |
+
+Live now holds 34. The pattern repeated inside two hours, and the round-number versions (`050000`,
+`051000`) show why: they were chosen by hand before applying. That is the case for running the check
+after every apply, not the case for more care.
+
 ## Why the versions drifted
 
 `apply_migration` in the Supabase MCP records the version as the timestamp at the moment it applies.

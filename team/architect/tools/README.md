@@ -39,7 +39,7 @@ Pass tracked files (`git ls-files`) so another session's uncommitted work is not
 | --- | --- | --- |
 | dependency-cruiser | 0 violations. `apps/web`: 67 modules, 125 dependencies. `packages/core`: 9 modules, 14 dependencies | Trustworthy only because `no-unresolvable` is an error: any import it cannot follow now fails the run |
 | ast-grep | 4 sites: `apps/web/src/lib/supabase/client.ts:15`, `middleware.ts:31`, `server.ts:21`, `service.ts:34` | Control `controls/supabase-client.ts` flags lines 6 and 7 and nothing else |
-| knip | 1 unused file (`apps/web/src/lib/supabase/client.ts`), 1 unused dependency (root `@supabase/supabase-js`), 1 unused devDependency (`eslint-config-next`), 16 unused exports, 7 unused types | Filtered to tracked files |
+| knip | 1 unused file (`apps/web/src/lib/supabase/client.ts`), 1 unused dependency (root `@supabase/supabase-js`), 16 unused exports, 7 unused types | Filtered to tracked files. It also reported `eslint-config-next` unused, and that was false: `apps/web/eslint.config.mjs` loads it by name through `FlatCompat`, and `eslint` over the tracked files exits 0. `knip.json` now ignores it for `apps/web` |
 | jscpd | 1 clone, 8 lines, 0.10% of 8,001 lines in 55 files, inside `stages-publish.tsx` | Tracked `.ts` and `.tsx` in both workspaces |
 | squawk | 168 issues; 143 in the unapplied baseline, 25 across four applied migrations | `prefer-robust-stmts`, `require-concurrent-index-creation` and the two timeout rules lead |
 
