@@ -11,7 +11,13 @@ for the mandate; this file is the state of the training and what comes next.
 | Memory | `council/designer/positions.md` |
 | Knowledge | `council/designer/research/` |
 | Leads | `council/designer/research/reading-list.md` |
+| Ideas before evidence | `council/designer/studio/` |
 | Skills it owns | `/dialecta-research`, and it argues in `/dialecta-council` |
+
+`studio/` was added 2026-09-20 and is the only place here exempt from the sourcing rule. Its README
+holds the contract and the three ways an idea leaves. It exists because every other artifact this
+advisor owns requires a citation, a new idea has none by definition, and so nothing new was ever
+getting written down.
 
 ## Where it is now
 
