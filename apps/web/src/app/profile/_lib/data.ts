@@ -32,6 +32,7 @@ import 'server-only';
  */
 import { cache } from 'react';
 import { createClient } from '@/lib/supabase/server';
+import { commentIdsWithShowableBodies } from '@/components/discourse/data';
 import { createServiceClient } from '@/lib/supabase/service';
 import type { FingerprintData } from '@dialecta/core';
 import {
@@ -254,12 +255,23 @@ async function loadKeyed(supabase: Client, memberKey: string): Promise<Keyed> {
   if (comments.error) warn('comments', comments.error.message);
   if (feed.error) warn('feed_events', feed.error.message);
 
+  // A body shows here only by the rule the discourse feed applies: classified,
+  // and not Breach. A failed tier read shows none, since a Breach comment's
+  // words must not appear in full on its author's profile.
+  const recent = comments.error ? [] : parseRows('comments', comments.data, parseCommentRow);
+  let showable = new Set<string>();
+  try {
+    showable = await commentIdsWithShowableBodies(supabase, recent.map((c) => c.id));
+  } catch (err) {
+    warn('comment_tiers', err instanceof Error ? err.message : String(err));
+  }
+
   return {
     axisRows,
     archetype: archetype.error || !archetype.data ? null : parseArchetypeRow(archetype.data),
     connections,
     commentCount: comments.error ? null : (comments.count ?? null),
-    comments: comments.error ? [] : parseRows('comments', comments.data, parseCommentRow),
+    comments: recent.filter((c) => showable.has(c.id)),
     feed: feed.error ? [] : parseRows('feed_events', feed.data, parseFeedRow),
   };
 }

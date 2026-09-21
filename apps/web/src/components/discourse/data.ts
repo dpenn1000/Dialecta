@@ -210,6 +210,25 @@ async function readLatest(
   return latest;
 }
 
+/**
+ * The ids among these whose body this session may be shown: classified, and
+ * not Breach, by the same tier rule every card applies. The one definition of
+ * that rule for every surface that shows a comment's words; the discourse feed
+ * applies it card by card in toComment(), and the profile's recent comments
+ * call this. A comment it leaves out shows no body anywhere.
+ */
+export async function commentIdsWithShowableBodies(
+  supabase: ServerClient,
+  commentIds: string[],
+): Promise<Set<string>> {
+  const showable = new Set<string>();
+  for (const [id, row] of await readLatest(supabase, 'comment_tiers', commentIds)) {
+    const tier = toTier(row);
+    if (tier && tier.final !== 'breach') showable.add(id);
+  }
+  return showable;
+}
+
 function toTier(row: Row | undefined): CommentTier | null {
   if (!row) return null;
   const ai = tierOrNull(row.ai_suggested_tier);
