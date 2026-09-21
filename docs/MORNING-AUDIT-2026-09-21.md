@@ -108,6 +108,9 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
 | **Article schema, additive only**, identity left on `author_member_id`. `author_profile_id` added so readers can see author names without reopening the column `security` closed | `builder` | Three migrations, `20260921040353` onward |
 | **Fingerprint engine changes**, all tested in `packages/core`: the ring is a soft horizon rather than a clamp, the ring phase walks rather than marching so the spiral is gone, the noise field closes so the seam at zero degrees is gone, and purity finally drives saturation, which the engine and the live page both promised and neither did | `designer`, convener | `docs/FINGERPRINT.md` |
 | **Four stages of the recovered editor left out of `/write`**: polish-and-read, opinion-map inputs, the AI hint and topic buttons, feature photo upload. Not on the path from blank page to published article | `builder` | `apps/web/src/components/editor/README.md` |
+| **The header scrolls with the page instead of staying fixed.** A fixed header would cover the writer's sticky stage bar. Everything else about the two-bar nav, its icons and the drawer is ported from live | `builder` | `apps/web/src/components/shell/`, commit `18ccd76` |
+| **One Sign in link and no Join button**, because the magic link does both. Write shows to visitors, since anyone can draft | `builder` | same |
+| **The site is light-only for now**, and the coloured avatar made from a member's top two axes is deferred, because it needs a database read on every page | `builder` | same |
 
 ---
 
