@@ -30,6 +30,12 @@
 --                       as <h2>: the section headings of the solar and education pieces.
 --                       original_html is NOT copied in: it is the pre-polish submission.
 --   body_json, declared_claims  left at their defaults. Not recoverable, not invented.
+--
+-- Edited after apply, self-check only. Live ran a check requiring exactly 5 filled
+-- rows across the whole table, and it passed. That check raised on an empty
+-- database and broke `supabase db reset` (supabase/CLAUDE.md). The check below makes
+-- the same requirement on live and passes on an empty database. The five UPDATEs
+-- are unchanged.
 
 begin;
 
@@ -238,14 +244,23 @@ update public.articles set
 where ghost_post_id = '69f2937b4e51770001fb5218'
   and author_member_id = '64c6e1f4-512f-4982-bbdc-7885b5e30449';
 
--- Self-check: all five must now carry a title and slug, or none of this lands.
+-- Self-check: every one of the five target rows that exists must now carry a title,
+-- slug, date and body, or none of this lands. On live all five exist, so this
+-- requires five. On an empty database (supabase db reset) none exist, the updates
+-- above match nothing, and the check passes.
 do $check$
-declare n int;
+declare expected int; filled int;
 begin
-  select count(*) into n from public.articles
-   where title is not null and slug is not null and published_at is not null and body_html <> '';
-  if n <> 5 then
-    raise exception 'articles content backfill: expected 5 rows filled, got %', n;
+  select count(*),
+         count(*) filter (where title is not null and slug is not null
+                            and published_at is not null and body_html <> '')
+    into expected, filled
+    from public.articles
+   where ghost_post_id in ('69eff72be5eec200010d5310', '69efc475e5eec200010d5299',
+                           '69d5c5c083cd72000193f0cd', '69f2594b4e51770001fb51d7',
+                           '69f2937b4e51770001fb5218');
+  if filled <> expected then
+    raise exception 'articles content backfill: % of % target rows filled', filled, expected;
   end if;
 end
 $check$;
