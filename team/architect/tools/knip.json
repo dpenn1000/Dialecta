@@ -1,0 +1,19 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": { "entry": [], "project": [] },
+    "apps/web": {},
+    "packages/core": {},
+    "tools/*": {}
+  },
+  "ignore": [
+    "_recovered/**",
+    "_recovered-next/**",
+    "_theme/**",
+    "_to_delete/**",
+    "api/**",
+    "components/**",
+    "design/**",
+    "docs/**"
+  ]
+}

@@ -1,0 +1,5 @@
+# architect: ast-grep 0.45.3 project config. Rule directories are relative to this file.
+# Run from the repository root:
+#   npx -p @ast-grep/cli@0.45.3 ast-grep scan --config team/architect/tools/sgconfig.yml apps/web/src
+ruleDirs:
+  - ast-grep-rules
