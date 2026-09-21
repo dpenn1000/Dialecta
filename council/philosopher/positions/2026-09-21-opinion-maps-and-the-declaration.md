@@ -209,3 +209,30 @@ cites "high specificity", scores 9. Noted for `builder`.
 | Weinreich, H., Obendorf, H., Herder, E., and Mayer, M. (2008). Not quite the average: An empirical study of Web use. *ACM Transactions on the Web* 2(1), Article 5. DOI 10.1145/1326561.1326566 | `research/2008-weinreich-web-use.md` |
 | Filed earlier: Barasch and Berger (2014); Steindl et al. (2015) | `research/2014-barasch-broadcasting-narrowcasting.md`, `research/2015-steindl-reactance.md` |
 | `articles` (`declaration`, `ai_analysis`, `ai_suggested_tier`, `author_note`, dates) and `opinion_map_positions` (nine rows, 2026-05-01 to 05-06) | Project `mguulnibvzusfvyuowwh`, read only, 2026-09-21 |
+
+## Rebuttal
+
+The strongest point against me is legal's first: the author saw the dot and clicked Save, so the
+mark is the author's. Save accepts a candidate. It does not place a dot. The picker offers two to
+four packages, normalizes the chosen one, and offers no way to move the coordinate; all
+seven live marks equal the engine's proposal exactly. Legal shows the dot is
+defensible, not that "Where the author lands" is true. Legal's own Article 9 finding is the better
+argument for row 4: legal calls a Save close to specific consent on a religion axis, and an author
+who places the dot has given it.
+
+Circulation would log an honestly binary article rather than restructure it. Row 1 forces no third
+pole. It forecloses the yes-or-no map and takes a second tension, and the one live binary sits
+beside a ternary on the same article, so retiring it costs a second map, not the only one.
+
+Conceded to legal. Row 6 renders the closing disclosure sentence outside the fold, beside the tier
+word: my reorder left the locked constraint true only in markup. Row 8 keeps all three marked
+passages whole with their reasons, not the Stance one alone. Row 9 adopts versioning and a fresh
+Stage 2.5 on any substantive re-run, which is why Far Shore's note answers a reading its
+author never saw.
+
+Conceded to circulation. Nine placements measure nothing, so the binary case rests on Kaplan and
+the three to five tensions the skill already requires, not on transfer from minimal groups. But
+circulation's collapse and legal's defence cannot both stand: that defence is the author's three
+fields on screen beside the dot. Keep the Strongest Objection open.
+
+Designer's uncaptioned target: when row 4 reveals the mark, caption it on every map.

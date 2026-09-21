@@ -250,3 +250,15 @@ sentence could be added to the Pact's existing classification-consent language n
 axes may reflect inferred sensitive categories; optional, and only worth it once a candidate has
 actually triggered recommendation 3 in practice. Nothing here reopens the seven Pact lines already
 tracked in `exchange/open/2026-09-21-legal-01`.
+
+## Rebuttal
+
+**`philosopher`'s veto is the strongest point against row 1, and it lands on the caption.** The picker passes the engine's `author_position` through and the editor only previews it (`dialecta-editor.jsx` lines 1855 to 1895), so the dot is the engine's estimate under "Where the author lands." Save accepts a placement without authoring one, and my consent theory covered only that. The architecture stands. Row 1 becomes: caption every dot as the engine's placement until, per philosopher's recommendation 4, the author sets it.
+
+**Row 6's exposure has already happened.** The re-setup update writes `declaration`, `ai_analysis` and `updated_at`, never `ai_suggested_tier` (`admin-resetup-maps.js` lines 99 to 106). Philosopher reads Far Shore's header as Forum and its overlay as Spark after a May 3 rewrite. Two readings on one page undercut the disclosed-basis defence: the basis shown must be the basis used. Row 6 gains a step: write tier and analysis together, and reconcile Far Shore now.
+
+**Row 5 changes twice.** Philosopher's recommendation 8 corrects my "restatement costs nothing to cut": true while alignment is `aligned`, false once it is partial or divergent, when the detected core claim must show. The voice demo's passage locators pass, since the article carries the quote; its dropped reasons do not.
+
+**`circulation`'s fold, conceded in part.** Nine placements and seven shares, none after May 6, lower row 4's urgency. Row 4 stays: the fold cuts reading cost yet leaves the locked sentence unshown, and moving that sentence fits `designer`'s closed-by-default. Circulation's recommendation 3, folding the declared fields too, would remove the only basis shown by default (row 1's premise); the flagged passages already sit behind the toggle.
+
+**Row 3 stands.** "On Doubt and Devotion" is a ternary with a "Leave the faith" pole, so the sensitive category outlives the binary.

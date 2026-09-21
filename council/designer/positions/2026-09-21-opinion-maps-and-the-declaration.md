@@ -56,3 +56,17 @@ already logged against the composer's disabled button.
 | Keep the disclosure closed by default; strengthen its affordance and gate the "tap to place yourself" line behind sign-in | A conditional string, an auth check already on the page | Nothing |
 
 The spec change in row one is Dan's call, per the charter.
+
+## Rebuttal
+
+The strongest point against me is legal's, and it lands on row four. The fold I cited to shrink the overlay also holds the locked sentence. Legal's check of both builds finds it inside the collapsed toggle, which my account omitted. A reader who never clicks sees the tier without the line saying the reading never gates publication. "Closed by default" keeps the constraint true in markup only. I concede that.
+
+Legal's recommendation 4 is the fix, and it leaves the reading folded. Row four becomes: move the sentence into the summary row, beside the tier it captions, and make the whole row the control. That adds 20 words, about five seconds at 238 words a minute, and settles the affordance and the constraint together.
+
+I oppose circulation's recommendation 3, folding the author's three fields. The fold belongs to the engine's reading; hiding the declaration while the tier stays visible inverts "the author's voice is the published one." The voice demonstration shows those fields at 98 words instead of 239. Only 141 of its 485 saved words reach a reader today; the other 344 sit behind the fold.
+
+The other rows:
+
+- Row one grows. Legal's sentence placement, philosopher's field order and circulation's spec passage all land on a surface with no section, so the section takes whichever Dan adopts, alongside the palette.
+- Row three keeps its rule, and its string waits on Dan. Philosopher finds all seven author marks equal the engine's proposed coordinate; legal reads the author's Save as consent. "Author's position" or "Engine's estimate" follows his ruling.
+- Row two stands. No other seat touches the 3:1 floor, and a contrast ratio needs no reader data.

@@ -113,3 +113,15 @@ system. I would add a short passage naming the map as the platform's first proof
 own walls, so future design passes weigh shareability alongside mission fit instead of treating the
 map as a purely on-platform engagement feature. That is a content addition, not a redesign, and it
 is Dan's call.
+
+## Rebuttal
+
+Legal's screenshot-verified finding is the strongest opposing point. The fold behind my wordiness finding cuts the forced read and also hides the locked line, "never used to gate publication." I priced only the first and concede the second: a reader who never clicks meets the tier word without its basis. The finding survives on designer's count, 307 to 314 words before any click, about 80 seconds. I back legal's row 4 (the closing line beside the tier badge); it costs my argument nothing.
+
+Rec 3, folding the author's three fields behind disclosures, is withdrawn. Legal's row 1 rests on the author's dot being "shown beside their own basis," and unclicked, those three fields are the only basis on screen. Philosopher's row 6 also puts the Strongest Objection first, and the voice demo's budgets reach 98 words without a fold.
+
+Rec 1 changes twice. `validateAnalysis` checks structure only, so the fifteen-line validator I priced can't decide whether "Drift to excess" answers "What do humans need to find meaning?" Philosopher's row 2 gives the code something checkable, a `pole_statements` field with one sentence per pole, and deletes the skill's example list. I missed that list; SKILL.md lines 92 to 101 hold "Free for all," "Pay your way" and "Trust the data," all shipped verbatim.
+
+Rec 4 loses its carve-out. The skill has no binary-specific honesty check. Philosopher shows both binaries on record hid a richer shape, and row 1 falls back to a cartesian, which forces no third pole. My case for ternary first was a shareability guess. I no longer resist retiring the binary or ranking by fit to the tensions (philosopher's rows 1 and 3).
+
+Recs 2 and 5 stand; my spec passage joins designer's proposed opinion-map section.
