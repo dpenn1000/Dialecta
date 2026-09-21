@@ -1,0 +1,184 @@
+/*
+ * The declaration card inside the Declare overlay: Core Claim, Scope
+ * Boundary, Strongest Objection, and the "How the engine read this"
+ * disclosure. Ported from ArticleDeclaration's inline styles in
+ * dialecta-article-classification.jsx.
+ *
+ * One deliberate departure from the source (apps/web/CLAUDE.md, "Brass
+ * never letters on a light surface", designer D-27): every label below
+ * letters in --brass-deep. The source used --brass-mid throughout
+ * (DeclarationField, OpinionAxis, FlaggedPassage), which discourse.css
+ * documents at 3.15:1 on paper, under the 4.5:1 floor; --brass-deep
+ * measures 7.27:1. Hairlines and the tension/passage accents keep
+ * --wood-edge and the generated --tier-*-border tokens, which are lines,
+ * not lettering, so D-27 does not apply to them.
+ *
+ * Every class here is ad- prefixed. Nothing here restyles a class another
+ * folder owns.
+ */
+
+.ad-section {
+  margin: clamp(18px, 3vw, 28px) 0 clamp(28px, 5vw, 40px);
+  padding: clamp(18px, 3vw, 24px) clamp(18px, 3vw, 26px);
+  background: var(--paper-bright);
+  border: 1px solid var(--brass-pale);
+  border-radius: 4px;
+}
+
+.ad-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 14px;
+}
+
+.ad-field {
+  margin-bottom: 14px;
+}
+
+.ad-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 4px;
+}
+
+.ad-value {
+  font-family: var(--font-reading);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-prose);
+}
+
+.ad-group {
+  margin-top: 18px;
+}
+
+.ad-group .ad-label {
+  margin-bottom: 10px;
+}
+
+/* ---------------------------------------------------------------------------
+   The AI disclosure: a native <details>, no client JS. The marker is
+   suppressed and replaced by the kicker triangle, which rotates open via
+   the [open] attribute selector rather than a JS-toggled class.
+   --------------------------------------------------------------------------- */
+
+.ad-disclosure {
+  margin: 24px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--wood-edge);
+}
+
+.ad-disclosure-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  list-style: none;
+}
+
+.ad-disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+
+.ad-disclosure-summary::before {
+  content: '▸';
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.ad-disclosure[open] > .ad-disclosure-summary::before {
+  transform: rotate(90deg);
+}
+
+.ad-disclosure-tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  font-size: 9px;
+  color: var(--brass-deep);
+}
+
+.ad-disclosure-body {
+  margin-top: 18px;
+}
+
+.ad-disclosure-footer {
+  margin-top: 18px;
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--tertiary);
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------
+   Flagged passages and tensions, inside the disclosure body.
+   --------------------------------------------------------------------------- */
+
+.ad-passage {
+  --ad-passage-accent: var(--brass-pale);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: rgba(255, 253, 248, 0.55);
+  border: 1px solid var(--wood-edge);
+  border-left: 3px solid var(--ad-passage-accent);
+  border-radius: 4px;
+}
+
+.ad-passage-tier {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+}
+
+.ad-passage-quote {
+  margin: 0 0 10px;
+  padding: 0;
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink);
+  border-left: none;
+}
+
+.ad-passage-why {
+  font-family: var(--font-reading);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-prose);
+}
+
+.ad-tension {
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--wood-edge);
+}
+
+.ad-tension .ad-label {
+  margin-bottom: 4px;
+}
+
+.ad-tension .ad-value {
+  font-size: 13px;
+}

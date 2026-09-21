@@ -2640,6 +2640,84 @@ export const strings = {
       footerMeta: "Dialecta · Session 13 · Stewards · v1",
     },
   },
+
+  /**
+   * The reading-stage spine and its two overlays, src/components/
+   * article-spine/. Ported from _theme/post.hbs's spine nav and overlay
+   * shells (the architect's 2026-09-21 delta-mechanic port plan, steps 1
+   * to 4: read and render only, no placement, no writes).
+   *
+   * Reflect's own overlay is member-gated on live ({{#if @member}} in
+   * post.hbs) and its placement content is step 6, not built here. Its
+   * segment stays in the spine so all six show, but opens nothing yet,
+   * matching what a signed-out reader sees on live today: the overlay
+   * markup is absent from the page for them too. Share keeps its anchor
+   * segment for the same six-segment layout but not live's native-share
+   * or popover behavior, which is a different feature this plan does not
+   * cover.
+   */
+  articleSpine: {
+    navLabel: 'Article reading spine',
+    segments: {
+      reflect: { label: 'Reflect', meta: 'Pre-read' },
+      read: { label: 'Read', meta: 'Reading' },
+      declare: { label: 'Declare', meta: 'After reading' },
+      discourse: { label: 'Discourse', meta: null as string | null },
+      bio: { label: 'Bio', meta: 'Author' },
+      share: { label: 'Share', meta: null as string | null },
+    },
+    declare: {
+      kicker: "⁂ The Author's Declaration",
+      titleEm: 'What was committed;',
+      titleRest: 'what shifted',
+      close: 'Close',
+    },
+  },
+
+  /**
+   * The author's declaration and its opinion maps, inside the Declare
+   * overlay: src/components/article-declaration/ and src/components/
+   * opinion-map/. Ported from dialecta-article-classification.jsx's
+   * ArticleDeclaration and dialecta-opinion-map.jsx, render only (the
+   * architect's 2026-09-21 delta-mechanic port plan, steps 3 and 4).
+   *
+   * The AI disclosure carries the fields confirmed live on
+   * mguulnibvzusfvyuowwh (tier_reason, alignment_note, core_claim_detected,
+   * author_message, flagged_passages, tensions). Two fields the source
+   * component reads, recommended_map and opposing_view_note, are not
+   * here: no live row has ever carried either name, so neither has ever
+   * rendered on live; see components/opinion-map/data.ts for the finding.
+   * The maps section intro drops the source's "tap to place yourself"
+   * instruction, since nothing here places anything yet; step 6's
+   * placement-client.tsx is the right home for that line, next to its own
+   * Commit button rather than in this section header.
+   */
+  opinionMap: {
+    declaration: {
+      eyebrow: 'What this article claims',
+      coreClaim: 'Core Claim',
+      scopeBoundary: 'Scope Boundary',
+      strongestObjection: 'Strongest Objection',
+      aiDisclosure: {
+        summary: 'How the engine read this',
+        tierReason: 'Tier Reasoning',
+        alignmentNote: "Alignment with the Author's Declaration",
+        coreClaimDetected: 'Core Claim the Engine Detected',
+        authorMessage: 'Note to the Author',
+        flaggedPassages: 'Passages the Engine Marked',
+        tensions: 'Tensions the Engine Found',
+        readsAs: (tier: string) => `Reads as ${tier}`,
+        footer:
+          "The engine's reading is disclosed alongside the article, never used to gate publication. The author's voice is the published one.",
+      },
+    },
+    maps: {
+      question: 'The question',
+      heading: { one: 'The opinion map', many: 'The opinion maps' },
+      intro: { one: 'Where the argument splits.', many: 'Two debates this article opens.' },
+      authorPosition: 'Where the author lands',
+    },
+  },
 } as const;
 
 export type Strings = typeof strings;

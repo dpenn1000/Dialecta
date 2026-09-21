@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { ArticleSpine } from '@/components/article-spine/spine';
 import { DiscourseSection, toArticleClaims } from '@/components/discourse/discourse-section';
 import { getPublishedArticle, isSupabaseConfigured } from '@/lib/articles';
 import { isOwnArticle } from '@/lib/article-ownership';
@@ -104,12 +105,14 @@ export default async function ArticlePage({ params, searchParams }: ArticlePageP
   // Layer from docs/Dialecta_Discourse_Layer_UX.md. That line used to render
   // on the page itself; it is a note for builders, so it lives here now.
   //
-  // The layout is post.hbs's: breadcrumb, brass title, lede, byline, body, on
-  // the same paper sheet the writer at /write drafts on, then "The
-  // Conversation": the discourse layer (src/components/discourse), below the
-  // body on the same sheet, as post.hbs placed #dialecta-comments. The spine,
-  // the article's own tier badge, the discourse chip and the author bio are
-  // not here yet.
+  // The layout is post.hbs's: the reading spine (src/components/article-spine,
+  // steps 1 to 4 of the 2026-09-21 delta-mechanic port plan), then breadcrumb,
+  // brass title, lede, byline, body, on the same paper sheet the writer at
+  // /write drafts on, then "The Conversation": the discourse layer
+  // (src/components/discourse), below the body on the same sheet, as post.hbs
+  // placed #dialecta-comments. The article's own tier badge (the separate
+  // #dialecta-tier-badge mount near the meta bar), the discourse byline chip
+  // and the author bio section are not here yet.
   const own = await isOwnArticle(article.id);
   const topic = topicLabel(article.topic);
   const date = publishedDate(article.published_at);
@@ -121,6 +124,17 @@ export default async function ArticlePage({ params, searchParams }: ArticlePageP
 
   return (
     <main className="dialecta-wide">
+      {/*
+        The reading-stage spine: sticky under the nav on desktop, fixed to
+        the bottom on mobile. Sits outside the paper sheet, as it does on
+        live (a full-width bar above the card, not inset inside it).
+        Steps 1 to 4 of the architect's 2026-09-21 delta-mechanic port
+        plan; see components/article-spine/spine.tsx for the full port
+        note and what is deliberately not built yet (Reflect's own
+        content, the placement island, Bio and Share's target sections).
+      */}
+      <ArticleSpine articleId={article.id} />
+
       <article className="dialecta-sheet dialecta-article">
         {/*
           post.hbs's figure.post-feature: the first element in the article,
@@ -184,9 +198,19 @@ export default async function ArticlePage({ params, searchParams }: ArticlePageP
           comment for why storage cleanliness alone would not be enough here.
         */}
         <div
+          id="post-content"
           className="dialecta-reading dialecta-reading--article"
           dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(article.body_html) }}
         />
+
+        {/*
+          End-of-body sentinel: what ArticleSpine's Declare overlay
+          auto-opens against once it is 50% visible (post.hbs's own
+          #post-content-end-sentinel, spine-client.tsx's IntersectionObserver).
+          Zero visual footprint, placed where live places it: after the
+          body, before the conversation.
+        */}
+        <div id="post-content-end-sentinel" aria-hidden="true" style={{ height: 1, width: 1 }} />
 
         {/*
           Rendered in the page's own HTML, not behind a Suspense boundary: a

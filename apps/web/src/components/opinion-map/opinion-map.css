@@ -1,0 +1,162 @@
+/*
+ * Chrome around the opinion-map SVG figures in engine.tsx: the topic
+ * caption above each map and the axis/pole label typography inside the
+ * SVG. The figures' own fills, gradients and markers stay on the SVG
+ * elements themselves (computed per render), matching house convention
+ * (CSS classes for anything static, inline attributes only for what the
+ * geometry or color math actually computes).
+ *
+ * Every class here is om- prefixed. Nothing here restyles a class another
+ * folder owns.
+ */
+
+.om-figure {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.om-figure--binary {
+  max-width: 600px;
+}
+
+.om-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.om-caption {
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.om-caption-kicker {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 4px;
+}
+
+.om-caption-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.25rem, 2.4vw + 0.2rem, 1.65rem);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.om-axis-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.om-binary-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.om-binary-label {
+  flex: 0 1 45%;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+
+.om-binary-label--left {
+  text-align: left;
+}
+
+.om-binary-label--right {
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------------------
+   The maps section wrapper, inside the Declare overlay: the eyebrow +
+   intro copy above the figures, and the "where the author lands" legend
+   chip below them. Ported from ArticleDeclaration's own inline styles.
+   --------------------------------------------------------------------------- */
+
+.om-section {
+  margin-top: 36px;
+}
+
+.om-section-head {
+  text-align: center;
+  margin-bottom: 28px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--wood-edge);
+}
+
+.om-section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 6px;
+}
+
+.om-section-intro {
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--secondary);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.om-figures {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.om-author-legend {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.om-author-legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: rgba(184, 134, 46, 0.08);
+  border: 1px solid var(--brass-pale);
+  border-radius: 100px;
+}
+
+.om-author-legend-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--brass-mid);
+  border: 2px solid var(--paper-bright);
+  box-shadow: 0 0 0 1px var(--brass-deep);
+}
+
+.om-author-legend-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+}
