@@ -18,6 +18,9 @@ Committed and on `backup/2026-09-21-overnight`; `main` is still not pushed.
 | Live's right-hand rail on every page but `/write` (regression 2) | `e8f6e7f` |
 | The reading spine, the author's declaration and the opinion maps, read-only (regression 3, steps 1 to 4) | `58a3ebe` plan, `25e4959` |
 | Comment times read like live's, and the featured photo slot (regressions 6 and 4) | `2b30710` |
+| Readers place themselves on the opinion maps: Reflect and Declare, written through `place_opinion_map_position()` | `670faa4` |
+| The Council reviewed the maps and the Declare overlay; nine decisions made, and the app-side fixes landed (order, summary row, question on every map, muted marker colours, a reader marker tagged "YOU", captions by who set the mark) | `d8e4b53`, `b99f51a`; the record is `council/log/2026-09-21-opinion-maps-and-the-declaration.md` |
+| "On the Far Shore of Fear" settled on Spark, so its badge, final tier and reading agree | `7bb7b94` |
 | Profiles gain live's Growth tab (regression 5) | `aa68e19` |
 | The rest of live's article page: tier badges, a real comment count, the author bio and the share row | `09f506b`, `4509414` |
 | Breach comment text is withheld by the database: `comment_bodies()`, both readers switched to it, then `body` and `mentions` revoked from the public key and signed-in users (`security-01`) | `9cd4094`, `62c5752`, `20260921160005` |
@@ -46,6 +49,18 @@ Committed and on `backup/2026-09-21-overnight`; `main` is still not pushed.
   paragraphs. It is a data edit on three posts with candidate lines ready, not a deploy. The
   card type stays `summary_large_image` until cutover; Ghost sends its own tag and the theme
   can't remove it. `scripts/check-live-share-tags.py` reads live before and after.
+- **Open from the Council review** (`council/log/2026-09-21-opinion-maps-and-the-declaration.md`):
+  the name for "the engine" (Dan asked for a better word); where the article classifier lives
+  (the architect recommends a route handler in `apps/web` on Vercel, and Dan wants the stack
+  explained first); committing the five calibration essays; and, once the name is chosen, taking
+  the Note to the Author off the reader's page (decided) and the label changes (decided). The
+  classifier's own changes wait on its new home: delete the example pole list, add the
+  answers-its-own-question check, rank by the article's tensions, retire the binary.
+- **Placement has no keyboard path.** The opinion-map figures are images with click, touch and
+  pointer handlers only; a reader who can't use a pointer can't place themselves.
+- **Four em dashes sit in stored declarations**, one in Far Shore's Strongest Objection (now the
+  first thing the overlay shows) and three in Kathryn's piece. They are the authors' words, so they
+  are untouched until Dan says.
 - **`/login` shows a claim token in its address bar** (`?next=/claim?token=...`) until the form is
   sent, and an analytics page view there would carry it. Scrub it the way `/claim` does before claim
   links go to the other 13 members.

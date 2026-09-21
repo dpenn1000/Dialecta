@@ -11,6 +11,9 @@
  */
 
 .om-figure {
+  /* width: 100% because auto side margins on a flex-column item shrink it to its content: a
+     signed-out reader's map drew at 305px where a member's, and live's, draws at 520px. */
+  width: 100%;
   max-width: 520px;
   margin: 0 auto;
 }
