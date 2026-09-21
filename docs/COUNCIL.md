@@ -10,16 +10,16 @@
 | `designer` | advisory | sonnet | yes | yes | 19 | 19 (16w/3r) | 31 | 4 | 6 |
 | `legal` | advisory | opus | yes | yes | 25 | 24 (23w/1r) | 35 | 7 | 2 |
 | `philosopher` | advisory | opus | yes | yes | 13 | 13 (13w/0r) | 11 | 1 | 5 |
-| `security` | advisory | opus | yes | yes | 50 | 49 (46w/3r) | 32 | 4 | 3 |
+| `security` | advisory | opus | yes | yes | 50 | 49 (46w/3r) | 32 | 4 | 4 |
 | `treasurer` | advisory | sonnet | yes | yes | 20 | 18 (13w/5r) | 64 | 4 | 4 |
-| `architect` | working | opus | yes | yes | 0 | 0 (0w/0r) | 2 | 0 | 0 |
-| `builder` | working | sonnet | yes | yes | 15 | 15 (10w/5r) | 21 | 2 | 10 |
-| `decider` | working | opus | yes | yes | 9 | 9 (7w/2r) | 22 | 2 | 19 |
-| `migrator` | working | sonnet | yes | yes | 16 | 15 (8w/7r) | 24 | 2 | 6 |
-| `reviewer` | working | opus | yes | yes | 17 | 17 (13w/4r) | 26 | 1 | 6 |
+| `architect` | working | opus | yes | yes | 8 | 6 (3w/3r) | 16 | 2 | 0 |
+| `builder` | working | sonnet | yes | yes | 15 | 15 (10w/5r) | 21 | 2 | 11 |
+| `decider` | working | opus | yes | yes | 9 | 9 (7w/2r) | 22 | 2 | 21 |
+| `migrator` | working | sonnet | yes | yes | 16 | 15 (8w/7r) | 24 | 2 | 8 |
+| `reviewer` | working | opus | yes | yes | 17 | 17 (13w/4r) | 26 | 1 | 7 |
 | `spec-reader` | working | haiku | yes | yes | 11 | 10 (0w/10r) | 22 | 1 | 4 |
 | `voice-editor` | working | sonnet | yes | yes | 11 | 11 (1w/10r) | 17 | 2 | 1 |
-| **total** | 13 seats | | | | **218** | **208** | **338** | | |
+| **total** | 13 seats | | | | **226** | **214** | **352** | | |
 
 `Notes` is filed sources. `Sourced` is how many name a source it can be checked against, split into `w` for an external URL and `r` for a file in this repository cited with a version, a date or a commit. Both count: a seat whose job is spec conformance cites specs, and doing that with a commit SHA is stricter provenance than a link, not weaker. `Standing` is positions for an advisor, practices for a practitioner. `Raised` and `Addressed` count exchange records in each direction.
 
@@ -112,7 +112,7 @@
 | | |
 | --- | --- |
 | Model | sonnet |
-| Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
+| Tools | `Read`, `Edit`, `Write`, `Grep`, `Glob`, `Bash`, `WebSearch`, `WebFetch`, `mcp__Claude_Browser__*`, `mcp__visualize__*` |
 | Research | 19 filed, 19 sourced (16 external, 3 from this repo) |
 | Reading list | 32 todo, 19 filed, 0 dead |
 | Positions | 31 |
@@ -346,7 +346,7 @@
 | Positions | 32 |
 | Charter | `council/security/charter.md` |
 | Brief | `council/security/brief.md` |
-| Exchange | raised 4, addressed 3 |
+| Exchange | raised 4, addressed 4 |
 
 **What it has read.** 50 filed in `council/security/research/`.
 
@@ -514,16 +514,25 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Bash`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 0 filed, 0 sourced (0 external, 0 from this repo) |
+| Research | 8 filed, 6 sourced (3 external, 3 from this repo), 2 unsourced |
 | Reading list | 0 todo, 0 filed, 0 dead (**no reading list**) |
-| Practices | 2 |
+| Practices | 16 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/architect/brief.md` |
-| Exchange | raised 0, addressed 0 |
+| Exchange | raised 2, addressed 0 |
 
-**What it has read.** Nothing filed yet in `team/architect/knowledge/`.
+**What it has read.** 8 filed in `team/architect/knowledge/`.
 
-**Gaps.** has filed nothing yet.
+| Source | What it changes here |
+| --- | --- |
+| [ALTER DEFAULT PRIVILEGES, and the four functions anon can still execute](https://www.postgresql.org/docs/current/sql-alterdefaultprivileges.html,) | **The revoke migration was scoped to session functions and the trigger functions were left.** |
+| Four tools for "defined twice", judged before described | GitHub REST API, `api.github.com/repos/<owner>/<repo>`, fetched 2026-09-20 for |
+| information_schema against pg_catalog, settled on live data | **Any control that decides whether a check passes reads `pg_catalog`.** Grants through |
+| opposing_view_engaged: confirmed, and the loss is on the write path | the live Dialecta database (`mguulnibvzusfvyuowwh`) through the Supabase MCP |
+| [RLS performance: the six mechanisms, and which ones bind before there are rows](https://supabase.com/docs/guides/troubleshooting/rls-performance-and-best-practices-Z5Jjwv,) | **The rebuild adds policies to every table it creates, and the cheapest moment to get all six |
+| The baseline's unverified markers, checked against live | **Do not apply this migration.** Nine of its guesses are wrong and two are type errors that make |
+| The server and client boundary, already filed by builder | `team/builder/knowledge/2026-nextjs-server-client-components.md`, filed 2026-09-19 from |
+| [The strict family, and the two flags apps/web is missing for free](https://www.typescriptlang.org/tsconfig/,) | **This is a two-line edit to `apps/web/tsconfig.json` with a measured cost of zero**, and it is |
 
 ### `builder`
 
@@ -542,7 +551,7 @@
 | Practices | 21 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/builder/brief.md` |
-| Exchange | raised 2, addressed 10 |
+| Exchange | raised 2, addressed 11 |
 
 **What it has read.** 15 filed in `team/builder/knowledge/`.
 
@@ -589,7 +598,7 @@
 | Practices | 22 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/decider/brief.md` |
-| Exchange | raised 2, addressed 19 |
+| Exchange | raised 2, addressed 21 |
 
 **What it has read.** 9 filed in `team/decider/knowledge/`.
 
@@ -629,7 +638,7 @@
 | Practices | 24 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/migrator/brief.md` |
-| Exchange | raised 2, addressed 6 |
+| Exchange | raised 2, addressed 8 |
 
 **What it has read.** 16 filed in `team/migrator/knowledge/`.
 
@@ -677,7 +686,7 @@
 | Practices | 26 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/reviewer/brief.md` |
-| Exchange | raised 1, addressed 6 |
+| Exchange | raised 1, addressed 7 |
 
 **What it has read.** 17 filed in `team/reviewer/knowledge/`.
 
