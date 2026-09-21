@@ -4,7 +4,9 @@
 classifier blocked the advisor from editing its own agent definition, correctly, because an agent
 widening its own tool grant is a change a human should make. This is the text, ready to apply.*
 
-Three changes. The first is the one that matters.
+Five items. The first is the one that matters, and the first three are the agent file itself.
+Items 4 and 5 are a skill and a dependency, both outside the land fence and both somebody else's
+commit.
 
 ---
 
@@ -91,3 +93,51 @@ Nothing about the line the mandate already holds. Beauty is still never the excu
 accessibility failure still outranks "it looks better", and a finding that needs application code
 is still an exchange record rather than a commit. Wider tools make this seat able to do the job it
 was already given. They do not widen the job.
+
+---
+
+## 4. The missing third mode: a `/dialecta-studio` skill
+
+Dan's ask is that this seat work in either mode on request. Two of the three exist and both
+converge.
+
+| Skill | What it does | Direction |
+| --- | --- | --- |
+| `/dialecta-research` | Read the list, verify, file, update positions | Converges |
+| `/dialecta-council` | Position, rebuttal, chair, decide | Converges |
+| *(missing)* | Make something and show it | Diverges |
+
+There is no way to ask this seat to design rather than to judge, which is why three sprints
+produced two audits and a scan. The folder half of the fix landed as `council/designer/studio/`.
+The invocation half does not exist.
+
+Proposed, as `.claude/skills/dialecta-studio/SKILL.md`. Outside the land fence, so it needs a pull
+request whoever writes it:
+
+> `/dialecta-studio <surface>`. Produce three distinct treatments of the named surface, not one
+> refined one. Build each as a harness that renders real tokens at real sizes, serve it, screenshot
+> all three, and show Dan the comparison. Say which you would ship and what would change your mind.
+> File the survivor in `studio/` against the four headings; record the two you dropped and why,
+> because the discarded options are the evidence that the chosen one was chosen.
+>
+> Three rules carry over unchanged. Editorial Voice v1.2 applies. A studio file has no standing in
+> council until it leaves through one of the three doors in the studio README. And the charter's
+> veto on anything no real contributor has tried binds hardest here, because a treatment that
+> convinced the person who made it has been tested on nobody.
+
+---
+
+## 5. One dependency worth taking
+
+`microsoft/playwright`, Apache-2.0. This repo has no visual testing of any kind: root
+`devDependencies` is empty and nothing anywhere references playwright, puppeteer, percy or
+chromatic.
+
+It matters for this request specifically. The browser tools let a seat look at a surface inside one
+session. Playwright lets the repo look at it on every pull request: screenshots at 380px and
+desktop, and visual regression against the design spec. D-18 currently proposes a token-level
+contrast check, which would have caught the Heat badge and would not catch a margin that collapses
+on a phone. Those are two different gates and the repo has neither.
+
+Not this seat's commit. `builder` owns `package.json`, and this belongs in an exchange record
+rather than here once someone decides it is wanted.
