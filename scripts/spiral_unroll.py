@@ -15,7 +15,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from PIL import Image, ImageDraw
-from turbulence_lab import OCTAVES, font, ring_seed_for
+from turbulence_lab import OCTAVES, font, ring_rotation, ring_seed_for
 
 RINGS, WIDE, TALL, PAD = 26, 300, 150, 18
 BG, INK, MUTED = (247, 242, 232), (28, 24, 20), (122, 112, 104)
@@ -34,8 +34,9 @@ def field(only, seed_mode):
     for yy in range(TALL):
         k = yy * RINGS / TALL
         seed = ring_seed_for(k, seed_mode)
+        rot = ring_rotation(k, seed_mode)
         for xx in range(WIDE):
-            theta = xx / WIDE * 2 * math.pi
+            theta = xx / WIDE * 2 * math.pi + rot
             v = 0.0
             for i, (f, c, k0, amp) in enumerate(OCTAVES):
                 if only is None or i == only:
@@ -47,7 +48,9 @@ def field(only, seed_mode):
 
 cols = [(i, f"theta x {f}", f"{rot_per_ring(f, c):+.1f} deg/ring") for i, (f, c, _, _) in enumerate(OCTAVES)]
 cols.append((None, "all four", "as rendered"))
-rows = [("Linear seed", "k * 11.7 + 3.3", "linear"), ("Hashed seed", "decorrelated", "hashed")]
+rows = [("Linear seed", "k * 11.7 + 3.3, as built", "linear"),
+        ("Hashed seed", "every ring independent", "hashed"),
+        ("Random walk", "neighbours correlated, no drift", "walk")]
 
 f_t, f_h, f_c, f_s = font(16, True), font(13, True), font(11), font(11, True)
 W = 150 + len(cols) * (WIDE + PAD)

@@ -38,7 +38,14 @@ def smoothstep(t):
     return t * t * (3 - 2 * t)
 
 
-OCTAVES = ((7.3, 1.7, 0.0, 0.5), (13.1, 3.3, 1.4, 0.3), (21.7, 5.9, 2.7, 0.2), (4.1, 0.7, 0.0, 0.15))
+# Frequencies are INTEGERS so the field closes around the perimeter.
+# The engine uses 7.3, 13.1, 21.7 and 4.1, none of them whole, so noise(0) and
+# noise(2*pi) disagree and every ring carries a step at theta = 0. Measured on
+# the engine's own numbers: up to 1.118 of a +-1.15 range, about 6.5px at a
+# mature amplitude. A closed loop cannot have a discontinuity in it, and the
+# nearest integers keep the character while removing the seam entirely
+# (worst gap after: 6.6e-14).
+OCTAVES = ((7, 1.7, 0.0, 0.5), (13, 3.3, 1.4, 0.3), (22, 5.9, 2.7, 0.2), (4, 0.7, 0.0, 0.15))
 
 
 def perimeter_noise(theta, ring_seed, only=None):
@@ -69,31 +76,95 @@ def turbulence_wave(theta, ring_seed, turbulence, mode="symmetric"):
     """
     if turbulence < 0.01:
         return 0.0
-    freq = 3 + turbulence * 8
-    w = (
-        math.sin(theta * freq + ring_seed * 0.4) * 0.7
-        + math.sin(theta * (freq * 1.8) + ring_seed * 0.9 + 1.1) * 0.4
-        + math.sin(theta * (freq * 0.5) + ring_seed * 0.2 + 2.3) * 0.5
-    )
+    # The frequency has to be a whole number so the wave closes around the
+    # perimeter, and it also has to vary smoothly, because turbulence is a
+    # per-point quantity: rounding it alone turns the frequency into a step
+    # function of theta and puts a fresh seam wherever it steps. So evaluate
+    # at the two bracketing integers and blend. A blend of two closed waves is
+    # closed, and the frequency still rises continuously with turbulence.
+    fr = 3 + turbulence * 8
+    lo = math.floor(fr)
+    frac = fr - lo
+
+    def at(f):
+        f = max(1, int(f))
+        return (
+            math.sin(theta * f + ring_seed * 0.4) * 0.7
+            + math.sin(theta * max(1, round(f * 1.8)) + ring_seed * 0.9 + 1.1) * 0.4
+            + math.sin(theta * max(1, round(f * 0.5)) + ring_seed * 0.2 + 2.3) * 0.5
+        )
+
+    w = at(lo) * (1 - frac) + at(lo + 1) * frac
     if mode == "outward":
         w = abs(w)
     return w * turbulence
 
 
-def ring_seed_for(k, seed_mode):
-    """
-    The engine uses `k * 11.7 + 3.3`, and its comment says this exists "so
-    adjacent rings wiggle differently".
+WALK_STEP = 0.07  # radians of ANGLE per ring, about 4 degrees
 
-    It does not do that. The seed is used as a PHASE, and a phase offset on a
-    function of theta is an angular rotation of that harmonic. A seed that
-    advances linearly in k therefore rotates every ring by a constant angle
-    from the one inside it, which is the construction of a spiral rather than a
-    decorrelation. "hashed" is the same idea done as intended: a seed with no
-    linear relationship between neighbouring rings.
+
+def _hash01(k, salt=0.0):
+    """Deterministic pseudo-random in [0, 1). Same contributor, same texture."""
+    return (math.sin(k * 127.1 + salt * 311.7 + 74.7) * 43758.5453) % 1.0
+
+
+def ring_rotation(k, seed_mode, salt=0.0, step=None):
+    """
+    The angle this ring's whole noise field is turned by, in radians.
+
+    This is the correction to a first attempt that walked the PHASE instead.
+    Phase enters each octave multiplied by its own coefficient (1.7, 3.3, 5.9,
+    0.7), so a phase step of 2.6 rad moved the finest octave by 15 rad, several
+    whole periods, and the walk degenerated into a hash. Dan, looking at the
+    render: hashed and walked "don't look that different". They were not.
+
+    Rotating theta itself turns every octave together by the same angle, which
+    is what a coherent material does, and puts the step in units that mean
+    something: WALK_STEP is degrees of turn between neighbouring rings.
+    """
+    s = WALK_STEP if step is None else step
+    if seed_mode == "linear":
+        return 0.0
+    if seed_mode == "hashed":
+        return _hash01(k, salt) * 2 * math.pi
+    rot, i = 0.0, 0
+    while i < int(k):
+        i += 1
+        rot += (_hash01(i, salt) * 2 - 1) * s
+    frac = k - int(k)
+    if frac:
+        rot += (_hash01(int(k) + 1, salt) * 2 - 1) * s * frac
+    return rot
+
+
+def ring_seed_for(k, seed_mode, salt=0.0, step=None):
+    """
+    Three ways to seed a ring's phase, only one of which is organic.
+
+    `linear` is the engine as built: `k * 11.7 + 3.3`. Its comment says this
+    exists "so adjacent rings wiggle differently", but the seed is used as a
+    PHASE, and a phase offset on a function of theta is an angular rotation.
+    A seed advancing by a constant rotates every ring by a constant angle from
+    the one inside it, which constructs a spiral instead of decorrelating.
+
+    `hashed` removes the spiral by making every ring independent. It also
+    removes what makes the texture read as a material: real ridges run
+    alongside their neighbours, and independent rings read as static.
+
+    `walk` is the one to ship. The phase takes a small random step per ring
+    rather than a fixed one, so neighbouring rings stay close (ridges that
+    follow each other) while the accumulated rotation wanders instead of
+    marching (no spiral). Deterministic in `salt`, so a contributor's
+    fingerprint is the same every render, which the whole identity claim
+    depends on.
     """
     if seed_mode == "hashed":
-        return (math.sin(k * 127.1 + 311.7) * 43758.5453) % (2 * math.pi)
+        return _hash01(k, salt) * 2 * math.pi
+    if seed_mode == "walk":
+        # The field is one material, so the phase is fixed. Ring-to-ring
+        # variation is the small ROTATION in ring_rotation, plus this light
+        # jitter so neighbours are alike without being identical.
+        return _hash01(0, salt) * 2 * math.pi + (_hash01(k, salt + 1) * 2 - 1) * 0.18
     return k * 11.7 + 3.3
 
 
@@ -112,6 +183,7 @@ def build_rings(axis_grad, axis_turb, axis_purity, max_r, mode="symmetric", seed
     for k in range(ring_count):
         depth = k / max(1, ring_count - 1)
         ring_seed = ring_seed_for(k, seed_mode)
+        ring_rot = ring_rotation(k, seed_mode)
         pts = []
         for p in range(N_PERIMETER):
             theta = (p / N_PERIMETER) * math.pi * 2
@@ -133,11 +205,11 @@ def build_rings(axis_grad, axis_turb, axis_purity, max_r, mode="symmetric", seed
             local_mat = min(axis_grad[a0], GRAD_HORIZON) * w0 + min(axis_grad[a1], GRAD_HORIZON) * w1
 
             base_amp = ((1 - local_purity) * 4 + 1.8) * (1 + (1 - depth) * 0.4)
-            radius += perimeter_noise(theta, ring_seed, only) * base_amp
+            radius += perimeter_noise(theta + ring_rot, ring_seed, only) * base_amp
 
             recency = 0.3 + (1 - depth) * 0.7
             maturity = 0.4 + min(local_mat / 22, 1) * 2.1
-            radius += turbulence_wave(theta, ring_seed, local_turb, mode) * 9 * recency * maturity
+            radius += turbulence_wave(theta + ring_rot, ring_seed, local_turb, mode) * 9 * recency * maturity
 
             pts.append((math.cos(theta - math.pi / 2) * radius, math.sin(theta - math.pi / 2) * radius))
         rings.append(pts)

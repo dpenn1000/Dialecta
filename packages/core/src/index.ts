@@ -80,3 +80,21 @@ export {
   tradeoffFactor,
   type AxisTotals,
 } from './fingerprint-geometry';
+
+export {
+  BASE_NOISE_FLOOR,
+  BASE_NOISE_IMPURITY_GAIN,
+  NOISE_OCTAVES,
+  PHASE_JITTER,
+  ROTATION_WALK_STEP,
+  TURBULENCE_FLOOR,
+  WAVE_AMPLITUDE,
+  baseNoiseAmplitude,
+  perimeterNoise,
+  ringFields,
+  textureOffset,
+  turbulenceWave,
+  waveAmplitude,
+  type RingField,
+  type TextureInput,
+} from './fingerprint-texture';
