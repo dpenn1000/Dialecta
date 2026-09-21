@@ -38,7 +38,7 @@ flowchart LR
   Q --> S
   W --> E[Editor island, TipTap]
   E --> R
-  R -. after the response .-> T[after(): ledger insert, replay, archetype]
+  R -. after the response .-> T["after(): ledger insert, replay, archetype"]
   N[Nightly Vercel Cron: reconcile, replay everyone] --> S
   T --> S
 ```
