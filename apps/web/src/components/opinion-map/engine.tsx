@@ -28,6 +28,13 @@
  * or changed) so the interactive figures paint the identical hues these
  * read-only ones do, from one place, rather than a second hardcoded copy.
  *
+ * Also exported for that island, after the council's review of the maps
+ * (council/log/2026-09-21-opinion-maps-and-the-declaration.md): AuthorMarker,
+ * AuthorPositionCaption, MapTopicCaption and mapQuestion, so a signed-in
+ * reader's figure draws the same question and the same author caption as the
+ * read-only one, and POLE_MARKER_COLORS / AXIS_MARKER_COLORS, the muted
+ * marker fills (see their comment for the contrast numbers).
+ *
  * Colors: two families. The surface tokens (ink, paper-bright, wood-edge,
  * the font stack) already exist in styles/tokens.css and
  * styles/dialecta-surfaces.css and are referenced here by var() only, no
@@ -41,7 +48,13 @@
  */
 import { strings } from '@/strings';
 import './opinion-map.css';
-import type { CartesianOpinionMap, OpinionMap, TernaryOpinionMap, BinaryOpinionMap } from './data';
+import type {
+  AuthorPositionSource,
+  CartesianOpinionMap,
+  OpinionMap,
+  TernaryOpinionMap,
+  BinaryOpinionMap,
+} from './data';
 
 const s = strings.opinionMap.maps;
 
@@ -61,6 +74,20 @@ export const POLE_LABEL_COLORS: Readonly<Record<0 | 1 | 2, string>> = {
 
 export const AXIS_COLORS = { L: '#f0a018', R: '#1a6ff0', T: '#22c55e', B: '#e83516' } as const;
 export const AXIS_LABEL_COLORS = { L: '#a06320', R: '#1a4d9c', T: '#1d7a3a', B: '#a02010' } as const;
+
+/**
+ * Marker fills: the dots drawn at a map's poles and axis ends. They take the
+ * muted twins above, never the landscape hues. A graphical object has to
+ * clear 3:1 against its card (WCAG 1.4.11), and against --paper-bright the
+ * bright hues do not: gold measures 2.12:1 (green 2.24:1), red 4.17:1 and
+ * blue 4.51:1 before the dot's own opacity takes more off, where the twins
+ * measure 4.80 to 7.99:1. The bright hues stay in the washes and in the
+ * blend that colours a reader's halo, where they are tints and no mark has
+ * to be found against them. Same values as the label twins on purpose: a
+ * pole's dot and its name always agree.
+ */
+export const POLE_MARKER_COLORS = POLE_LABEL_COLORS;
+export const AXIS_MARKER_COLORS = AXIS_LABEL_COLORS;
 
 // ─── Color math ─────────────────────────────────────────────────────────
 
@@ -185,11 +212,15 @@ function ternaryGridSegments(size: number) {
 
 /**
  * Brass-toned dot with a layered halo, the author's position on any map.
- * Distinct enough to be findable without dominating the landscape.
+ * Distinct enough to be findable without dominating the landscape. Exported
+ * so the placement island (placement-client.tsx) draws the same marker
+ * instead of keeping a second copy. `label` is the marker's spoken name, the
+ * same caption that prints under the map, so what a screen reader hears
+ * matches who set the mark (engine or author).
  */
-function AuthorMarker({ x, y }: { x: number; y: number }) {
+export function AuthorMarker({ x, y, label }: { x: number; y: number; label: string }) {
   return (
-    <g aria-label="Author's position">
+    <g data-marker="author" aria-label={label}>
       <circle cx={x} cy={y} r={16} fill="var(--brass-mid)" opacity={0.1} />
       <circle cx={x} cy={y} r={11} fill="none" stroke="var(--brass-deep)" strokeWidth={1} strokeDasharray="2,2" opacity={0.85} />
       <circle cx={x} cy={y} r={7} fill="var(--brass-mid)" stroke="var(--paper-bright)" strokeWidth={2} />
@@ -198,7 +229,36 @@ function AuthorMarker({ x, y }: { x: number; y: number }) {
   );
 }
 
-function MapTopicCaption({ children }: { children: string | null }) {
+/**
+ * The caption under a map's author marker: the marker's key, worded by who
+ * set it (`author_position_source`, absent means the engine). Every map
+ * that draws a marker carries its own, not only the last one in the
+ * overlay. Rendered by OpinionMapFigure for the read-only view and by
+ * PlacementClient for the interactive one, so a reader sees the same
+ * caption signed in or out.
+ */
+export function AuthorPositionCaption({ source }: { source: AuthorPositionSource }) {
+  return (
+    <div className="om-author-legend">
+      <span className="om-author-legend-chip">
+        <span className="om-author-legend-dot" aria-hidden="true" />
+        <span className="om-author-legend-label">{s.authorPosition[source]}</span>
+      </span>
+    </div>
+  );
+}
+
+/** The question a map asks: its own topic, or a cartesian's two axis topics joined. */
+function cartesianQuestion(axes: CartesianOpinionMap['axes']): string | null {
+  return axes.map((a) => a.topic).filter(Boolean).join(' × ') || null;
+}
+
+export function mapQuestion(map: OpinionMap): string | null {
+  return map.type === 'cartesian' ? cartesianQuestion(map.axes) : map.topic;
+}
+
+/** "The question" over the map's own question. Drawn on every figure, read-only or interactive. */
+export function MapTopicCaption({ children }: { children: string | null }) {
   if (!children) return null;
   return (
     <div className="om-caption">
@@ -213,14 +273,16 @@ function MapTopicCaption({ children }: { children: string | null }) {
 export function CartesianMap({
   axes,
   authorPosition = null,
+  authorSource = 'engine',
   size = 320,
 }: {
   axes: CartesianOpinionMap['axes'];
   authorPosition?: CartesianOpinionMap['authorPosition'];
+  authorSource?: AuthorPositionSource;
   size?: number;
 }) {
   const [hor, ver] = axes;
-  const captionTopic = [hor.topic, ver.topic].filter(Boolean).join(' × ');
+  const captionTopic = cartesianQuestion(axes);
   const labelLeft = hor.axisA;
   const labelRight = hor.axisB;
   const labelTop = ver.axisA;
@@ -233,7 +295,7 @@ export function CartesianMap({
 
   return (
     <div className="om-figure">
-      <MapTopicCaption>{captionTopic || null}</MapTopicCaption>
+      <MapTopicCaption>{captionTopic}</MapTopicCaption>
       <svg
         viewBox={`${VB_OFFSET} ${VB_OFFSET} ${VB_SIZE} ${VB_SIZE}`}
         xmlns="http://www.w3.org/2000/svg"
@@ -282,10 +344,10 @@ export function CartesianMap({
           </g>
         )}
 
-        <circle cx={size / 2} cy={4} r={5} fill={AXIS_COLORS.T} opacity={0.85} />
-        <circle cx={size / 2} cy={size - 4} r={5} fill={AXIS_COLORS.B} opacity={0.85} />
-        <circle cx={4} cy={size / 2} r={5} fill={AXIS_COLORS.L} opacity={0.85} />
-        <circle cx={size - 4} cy={size / 2} r={5} fill={AXIS_COLORS.R} opacity={0.85} />
+        <circle cx={size / 2} cy={4} r={5} fill={AXIS_MARKER_COLORS.T} opacity={0.85} />
+        <circle cx={size / 2} cy={size - 4} r={5} fill={AXIS_MARKER_COLORS.B} opacity={0.85} />
+        <circle cx={4} cy={size / 2} r={5} fill={AXIS_MARKER_COLORS.L} opacity={0.85} />
+        <circle cx={size - 4} cy={size / 2} r={5} fill={AXIS_MARKER_COLORS.R} opacity={0.85} />
 
         <text x={size / 2} y={-LABEL_PAD / 2 + 4} textAnchor="middle" className="om-axis-label" fill={AXIS_LABEL_COLORS.T}>
           {labelTop.toUpperCase()}
@@ -316,7 +378,7 @@ export function CartesianMap({
 
         <rect x={0.75} y={0.75} width={size - 1.5} height={size - 1.5} fill="none" stroke="var(--wood-edge)" strokeWidth={1.5} rx={10} />
 
-        {authorPosition ? <AuthorMarker x={authorPosition.x * size} y={authorPosition.y * size} /> : null}
+        {authorPosition ? <AuthorMarker x={authorPosition.x * size} y={authorPosition.y * size} label={s.authorPosition[authorSource]} /> : null}
       </svg>
     </div>
   );
@@ -328,11 +390,13 @@ export function TernaryMap({
   poles,
   topic = null,
   authorPosition = null,
+  authorSource = 'engine',
   size = 340,
 }: {
   poles: TernaryOpinionMap['poles'];
   topic?: string | null;
   authorPosition?: TernaryOpinionMap['authorPosition'];
+  authorSource?: AuthorPositionSource;
   size?: number;
 }) {
   const [labelA, labelB, labelC] = poles;
@@ -393,9 +457,9 @@ export function TernaryMap({
             })()
           : null}
 
-        <circle cx={A.x} cy={A.y} r={5.5} fill={POLE_COLORS[0]} opacity={0.9} />
-        <circle cx={B.x} cy={B.y} r={5.5} fill={POLE_COLORS[1]} opacity={0.9} />
-        <circle cx={C.x} cy={C.y} r={5.5} fill={POLE_COLORS[2]} opacity={0.9} />
+        <circle cx={A.x} cy={A.y} r={5.5} fill={POLE_MARKER_COLORS[0]} opacity={0.9} />
+        <circle cx={B.x} cy={B.y} r={5.5} fill={POLE_MARKER_COLORS[1]} opacity={0.9} />
+        <circle cx={C.x} cy={C.y} r={5.5} fill={POLE_MARKER_COLORS[2]} opacity={0.9} />
 
         <text x={A.x} y={A.y - LABEL_PAD / 2 - 4} textAnchor="middle" className="om-axis-label" fill={POLE_LABEL_COLORS[0]}>
           {labelA.toUpperCase()}
@@ -412,7 +476,7 @@ export function TernaryMap({
         {authorPosition
           ? (() => {
               const ap = barycentricToXY(authorPosition.a, authorPosition.b, authorPosition.c, size);
-              return <AuthorMarker x={ap.x} y={ap.y} />;
+              return <AuthorMarker x={ap.x} y={ap.y} label={s.authorPosition[authorSource]} />;
             })()
           : null}
       </svg>
@@ -430,12 +494,14 @@ export function BinaryMap({
   axisA,
   axisB,
   authorPosition = null,
+  authorSource = 'engine',
   size = 320,
 }: {
   topic?: string | null;
   axisA: string;
   axisB: string;
   authorPosition?: BinaryOpinionMap['authorPosition'];
+  authorSource?: AuthorPositionSource;
   size?: number;
 }) {
   const VIEW_HEIGHT = 64;
@@ -504,8 +570,8 @@ export function BinaryMap({
           );
         })}
 
-        <circle cx={HALF_T - 4} cy={BASELINE} r={4.5} fill={AXIS_COLORS.L} opacity={0.95} />
-        <circle cx={size - HALF_T + 4} cy={BASELINE} r={4.5} fill={AXIS_COLORS.R} opacity={0.95} />
+        <circle cx={HALF_T - 4} cy={BASELINE} r={4.5} fill={AXIS_MARKER_COLORS.L} opacity={0.95} />
+        <circle cx={size - HALF_T + 4} cy={BASELINE} r={4.5} fill={AXIS_MARKER_COLORS.R} opacity={0.95} />
 
         {!authorPosition && (
           <g opacity={0.42}>
@@ -514,7 +580,7 @@ export function BinaryMap({
           </g>
         )}
 
-        {authorPosition ? <AuthorMarker x={authorPosition.x * size} y={curveY(authorPosition.x)} /> : null}
+        {authorPosition ? <AuthorMarker x={authorPosition.x * size} y={curveY(authorPosition.x)} label={s.authorPosition[authorSource]} /> : null}
       </svg>
     </div>
   );
@@ -522,9 +588,24 @@ export function BinaryMap({
 
 // ─── Dispatch ───────────────────────────────────────────────────────────
 
-/** Renders whichever of the three figures `map.type` names, read-only. */
+/**
+ * Renders whichever of the three figures `map.type` names, read-only, and
+ * the caption under its author marker when it draws one.
+ */
 export function OpinionMapFigure({ map }: { map: OpinionMap }) {
-  if (map.type === 'cartesian') return <CartesianMap axes={map.axes} authorPosition={map.authorPosition} />;
-  if (map.type === 'ternary') return <TernaryMap poles={map.poles} topic={map.topic} authorPosition={map.authorPosition} />;
-  return <BinaryMap topic={map.topic} axisA={map.axisA} axisB={map.axisB} authorPosition={map.authorPosition} />;
+  const source = map.authorPositionSource;
+  const figure =
+    map.type === 'cartesian' ? (
+      <CartesianMap axes={map.axes} authorPosition={map.authorPosition} authorSource={source} />
+    ) : map.type === 'ternary' ? (
+      <TernaryMap poles={map.poles} topic={map.topic} authorPosition={map.authorPosition} authorSource={source} />
+    ) : (
+      <BinaryMap topic={map.topic} axisA={map.axisA} axisB={map.axisB} authorPosition={map.authorPosition} authorSource={source} />
+    );
+  return (
+    <>
+      {figure}
+      {map.authorPosition ? <AuthorPositionCaption source={source} /> : null}
+    </>
+  );
 }

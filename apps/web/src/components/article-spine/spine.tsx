@@ -94,7 +94,11 @@ const REFLECT_TITLE_ID = 'post-overlay-reflect-title';
  */
 export async function ArticleSpine({ articleId, discourseCount }: { articleId: string; discourseCount: number | null }) {
   const member = await readShellMember();
-  const canPlace = member !== null;
+  // Placing needs a claimed profile: place_opinion_map_position() resolves the reader from
+  // current_profile_id() and returns nothing for a sign-in that isn't linked to one, so an
+  // unclaimed member gets the read-only maps and a line saying why, not a Commit that fails.
+  const canPlace = member !== null && member.href !== null;
+  const placeHint = canPlace ? null : member === null ? 'guest' : 'unclaimed';
 
   return (
     <SpineClient
@@ -125,7 +129,7 @@ export async function ArticleSpine({ articleId, discourseCount }: { articleId: s
           <h2 id={DECLARE_TITLE_ID} className="post-overlay-title">
             <em>{s.declare.titleEm}</em> {s.declare.titleRest}
           </h2>
-          <ArticleDeclaration articleId={articleId} canPlace={canPlace} />
+          <ArticleDeclaration articleId={articleId} canPlace={canPlace} placeHint={placeHint} />
           <div className="post-overlay-actions">
             <button type="button" className="post-overlay-skip" data-overlay-close>
               {s.declare.close}

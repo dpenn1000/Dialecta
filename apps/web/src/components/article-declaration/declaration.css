@@ -63,67 +63,154 @@
 }
 
 /* ---------------------------------------------------------------------------
-   The AI disclosure: a native <details>, no client JS. The marker is
-   suppressed and replaced by the kicker triangle, which rotates open via
-   the [open] attribute selector rather than a JS-toggled class.
+   Core Claim and Scope Boundary. The maps come first now (council
+   2026-09-21), so these two sit under a hairline instead of running on from
+   the last map's controls.
    --------------------------------------------------------------------------- */
 
-.ad-disclosure {
-  margin: 24px 0 0;
-  padding-top: 18px;
+.om-section + .ad-claims {
+  margin-top: 36px;
+  padding-top: 22px;
   border-top: 1px solid var(--wood-edge);
 }
 
+.ad-claims .ad-field:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   The engine's reading: a native <details>, no client JS, closed by default.
+   The whole <summary> is the control, and it is drawn as one: a bordered
+   row that lifts on hover, carrying the title, the tier, a labelled cue for
+   opening it, and the sentence saying the reading is disclosed and never a
+   gate, all visible with no click. The cue's two labels swap on [open]
+   through the attribute selector below rather than a JS-toggled class.
+   --------------------------------------------------------------------------- */
+
+.ad-disclosure {
+  margin: 28px 0 0;
+}
+
 .ad-disclosure-summary {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 0;
+  display: block;
+  padding: 12px 14px 13px;
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--brass-deep);
   list-style: none;
+  background: color-mix(in srgb, var(--brass-pale) 16%, var(--paper-bright));
+  border: 1px solid var(--wood-edge);
+  border-radius: 4px;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .ad-disclosure-summary::-webkit-details-marker {
   display: none;
 }
 
-.ad-disclosure-summary::before {
-  content: '▸';
-  display: inline-block;
-  font-size: 12px;
-  line-height: 1;
-  transition: transform 0.2s ease;
+.ad-disclosure-summary:hover {
+  background: color-mix(in srgb, var(--brass-pale) 32%, var(--paper-bright));
+  border-color: var(--brass-mid);
 }
 
-.ad-disclosure[open] > .ad-disclosure-summary::before {
-  transform: rotate(90deg);
+.ad-disclosure-summary:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 2px;
+}
+
+.ad-disclosure-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+.ad-disclosure-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
 }
 
 .ad-disclosure-tier {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  margin-left: auto;
-  font-size: 9px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--brass-deep);
 }
 
-.ad-disclosure-body {
-  margin-top: 18px;
+/* The open/close cue: a pill with a label and a chevron, so the row reads as
+   a control and not as a heading. */
+.ad-disclosure-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 4px 12px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  background: var(--paper-bright);
+  border: 1px solid var(--brass-mid);
+  border-radius: 100px;
 }
 
-.ad-disclosure-footer {
-  margin-top: 18px;
+.ad-disclosure-cue::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.ad-disclosure[open] > .ad-disclosure-summary .ad-disclosure-cue::after {
+  transform: translateY(2px) rotate(-135deg);
+}
+
+.ad-disclosure-cue-hide {
+  display: none;
+}
+
+.ad-disclosure[open] > .ad-disclosure-summary .ad-disclosure-cue-show {
+  display: none;
+}
+
+.ad-disclosure[open] > .ad-disclosure-summary .ad-disclosure-cue-hide {
+  display: inline;
+}
+
+/* The locked sentence. Reading type in --secondary (7.25:1 on the row's tint,
+   6.96:1 on its hover tint), not the small tertiary print it was while it sat
+   folded away. */
+.ad-disclosure-note {
+  display: block;
+  margin-top: 9px;
   font-family: var(--font-reading);
   font-style: italic;
-  font-size: 12px;
-  color: var(--tertiary);
+  font-size: 13px;
   line-height: 1.5;
+  color: var(--secondary);
+  text-wrap: pretty;
+}
+
+.ad-disclosure-body {
+  margin-top: 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ad-disclosure-summary,
+  .ad-disclosure-cue::after {
+    transition: none;
+  }
 }
 
 /* ---------------------------------------------------------------------------

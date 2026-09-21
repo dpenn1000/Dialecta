@@ -35,6 +35,15 @@
  * brass marker when showAuthorPosition is true, and the reader's own, as
  * live's InteractiveMap did, so nothing appears twice.
  *
+ * After the council's review of the maps (council/log/2026-09-21-opinion-
+ * maps-and-the-declaration.md) the island also: draws the map's question
+ * above the figure when no Reflect prompt already carries it, as the
+ * read-only figure does; captions the author's marker under the figure, by
+ * who set it; draws the reader's marker as an ink diamond with a "You" tag,
+ * on top of the author's brass circle, so a tap on or beside the author's
+ * mark still reads as a second, different mark; and prints the privacy
+ * line under a Declare placement.
+ *
  * Not built here (deferred to step 7, docs/plans, Decision 5): reading a
  * committed placement back after a reload. This island's state resets on
  * remount, same as live's own React state does today.
@@ -50,8 +59,14 @@ import {
   inTriangle,
   POLE_COLORS,
   POLE_LABEL_COLORS,
+  POLE_MARKER_COLORS,
   AXIS_COLORS,
   AXIS_LABEL_COLORS,
+  AXIS_MARKER_COLORS,
+  AuthorMarker,
+  AuthorPositionCaption,
+  MapTopicCaption,
+  mapQuestion,
 } from './engine';
 import type { OpinionMap, CartesianOpinionMap, TernaryOpinionMap, BinaryOpinionMap } from './data';
 import { placeOpinionMapPosition, type PlacementStage } from './actions';
@@ -59,6 +74,7 @@ import { strings } from '@/strings';
 import './opinion-map.css';
 
 const s = strings.opinionMap.placement;
+const sm = strings.opinionMap.maps;
 
 // ─── Coordinate shapes ──────────────────────────────────────────────────
 
@@ -117,25 +133,41 @@ function ternaryGridSegments(size: number): Array<[{ x: number; y: number }, { x
 
 // ─── Markers ────────────────────────────────────────────────────────────
 
-/** Same brass marker as engine.tsx's (private there); the author's position. */
-function AuthorMarker({ x, y }: { x: number; y: number }) {
-  return (
-    <g aria-label="Author's position">
-      <circle cx={x} cy={y} r={16} fill="var(--brass-mid)" opacity={0.1} />
-      <circle cx={x} cy={y} r={11} fill="none" stroke="var(--brass-deep)" strokeWidth={1} strokeDasharray="2,2" opacity={0.85} />
-      <circle cx={x} cy={y} r={7} fill="var(--brass-mid)" stroke="var(--paper-bright)" strokeWidth={2} />
-      <circle cx={x} cy={y} r={2.5} fill="var(--paper-bright)" />
-    </g>
-  );
-}
+/*
+ * The reader's own marker, built to be told apart from the author's at a
+ * glance. The author's is a brass circle with a dashed ring, a target. The
+ * reader's is an ink diamond with a "You" tag: a different shape, a
+ * different colour family (ink, where the source's color-mixed ring landed
+ * gold near the gold pole and read as a second copy of the brass mark), and a
+ * word. It is an outline, not a fill, sized to frame the author's marker
+ * (its inscribed circle, 12 units, clears the dashed ring at 11), so a tap
+ * on the author's mark leaves both visible: the brass target inside the
+ * reader's diamond. It is drawn after the author's marker in the same svg,
+ * which is what puts it on top. The landscape blend (`color`) survives only as
+ * the soft halo, decoration under the mark; the mark itself is ink on a
+ * paper-bright keyline, 17.36:1 against the card.
+ */
+const USER_R = 17; // diamond half-diagonal, viewBox units
+const TAG_W = 40;
+const TAG_H = 18;
+const TAG_GAP = USER_R + 5; // marker centre to the tag's near edge
 
-/** The reader's own marker: a color-mixed ring so it reads at a glance against the landscape it sits on. */
-function UserMarker({ x, y, color }: { x: number; y: number; color: string }) {
+function UserMarker({ x, y, color, tagMinY }: { x: number; y: number; color: string; tagMinY: number }) {
+  // The tag rides above the mark, unless that would land on the map's top
+  // labels (the figure says where its free space starts), then below it.
+  const above = y - TAG_GAP - TAG_H >= tagMinY;
+  const tagY = above ? y - TAG_GAP - TAG_H : y + TAG_GAP;
+  const diamond = `M ${x} ${y - USER_R} L ${x + USER_R} ${y} L ${x} ${y + USER_R} L ${x - USER_R} ${y} Z`;
   return (
-    <g aria-label="Your position">
-      <circle cx={x} cy={y} r={29} fill={color} opacity={0.22} />
-      <circle cx={x} cy={y} r={15} fill="var(--paper-bright)" stroke={color} strokeWidth={2.5} />
-      <circle cx={x} cy={y} r={3.5} fill={color} />
+    <g data-marker="reader" aria-label={s.yourPosition}>
+      <circle cx={x} cy={y} r={26} fill={color} opacity={0.2} />
+      <path d={diamond} fill="none" stroke="var(--paper-bright)" strokeWidth={5} strokeLinejoin="round" />
+      <path d={diamond} fill="none" stroke="var(--ink)" strokeWidth={2.25} strokeLinejoin="round" />
+      <circle cx={x} cy={y} r={3.25} fill="var(--ink)" stroke="var(--paper-bright)" strokeWidth={1.25} />
+      <rect x={x - TAG_W / 2} y={tagY} width={TAG_W} height={TAG_H} rx={TAG_H / 2} fill="var(--ink)" />
+      <text x={x} y={tagY + TAG_H / 2 + 4.2} textAnchor="middle" className="om-marker-tag" fill="var(--paper-bright)">
+        {s.you.toUpperCase()}
+      </text>
     </g>
   );
 }
@@ -153,14 +185,18 @@ function EmptyHint({ x, y }: { x: number; y: number }) {
 
 function CartesianInteractive({
   axes,
+  question,
   placement,
   authorPosition,
+  authorLabel,
   onPlace,
   size = 320,
 }: {
   axes: CartesianOpinionMap['axes'];
+  question: string | null;
   placement: CartesianCoords | null;
   authorPosition: CartesianOpinionMap['authorPosition'];
+  authorLabel: string;
   onPlace: (c: CartesianCoords) => void;
   size?: number;
 }) {
@@ -184,6 +220,7 @@ function CartesianInteractive({
 
   return (
     <div className="om-figure">
+      <MapTopicCaption>{question}</MapTopicCaption>
       <svg
         viewBox={`${VB_OFFSET} ${VB_OFFSET} ${VB_SIZE} ${VB_SIZE}`}
         xmlns="http://www.w3.org/2000/svg"
@@ -233,10 +270,10 @@ function CartesianInteractive({
 
         {!authorPosition && !placement ? <EmptyHint x={size / 2} y={size / 2} /> : null}
 
-        <circle cx={size / 2} cy={4} r={5} fill={AXIS_COLORS.T} opacity={0.85} />
-        <circle cx={size / 2} cy={size - 4} r={5} fill={AXIS_COLORS.B} opacity={0.85} />
-        <circle cx={4} cy={size / 2} r={5} fill={AXIS_COLORS.L} opacity={0.85} />
-        <circle cx={size - 4} cy={size / 2} r={5} fill={AXIS_COLORS.R} opacity={0.85} />
+        <circle cx={size / 2} cy={4} r={5} fill={AXIS_MARKER_COLORS.T} opacity={0.85} />
+        <circle cx={size / 2} cy={size - 4} r={5} fill={AXIS_MARKER_COLORS.B} opacity={0.85} />
+        <circle cx={4} cy={size / 2} r={5} fill={AXIS_MARKER_COLORS.L} opacity={0.85} />
+        <circle cx={size - 4} cy={size / 2} r={5} fill={AXIS_MARKER_COLORS.R} opacity={0.85} />
 
         <text x={size / 2} y={-LABEL_PAD / 2 + 4} textAnchor="middle" className="om-axis-label" fill={AXIS_LABEL_COLORS.T}>
           {labelTop.toUpperCase()}
@@ -267,8 +304,8 @@ function CartesianInteractive({
 
         <rect x={0.75} y={0.75} width={size - 1.5} height={size - 1.5} fill="none" stroke="var(--wood-edge)" strokeWidth={1.5} rx={10} />
 
-        {authorPosition ? <AuthorMarker x={authorPosition.x * size} y={authorPosition.y * size} /> : null}
-        {placement && userColor ? <UserMarker x={placement.x * size} y={placement.y * size} color={userColor} /> : null}
+        {authorPosition ? <AuthorMarker x={authorPosition.x * size} y={authorPosition.y * size} label={authorLabel} /> : null}
+        {placement && userColor ? <UserMarker x={placement.x * size} y={placement.y * size} color={userColor} tagMinY={0} /> : null}
       </svg>
     </div>
   );
@@ -278,14 +315,18 @@ function CartesianInteractive({
 
 function TernaryInteractive({
   poles,
+  question,
   placement,
   authorPosition,
+  authorLabel,
   onPlace,
   size = 340,
 }: {
   poles: TernaryOpinionMap['poles'];
+  question: string | null;
   placement: TernaryCoords | null;
   authorPosition: TernaryOpinionMap['authorPosition'];
+  authorLabel: string;
   onPlace: (c: TernaryCoords) => void;
   size?: number;
 }) {
@@ -316,6 +357,7 @@ function TernaryInteractive({
 
   return (
     <div className="om-figure">
+      <MapTopicCaption>{question}</MapTopicCaption>
       <svg
         viewBox={`${-LABEL_PAD} ${-LABEL_PAD} ${VB_W} ${VB_H}`}
         xmlns="http://www.w3.org/2000/svg"
@@ -358,9 +400,9 @@ function TernaryInteractive({
 
         {!authorPosition && !placement ? <EmptyHint x={barycentricToXY(1 / 3, 1 / 3, 1 / 3, size).x} y={barycentricToXY(1 / 3, 1 / 3, 1 / 3, size).y} /> : null}
 
-        <circle cx={A.x} cy={A.y} r={5.5} fill={POLE_COLORS[0]} opacity={0.9} />
-        <circle cx={B.x} cy={B.y} r={5.5} fill={POLE_COLORS[1]} opacity={0.9} />
-        <circle cx={C.x} cy={C.y} r={5.5} fill={POLE_COLORS[2]} opacity={0.9} />
+        <circle cx={A.x} cy={A.y} r={5.5} fill={POLE_MARKER_COLORS[0]} opacity={0.9} />
+        <circle cx={B.x} cy={B.y} r={5.5} fill={POLE_MARKER_COLORS[1]} opacity={0.9} />
+        <circle cx={C.x} cy={C.y} r={5.5} fill={POLE_MARKER_COLORS[2]} opacity={0.9} />
 
         <text x={A.x} y={A.y - LABEL_PAD / 2 - 4} textAnchor="middle" className="om-axis-label" fill={POLE_LABEL_COLORS[0]}>
           {labelA.toUpperCase()}
@@ -377,11 +419,12 @@ function TernaryInteractive({
         {authorPosition
           ? (() => {
               const ap = barycentricToXY(authorPosition.a, authorPosition.b, authorPosition.c, size);
-              return <AuthorMarker x={ap.x} y={ap.y} />;
+              return <AuthorMarker x={ap.x} y={ap.y} label={authorLabel} />;
             })()
           : null}
 
-        {placement && userXY && userColor ? <UserMarker x={userXY.x} y={userXY.y} color={userColor} /> : null}
+        {/* The top pole's label sits just above vertex A, so a tag placed above a mark near it would land on the label. */}
+        {placement && userXY && userColor ? <UserMarker x={userXY.x} y={userXY.y} color={userColor} tagMinY={A.y - 4} /> : null}
       </svg>
     </div>
   );
@@ -396,15 +439,19 @@ function TernaryInteractive({
 function BinaryInteractive({
   axisA,
   axisB,
+  question,
   placement,
   authorPosition,
+  authorLabel,
   onPlace,
   size = 320,
 }: {
   axisA: string;
   axisB: string;
+  question: string | null;
   placement: BinaryCoords | null;
   authorPosition: BinaryOpinionMap['authorPosition'];
+  authorLabel: string;
   onPlace: (c: BinaryCoords) => void;
   size?: number;
 }) {
@@ -463,6 +510,8 @@ function BinaryInteractive({
 
   return (
     <div className="om-figure om-figure--binary">
+      <MapTopicCaption>{question}</MapTopicCaption>
+
       <div className="om-binary-labels">
         <div className="om-binary-label om-binary-label--left" style={{ color: AXIS_LABEL_COLORS.L }}>
           {axisA}
@@ -519,16 +568,17 @@ function BinaryInteractive({
           );
         })}
 
-        <circle cx={HALF_T - 4} cy={BASELINE} r={4.5} fill={AXIS_COLORS.L} opacity={0.95} />
-        <circle cx={size - HALF_T + 4} cy={BASELINE} r={4.5} fill={AXIS_COLORS.R} opacity={0.95} />
+        <circle cx={HALF_T - 4} cy={BASELINE} r={4.5} fill={AXIS_MARKER_COLORS.L} opacity={0.95} />
+        <circle cx={size - HALF_T + 4} cy={BASELINE} r={4.5} fill={AXIS_MARKER_COLORS.R} opacity={0.95} />
 
         {!visibleMarker && !authorPosition ? <EmptyHint x={size / 2} y={curveY(0.5)} /> : null}
 
-        {authorPosition ? <AuthorMarker x={authorPosition.x * size} y={curveY(authorPosition.x)} /> : null}
+        {authorPosition ? <AuthorMarker x={authorPosition.x * size} y={curveY(authorPosition.x)} label={authorLabel} /> : null}
 
+        {/* The strip is 64 units tall, so the tag may ride a few units above its top edge, into the margin the svg's own overflow: visible allows. */}
         {visibleMarker ? (
           <g opacity={dragging ? 0.85 : 1}>
-            <UserMarker x={visibleMarker.x * size} y={curveY(visibleMarker.x)} color={binaryBlend(visibleMarker.x)} />
+            <UserMarker x={visibleMarker.x * size} y={curveY(visibleMarker.x)} color={binaryBlend(visibleMarker.x)} tagMinY={-8} />
           </g>
         ) : null}
       </svg>
@@ -540,21 +590,27 @@ function BinaryInteractive({
 
 function InteractiveFigure({
   map,
+  question,
   placement,
   showAuthorPosition,
   onPlace,
 }: {
   map: OpinionMap;
+  /** Drawn above the figure as "The question"; null when a Reflect prompt already carries it. */
+  question: string | null;
   placement: Coordinates | null;
   showAuthorPosition: boolean;
   onPlace: (c: Coordinates) => void;
 }) {
+  const authorLabel = sm.authorPosition[map.authorPositionSource];
   if (map.type === 'cartesian') {
     return (
       <CartesianInteractive
         axes={map.axes}
+        question={question}
         placement={asCartesian(placement)}
         authorPosition={showAuthorPosition ? map.authorPosition : null}
+        authorLabel={authorLabel}
         onPlace={onPlace}
       />
     );
@@ -563,8 +619,10 @@ function InteractiveFigure({
     return (
       <TernaryInteractive
         poles={map.poles}
+        question={question}
         placement={asTernary(placement)}
         authorPosition={showAuthorPosition ? map.authorPosition : null}
+        authorLabel={authorLabel}
         onPlace={onPlace}
       />
     );
@@ -573,8 +631,10 @@ function InteractiveFigure({
     <BinaryInteractive
       axisA={map.axisA}
       axisB={map.axisB}
+      question={question}
       placement={asBinary(placement)}
       authorPosition={showAuthorPosition ? map.authorPosition : null}
+      authorLabel={authorLabel}
       onPlace={onPlace}
     />
   );
@@ -643,6 +703,12 @@ export interface PlacementClientProps {
    * every other dismiss control in that file already uses.
    */
   committedCloseLabel?: string | null;
+  /**
+   * Declare only: the line under the actions saying who can see the
+   * placement. Reflect leaves it out, since its overlay body already prints
+   * the same sentence above the map.
+   */
+  privacyNote?: string | null;
 }
 
 export function PlacementClient({
@@ -654,6 +720,7 @@ export function PlacementClient({
   prompt = null,
   postPlacementText = null,
   committedCloseLabel = null,
+  privacyNote = null,
 }: PlacementClientProps): ReactNode {
   const [committed, setCommitted] = useState<Coordinates | null>(null);
   const [pending, setPending] = useState<Coordinates | null>(null);
@@ -700,6 +767,11 @@ export function PlacementClient({
     setError(null);
   }
 
+  // A Reflect prompt already leads with its own header and names the topic
+  // in its body; only a bare figure (Declare) draws the map's question.
+  const question = prompt ? null : mapQuestion(map);
+  const showsAuthorMarker = showAuthorPosition && map.authorPosition !== null;
+
   return (
     <div className="om-placement">
       {prompt ? (
@@ -710,7 +782,9 @@ export function PlacementClient({
         </div>
       ) : null}
 
-      <InteractiveFigure map={map} placement={placement} showAuthorPosition={showAuthorPosition} onPlace={place} />
+      <InteractiveFigure map={map} question={question} placement={placement} showAuthorPosition={showAuthorPosition} onPlace={place} />
+
+      {showsAuthorMarker ? <AuthorPositionCaption source={map.authorPositionSource} /> : null}
 
       <PlacementActions
         isPendingTap={isPendingTap}
@@ -735,6 +809,8 @@ export function PlacementClient({
           {error}
         </p>
       ) : null}
+
+      {privacyNote ? <p className="om-placement-privacy">{privacyNote}</p> : null}
     </div>
   );
 }

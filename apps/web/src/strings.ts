@@ -9,6 +9,17 @@
  */
 import type { Tier } from '@dialecta/core';
 
+/**
+ * The one sentence about who can see a reader's placement. Reflect's overlay
+ * body (articleSpine.reflect.body) and the Declare placement
+ * (opinionMap.placement.privacy) both print it, so it lives once here and the
+ * two cannot drift. The promise holds because opinion_map_positions carries a
+ * single SELECT policy, opinion_map_self_read, scoped to the row's own profile_id
+ * (legal seat, council/log/2026-09-21-opinion-maps-and-the-declaration.md). If
+ * that policy ever widens, this is the one place the promise changes.
+ */
+const PLACEMENT_PRIVACY = "Your placement is private: other readers can't see it.";
+
 export const strings = {
   site: {
     name: 'Dialecta',
@@ -2698,7 +2709,7 @@ export const strings = {
       kicker: '⁂ The Delta Mechanic · Pre-read',
       titlePlain: 'Where do you stand',
       titleEm: 'before reading?',
-      body: "Mark where you stand before you read. You can place yourself again after, in Declare. Your placement is private: other readers can't see it.",
+      body: `Mark where you stand before you read. You can place yourself again after, in Declare. ${PLACEMENT_PRIVACY}`,
       skip: 'Skip for now',
     },
     /**
@@ -2816,15 +2827,36 @@ export const strings = {
         flaggedPassages: 'Passages the Engine Marked',
         tensions: 'Tensions the Engine Found',
         readsAs: (tier: string) => `Reads as ${tier}`,
+        /**
+         * The locked sentence: the engine's reading is disclosed, never a
+         * gate. It prints in the disclosure's summary row, beside the tier
+         * word, so it shows without a click (council 2026-09-21, legal row 4;
+         * designer conceded it). Do not move it back into the folded body.
+         * The key keeps its old name so anything that points at it still lands.
+         */
         footer:
           "The engine's reading is disclosed alongside the article, never used to gate publication. The author's voice is the published one.",
+        /** The summary row's own open and close cue; CSS shows one of the two. */
+        show: 'Show the reading',
+        hide: 'Hide the reading',
       },
     },
     maps: {
       question: 'The question',
       heading: { one: 'The opinion map', many: 'The opinion maps' },
       intro: { one: 'Where the argument splits.', many: 'Two debates this article opens.' },
-      authorPosition: 'Where the author lands',
+      /**
+       * The caption under every map's author marker. These two strings are
+       * Dan's copy (council 2026-09-21, decisions 4 and 5): the marker is the
+       * engine's estimate until an author sets it. Which one a map gets is
+       * data, `author_position_source` on the declared map, and absent means
+       * `engine`; every live article is `engine` today, since no author has
+       * set a mark. Nothing in this app writes the field.
+       */
+      authorPosition: {
+        engine: "The engine's estimate of where the author lands",
+        author: 'Where the author lands',
+      },
     },
     /**
      * The placement island, src/components/opinion-map/placement-client.tsx.
@@ -2851,6 +2883,19 @@ export const strings = {
       replace: 'Re-place',
       saveFailed: 'Could not save your placement',
       signInRequired: 'Sign in to place yourself',
+      /**
+       * Under a read-only map, for a reader who can't place. Dan's copy, as drafted 2026-09-21.
+       * Signed out: the first two make one sentence with a sign-in link. Signed in but not yet
+       * linked to a profile: the third, since a Commit would fail for them.
+       */
+      signInLink: 'Sign in',
+      signInRest: 'to place yourself on this map.',
+      unclaimed: "Placing yourself needs a profile linked to your sign-in, and yours isn't linked yet.",
+      /** Under the Declare placement, beside its Commit button; the same sentence Reflect's overlay prints. */
+      privacy: PLACEMENT_PRIVACY,
+      /** The tag on the reader's own marker, and the marker's spoken name. */
+      you: 'You',
+      yourPosition: 'Your position',
       /**
        * Reflect's per-map-type prompt (live's buildPreReadPrompt(),
        * dialecta-opinion-map-placement.jsx:647-670), verbatim including the

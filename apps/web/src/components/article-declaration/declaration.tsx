@@ -1,11 +1,11 @@
 /**
  * The article's opinion-map declaration surfaces, both fed by the same
- * loadArticleDeclaration() read: ArticleDeclaration (Core Claim, Scope
- * Boundary, Strongest Objection, the article's opinion maps, and a native
+ * loadArticleDeclaration() read: ArticleDeclaration (Strongest Objection,
+ * the article's opinion maps, Core Claim, Scope Boundary, and a native
  * <details> disclosure of the engine's own reading, inside the Declare
  * overlay) and ArticleReflectPlacement (map 0 only, author position
- * hidden, inside the Reflect overlay). Core Claim/Scope/Objection/the
- * disclosure stay server-only, no client JS: <details>/<summary> gives the
+ * hidden, inside the Reflect overlay). Everything but the placement islands
+ * stays server-only, no client JS: <details>/<summary> gives the
  * expand/collapse live spent a useState on
  * (dialecta-article-classification.jsx:309) for free.
  *
@@ -18,19 +18,28 @@
  * Steps 3, 4 and 6 of the architect's port plan (team/architect/architecture/
  * 2026-09-21-delta-mechanic-port.md, build order #3, #4 and #6).
  * OpinionMapFigure (components/opinion-map/engine.tsx) stays the read-only
- * figure every reader sees, unchanged; PlacementClient
+ * figure every reader sees; PlacementClient
  * (components/opinion-map/placement-client.tsx), the tap-to-place,
  * Commit-button island ported from live's InteractiveMap, takes its place
  * for a canPlace caller, one per post-read map: the same map with the
  * author's marker and the reader's own, drawn once, as live draws it.
+ *
+ * The overlay's order, its summary row and the detected-claim rule come from
+ * the council's review of the maps and the declaration
+ * (council/log/2026-09-21-opinion-maps-and-the-declaration.md, "Dan's
+ * decisions"): the Strongest Objection leads, the maps follow, then the
+ * author's Core Claim and Scope Boundary, then the engine's reading folded
+ * behind one row that carries the tier and the sentence saying the reading
+ * never gates publication.
  */
 import type { CSSProperties } from 'react';
 import { tierName, type Tier } from '@dialecta/core';
 import { TierIcon } from '@/components/discourse/tier-badge';
 import { strings } from '@/strings';
-import { loadArticleDeclaration, type FlaggedPassage, type Tension } from '../opinion-map/data';
+import { loadArticleDeclaration, type AiAlignment, type ArticleAiAnalysis, type FlaggedPassage, type Tension } from '../opinion-map/data';
 import { OpinionMapFigure } from '../opinion-map/engine';
 import { PlacementClient } from '../opinion-map/placement-client';
+import { SignInLink } from '@/components/shell/sign-in-link';
 import '../opinion-map/opinion-map.css';
 import './declaration.css';
 
@@ -72,6 +81,15 @@ function TensionCard({ tension }: { tension: Tension }) {
   );
 }
 
+/**
+ * The engine's reading, folded. One native <details>, closed by default; the
+ * whole summary row is the control (a <summary> toggles wherever inside it a
+ * reader clicks), so it carries three things a reader sees with no click: the
+ * tier the engine read, the sentence saying the reading is disclosed and
+ * never a gate (locked by the council, moved out of the folded body so it is
+ * true on screen and not only in markup), and a labelled cue for opening it.
+ * The cue's two labels swap on [open] in CSS; nothing here needs a client.
+ */
 function AiDisclosure({
   suggestedTier,
   tierReason,
@@ -92,13 +110,20 @@ function AiDisclosure({
   return (
     <details className="ad-disclosure">
       <summary className="ad-disclosure-summary">
-        <span>{s.aiDisclosure.summary}</span>
-        {suggestedTier ? (
-          <span className="ad-disclosure-tier">
-            <TierIcon tier={suggestedTier} size={10} />
-            <span>{tierName(suggestedTier)}</span>
+        <span className="ad-disclosure-head">
+          <span className="ad-disclosure-title">{s.aiDisclosure.summary}</span>
+          {suggestedTier ? (
+            <span className="ad-disclosure-tier">
+              <TierIcon tier={suggestedTier} size={10} />
+              <span>{tierName(suggestedTier)}</span>
+            </span>
+          ) : null}
+          <span className="ad-disclosure-cue" aria-hidden="true">
+            <span className="ad-disclosure-cue-show">{s.aiDisclosure.show}</span>
+            <span className="ad-disclosure-cue-hide">{s.aiDisclosure.hide}</span>
           </span>
-        ) : null}
+        </span>
+        <span className="ad-disclosure-note">{s.aiDisclosure.footer}</span>
       </summary>
 
       <div className="ad-disclosure-body">
@@ -124,30 +149,62 @@ function AiDisclosure({
             ))}
           </div>
         ) : null}
-
-        <p className="ad-disclosure-footer">{s.aiDisclosure.footer}</p>
       </div>
     </details>
   );
 }
 
-export async function ArticleDeclaration({ articleId, canPlace }: { articleId: string; canPlace: boolean }) {
+/**
+ * The engine's own detected core claim earns a field of its own only when the
+ * engine says its read differs from the author's: alignment `partial` or
+ * `divergent`. The guard used to be a raw string comparison, which prints a
+ * 57-word paraphrase of a claim the engine itself marked `aligned` (all five
+ * live readings are). When a row carries no alignment word at all, nothing on
+ * file says the read matches, so the old comparison stands and a differing
+ * claim still shows: a disclosure surface fails toward showing.
+ */
+function detectedCoreClaimToShow(ai: ArticleAiAnalysis | null, authorClaim: string | null): string | null {
+  const detected = ai?.coreClaimDetected ?? null;
+  if (!ai || !detected) return null;
+  const alignment: AiAlignment | null = ai.alignment;
+  if (alignment === 'partial' || alignment === 'divergent') return detected;
+  if (alignment === 'aligned') return null;
+  return detected !== authorClaim ? detected : null;
+}
+
+/**
+ * The line under a read-only map for a reader who can't place: signed out, or signed in with a
+ * sign-in that isn't linked to a profile yet. Without it the maps look tappable and do nothing.
+ */
+function PlaceHint({ kind }: { kind: 'guest' | 'unclaimed' }) {
+  return kind === 'guest' ? (
+    <p className="om-placement-hint">
+      <SignInLink className="om-placement-hint-link">{sp.signInLink}</SignInLink> {sp.signInRest}
+    </p>
+  ) : (
+    <p className="om-placement-hint">{sp.unclaimed}</p>
+  );
+}
+
+export async function ArticleDeclaration({
+  articleId,
+  canPlace,
+  placeHint,
+}: {
+  articleId: string;
+  canPlace: boolean;
+  placeHint: 'guest' | 'unclaimed' | null;
+}) {
   const { declaration, aiAnalysis } = await loadArticleDeclaration(articleId);
   if (!declaration) return null;
 
   const maps = declaration.opinionMaps;
-  const anyAuthorPosition = maps.some((m) => m.authorPosition !== null);
-  // ai.core_claim_detected is only worth a field of its own when it differs
-  // from the author's own core claim; otherwise it repeats the field above.
-  const coreClaimDetected =
-    aiAnalysis?.coreClaimDetected && aiAnalysis.coreClaimDetected !== declaration.coreClaim ? aiAnalysis.coreClaimDetected : null;
+  const coreClaimDetected = detectedCoreClaimToShow(aiAnalysis, declaration.coreClaim);
 
   return (
     <section className="ad-section">
       <div className="ad-eyebrow">{s.eyebrow}</div>
 
-      <Field label={s.coreClaim} value={declaration.coreClaim} />
-      <Field label={s.scopeBoundary} value={declaration.scopeBoundary} />
       <Field label={s.strongestObjection} value={declaration.strongestObjection} />
 
       {maps.length > 0 ? (
@@ -161,22 +218,23 @@ export async function ArticleDeclaration({ articleId, canPlace }: { articleId: s
             {maps.map((m, i) => (
               <div className="om-figure-group" key={i}>
                 {canPlace ? (
-                  <PlacementClient map={m} articleId={articleId} mapIndex={i} stage="post_read" showAuthorPosition />
+                  <PlacementClient map={m} articleId={articleId} mapIndex={i} stage="post_read" showAuthorPosition privacyNote={sp.privacy} />
                 ) : (
-                  <OpinionMapFigure map={m} />
+                  <>
+                    <OpinionMapFigure map={m} />
+                    {placeHint ? <PlaceHint kind={placeHint} /> : null}
+                  </>
                 )}
               </div>
             ))}
           </div>
+        </div>
+      ) : null}
 
-          {anyAuthorPosition ? (
-            <div className="om-author-legend">
-              <span className="om-author-legend-chip">
-                <span className="om-author-legend-dot" aria-hidden="true" />
-                <span className="om-author-legend-label">{sm.authorPosition}</span>
-              </span>
-            </div>
-          ) : null}
+      {declaration.coreClaim || declaration.scopeBoundary ? (
+        <div className="ad-claims">
+          <Field label={s.coreClaim} value={declaration.coreClaim} />
+          <Field label={s.scopeBoundary} value={declaration.scopeBoundary} />
         </div>
       ) : null}
 

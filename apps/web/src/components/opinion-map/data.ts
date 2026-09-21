@@ -20,6 +20,18 @@ import 'server-only';
 import { isTier, type Tier } from '@dialecta/core';
 import { createClient } from '@/lib/supabase/server';
 
+/**
+ * Who set a map's author marker. The engine proposes every candidate with
+ * its own `author_position` already plotted, and the picker passes that
+ * coordinate through untouched (council/log/2026-09-21-opinion-maps-and-the-
+ * declaration.md, "Dan's decisions", item 4), so today every marker on every
+ * live article is the engine's estimate. `author_position_source` is the
+ * optional field on a declared map that will say otherwise once an author
+ * places the mark themselves; absent, or anything other than 'author',
+ * reads as 'engine'. Read only: nothing in this app writes it.
+ */
+export type AuthorPositionSource = 'author' | 'engine';
+
 export interface CartesianAxis {
   axisA: string;
   axisB: string;
@@ -30,6 +42,7 @@ export interface CartesianOpinionMap {
   type: 'cartesian';
   axes: readonly [CartesianAxis, CartesianAxis];
   authorPosition: { x: number; y: number } | null;
+  authorPositionSource: AuthorPositionSource;
 }
 
 export interface TernaryOpinionMap {
@@ -37,6 +50,7 @@ export interface TernaryOpinionMap {
   topic: string | null;
   poles: readonly [string, string, string];
   authorPosition: { a: number; b: number; c: number } | null;
+  authorPositionSource: AuthorPositionSource;
 }
 
 export interface BinaryOpinionMap {
@@ -45,6 +59,7 @@ export interface BinaryOpinionMap {
   axisA: string;
   axisB: string;
   authorPosition: { x: number } | null;
+  authorPositionSource: AuthorPositionSource;
 }
 
 export type OpinionMap = CartesianOpinionMap | TernaryOpinionMap | BinaryOpinionMap;
@@ -55,6 +70,8 @@ export interface ArticleDeclaration {
   strongestObjection: string | null;
   opinionMaps: OpinionMap[];
 }
+
+export type AiAlignment = 'aligned' | 'partial' | 'divergent';
 
 export interface FlaggedPassage {
   passage: string;
@@ -80,6 +97,14 @@ export interface Tension {
  */
 export interface ArticleAiAnalysis {
   tierReason: string | null;
+  /**
+   * The engine's own verdict on how its independent read of the article
+   * compares to the author's declared core claim: `ai_analysis.alignment`,
+   * one of three words (opinion-mapper skill, output schema). Confirmed on
+   * all five published rows, each `aligned`, 2026-09-21. Null when the key is
+   * missing or holds anything else; the caller decides what null means.
+   */
+  alignment: AiAlignment | null;
   alignmentNote: string | null;
   coreClaimDetected: string | null;
   authorMessage: string | null;
@@ -107,6 +132,15 @@ function num(v: unknown): number | null {
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
 }
 
+/** Absent, or anything but the word 'author', means the engine proposed the mark. */
+function toAuthorPositionSource(m: Row): AuthorPositionSource {
+  return m.author_position_source === 'author' ? 'author' : 'engine';
+}
+
+function toAlignment(v: unknown): AiAlignment | null {
+  return v === 'aligned' || v === 'partial' || v === 'divergent' ? v : null;
+}
+
 function toCartesianAxis(v: unknown): CartesianAxis | null {
   if (!isRecord(v)) return null;
   const axisA = str(v.axis_a);
@@ -123,7 +157,12 @@ function toCartesianMap(m: Row): CartesianOpinionMap | null {
   const ap = isRecord(m.author_position) ? m.author_position : null;
   const x = ap ? num(ap.x) : null;
   const y = ap ? num(ap.y) : null;
-  return { type: 'cartesian', axes: [a0, a1], authorPosition: x !== null && y !== null ? { x, y } : null };
+  return {
+    type: 'cartesian',
+    axes: [a0, a1],
+    authorPosition: x !== null && y !== null ? { x, y } : null,
+    authorPositionSource: toAuthorPositionSource(m),
+  };
 }
 
 function toTernaryMap(m: Row): TernaryOpinionMap | null {
@@ -139,6 +178,7 @@ function toTernaryMap(m: Row): TernaryOpinionMap | null {
     topic: str(m.topic),
     poles: [poles[0] ?? '', poles[1] ?? '', poles[2] ?? ''],
     authorPosition: a !== null && b !== null && c !== null ? { a, b, c } : null,
+    authorPositionSource: toAuthorPositionSource(m),
   };
 }
 
@@ -148,7 +188,14 @@ function toBinaryMap(m: Row): BinaryOpinionMap | null {
   if (!axisA || !axisB) return null;
   const ap = isRecord(m.author_position) ? m.author_position : null;
   const x = ap ? num(ap.x) : null;
-  return { type: 'binary', topic: str(m.topic), axisA, axisB, authorPosition: x !== null ? { x } : null };
+  return {
+    type: 'binary',
+    topic: str(m.topic),
+    axisA,
+    axisB,
+    authorPosition: x !== null ? { x } : null,
+    authorPositionSource: toAuthorPositionSource(m),
+  };
 }
 
 function toOpinionMap(v: unknown): OpinionMap | null {
@@ -193,6 +240,7 @@ function toAiAnalysis(v: unknown): ArticleAiAnalysis | null {
   const rawTensions = Array.isArray(v.tensions) ? v.tensions : [];
   return {
     tierReason: str(v.tier_reason),
+    alignment: toAlignment(v.alignment),
     alignmentNote: str(v.alignment_note),
     coreClaimDetected: str(v.core_claim_detected),
     authorMessage: str(v.author_message),
