@@ -6,6 +6,34 @@ section 6.*
 
 ---
 
+## 0. First: the live comments API gives out private data
+
+**Production `/api/comments` returns, to anyone who asks, every comment's private commenter message,
+its classifier internals and its author's member id, which is the Phase 0 credential.** Confirmed
+without calling production: `_recovered/api/comments.js` is byte-identical to the file production
+serves (SHA-1 `b5db0ff3...` against deployment `dpl_HPsX...`, which carries `dialecta.vercel.app`).
+Sized from the database with counts only: 3 comments, all published; 3 private commenter messages;
+2 claim texts; 2 members' ids. Hidden Breach text and pending comments are not exposed today only
+because none exist yet; the first one is.
+
+Fixing it is a production deploy, so it waits for you. `security` is preparing the narrowed
+handler with tests, a map of what the live theme reads from it, whether the recovered tree
+reproduces production file for file, and the steps with a rollback:
+`council/security/hotfix-2026-09-21-api-comments/`.
+
+## 0A. The fingerprint Council's answer
+
+Readable at profile size with a key, and false about heat. Blind readers matched marks to people
+19 of 21 times against 3 by chance, and 5 of 21 at byline size. Every single-mark reader described
+a heated person, including Father Anselm, who has no Heat at all; the organic wobble is what the
+legend teaches as heat. The Council recommends marks stay visible only to their owner until a test
+with real people passes ($137 small, $411 full), and fixing what the database records first.
+Seven decisions are yours, in the log's closing section "For Dan, in the morning":
+`council/log/2026-09-20-fingerprint-legibility-and-model.md`. On your live renders: what you liked
+is lightness, which either colour choice can keep.
+
+---
+
 ## 1. What you can open this morning
 
 The dev server is at **`http://localhost:3050`**, in its own minimised console window titled
