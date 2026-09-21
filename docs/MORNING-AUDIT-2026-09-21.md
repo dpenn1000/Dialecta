@@ -35,11 +35,12 @@ Ranked by what they unblock. The first three are between you and publishing an a
 | --- | --- | --- | --- |
 | **2.1** | **Link your login to your profile.** Sign in once at `/login`, then a claim token has to be issued for your profile and redeemed. `claim_profile()` exists and works; nothing has ever called it | Publishing, commenting as yourself, and opening `/analytics` in production | Ten minutes with a session that can write |
 | ~~2.2~~ | ~~Retire the Ghost id~~ **Done overnight.** `articles.ghost_post_id` is nullable, migration `20260921052443`, so a native article can now be saved. You had said the implementation is being fully rebuilt, which settled what I had framed as the Ghost-retirement decision | Native articles | Done |
-| **2.3** | **An author write policy on `articles`, with `security` now.** Not applied as drafted, because `articles` carries `final_tier` and `ai_suggested_tier`, and a plain author policy would let a signed-in author set their own tier: the self-tiering bug from PR-3, on a different table. `security` is designing one that lets an author write their content and never their classification, and was given the architect's direction to key it on `profiles.id` | Publishing | `security`'s, then applied. It matches nobody until 2.1 |
+| ~~2.3~~ | ~~An author write policy on `articles`~~ **Done overnight by `security`.** Migration `20260921053807`: an author can write their own article and never its tier. Table-level insert and update were revoked, then granted back for exactly the columns the publish route writes; both author ids are pinned to the caller, keyed on `profiles.id` as the architect directed; and `published_at` must fall within five minutes of now, so nobody can date an article ahead and hold the top of the front page | Publishing | Done. It matches nobody until 2.1, so your first real publish is its test |
 | **2.4** | **Check that `apps/web`'s own env file defines `SUPABASE_SERVICE_ROLE_KEY`.** The name split is deliberate, not a mismatch: `apps/web/.env.example` uses `SUPABASE_SERVICE_ROLE_KEY` and says not to reintroduce the old name, while the root uses `SUPABASE_SERVICE_KEY` for the legacy `api/` and `scripts/`. **Next.js loads env files from the app's own directory, so the root `.env` does not enter into it.** While you are there, `apps/web/.env.example` is missing two names the code reads: `ANALYTICS_ADMIN_UIDS` and `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` | The comment pipeline | A minute. *Corrected by the architect seat: this row first pointed you at the root `.env`, which was the wrong file* |
 | ~~2.8~~ | ~~The architect seat's name~~ **Decided by you: `architect`.** No rename needed | | Done |
 | **2.9** | **Authorise the architect seat's read-only database connector, once.** You told me to give it review access to every platform, and it has it now: a Supabase connector that is read-only on Supabase's side is in `C:\Dialecta\.mcp.json` as `supabase-dialecta-ro`, and the seat's grant names read tools only across Supabase, Vercel, GitHub, the browser and the notes index. **The one step left is yours**: the next time a Claude session opens in `C:\Dialecta` it will ask to enable the project server and then send you through Supabase's sign-in, once | Every sweep the seat runs | The OAuth click. What each grant covers, and what is deliberately withheld, is in `.claude/agents/architect.md`, "Your access" |
 | **2.10** | **Two identity decisions that block the most, both through `decider`** since each amends a spec or an ADR-level choice. First: a person is keyed three ways and an article two, 14 of 18 Ghost-keyed person columns have no foreign key, and `opinion_map_self_read` compares Ghost ids to the JWT subject, so no Supabase Auth reader can see their own rows (`architect-05`). Second: "forming" is an archetype in the spec and `packages/core` and a confidence level on live (`architect-03`) | Most of what comes after the prototype | A debate each |
+| **2.11** | **Whether a revision resets an article's tier, through `decider`.** A classified article keeps its tier through any rewrite, so an author can replace the whole body of an article classified Forum and keep Forum for words the classifier never read. No policy closes it without blocking every revision. The fix is reclassifying on revision, and whether that resets the tier is a spec decision. Found by `security` while writing 2.3 | Tiers on articles meaning what they say | A ruling, then a small build |
 | **2.5** | **The price rise trigger.** The membership page raises the price on the hundredth member; `legal` and `philosopher` ruled to publish a date. A third option nobody has argued: first hundred or one year, whichever comes first | The membership page. `exchange/open/2026-09-21-convener-04` | A sentence |
 | **2.6** | **The Underwriter price itself**, $50 against $100. Both seats support the ladder | The gifting rebuild and the Vercel licence | Free to decide |
 | **2.7** | **Colour: rings by axis or by territory.** Pending the fingerprint debate, section 5 | The fingerprint | After you read the debate |
@@ -119,6 +120,8 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
 - `anon` could execute four database functions it should not. All four closed. One of them I had
   recorded as closed when it was not; the architect seat caught it from the function's access list.
 - `profiles.ghost_member_id` closed on 2026-09-20.
+- Self-tiering on `articles`: an author can no longer write `final_tier` or `ai_suggested_tier` on
+  their own row, closed by column privilege rather than a check (2.3).
 
 **Still open, deliberately:**
 
@@ -129,6 +132,12 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
   no-half-measures rule. `exchange/open/2026-09-21-convener-05`.
 - Three trigger functions still hold public execute. Revoking should be safe and was not tested
   against production overnight.
+- A classified article keeps its tier through a rewrite (2.11).
+- The architecture map's single `alter default privileges ... from public` would repeat tonight's
+  half-revoke on every future function, because Supabase's defaults also grant `anon` by name. It
+  takes a second statement for `anon`. `security`'s finding, filed to the architect.
+- `articles` has no live trigger keeping `updated_at` current, so an amended article keeps its
+  insert time there. `security`'s finding, for `migrator`.
 
 ---
 
@@ -139,7 +148,17 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
   would mean the page you like is doing rings-by-axis and halo-by-territory at once. Its log will
   have a section called `For Dan, in the morning`.
 - **The architect seat's top-to-bottom review**, in your own session "engineerL architect seat
-  handoff". It has been given everything found tonight so it starts from what is fixed.
+  handoff". It has been given everything found tonight so it starts from what is fixed. Its rebuild
+  map is in, section 2A.
+- **Four builders**, one surface each: the site shell and design system; the discourse layer; profiles
+  and the fingerprint; the front page with the Pact, Guidebook and Community. Their files are
+  landing in `apps/web` now and get committed as each one reports.
+- **`decider` on three architecture rulings**: the identity key, "forming", and the downstream runner
+  (2.10), with positions from six seats. `council/log/2026-09-21-identity-forming-and-the-runner.md`.
+- **`legal`, drafting the terms that sit beside the Pact**, at your request: terms of service, a
+  privacy notice, membership terms with the separate renewal consent, and a cover note listing every
+  value left for you, what the build has to do before each clause is true, and what needs a lawyer
+  before any of it binds. Drafts land in `council/legal/drafts/`.
 
 ---
 
@@ -194,10 +213,15 @@ else, which serves as the acceptance test. `builder` implements.
 - I misquoted a migration inside quotation marks in `SUBSCRIPTION-MODEL.md`: "cannot pay themselves"
   for "didn't pay themselves", hardship for honour. Corrected, and the correction is visible.
 - I briefed the writer as the editor component. You meant the whole Ghost replacement.
-- **I told every agent tonight that the database connector's `execute_sql` is read-only. It is not;
-  it runs anything.** No agent wrote through it as far as the record shows, since each used
-  `apply_migration` for writes, but the safety assumption every brief rested on was false. This is
-  part of why 2.9 matters.
+- **I passed on a correction without measuring it.** The architect seat said the database
+  connector's `execute_sql` runs any statement, and I wrote that into this report and into the
+  seat's access table. The security seat reported the opposite, and one read settled it:
+  `execute_sql` connects as `supabase_read_only_user`, a member of `pg_read_all_data` and
+  `pg_monitor` only, with both read-only settings on and write privilege on none of the 31 public
+  tables. So the briefs were right the first time. The connector's own description says a
+  destructive statement "may require the user to confirm", which makes read-only how it behaves
+  rather than a guarantee, so nothing should send it a write. Every write tonight went through
+  `apply_migration`.
 - **I named three migration files with timestamps I made up** rather than the versions the database
   recorded. The CLI compares by timestamp alone, so all three looked like pending migrations and a
   `db push` would have tried to run them again. Renamed to their live versions, and the email-fix
