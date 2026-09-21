@@ -275,10 +275,18 @@ main:not([class]) {
   background-image: var(--paper-grain);
   padding: var(--sheet-pad-top) var(--sheet-pad-x) var(--sheet-pad-bottom);
   border-radius: 4px;
+  /* Was `inset 0 1px 0`: the same Chromium hazard the Pact's .parchment carries
+     (pact.module.css:56, same fix) but here on an element whose height is an
+     entire article body (9,254px measured on one piece). An inset box-shadow,
+     even a 1px sliver, is computed against the full rounded-rect bounds; moved
+     outside the edge instead, which reads the same for a 1px hairline and no
+     longer needs the full-height mask. Confirmed 2026-09-21 (builder): the
+     unbounded render recovers with this layer flipped, on both .dialecta-sheet
+     and the bare-<main> placeholder path below it. */
   box-shadow:
     0 4px 24px rgba(28, 24, 20, 0.1),
     0 1px 4px rgba(28, 24, 20, 0.06),
-    inset 0 1px 0 rgba(245, 223, 160, 0.35),
+    0 1px 0 rgba(245, 223, 160, 0.35),
     0 0 0 0.5px rgba(184, 134, 46, 0.18);
   position: relative;
 }

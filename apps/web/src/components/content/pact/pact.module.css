@@ -62,10 +62,24 @@
     radial-gradient(ellipse at 12% 92%, rgba(212, 168, 74, 0.12) 0%, transparent 45%),
     linear-gradient(165deg, #efe2c4 0%, #ead7b3 35%, #f0e2bf 70%, #e8d3aa 100%);
   border-radius: 6px;
-  overflow: hidden;
+  /* overflow was hidden: combined with border-radius on a section whose height is
+     unbounded content (the long sheet runs ~7,800px), that is the same full-height
+     offscreen-surface hazard documented below for .parchment::before, confirmed
+     2026-09-21 (builder) by removing it and watching the render recover. .before/
+     .after/.edges/.crinkles each carry their own border-radius already, so they
+     still self-round with no parent clip, and .inner's own padding keeps real
+     content clear of the corners, so dropping the clip costs nothing visible. */
   box-shadow:
-    inset 0 0 0 1px rgba(140, 74, 47, 0.18),
-    inset 0 0 0 9px rgba(140, 74, 47, 0.12),
+    /* was `inset 0 0 0 1px`: same hairline, moved outside the edge instead of
+       inside it, so it no longer needs an inset mask computed against the
+       rounded rect for the full unbounded height. A 1px ring reads the same
+       from either side of the edge. */
+    0 0 0 1px rgba(140, 74, 47, 0.18),
+    /* was a second `inset 0 0 0 9px` ring here: dropped rather than flipped
+       outward, since a 9px OUTER ring would visibly bulge past the card in a
+       way the original inward tint did not. .parchment::after already lays a
+       corner vignette over the same area, so the edge still reads as aged
+       paper without it. */
     0 2px 12px rgba(28, 24, 20, 0.1),
     0 12px 48px rgba(28, 24, 20, 0.08);
   margin-bottom: 32px;
