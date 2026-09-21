@@ -46,6 +46,68 @@ export const strings = {
     drawerSubtitle: 'A publication',
     footerNote:
       'A platform for constructive dialogue, informed debate, and idea-first discourse. Founded April 2026. Built on the belief that thinking well is worth rewarding.',
+
+    /**
+     * The persistent right rail (src/components/shell/site-sidebar.tsx), ported
+     * from _recovered-next/lib/theme/dialecta-sidebar.jsx's non-article branch:
+     * QuoteHero, PulseCard's isArticle=false read, LiveNowCard,
+     * RecentlyPublishedCard, StewardsCard, in that order. Council ruling
+     * (council/log/2026-09-20-port-or-rewrite.md, dialecta-sidebar.jsx row):
+     * "generateMockPulse deleted or replaced with a real endpoint, not shipped
+     * as fabricated data." Live already disclosed Live Now as mocked; On
+     * Dialecta and Stewards Today did not, so both gained the same disclosure
+     * here rather than shipping numbers or names as if they were live.
+     * Recently Published is the one card backed by a real query.
+     */
+    rail: {
+      onDialecta: {
+        label: 'On Dialecta',
+        description: 'Readers and composers moving across the site, once presence is live.',
+        mockedNote: 'Live signal coming.',
+      },
+      liveNow: {
+        label: 'Live Now',
+        mockedNote: 'Live signal coming.',
+      },
+      recentlyPublished: {
+        label: 'Recently Published',
+        empty: 'Nothing published yet.',
+      },
+      stewardsToday: {
+        label: 'Stewards Today',
+        mockedNote: 'Live signal coming.',
+        stewards: [
+          { name: 'Maya Reiss', order: 'Memoirist' },
+          { name: 'Wen Liu', order: 'Theorist' },
+          { name: 'Father Anselm Okafor', order: 'Glossator' },
+        ],
+      },
+      /**
+       * Six entries from design/dialecta-quote-library.html (curated, Council
+       * "Three Tests" set), spanning six different archetypes so the rail
+       * does not read as one voice. One is picked per render, server side.
+       */
+      quotes: [
+        { text: 'The unexamined life is not worth living.', author: 'Socrates' },
+        {
+          text: 'When the facts change, I change my mind. What do you do, sir?',
+          author: 'John Maynard Keynes',
+        },
+        {
+          text: "If you can't explain it simply, you don't understand it well enough.",
+          author: 'Albert Einstein',
+        },
+        {
+          text: 'Those who cannot remember the past are condemned to repeat it.',
+          author: 'George Santayana',
+        },
+        {
+          text: 'It is impossible for a man to learn what he thinks he already knows.',
+          author: 'Epictetus',
+        },
+        { text: 'One should not act or speak as if asleep.', author: 'Heraclitus' },
+      ],
+    },
   },
 
   commenterMessages: {

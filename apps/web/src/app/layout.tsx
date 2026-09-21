@@ -4,8 +4,11 @@ import '@/styles/tokens.css';
 import '@/styles/dialecta-surfaces.css';
 import './globals.css';
 import '@/components/shell/shell.css';
+import '@/components/shell/site-sidebar.css';
+import { RailShell } from '@/components/shell/rail-shell';
 import { SiteFooter } from '@/components/shell/site-footer';
 import { SiteHeader } from '@/components/shell/site-header';
+import { SiteSidebar } from '@/components/shell/site-sidebar';
 import { strings } from '@/strings';
 import { SITE_URL } from '@/lib/site';
 import { getPlausibleConfig } from '@/lib/analytics';
@@ -34,6 +37,14 @@ export const metadata: Metadata = {
  * <main> (no class) lands on the standard paper sheet; a <main> with any class
  * styles itself (globals.css). The header reads the session, so every route
  * renders per request.
+ *
+ * The page slot sits inside RailShell, default.hbs's other half: the
+ * persistent right rail that used to live only in post.hbs, moved into the
+ * shared shell on 2026-04-29 so it persists across every page
+ * (_theme/assets/css/style.css:1773-1787). SiteSidebar is rendered here, on
+ * the server, and handed down as a prop; RailShell's only job is deciding
+ * whether the current route gets it (see its own comment for why that check
+ * needs the one client boundary in this tree beyond nav-client.tsx).
  */
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const plausible = getPlausibleConfig();
@@ -57,6 +68,21 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Source+Serif+4:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap"
         />
+        {/*
+          Playfair Display, italic only: the site rail's quote hero
+          (components/shell/site-sidebar.css .rail-quote-text). Ported from
+          default.hbs's own separate link for it, "its Q (and the way the
+          italic strokes flow into one another) reads more elegantly at hero
+          scale than Cormorant italic." Weights 400/500/600 only, matching
+          live: 400 for the resting state, 500 the default, 600 reserved for
+          hover/emphasis, none of which this port currently uses, so this
+          stays ready rather than trimmed.
+        */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font -- see the note above the first font link */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap"
+        />
       </head>
       <body>
         <div className="site-frame">
@@ -65,7 +91,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </a>
           <SiteHeader />
           <div id="content" className="site-body" tabIndex={-1}>
-            {children}
+            <RailShell sidebar={<SiteSidebar />}>{children}</RailShell>
           </div>
           <SiteFooter />
         </div>

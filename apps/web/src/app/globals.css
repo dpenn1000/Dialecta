@@ -307,3 +307,77 @@ body::before {
   line-height: 1.6;
   color: var(--secondary);
 }
+
+/* ---------------------------------------------------------------------------
+   Site rail: the page in the left cell, the persistent sidebar in the
+   right. Ported from the live shell's .site-main / .site-rail
+   (_theme/assets/css/style.css:1751-1830; see
+   council/designer/research/2026-09-21-live-vs-localhost/REPORT.md finding
+   2). Rendered by RailShell (components/shell/rail-shell.tsx) around
+   layout.tsx's {children}; widget visuals are site-sidebar.css.
+
+   Live split this into two elements: .site-main (the max-width cap and its
+   padding) and .site-rail (the grid) nested inside it. There is no second
+   consumer of a bare "site-main" wrapper here, so the two are merged into
+   this one class instead of porting both.
+
+   No horizontal padding here on purpose: --page-pad is already spent once by
+   every bare <main> (:where(main:not([class])) below, and profile/[id]'s
+   page is one), computed as a share of *its own* containing block's width.
+   Adding page-pad again at this level would take it from that calculation
+   twice. Centering comes from the max-width and auto margins alone; only in
+   the narrow band between the 1100px breakpoint and --max-width does the
+   rail sit flush with the viewport edge, which is the same trade live's own
+   .site-main padding was written to avoid at every width, and is judged
+   cheaper here than narrowing profile/[id]'s reading column to dodge it. */
+.site-rail {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-bottom: clamp(28px, 4vw, 48px);
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: clamp(12px, 0.5vw + 6px, 18px);
+  align-items: start;
+}
+
+/* RailShell's /write exception: no aside is rendered, and the content cell takes the row. */
+.site-rail.site-rail-single {
+  grid-template-columns: 1fr;
+}
+
+.site-content {
+  min-width: 0;
+}
+
+/* position: sticky, not fixed: it pins against .site-body's own scroll, and
+   un-pins once the rail's shorter column (whichever cell is taller) ends.
+   --nav-height is 0 here (the header sits in the page flow; see
+   dialecta-surfaces.css), unlike live's fixed nav, so top resolves to 16px
+   rather than clearing a header that has already scrolled away by the time
+   this can stick. Kept as a calc against the token anyway, so this stays
+   correct if that ever changes. */
+.site-sidebar {
+  position: sticky;
+  top: calc(var(--nav-height) + 16px);
+  max-height: calc(100vh - var(--nav-height) - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding-bottom: clamp(24px, 4vh, 48px);
+}
+
+.site-sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Below lg: single column, sidebar hidden. Same 1100px breakpoint as live's
+   RESPONSIVE CONTRACT (--bp-lg). */
+@media (max-width: 1099px) {
+  .site-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .site-sidebar {
+    display: none;
+  }
+}
