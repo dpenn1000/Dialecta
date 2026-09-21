@@ -19,7 +19,25 @@ export interface Article extends ArticleSummary {
   declared_claims: unknown[];
 }
 
-const SUMMARY_COLUMNS = 'id, slug, title, excerpt, topic, published_at, author:profiles!articles_author_id_fkey(display_name)';
+/**
+ * The author embed names its foreign key because articles has two keys into
+ * profiles and PostgREST needs to be told which one to join on.
+ *
+ * It must be articles_author_profile_id_fkey (author_profile_id -> profiles.id).
+ * The other key, articles_author_member_id_fkey (author_member_id ->
+ * profiles.ghost_member_id), resolves too, but joining on it makes PostgREST
+ * read profiles.ghost_member_id, which is closed to anon, and every anonymous
+ * page view fails with "permission denied for table profiles". See
+ * supabase/migrations/20260921041813_articles_author_profile_id_for_public_embed.sql.
+ *
+ * It is NOT articles_author_id_fkey: there is no author_id column. Where
+ * article identity finally lives (author_member_id text vs an author_id uuid
+ * on auth.users) is an open decision for migrator and decider, and
+ * profiles.user_id is null for every profile today, so an auth.uid()-keyed
+ * identity would resolve to nobody.
+ */
+const SUMMARY_COLUMNS =
+  'id, slug, title, excerpt, topic, published_at, author:profiles!articles_author_profile_id_fkey(display_name)';
 
 /** True when the public Supabase env is present. Pages render a notice otherwise. */
 export function isSupabaseConfigured(): boolean {
@@ -40,6 +58,9 @@ export async function getPublishedArticles(limit = 20): Promise<ArticleSummary[]
     .select(SUMMARY_COLUMNS)
     .eq('status', 'published')
     .order('published_at', { ascending: false })
+    // Tiebreak so the order is stable across refreshes. The Ghost-era rows carry a
+    // date-only published_at (12:00 UTC, from the site crawl), and two pairs share one.
+    .order('created_at', { ascending: false })
     .limit(limit);
   if (error) throw new Error(`articles query failed: ${error.message}`);
   return (data ?? []).map((r) => oneAuthor<ArticleSummary>(r as unknown as Row<ArticleSummary>));
