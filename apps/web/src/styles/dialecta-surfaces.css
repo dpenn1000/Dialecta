@@ -21,6 +21,18 @@
  * Source: _theme/assets/css/style.css, the Ghost admin export, read 2026-09-20.
  * Copy from that file, never from _recovered-next/lib/theme/style.css, which is
  * a five-month-stale mirror that happens to be byte identical today.
+ *
+ * The site shell (2026-09-20) completed the live :root here: --body, the five
+ * --bp-* breakpoints, --mobile-brand-h and --drawer-w now exist under their
+ * live names, so a ported component's var() resolves without a rename. Two
+ * are deliberate departures, each explained where it is defined: --nav-height
+ * is 0, and --page-grain is new (designer's token for the second grain). With
+ * these, every name in the live :root block resolves in apps/web, the two
+ * forked names included (tokens.css carries the spec's values for those).
+ *
+ * Brass never letters on a light surface (designer D-27, and the site shell
+ * brief). The link rules below that set brass text on the paper sheet now set
+ * ink text over a brass underline: the brass stays, as a line.
  */
 
 :root {
@@ -28,6 +40,9 @@
      --paper-bright is an engine card (the compose workbench is one). */
   --ink: #1c1814;
   --ink-soft: #2c2620;
+  /* --body is the live name; the recovered components reference it 40 times.
+     --body-ink is the same value under the name the writer uses. */
+  --body: #3a342c;
   --body-ink: #3a342c;
   --secondary: #5a5248;
   --tertiary: #7a7068;
@@ -92,6 +107,14 @@
       var(--wood-warm) 100%
     );
 
+  /* The page grain: the warmer, sepia-tinted fractal noise the live site lays
+     over the whole page (body::before, and .nav-drawer::before inside the
+     drawer). The two live literals, documented as identical, had drifted to
+     alpha 0.035 and 0.04; designer asked for one token with one value, and the
+     body's 0.035 is it. Distinct from --paper-grain below, which is achromatic
+     and belongs to paper surfaces. */
+  --page-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='4'/><feColorMatrix type='matrix' values='0 0 0 0 0.55  0 0 0 0 0.36  0 0 0 0 0.18  0 0 0 0.035 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+
   /* Paper grain: one fractalNoise overlay at 0.045 opacity, the same value the
      live article card uses, so a draft on the workbench and the published
      article read as the same sheet. */
@@ -111,6 +134,85 @@
   --gutter: clamp(20px, 1.5vw + 12px, 40px);
   --reading-max: clamp(560px, 50vw, 920px);
   --rail-w: clamp(280px, 18vw, 380px);
+
+  /* The height of fixed chrome over the top of the page, which is none. The
+     live value was 119px: a 33px build banner plus the 86px two-bar nav, both
+     position: fixed, and every page padded itself by it. The site shell's
+     header sits in the page flow instead (components/shell/site-header.tsx).
+     A ported component that sticks "below the nav" with
+     top: var(--nav-height) therefore sticks at the top edge, which is where
+     the nav's bottom edge is once the nav has scrolled away. */
+  --nav-height: 0px;
+
+  /* Canonical breakpoints, from the live RESPONSIVE CONTRACT. A custom
+     property cannot drive a media query, so these record the only values a
+     query may use: max-width 539, 767, 1099 and min-width 1100, 1600, 1900. */
+  --bp-sm: 540px;
+  --bp-md: 768px;
+  --bp-lg: 1100px;
+  --bp-xl: 1600px;
+  --bp-xxl: 1900px;
+
+  /* Mobile chrome: the brand bar's height and the drawer's width. */
+  --mobile-brand-h: 52px;
+  --drawer-w: min(86vw, 360px);
+}
+
+/* ---------------------------------------------------------------------------
+   The page-shell grid, from the live PAGE-SHELL GRID TEMPLATE: edge padding, a
+   reading column, an optional right rail, edge padding. Below lg the rail
+   collapses and the column fills.
+
+     <div class="page-shell">
+       <main class="page-main">...</main>
+       <aside class="page-rail">...</aside>   (optional, lg and up only)
+     </div>
+
+   .page-full spans every column, for a full-bleed element.
+   --------------------------------------------------------------------------- */
+
+.page-shell {
+  display: grid;
+  grid-template-columns:
+    [full-start]
+    minmax(var(--page-pad), 1fr)
+    [main-start]
+    minmax(0, var(--reading-max))
+    [main-end rail-start]
+    var(--rail-w)
+    [rail-end]
+    minmax(var(--page-pad), 1fr)
+    [full-end];
+  column-gap: var(--gutter);
+  row-gap: var(--gutter);
+  align-items: start;
+}
+
+.page-shell > .page-main {
+  grid-column: main-start / main-end;
+  min-width: 0;
+}
+
+.page-shell > .page-rail {
+  grid-column: rail-start / rail-end;
+  min-width: 0;
+}
+
+.page-shell > .page-full {
+  grid-column: full-start / full-end;
+}
+
+@media (max-width: 1099px) {
+  .page-shell {
+    grid-template-columns:
+      [full-start main-start]
+      minmax(var(--page-pad), 1fr)
+      [main-end rail-start rail-end full-end];
+  }
+
+  .page-shell > .page-rail {
+    display: none;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -156,8 +258,16 @@
 
 /* The article sheet, from .post-article. Same paper, same grain, same brass
    hairline ring and gold top edge lift, so what the writer types on and what a
-   reader reads are one surface. */
-.dialecta-sheet {
+   reader reads are one surface.
+
+   A <main> with no class of its own wears the sheet too, so a page that has
+   not styled itself yet (the placeholders, /login) sits on paper instead of
+   on the stone end of the page gradient, where body text measures 3.45:1.
+   Giving the <main> any class opts out entirely. Plain specificity here, not
+   :where(): this file loads before globals.css, and a zero-weight rule would
+   lose its padding to the reset there. globals.css sets the width. */
+.dialecta-sheet,
+main:not([class]) {
   --sheet-pad-x: clamp(24px, 3.5vw + 12px, 88px);
   --sheet-pad-top: clamp(28px, 2vw + 16px, 56px);
   --sheet-pad-bottom: clamp(44px, 2.5vw + 24px, 80px);
@@ -232,8 +342,16 @@
 }
 
 .dialecta-reading a {
-  color: var(--brass-deep);
-  text-underline-offset: 2px;
+  color: var(--ink);
+  text-decoration-line: underline;
+  text-decoration-color: var(--brass-mid);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.dialecta-reading a:hover {
+  text-decoration-color: var(--brass-deep);
+  text-decoration-thickness: 2px;
 }
 
 .dialecta-reading hr {
@@ -315,7 +433,10 @@
 }
 
 .dialecta-breadcrumb a:hover {
-  color: var(--brass-mid);
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--brass-mid);
+  text-underline-offset: 3px;
 }
 
 .dialecta-article-title {
@@ -354,7 +475,9 @@
 }
 
 .dialecta-byline-row a {
-  color: var(--brass-deep);
+  color: var(--ink);
+  text-decoration-color: var(--brass-mid);
+  text-underline-offset: 3px;
 }
 
 .dialecta-reading--article {

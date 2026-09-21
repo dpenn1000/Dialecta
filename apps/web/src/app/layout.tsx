@@ -3,6 +3,9 @@ import Script from 'next/script';
 import '@/styles/tokens.css';
 import '@/styles/dialecta-surfaces.css';
 import './globals.css';
+import '@/components/shell/shell.css';
+import { SiteFooter } from '@/components/shell/site-footer';
+import { SiteHeader } from '@/components/shell/site-header';
 import { strings } from '@/strings';
 import { SITE_URL } from '@/lib/site';
 import { getPlausibleConfig } from '@/lib/analytics';
@@ -22,6 +25,16 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * The frame every page renders inside: the site shell's header, the page,
+ * the footer (src/components/shell/). Ported from _theme/default.hbs, which is
+ * the specification for the site as it looks today.
+ *
+ * Pages render their own <main>, so the page slot here is a plain div. A bare
+ * <main> (no class) lands on the standard paper sheet; a <main> with any class
+ * styles itself (globals.css). The header reads the session, so every route
+ * renders per request.
+ */
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const plausible = getPlausibleConfig();
 
@@ -46,7 +59,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body>
-        {children}
+        <div className="site-frame">
+          <a className="skip-link" href="#content">
+            {strings.shell.skipToContent}
+          </a>
+          <SiteHeader />
+          <div id="content" className="site-body" tabIndex={-1}>
+            {children}
+          </div>
+          <SiteFooter />
+        </div>
         {plausible ? (
           <Script defer data-domain={plausible.domain} src={plausible.scriptSrc} strategy="afterInteractive" />
         ) : null}

@@ -1,0 +1,845 @@
+/*
+ * The site shell: header, primary nav, editorial drawer, footer.
+ *
+ * Ported from _theme/assets/css/style.css, rule for rule where a rule survives:
+ * "NAV" (.site-nav, .nav-logo-bar, .nav-sub-bar, lines 1660 to 1743),
+ * "NAVIGATION HELPER OVERRIDES" (the {{navigation}} list, 2278 to 2339), "NAV
+ * MEMBER AREA" (2341 to 2468), "EDITORIAL DRAWER" (271 to 668) and the mobile
+ * asterism strip (1488 to 1548). Copied from the live file, never from
+ * _recovered-next/lib/theme/style.css.
+ *
+ * What changed, and why:
+ * - Literal hex that a token now carries reads the token (#f7f2e8 is
+ *   var(--cream), #1c1814 is var(--ink), #3a342c is var(--body)). Alpha tints
+ *   and the metallic sub-bar stops have no token and stay literal, as live.
+ * - Brass never letters on a light surface (designer D-27: no brass stop but
+ *   --brass-deep clears 4.5:1 on cream, and the rule is categorical). Where the
+ *   live drawer set brass-deep text on cream (hover, the current link, the
+ *   pills, the member Order line), the text is ink and the brass moves to the
+ *   rule, the ring or the fill beside it. Brass still letters on the ink half
+ *   of the brand bar, where it clears 5.45:1 and up.
+ * - Current-page state is aria-current, which the live CSS already styled
+ *   (Ghost's nav-current class is gone), plus a one pixel brass-deep underline
+ *   on the sub-bar so the state is visible, not only announced.
+ * - The drawer toggle grew from 40x36 to 44x40 to meet the live contract's
+ *   own 44px touch target rule (RESPONSIVE CONTRACT, section 5).
+ * - Breakpoints are the canonical five only (1099/1100 here).
+ */
+
+/* ---------------------------------------------------------------------------
+   Frame
+   --------------------------------------------------------------------------- */
+
+.site-frame {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-body {
+  flex: 1 0 auto;
+  min-width: 0;
+}
+
+/* Programmatic focus from the skip link; nothing to draw around a region. */
+.site-body:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -64px;
+  z-index: 200;
+  padding: 10px 16px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--cream);
+  background: var(--ink);
+  border: 1px solid var(--brass-mid);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+/* ---------------------------------------------------------------------------
+   Header: brand bar
+   --------------------------------------------------------------------------- */
+
+/* In the page flow, not fixed; see site-header.tsx. No z-index, so the drawer
+   and scrim below stack against the whole page, not inside the header. */
+.site-nav {
+  position: relative;
+}
+
+.nav-logo-bar {
+  height: 52px;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--ink) 65%, var(--ink) 100%);
+  border-bottom: 1px solid rgba(184, 115, 42, 0.22);
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo-inner {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nav-logo-link {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+  border-radius: 2px;
+}
+
+/* The logo spans the gradient's light and dark halves, so one ring colour
+   cannot clear 3:1 across it: a deep ring for the cream side, a pale one
+   outside it for the ink side. */
+.nav-logo-link:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px var(--brass-pale);
+}
+
+.nav-logo {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+.nav-member-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Everything in the member area sits on the ink half of the bar. */
+.nav-member-area :focus-visible {
+  outline-color: var(--brass-bright);
+}
+
+.nav-signin-link {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(247, 242, 232, 0.7);
+  text-decoration: none;
+  padding: 8px 4px;
+  transition: color 0.15s;
+}
+
+.nav-signin-link:hover {
+  color: var(--gold);
+}
+
+.nav-write-link {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(247, 242, 232, 0.82);
+  text-decoration: none;
+  padding: 5px 12px;
+  border: 1px solid rgba(212, 168, 74, 0.35);
+  border-radius: 3px;
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.nav-write-link:hover {
+  color: var(--gold);
+  border-color: rgba(212, 168, 74, 0.7);
+  background: rgba(212, 168, 74, 0.08);
+}
+
+.nav-member-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: rgba(247, 242, 232, 0.82);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  transition: color 0.15s;
+}
+
+a.nav-member-link:hover {
+  color: var(--gold);
+}
+
+/* The brand-bar avatar chip, initials over the default brass-pale tint. The
+   live resolver painted a pillar gradient from the member's top two axes; that
+   needs axis_scores on every page load and waits for the profile surface. */
+.nav-member-initials {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(212, 168, 74, 0.18);
+  border: 1px solid rgba(212, 168, 74, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  color: var(--gold);
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* A sign in with no display name yet: a seat ring with a dot, not a blank. */
+.nav-member-initials:empty::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.nav-member-name {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   Header: the metallic sub-bar and the primary nav
+   --------------------------------------------------------------------------- */
+
+.nav-sub-bar {
+  height: 34px;
+  background: linear-gradient(to bottom, #eceae4 0%, #d8d4cc 48%, #eceae4 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-sub-bar::before,
+.nav-sub-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.96), transparent);
+}
+
+.nav-sub-bar::before {
+  top: 0;
+}
+
+.nav-sub-bar::after {
+  bottom: 0;
+}
+
+.nav-sub-inner {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 1.5vw + 10px, 32px);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.nav-sub-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 2vw + 4px, 28px);
+  height: 100%;
+}
+
+.nav-sub-list li {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.nav-sub-link {
+  position: relative;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--body);
+  text-decoration: none;
+  padding: 0 6px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.nav-sub-link:hover {
+  background: rgba(255, 255, 255, 0.35);
+  color: var(--ink);
+}
+
+.nav-sub-link:focus-visible {
+  outline-offset: -2px;
+}
+
+.nav-sub-link[aria-current="page"] {
+  color: var(--ink);
+}
+
+/* The current page, drawn as a brass line: 5.05:1 on the darkest sub-bar stop. */
+.nav-sub-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  height: 1px;
+  background: var(--brass-deep);
+}
+
+.nav-sub-icon {
+  flex-shrink: 0;
+  color: var(--brass-warm);
+  display: block;
+  transition: color 0.15s;
+}
+
+.nav-sub-link:hover .nav-sub-icon,
+.nav-sub-link[aria-current="page"] .nav-sub-icon {
+  color: var(--brass-deep);
+}
+
+/* Below lg the strip replaces the links: narrowing brass swipes either side
+   of the curved asterism. Decorative only. */
+.nav-asterism-strip {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+   The editorial drawer (Model B mobile nav, reachable at every width)
+   --------------------------------------------------------------------------- */
+
+.nav-drawer-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 40px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid rgba(184, 115, 42, 0.35);
+  border-radius: 4px;
+  color: var(--brass-warm);
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background 0.15s;
+}
+
+.nav-drawer-toggle:hover {
+  border-color: var(--brass-warm);
+  color: var(--brass-bright);
+  background: rgba(212, 168, 74, 0.06);
+}
+
+.nav-drawer-toggle[data-state="open"] {
+  background: rgba(212, 168, 74, 0.12);
+  border-color: var(--brass-bright);
+  color: var(--brass-bright);
+}
+
+.nav-drawer-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(28, 24, 20, 0);
+  pointer-events: none;
+  transition: background 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.nav-drawer-scrim[data-state="open"] {
+  background: rgba(28, 24, 20, 0.45);
+  pointer-events: auto;
+}
+
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--drawer-w);
+  z-index: 120;
+  background:
+    radial-gradient(ellipse at top right, rgba(212, 168, 74, 0.08), transparent 60%),
+    linear-gradient(180deg, var(--cream) 0%, #f3eddd 100%);
+  border-left: 1px solid rgba(184, 115, 42, 0.2);
+  box-shadow: -16px 0 48px rgba(28, 24, 20, 0.18);
+  transform: translateX(100%);
+  visibility: hidden;
+  transition:
+    transform 0.36s cubic-bezier(0.32, 0.72, 0, 1),
+    visibility 0s linear 0.36s;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.nav-drawer[data-state="open"] {
+  transform: translateX(0);
+  visibility: visible;
+  transition:
+    transform 0.36s cubic-bezier(0.32, 0.72, 0, 1),
+    visibility 0s linear 0s;
+}
+
+/* The page grain inside the drawer, at the live drawer's 0.6 layer opacity. */
+.nav-drawer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: var(--page-grain);
+  opacity: 0.6;
+}
+
+.nav-drawer > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nav-drawer-header {
+  position: relative;
+  padding: 16px 52px 12px;
+  border-bottom: 1px solid rgba(184, 115, 42, 0.18);
+  text-align: center;
+}
+
+.nav-drawer-logo-link {
+  display: inline-block;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.nav-drawer-logo {
+  height: 36px;
+  width: auto;
+  max-width: 100%;
+  display: inline-block;
+}
+
+.nav-drawer-subtitle {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-top: 4px;
+}
+
+.nav-drawer-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: 1px solid rgba(184, 115, 42, 0.3);
+  border-radius: 50%;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.nav-drawer-close:hover {
+  border-color: var(--brass-mid);
+  background: rgba(212, 168, 74, 0.08);
+}
+
+.nav-drawer-links {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.nav-drawer-links li {
+  margin: 0;
+}
+
+.nav-drawer-links a {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  min-height: 44px;
+  padding: 10px 32px;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.nav-drawer-links a:hover {
+  background: rgba(212, 168, 74, 0.08);
+  color: var(--ink);
+}
+
+.nav-drawer-links a:focus-visible {
+  outline-offset: -3px;
+}
+
+/* The live current link turned brass-deep; here the ink stays and the brass
+   is the three pixel rule on the left, deep enough to clear 3:1 on cream. */
+.nav-drawer-links a[aria-current="page"] {
+  border-left-color: var(--brass-deep);
+  color: var(--ink);
+  background: rgba(212, 168, 74, 0.06);
+}
+
+.nav-drawer-icon {
+  flex-shrink: 0;
+  display: block;
+  align-self: center;
+  color: var(--brass-warm);
+}
+
+.nav-drawer-links a[aria-current="page"] .nav-drawer-icon {
+  color: var(--brass-deep);
+}
+
+.nav-drawer-divider {
+  text-align: center;
+  margin: 6px 32px;
+  padding: 4px 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--brass-warm);
+  letter-spacing: 0.4em;
+}
+
+.nav-drawer-member {
+  padding: 10px 24px 24px;
+  text-align: center;
+}
+
+.nav-drawer-avatar {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  background: var(--bg-white);
+  border: 1px solid var(--brass-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.4rem;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+  overflow: hidden;
+}
+
+.nav-drawer-avatar:empty::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brass-mid);
+}
+
+.nav-drawer-membername {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--ink);
+  margin-bottom: 12px;
+  text-decoration: none;
+}
+
+a.nav-drawer-membername:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--brass-mid);
+  text-underline-offset: 3px;
+}
+
+.nav-drawer-memberlinks {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav-drawer-memberlinks form {
+  display: contents;
+}
+
+/* The member pills: brass-pale fill with the paper grain, a brass ring and a
+   pressed-metal highlight, as live. The ink is --ink-soft, not the live
+   --brass-deep, and the hover fill is --brass-warm under ink, not cream
+   (cream on brass-warm measures 1.98:1). */
+.nav-drawer-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 7px 14px;
+  background-color: var(--brass-pale);
+  background-image: var(--paper-grain);
+  border: 1px solid rgba(184, 115, 42, 0.45);
+  border-radius: 999px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 1px 2px rgba(74, 40, 16, 0.1);
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.nav-drawer-pill:hover {
+  color: var(--ink);
+  background-color: var(--brass-warm);
+  background-image: none;
+  border-color: var(--brass-deep);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 3px 8px rgba(184, 115, 42, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Sign out: the live terra tint, destructive without shouting. */
+.nav-drawer-pill--leave {
+  color: #6e3917;
+  background-color: #f7e6d8;
+  border-color: rgba(140, 74, 47, 0.4);
+}
+
+.nav-drawer-pill--leave:hover {
+  color: var(--cream);
+  background-color: var(--terra);
+  border-color: #6e3917;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 3px 8px rgba(140, 74, 47, 0.3);
+}
+
+html.drawer-open,
+html.drawer-open body {
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------------
+   Footer
+   --------------------------------------------------------------------------- */
+
+/* The top margin is small on purpose: most pages already end in their own
+   bottom padding, and a bare sheet ends at its margin. */
+.site-footer {
+  position: relative;
+  margin-top: clamp(28px, 4vw, 48px);
+  background-color: var(--cream);
+  background-image: var(--paper-grain);
+  border-top: 1px solid var(--wood-edge);
+}
+
+/* The brass rule along the top edge, fading at both ends. */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--brass-mid) 20%, var(--brass-mid) 80%, transparent);
+}
+
+.site-footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 36px var(--page-pad) 40px;
+  text-align: center;
+}
+
+.site-footer-ornament {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--brass-warm);
+}
+
+.site-footer-mark {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin: 10px 0 8px;
+}
+
+.site-footer-note {
+  font-family: var(--font-reading);
+  font-size: 0.88rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--secondary);
+  max-width: 56ch;
+  margin: 0 auto;
+}
+
+.site-footer-links {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 20px;
+}
+
+.site-footer-links a {
+  display: inline-block;
+  padding: 8px 2px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.site-footer-links a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--brass-mid);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+/* ---------------------------------------------------------------------------
+   Below lg: the brand bar keeps the logo, the sign in state and the toggle;
+   the sub-bar shortens to the asterism strip; Write and the member name move
+   into the drawer.
+   --------------------------------------------------------------------------- */
+
+@media (max-width: 1099px) {
+  .nav-logo-inner {
+    padding: 0 var(--page-pad);
+  }
+
+  .nav-write-link,
+  .nav-member-name {
+    display: none;
+  }
+
+  .nav-sub-bar {
+    height: 24px;
+  }
+
+  .nav-sub-inner {
+    display: none;
+  }
+
+  .nav-asterism-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+    height: 100%;
+    padding: 0 18px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-asterism-swipe {
+    flex: 1 1 auto;
+    max-width: 110px;
+    height: 1px;
+  }
+
+  .nav-asterism-swipe:first-child {
+    background: linear-gradient(to right, transparent 0%, var(--brass-mid) 95%);
+  }
+
+  .nav-asterism-swipe:last-child {
+    background: linear-gradient(to left, transparent 0%, var(--brass-mid) 95%);
+  }
+
+  .nav-asterism-mark {
+    flex-shrink: 0;
+    display: block;
+    color: var(--brass-mid);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-drawer,
+  .nav-drawer[data-state="open"],
+  .nav-drawer-scrim,
+  .skip-link {
+    transition: none;
+  }
+}
+
+@media print {
+  .site-nav,
+  .site-footer,
+  .skip-link {
+    display: none;
+  }
+}

@@ -1,7 +1,20 @@
 /*
- * Global base styles. Colors, fonts, radii and shadows come from tokens.css,
- * which is generated from design/dialecta-design-spec.html. Do not hard-code
- * values here that a token already provides.
+ * Global base styles, every page.
+ *
+ * Tokens come from the two files the root layout loads first: tokens.css,
+ * generated from design/dialecta-design-spec.html (never edit it by hand), and
+ * styles/dialecta-surfaces.css, the live theme's paper, brass, wood, grain and
+ * fluid scale, copied from _theme/assets/css/style.css. Do not hard-code a
+ * value here that either one provides.
+ *
+ * Every rule below that styles a bare element is wrapped in :where(), which
+ * weighs nothing in the cascade, so any class a page or component writes wins
+ * without a fight. A bare, unclassed <main> gets the paper sheet, and an
+ * unclassed control inside a <form> on such a page gets the house look; give
+ * either one a class and it is yours.
+ *
+ * Brass never letters on a light surface (designer D-27). On paper brass is a
+ * line, a ring, a dot or a fill under ink; brass type belongs on dark ground.
  */
 
 *,
@@ -13,40 +26,284 @@
 }
 
 html {
+  /* The site has one palette, and it is light. Without this a dark OS setting
+     draws form controls and scrollbars dark on cream paper. */
+  color-scheme: light;
   scroll-behavior: smooth;
-}
-
-body {
-  font-family: var(--font-body, system-ui, sans-serif);
-  background: var(--page-background, var(--bg-primary, #f7f2e8));
-  color: var(--text-body, #3a342c);
-  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* The off-canvas drawer, or any child too wide for a phone, must never widen
+     the page. clip rather than hidden: hidden makes a scroll container, and a
+     scroll container breaks every position: sticky beneath it. */
+  overflow-x: clip;
 }
 
-h1,
-h2,
-h3 {
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* The live body: the stone-to-cream gradient fixed to the viewport, under the
+   sepia page grain. `html body`, not `body`: Next's built-in 404 injects its
+   own body{} rule later in the page, black under a dark OS preference, and it
+   blacked out every unknown URL until this outweighed it. */
+html body {
+  font-family: var(--font-body, system-ui, sans-serif);
+  background: var(--page-background, var(--cream, #f7f2e8));
+  background-attachment: fixed;
+  color: var(--body, #3a342c);
+  line-height: 1.5;
+  min-height: 100vh;
+  /* A long path or URL with no break point wraps instead of running off a
+     phone-width sheet. */
+  overflow-wrap: break-word;
+}
+
+/* z-index -1 paints the grain over the page background and under every box,
+   so it never opens a stacking context a page's own overlay has to beat. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--page-grain);
+}
+
+::selection {
+  background: rgba(212, 168, 74, 0.3);
+  color: var(--ink);
+}
+
+:where(:focus-visible) {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Type
+   --------------------------------------------------------------------------- */
+
+:where(h1, h2, h3, h4) {
   font-family: var(--font-display, Georgia, serif);
-  color: var(--text-primary);
+  color: var(--ink);
   font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
 }
 
-a {
-  color: var(--gold-muted, inherit);
+:where(h1) {
+  font-size: var(--type-h1);
 }
 
-main {
-  max-width: 44rem;
-  margin: 0 auto;
-  padding: 3rem 1rem;
+:where(h2) {
+  font-size: var(--type-h2);
 }
 
+:where(h3) {
+  font-size: var(--type-h3);
+}
+
+/* Links take the ink of the text around them and carry brass as the line
+   under it. The old default here was --gold-muted text, brass lettering on
+   cream at 3.61:1. */
+:where(a) {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--brass-mid);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition:
+    color 0.15s,
+    text-decoration-color 0.15s;
+}
+
+:where(a:hover) {
+  color: var(--ink);
+  text-decoration-color: var(--brass-deep);
+}
+
+:where(img, video) {
+  max-width: 100%;
+  height: auto;
+}
+
+:where(hr) {
+  border: 0;
+  border-top: 1px solid var(--wood-edge);
+  margin: 2em 0;
+}
+
+/* ---------------------------------------------------------------------------
+   The page column
+   --------------------------------------------------------------------------- */
+
+:where(main) {
+  display: block;
+  margin-inline: auto;
+}
+
+/* A bare <main> is a paper sheet (the .dialecta-sheet rule in
+   dialecta-surfaces.css) at the live article's 820px reading width. The
+   footer's own top margin spaces the bottom. */
+:where(main:not([class])) {
+  width: min(820px, calc(100% - 2 * var(--page-pad)));
+  margin-block: clamp(20px, 3vw, 44px) 0;
+}
+
+:where(main:not([class])) > :where(* + *) {
+  margin-top: 1rem;
+}
+
+/* Reading type for the page's own paragraphs and lists, its direct children
+   only. A component rendered inside the page keeps the DM Sans it inherits
+   from body, which is what the live theme gave it. */
+:where(main:not([class])) > :where(p),
+:where(main:not([class])) > :where(ul, ol) > :where(li) {
+  font-family: var(--font-reading);
+  font-size: var(--type-body);
+  line-height: 1.7;
+  color: var(--body);
+}
+
+:where(main:not([class])) > :where(ul, ol) {
+  padding-left: 1.25em;
+}
+
+:where(main:not([class])) > :where(ul, ol) > :where(li + li) {
+  margin-top: 1.1em;
+}
+
+:where(main:not([class])) > :where(ul, ol) > :where(li) > :where(* + *) {
+  margin-top: 0.3em;
+}
+
+:where(main:not([class])) :where(form) > :where(* + *),
+:where(main:not([class])) :where(form + form) {
+  margin-top: 0.75rem;
+}
+
+:where(main:not([class])) :where(form) > :where(label + *) {
+  margin-top: 6px;
+}
+
+/* ---------------------------------------------------------------------------
+   Forms: the house look for an unclassed control in a form on an unstyled page
+
+   Scoped to a <form> inside a bare <main>, and no wider, on purpose. The
+   recovered components set their buttons' look in inline style objects and
+   give them no class (41 unclassed buttons across the discourse layer, the
+   private draft, the profile and the community feed), and a site-wide
+   default would fill in every property those objects leave unset: the
+   uppercase, the brass fill, the 44px height. None of them uses a <form>.
+   /login does, and it is what this is for.
+   --------------------------------------------------------------------------- */
+
+:where(main:not([class])) :where(form) :where(label:not([class])) {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+
+/* A brass ring on paper, which is brass as a line: 3.15:1 against the sheet,
+   over the 3:1 a control's boundary needs. */
+:where(main:not([class])) :where(form) :where(
+    input:not([class]):not(
+        [type="checkbox"],
+        [type="radio"],
+        [type="submit"],
+        [type="button"],
+        [type="reset"],
+        [type="hidden"],
+        [type="file"],
+        [type="range"],
+        [type="color"]
+      ),
+    textarea:not([class]),
+    select:not([class])
+  ) {
+  display: block;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--ink);
+  background-color: var(--paper-bright);
+  background-image: var(--paper-grain);
+  border: 1px solid var(--brass-mid);
+  border-radius: 4px;
+  padding: 10px 12px;
+  box-shadow: inset 0 1px 2px rgba(28, 24, 20, 0.06);
+}
+
+:where(main:not([class])) :where(form) :where(input, textarea)::placeholder {
+  color: var(--tertiary);
+  opacity: 1;
+}
+
+/* The live Join button: a brass fill with ink letters, which clear 5.45:1 on
+   its darkest stop. */
+:where(main:not([class])) :where(form) :where(button:not([class]), input:not([class])[type="submit"], input:not([class])[type="button"]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 20px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--brass-bright) 0%, var(--brass-mid) 100%);
+  border: 1px solid rgba(122, 74, 16, 0.35);
+  border-radius: 3px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 1px 2px rgba(74, 40, 16, 0.16);
+  cursor: pointer;
+  transition:
+    filter 0.15s,
+    box-shadow 0.15s;
+}
+
+:where(main:not([class])) :where(form) :where(button:not([class]):hover:not(:disabled)) {
+  filter: brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 3px 8px rgba(184, 115, 42, 0.28);
+}
+
+:where(main:not([class])) :where(form) :where(button:not([class]):disabled) {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* ---------------------------------------------------------------------------
+   Shared primitives
+   --------------------------------------------------------------------------- */
+
+/* A notice: a paper slip with a brass rule down its left edge, from the
+   writer's precondition note. */
 .notice {
-  border: 1px solid var(--border-medium);
-  background: var(--bg-white);
-  border-radius: var(--radius-md);
-  padding: 1rem;
-  color: var(--text-secondary);
+  border: 1px solid var(--wood-edge);
+  border-left: 2px solid var(--brass-mid);
+  border-radius: 0 4px 4px 0;
+  background-color: var(--paper-bright);
+  background-image: var(--paper-grain);
+  padding: 12px 16px;
+  font-family: var(--font-reading);
+  font-style: italic;
   font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--secondary);
 }

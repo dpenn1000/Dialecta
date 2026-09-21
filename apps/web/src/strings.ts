@@ -14,6 +14,30 @@ export const strings = {
     name: 'Dialecta',
     tagline: 'A platform for constructive dialogue, informed debate, and idea-first discourse.',
   },
+  shell: {
+    skipToContent: 'Skip to content',
+    primaryNavLabel: 'Primary',
+    footerNavLabel: 'Footer',
+    nav: {
+      articles: 'Articles',
+      community: 'Community',
+      stewards: 'Stewards',
+      pact: 'The Pact',
+      fingerprint: 'The Living Fingerprint',
+      guidebook: 'Guidebook',
+      about: 'About',
+    },
+    write: 'Write',
+    signIn: 'Sign in',
+    signOut: 'Sign out',
+    signedIn: 'Signed in',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+    drawerLabel: 'Site navigation',
+    drawerSubtitle: 'A publication',
+    footerNote:
+      'A platform for constructive dialogue, informed debate, and idea-first discourse. Founded April 2026. Built on the belief that thinking well is worth rewarding.',
+  },
 
   commenterMessages: {
     spark:
