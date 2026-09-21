@@ -95,7 +95,7 @@ Ranked by what they unblock. The first three are between you and publishing an a
 | **2.1** | **Link your login to your profile.** Sign in once at `/login`, then a claim token has to be issued for your profile and redeemed. `claim_profile()` exists and works; nothing has ever called it | Publishing, commenting as yourself, and opening `/analytics` in production | Ten minutes with a session that can write |
 | ~~2.2~~ | ~~Retire the Ghost id~~ **Done overnight.** `articles.ghost_post_id` is nullable, migration `20260921052443`, so a native article can now be saved. You had said the implementation is being fully rebuilt, which settled what I had framed as the Ghost-retirement decision | Native articles | Done |
 | ~~2.3~~ | ~~An author write policy on `articles`~~ **Done overnight by `security`.** Migration `20260921053807`: an author can write their own article and never its tier. Table-level insert and update were revoked, then granted back for exactly the columns the publish route writes; both author ids are pinned to the caller, keyed on `profiles.id` as the architect directed; and `published_at` must fall within five minutes of now, so nobody can date an article ahead and hold the top of the front page | Publishing | Done. It matches nobody until 2.1, so your first real publish is its test |
-| **2.4** | **Check that `apps/web`'s own env file defines `SUPABASE_SERVICE_ROLE_KEY`.** The name split is deliberate, not a mismatch: `apps/web/.env.example` uses `SUPABASE_SERVICE_ROLE_KEY` and says not to reintroduce the old name, while the root uses `SUPABASE_SERVICE_KEY` for the legacy `api/` and `scripts/`. **Next.js loads env files from the app's own directory, so the root `.env` does not enter into it.** While you are there, `apps/web/.env.example` is missing two names the code reads: `ANALYTICS_ADMIN_UIDS` and `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` | The comment pipeline, and on this machine most of what the prototype shows: without the key, `/api/comment` stores a comment and then fails with a 500 at the classification insert, no comment shows its tier, and every profile says its fingerprint could not be read. `security` is building database reads that retire the key from the page paths; until then, it lights them up | A minute. *Corrected by the architect seat: this row first pointed you at the root `.env`, which was the wrong file* |
+| **2.4** | **Check that `apps/web`'s own env file defines `SUPABASE_SERVICE_ROLE_KEY`.** The name split is deliberate, not a mismatch: `apps/web/.env.example` uses `SUPABASE_SERVICE_ROLE_KEY` and says not to reintroduce the old name, while the root uses `SUPABASE_SERVICE_KEY` for the legacy `api/` and `scripts/`. **Next.js loads env files from the app's own directory, so the root `.env` does not enter into it.** While you are there, `apps/web/.env.example` is missing two names the code reads: `ANALYTICS_ADMIN_UIDS` and `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` | The comment pipeline, and on this machine most of what the prototype shows: without the key, `/api/comment` stores a comment and then fails with a 500 at the classification insert, and every profile says its fingerprint could not be read. Tiers no longer need it: they read through database functions `security` added overnight | A minute. *Corrected by the architect seat: this row first pointed you at the root `.env`, which was the wrong file* |
 | ~~2.8~~ | ~~The architect seat's name~~ **Decided by you: `architect`.** No rename needed | | Done |
 | **2.9** | **Authorise the architect seat's read-only database connector, once.** You told me to give it review access to every platform, and it has it now: a Supabase connector that is read-only on Supabase's side is in `C:\Dialecta\.mcp.json` as `supabase-dialecta-ro`, and the seat's grant names read tools only across Supabase, Vercel, GitHub, the browser and the notes index. **The one step left is yours**: the next time a Claude session opens in `C:\Dialecta` it will ask to enable the project server and then send you through Supabase's sign-in, once | Every sweep the seat runs | The OAuth click. What each grant covers, and what is deliberately withheld, is in `.claude/agents/architect.md`, "Your access" |
 | **2.10** | **Two identity decisions that block the most, both through `decider`** since each amends a spec or an ADR-level choice. First: a person is keyed three ways and an article two, 14 of 18 Ghost-keyed person columns have no foreign key, and `opinion_map_self_read` compares Ghost ids to the JWT subject, so no Supabase Auth reader can see their own rows (`architect-05`). Second: "forming" is an archetype in the spec and `packages/core` and a confidence level on live (`architect-03`) | Most of what comes after the prototype | A debate each |
@@ -190,6 +190,11 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
 - `profiles.ghost_member_id` closed on 2026-09-20.
 - Self-tiering on `articles`: an author can no longer write `final_tier` or `ai_suggested_tier` on
   their own row, closed by column privilege rather than a check (2.3).
+- The new app's page paths no longer read tiers on the service role. Two database functions return a
+  comment's public tier to anyone who can read the comment, and its private reading only to its
+  author (`20260921063139`). Measured: anon runs the first and not the second, PUBLIC holds neither.
+- A Breach comment's words could have shown in full on its author's profile. The profile and the
+  thread now share one rule for when a body may show.
 
 **Still open, deliberately:**
 
@@ -201,6 +206,11 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
 - Three trigger functions still hold public execute. Revoking should be safe and was not tested
   against production overnight.
 - A classified article keeps its tier through a rewrite (2.11).
+- **Breach bodies are withheld by the new app's server, not yet by the database**: the public key can
+  still read `comments.body` for any published comment. `security` filed the control rather than force
+  it tonight, because two pages would break (`security-01`). The order is a release function, both
+  readers switched to it, then the revoke, all before anything can publish a comment. Nothing is
+  Breach today and nothing can publish yet.
 - Community cannot show archetypes, pillar colours or who did what in the feed, because anon cannot
   read the Ghost member id those rows are keyed on. A public profile view, or identity keyed on
   `profiles.id` (the architect's step 2), lights them up without reopening the credential.
@@ -230,9 +240,8 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
   Community, About and Stewards; and a fifth on the gaps nobody owned, which are the `/fingerprint`
   explainer page compared side by side with the live one you liked, the writer's brass lettering on
   paper, and sign-in returning you to the article you were reading.
-- **`security`, on reading tiers without the service key**: database functions that let a comment
-  show its tier with only the public key, and a decision on withholding Breach bodies at the database
-  rather than only on the server, which `legal` asked for.
+- **`security`, preparing the production fix** for `/api/comments` and the upload route, section 0.
+  Its tier-read functions are done and in use (section 4).
 - **`decider` on three architecture rulings**: the identity key, "forming", and the downstream runner
   (2.10), with positions from six seats. `council/log/2026-09-21-identity-forming-and-the-runner.md`.
 - **`legal`, drafting the terms that sit beside the Pact**, at your request: terms of service, a
