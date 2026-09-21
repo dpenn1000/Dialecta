@@ -19,13 +19,19 @@ Committed and on `backup/2026-09-21-overnight`; `main` is still not pushed.
 | The reading spine, the author's declaration and the opinion maps, read-only (regression 3, steps 1 to 4) | `58a3ebe` plan, `25e4959` |
 | Comment times read like live's, and the featured photo slot (regressions 6 and 4) | `2b30710` |
 | Profiles gain live's Growth tab (regression 5) | `aa68e19` |
+| The rest of live's article page: tier badges, a real comment count, the author bio and the share row | `09f506b`, `4509414` |
+| Breach comment text is withheld by the database: `comment_bodies()`, both readers switched to it, then `body` and `mentions` revoked from the public key and signed-in users (`security-01`) | `9cd4094`, `62c5752`, `20260921160005` |
+| `opinion_map_positions` keyed by profile and article, with live's writer untouched (Declare step 5) | `fca062b` |
 
 **Open from today:**
 
-- **Comments open only after the Breach-body lock** (`security-01`): a release function, both
-  readers switched to it, then the revoke. Running now.
-- **Declare's placement step** waits on the `opinion_map_positions` migration you approved. It is
-  written as expand now and contract at cutover, because live still writes that table. Running now.
+- **Comments can open.** The Breach-body lock is in. What commenting still needs is 2.4, the admin
+  key in `apps/web`'s own env file.
+- **Declare's placement step** is being built now, on the table change you approved.
+- **A second live leak of comment text, yours to fix on production.** `_recovered-next/lib/get-comment.js`,
+  behind the comment share-card image, prints any pending or published comment's text with no tier
+  check, on the service key. Nothing is Breach today. It goes with section 0's fix, if that app still
+  serves share cards.
 - **Before cutover:** copy the three profile avatars and the site's logo, icon and two home photos
   off Ghost the same way; redirect `/content/images/*` to the bucket so old links still resolve;
   and don't rerun `scripts/import-ghost.mjs` as it stands, since it would write Ghost's photo URLs
@@ -262,11 +268,11 @@ staging, since it is a plan and cost choice.
 - Three trigger functions still hold public execute. Revoking should be safe and was not tested
   against production overnight.
 - A classified article keeps its tier through a rewrite (2.11).
-- **Breach bodies are withheld by the new app's server, not yet by the database**: the public key can
-  still read `comments.body` for any published comment. `security` filed the control rather than force
-  it tonight, because two pages would break (`security-01`). The order is a release function, both
-  readers switched to it, then the revoke, all before anything can publish a comment. Nothing is
-  Breach today and nothing can publish yet.
+- ~~Breach bodies are withheld by the new app's server, not yet by the database~~ **Closed
+  2026-09-21.** `comment_bodies()` releases text only for classified, unsuppressed, non-Breach
+  comments, and the public key and signed-in users lost SELECT on `comments.body` and
+  `comments.mentions`. Live's legacy API reads with the service role and still returns both;
+  that is section 0's fix.
 - Community cannot show archetypes, pillar colours or who did what in the feed, because anon cannot
   read the Ghost member id those rows are keyed on. A public profile view, or identity keyed on
   `profiles.id` (the architect's step 2), lights them up without reopening the credential.
