@@ -181,3 +181,47 @@ Not tested:
 - `classifications`: its grants and its one policy. `/analytics` probes it as a deny.
 - The `comments.body` and `comments.mentions` grants, until both readers read through
   `comment_bodies`.
+
+## Update, 2026-09-21, later the same day
+
+The follow-up is written, not applied. Two DRAFT migrations and the full brief sit in
+`council/security/2026-09-21-breach-body-migrations/`: `comment_bodies(uuid[])` finished from the
+sketch above (same file, same grant shape, both decisions below made explicit in its header) and
+the revoke as its own migration, sequenced to apply only after both readers below switch.
+
+**The two decisions, now made.** No classification: withheld, the row is dropped. Suppressed:
+withheld unconditionally, even from the author. Both match `toComment()` as measured today; neither
+was a live judgment call, both fell out of reading the code that already exists. Still open, still
+legal's: an author's own Breach text, and whether `specificity_score` withholds on Breach.
+
+**Every reader of `comments.body` and `comments.mentions`, found and dispositioned.** Full table in
+the folder's `README.md`. In `apps/web`: the two known readers (`discourse/data.ts`,
+`profile/_lib`) need the switch; `analytics/_lib` and `api/comment/route.ts` never selected these
+columns and need nothing. In quarantine: every Supabase client under `_recovered/` and
+`_recovered-next/`, without exception, uses `SUPABASE_SERVICE_KEY`; none read the anon or
+publishable key, confirmed by grep, so the revoke touches none of them and fixes none of them.
+`_theme/` holds no Supabase client at all; its one comments consumer fetches the legacy `/api/comments`
+route. No view, function or edge function in the project touches either column beside the one this
+adds.
+
+**New finding, live, not previously in a hotfix.** `_recovered-next/lib/get-comment.js`, read by
+`app/comment/[id]/opengraph-image.js`, is a second live reader in the same family as
+`council/security/hotfix-2026-09-21-api-comments/`'s `comments.js`: service role, and it gates on
+`status <> 'suppressed'` only, no tier check at all. It renders a comment's stored body directly
+into a public PNG at `/comment/<uuid>/opengraph-image` for any pending or published comment,
+Breach included, with no card to hide it behind. Neither migration here reaches it; it needs its
+own hotfix, same shape as the existing one, and is not it yet.
+
+**Reader switches specified for the builder**, file and line, with the code shape, in the folder's
+`README.md`: both readers call `comment_bodies` the way `comment_tiers` is already called, merge by
+`comment_id` into a Map the same way `readLatest()` already does, and the one new rule either
+switch has to hold is that an id missing from the result is the withheld case, not a fetch error.
+`discourse/data.ts toComment()` loses its `body`-gates-validity check in the same change, since body
+no longer arrives on the base row.
+
+**Verification and rollback for both migrations** are in the same `README.md`: grants and `proacl`
+after the function lands, a no-session PostgREST call against the 3 live ids, column grants and a
+direct-select 42501 check after the revoke, and the reverse-order rollback for each.
+
+Not run: `node scripts/land.mjs`. The brief that opened this update said write, verify and hand
+over, not apply; landing this seat's own folder is the convener's call, not assumed here.
