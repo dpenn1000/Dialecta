@@ -168,6 +168,28 @@ export function tradeoffFactor(axis: Axis, totals: AxisTotals): number {
  *
  * Multiply by the ring radius to get a length. Never returns 1: the ring is a
  * horizon, and that is the whole point of this module.
+ *
+ * SCOPE, AND A CORRECTION TO WHAT THIS MODULE FIRST CLAIMED
+ *
+ * This bounds EARNED EXTENT. It does not bound the rendered line, and the
+ * recovered engine's texture crosses the ring today. Base noise and the
+ * turbulence wave are both added in absolute pixels after the radius is
+ * computed (engine `:518`, `radius += baseNoise + wave`), with nothing holding
+ * them inside anything. Measured on a faithful port of that code at a 95px
+ * ring, furthest sampled point as a percentage of the ring:
+ *
+ *   22 graduations, turbulence 0.00    102.6%
+ *   22 graduations, turbulence 1.00    127.5%
+ *   20 graduations, turbulence 0.50    104.7%
+ *
+ * So a mature fingerprint already breaks out of its own horizon on texture
+ * alone, before any of this module's arithmetic is consulted. Fixing it means
+ * spending texture out of the headroom the ring leaves rather than adding it
+ * on top, which changes how turbulence reads on mature shapes and is therefore
+ * `designer`'s call, not a quiet clamp to add here.
+ *
+ * `scripts/turbulence_lab.py` reproduces the engine's texture outside the
+ * browser and is what these numbers came from.
  */
 export function axisExtent(axis: Axis, totals: AxisTotals): number {
   const progress = horizonProgress(totals[axis] ?? 0);
