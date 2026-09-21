@@ -37,8 +37,8 @@ Ranked by what they unblock. The first three are between you and publishing an a
 | **2.2** | **Retire the Ghost id.** `articles.ghost_post_id` is `NOT NULL`, so an article that never lived in Ghost cannot be saved. `alter table public.articles alter column ghost_post_id drop not null;` | Native articles | One line. It is the Ghost-retirement decision in miniature, which is why nobody made it for you |
 | **2.3** | **An author insert policy on `articles`.** Drafted by `builder` and deliberately not applied: it keys on `current_ghost_member_id()` plus `is_author`, and matches nobody until 2.1 is done | Publishing | Apply after 2.1 |
 | **2.4** | **Check that `apps/web`'s own env file defines `SUPABASE_SERVICE_ROLE_KEY`.** The name split is deliberate, not a mismatch: `apps/web/.env.example` uses `SUPABASE_SERVICE_ROLE_KEY` and says not to reintroduce the old name, while the root uses `SUPABASE_SERVICE_KEY` for the legacy `api/` and `scripts/`. **Next.js loads env files from the app's own directory, so the root `.env` does not enter into it.** While you are there, `apps/web/.env.example` is missing two names the code reads: `ANALYTICS_ADMIN_UIDS` and `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` | The comment pipeline | A minute. *Corrected by the architect seat: this row first pointed you at the root `.env`, which was the wrong file* |
-| **2.8** | **The architect seat's name: `architect` or `engineer`.** You asked it tonight. Its argument is in your "engineerL architect seat handoff" session | Nothing, but it is yours | A word |
-| **2.9** | **Give the architect seat read-only database access.** It currently cannot reach the database at all, and the connector every session has used is not read-only. From `C:\Dialecta`: `claude mcp add --scope project --transport http supabase-dialecta-ro "https://mcp.supabase.com/mcp?project_ref=mguulnibvzusfvyuowwh&read_only=true&features=database,debugging,docs"`, authorise once, then add the tool to the seat's frontmatter | Every sweep the seat runs | Five minutes. Full list in `docs/handoffs/dialecta-handoff-2026-09-21-architect-access.md` on its branch. **Not run by the convener: adding a connector changes your configuration, which is yours to do** |
+| ~~2.8~~ | ~~The architect seat's name~~ **Decided by you: `architect`.** No rename needed | | Done |
+| **2.9** | **Authorise the architect seat's read-only database connector, once.** You told me to give it review access to every platform, and it has it now: a Supabase connector that is read-only on Supabase's side is in `C:\Dialecta\.mcp.json` as `supabase-dialecta-ro`, and the seat's grant names read tools only across Supabase, Vercel, GitHub, the browser and the notes index. **The one step left is yours**: the next time a Claude session opens in `C:\Dialecta` it will ask to enable the project server and then send you through Supabase's sign-in, once | Every sweep the seat runs | The OAuth click. What each grant covers, and what is deliberately withheld, is in `.claude/agents/architect.md`, "Your access" |
 | **2.10** | **Two identity decisions that block the most, both through `decider`** since each amends a spec or an ADR-level choice. First: a person is keyed three ways and an article two, 14 of 18 Ghost-keyed person columns have no foreign key, and `opinion_map_self_read` compares Ghost ids to the JWT subject, so no Supabase Auth reader can see their own rows (`architect-05`). Second: "forming" is an archetype in the spec and `packages/core` and a confidence level on live (`architect-03`) | Most of what comes after the prototype | A debate each |
 | **2.5** | **The price rise trigger.** The membership page raises the price on the hundredth member; `legal` and `philosopher` ruled to publish a date. A third option nobody has argued: first hundred or one year, whichever comes first | The membership page. `exchange/open/2026-09-21-convener-04` | A sentence |
 | **2.6** | **The Underwriter price itself**, $50 against $100. Both seats support the ladder | The gifting rebuild and the Vercel licence | Free to decide |
@@ -54,7 +54,7 @@ Ranked by what they unblock. The first three are between you and publishing an a
 | **Charter badge:** grant `is_charter` unconditionally at checkout as today, and add a second marker for underwriters who also published, conferred after the writing and announced nowhere. The article requirement you asked about is legal only until payment goes live, and backfires psychologically if announced | `legal`, `philosopher` | `council/log/2026-09-20-charter-badge-and-price-ladder.md` |
 | **Price ladder:** publish the date. The hold clause ships either way | `legal`, `philosopher` | same |
 | **Closed the email leak.** You authorised it | You | Section 4 |
-| **Backup branch, not `main`.** You authorised it | You | Section 6 |
+| **Backup branch, not `main`.** You authorised it, on a reason that turned out false; see section 6 | You | Section 6 |
 | **Article schema, additive only**, identity left on `author_member_id`. `author_profile_id` added so readers can see author names without reopening the column `security` closed | `builder` | Three migrations, `20260921040353` onward |
 | **Fingerprint engine changes**, all tested in `packages/core`: the ring is a soft horizon rather than a clamp, the ring phase walks rather than marching so the spiral is gone, the noise field closes so the seam at zero degrees is gone, and purity finally drives saturation, which the engine and the live page both promised and neither did | `designer`, convener | `docs/FINGERPRINT.md` |
 | **Four stages of the recovered editor left out of `/write`**: polish-and-read, opinion-map inputs, the AI hint and topic buttons, feature photo upload. Not on the path from blank page to published article | `builder` | `apps/web/src/components/editor/README.md` |
@@ -96,10 +96,20 @@ Ranked by what they unblock. The first three are between you and publishing an a
 
 ## 6. Things worth knowing before you touch anything
 
-**Pushing `main` deploys to production.** Two Vercel projects are git-linked to this repo:
-`committee-api` builds `main` straight to production, and `dialecta`, your live production API,
-builds from this repo too. Its builds currently fail, which is the only reason production has not
-been replaced. That is why the night's work went to a backup branch.
+**Pushing `main` does not deploy to production, and I told you it did.** `vercel.json` on `main`
+sets `git.deploymentEnabled: false`, which landed 2026-09-20. The evidence it works is in Vercel's
+own record: every production deploy from `main` since then is CANCELED, and the three pushes of the
+backup branch tonight triggered no deployment on any project. I read the deployment list without
+reading `vercel.json`, saw git-linked projects building, and concluded a push would deploy. It
+would not. You chose the backup branch partly on that reason; the backup did its job regardless,
+and pushing `main` remains your call.
+
+**What is true, and is the real risk.** Branches cut from before 2026-09-20 still carry the old
+config and do build: the designer's `claude/jolly-dijkstra-03d6e7` built previews tonight, one of
+them against `dialecta`, your live API project, which failed and so replaced nothing. And
+`CLAUDE.md` records that P0-3 must flip `deploymentEnabled` back on before `apps/web` gets previews.
+**The day that flag flips, pushes to `main` start building production again.** That is the moment
+to be careful, not tonight.
 
 **Building in place breaks the dev server.** `npm run build` writes to the same `.next` folder the
 dev server is serving from, and it took every route to 500 twice tonight. Stop the server first, or

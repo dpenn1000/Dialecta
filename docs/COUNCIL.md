@@ -7,19 +7,19 @@
 | Seat | Bench | Model | Web | Writes | Notes | Sourced | Standing | Raised | Addressed |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `circulation` | advisory | sonnet | yes | yes | 12 | 8 (1w/7r) | 31 | 1 | 0 |
-| `designer` | advisory | sonnet | yes | yes | 19 | 19 (16w/3r) | 31 | 4 | 6 |
-| `legal` | advisory | opus | yes | yes | 25 | 24 (23w/1r) | 35 | 7 | 2 |
-| `philosopher` | advisory | opus | yes | yes | 13 | 13 (13w/0r) | 11 | 1 | 5 |
+| `designer` | advisory | sonnet | yes | yes | 19 | 19 (16w/3r) | 37 | 5 | 6 |
+| `legal` | advisory | opus | yes | yes | 34 | 33 (32w/1r) | 45 | 7 | 2 |
+| `philosopher` | advisory | opus | yes | yes | 17 | 17 (17w/0r) | 12 | 1 | 5 |
 | `security` | advisory | opus | yes | yes | 50 | 49 (46w/3r) | 32 | 4 | 4 |
-| `treasurer` | advisory | sonnet | yes | yes | 20 | 18 (13w/5r) | 64 | 4 | 4 |
+| `treasurer` | advisory | sonnet | yes | yes | 21 | 19 (14w/5r) | 64 | 4 | 4 |
 | `architect` | working | opus | yes | yes | 8 | 6 (3w/3r) | 16 | 2 | 0 |
-| `builder` | working | sonnet | yes | yes | 15 | 15 (10w/5r) | 21 | 2 | 11 |
-| `decider` | working | opus | yes | yes | 9 | 9 (7w/2r) | 22 | 2 | 21 |
+| `builder` | working | sonnet | yes | yes | 15 | 15 (10w/5r) | 24 | 2 | 11 |
+| `decider` | working | opus | yes | yes | 9 | 9 (7w/2r) | 22 | 2 | 22 |
 | `migrator` | working | sonnet | yes | yes | 16 | 15 (8w/7r) | 24 | 2 | 8 |
 | `reviewer` | working | opus | yes | yes | 17 | 17 (13w/4r) | 26 | 1 | 7 |
 | `spec-reader` | working | haiku | yes | yes | 11 | 10 (0w/10r) | 22 | 1 | 4 |
 | `voice-editor` | working | sonnet | yes | yes | 11 | 11 (1w/10r) | 17 | 2 | 1 |
-| **total** | 13 seats | | | | **226** | **214** | **352** | | |
+| **total** | 13 seats | | | | **240** | **228** | **372** | | |
 
 `Notes` is filed sources. `Sourced` is how many name a source it can be checked against, split into `w` for an external URL and `r` for a file in this repository cited with a version, a date or a commit. Both count: a seat whose job is spec conformance cites specs, and doing that with a commit SHA is stricter provenance than a link, not weaker. `Standing` is positions for an advisor, practices for a practitioner. `Raised` and `Addressed` count exchange records in each direction.
 
@@ -114,11 +114,11 @@
 | Model | sonnet |
 | Tools | `Read`, `Edit`, `Write`, `Grep`, `Glob`, `Bash`, `WebSearch`, `WebFetch`, `mcp__Claude_Browser__*`, `mcp__visualize__*` |
 | Research | 19 filed, 19 sourced (16 external, 3 from this repo) |
-| Reading list | 32 todo, 19 filed, 0 dead |
-| Positions | 31 |
+| Reading list | 38 todo, 19 filed, 0 dead |
+| Positions | 37 |
 | Charter | `council/designer/charter.md` |
 | Brief | `council/designer/brief.md` |
-| Exchange | raised 4, addressed 6 |
+| Exchange | raised 5, addressed 6 |
 
 **What it has read.** 19 filed in `council/designer/research/`.
 
@@ -144,7 +144,7 @@
 | [Rate limits](https://supabase.com/docs/guides/auth/auth-smtp) | P0-4 is blocked in a way the backlog does not record. Magic link sign-up cannot work at cutover on the default provider, because it will only deliver to organisation team members, at 2 em... |
 | [Understanding the scale](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale) | Names what is missing from Dialecta's tier tokens. Each tier carries `top`, `bot`, `border` and `text`, which is three chrome values and one ink value with nothing binding the ink to the ... |
 
-<details><summary>Still to read: 32 lead(s)</summary>
+<details><summary>Still to read: 38 lead(s)</summary>
 
 - Slashdot moderation and meta-moderation — Community classification of comments with a second layer judging the judges; direct precedent for reclassification
 - Hacker News moderation and ranking notes (dang's public comments, the HN guidelines) — Flat design, flag-based suppression, "assume good faith" copy; bears on the Breach tier UX
@@ -178,6 +178,12 @@
 - `Evercoder/culori` or `gka/chroma.js` — Would replace the hand-rolled CIEDE2000 in `tier-palette-audit.py` if the audit moves into CI
 - `dequelabs/axe-core` or `pa11y/pa11y` — The rendered-page half of D-18. Catches what a token file cannot, such as opacity on dimmed filter buttons
 - `system-fonts/modern-font-stacks`, CC0 — What Dialecta's four webfaces fall back to before they load, classified by typeface style
+- `microsoft/playwright`, Apache-2.0, 96,417 stars — The single highest-value addition. Real screenshots headlessly, breakpoint testing at 380px, and visual regression against the design spec. Turns "look at it" from a session-only act into something CI repeats
+- `uswds/uswds`, 7,198 stars — A public-sector design system with a published spacing and type token set and accessibility as a floor rather than a trade. The closest worked example of what D-15, D-20 and D-25 are asking for
+- `carbon-design-system/carbon`, Apache-2.0, 9,471 stars — The same, from IBM, with an explicit type scale and an 8px grid. Read alongside USWDS so the shape is drawn from two systems rather than one
+- `tabler/tabler-icons`, MIT, 21,740 stars — Over 6,100 icons under a clean MIT licence. Dialecta has seven bespoke tier icons and no general UI set, and the charter names iconography as this seat's
+- `adobe-fonts/source-serif`, OFL-1.1, 2,377 stars — Dialecta already uses Source Serif 4 as `--font-reading`. The upstream carries the optical sizes, which bear directly on D-16 and the measure
+- `rough-stuff/rough`, MIT, 21,190 stars — Hand-drawn, sketchy graphics. Flagged as a lead to check against the aesthetic, not as a recommendation
 
 </details>
 
@@ -199,31 +205,38 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 25 filed, 24 sourced (23 external, 1 from this repo), 1 unsourced |
+| Research | 34 filed, 33 sourced (32 external, 1 from this repo), 1 unsourced |
 | Reading list | 23 todo, 22 filed, 3 dead |
-| Positions | 35 |
+| Positions | 45 |
 | Charter | `council/legal/charter.md` |
 | Brief | `council/legal/brief.md` |
 | Exchange | raised 7, addressed 2 |
 
-**What it has read.** 25 filed in `council/legal/research/`.
+**What it has read.** 34 filed in `council/legal/research/`.
 
 | Source | What it changes here |
 | --- | --- |
 | [Consent as a complete defence to defamation, and the limit that decides how far it goes](https://www.justia.com/trials-litigation/docs/caci/1700/1721/) | **That last sentence describes Dialecta's comment flow almost exactly.** A contributor writes a |
+| [Godbehere v. Phoenix Newspapers: Arizona's false light tort, and the true record that misleads](https://www.dmlp.org/legal-guide/arizona-false-light.) | **It is the tort shaped like the fingerprint's defects.** Defamation asks whether a statement is |
 | [Milkovich v. Lorain Journal: there is no opinion label that saves a statement](https://www.law.cornell.edu/supremecourt/text/497/1) | **A disclaimer is worth close to nothing, and this is the correction to make whenever someone |
 | [Yetman v. English: Arizona's fact/opinion line for defamation](https://www.azbar.org/media/p0onmoso/defamation-2015.pdf`) | Arizona does not appear to hold a stronger or weaker fact/opinion line than the general First |
+| [Douglas v. Talk America: you cannot change the deal by editing the page](https://caselaw.findlaw.com/court/us-9th-circuit/1307125.html) | **Binding in Dialecta's circuit.** Arizona is in the Ninth. This is not persuasive authority, |
 | Fair Housing Council v. Roommates.com: the Ninth Circuit's material-contribution test | This is now the more naturally controlling circuit authority for Dialecta's own Section 230 |
 | [Roommates.com: material contribution to unlawfulness, and why Stage 2 survives it](https://cdn.ca9.uscourts.gov/datastore/opinions/2008/04/02/0456916.pdf) | **Stage 2 self-declaration is structurally the Roommates questionnaire, and it survives anyway.** |
+| [ROSCA: the three things a recurring charge owes, and they are in force](https://www.law.cornell.edu/uscode/text/15/8403) | **Sequence, not content, is the binding part of requirement one.** The material terms have to be |
+| [California's minor content removal law](https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22581) | **The one US deletion right this tree has found that ignores platform size.** It turns on actual |
 | [DMLP on CDA immunity: mixed content is the unlit part of the map](https://www.dmlp.org/legal-guide/immunity-online-publishers-under-communications-decency-act) | Dialecta being small does not put it outside 230, and it does not put it outside a lawsuit |
 | [DMLP on publishing others' content: your commentary is yours](https://www.dmlp.org/legal-guide/publishing-statements-and-content-others) | The rule splits Dialecta's comment card into two publications on one surface. The comment body |
 | [Nguyen v. Barnes and Noble: a link to the terms is not agreement to the terms](https://en.wikipedia.org/wiki/Nguyen_v._Barnes_%26_Noble,_Inc.) | P0-D2 decides the sign-up flow, and this decides one thing inside it. If Dialecta ever wants to |
+| [GDPR Articles 17 and 21: erasure, and the right to object to profiling](https://gdpr-info.eu/art-17-gdpr/) | **None of this applies unless the GDPR does.** `security`'s territorial scope note finds the |
 | [A.R.S. Section 12-751: Arizona's anti-SLAPP, and the motive test that blunts it](https://www.azleg.gov/ars/12/00751.htm) | **This does not restore the cheap early exit that Section 230 would have provided, and it |
 | [A.R.S. Section 18-552: Arizona breach notification, and the economic loss trigger](https://www.azleg.gov/ars/18/00552.htm) | **Forty-five days from determination, not sixty.** Connecticut's clock is sixty days from |
 | [Counterman v. Colorado: the speaker's state of mind, and what Breach is not](https://www.law.cornell.edu/supremecourt/text/22-138) | Breach is not a finding of a true threat and should never be described as one. The tier is |
 | [CRS on algorithmic recommendations: the courts that went the other way](https://www.everycrsreport.com/reports/R47753.html) | This is the case for the other side of the tier label question, and it should be argued at full |
 | [Anderson v. TikTok: a platform's own output is first-party speech and Section 230 does not reach it](https://www2.ca3.uscourts.gov/opinarch/223061p.pdf) | This is the strongest appellate support for treating Dialecta's classifier output as the |
 | [CRS on Section 230: a label the website adds is not covered by the shield](https://www.everycrsreport.com/files/2024-01-04_R46751_9fa55d4913ef4d0ce4a81cb34dedf3333782a277.html) | This is the closest thing to a direct answer on the question the `legal` charter was created |
+| [New York GBL 527-a: the statute that already knows what a price ladder is](https://www.nysenate.gov/legislation/laws/GBS/527-A) | **A published, dated price ladder is the disclosure this statute asks for, not a risk it |
+| [California's automatic renewal law after AB 2863: consent to renewal is its own step](https://ktslaw.com/en/insights/alert/2024/10/california-latest-automatic-renewal-law-amendments-take-effect-in-july-2025) | **The Pact cannot carry the renewal consent, and this is the sharpest version of that finding.** |
 | [Public Act 25-113: the amended CTDPA text, read for whether a fingerprint is sensitive data](https://www.cga.ct.gov/2025/act/pa/pdf/2025PA-00113-R00SB-01295-PA.pdf) | **The six pillars and the archetype are not sensitive data.** The list at Section 42-515(39) is |
 | [18 U.S.C. Section 2258A: the one mandatory report, and what it does not require](https://www.law.cornell.edu/uscode/text/18/2258A) | This is the one reporting duty that does not care that Dialecta has fourteen members, and the |
 | [47 U.S.C. Section 230: the operative text, and the clause a tier badge lands on](https://www.law.cornell.edu/uscode/text/47/230) | A contributor's comment text is information provided by another information content provider. |
@@ -233,6 +246,8 @@
 | [Connecticut Attorney General on the CTDPA: who enforces it, and for how much](https://portal.ct.gov/ag/sections/privacy/the-connecticut-data-privacy-act) | No private right of action is the single most useful fact about Connecticut exposure for a |
 | [Doe 1 v. Meta: the Ninth Circuit declines to follow Anderson, in Dialecta's own forum](https://blog.ericgoldman.org/archives/2026/05/ninth-circuit-panel-goes-out-of-its-way-to-question-section-230-doe-v-meta.htm) | **This is the controlling forum and it goes the other way from Anderson.** Dialecta is operated |
 | [EFF on Section 230: it covers the smallest comment section, and it has edges](https://www.eff.org/issues/cda230) | The best argument that Dialecta's whole moderation apparatus is ordinary is here: a small |
+| [The Arizona Consumer Fraud Act, and the clause that imports FTC deception law into state law](https://codes.findlaw.com/az/title-44-trade-and-commerce/az-rev-st-sect-44-1522/) | **This is the statute a founding-price promise actually lives under, not a privacy law and not |
+| [The FTC click-to-cancel rule is vacated, and what replaced it is a question, not a rule](https://www.federalregister.gov/documents/2026/03/13/2026-04952/rule-concerning-the-use-of-prenotification-negative-option-plans) | **Do not design to the click-to-cancel rule, and do not ignore what it asked for.** It is not |
 | [Van Dort on the reporting gap: no US law makes a platform report a credible threat](https://journals.law.umn.edu/mjlst/2026/03/24/closing-the-reporting-gap-building-a-legal-framework-for-reporting-serious-online-threats) | Dialecta owes no duty to report a threat. The Breach tier can fire, the comment can be |
 | [Wiley Rein on the 2026 CTDPA amendments: the thresholds, and a profiling duty with a date on it](https://www.wiley.law/alert-Major-Changes-to-Connecticut-Consumer-Privacy-Law-Will-Take-Effect-July-1-2026) | The alert is right on the three triggers and right that the sensitive data trigger has no |
 
@@ -276,23 +291,27 @@
 | --- | --- |
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 13 filed, 13 sourced (13 external, 0 from this repo) |
-| Reading list | 17 todo, 11 filed, 0 dead |
-| Positions | 11 |
+| Research | 17 filed, 17 sourced (17 external, 0 from this repo) |
+| Reading list | 19 todo, 13 filed, 0 dead |
+| Positions | 12 |
 | Charter | `council/philosopher/charter.md` |
 | Brief | `council/philosopher/brief.md` |
 | Exchange | raised 1, addressed 5 |
 
-**What it has read.** 13 filed in `council/philosopher/research/`.
+**What it has read.** 17 filed in `council/philosopher/research/`.
 
 | Source | What it changes here |
 | --- | --- |
+| [A Meta-Analytic Review of Experiments Examining the Effects of Extrinsic Rewards on Intrinsic Motivation](https://home.ubalt.edu/tmitch/642/articles%20syllabus/Deci%20Koestner%20Ryan%20meta%20IM%20psy%20bull%2099.pdf) | Splits the Charter badge question along a line that is not about tone. An announced condition ("write three articles this year and the badge locks") is an expected, tangible, completion-c... |
 | [Effort for Payment: A Tale of Two Markets](https://journals.sagepub.com/doi/abs/10.1111/j.0956-7976.2004.00757.x) | Directly answers the mechanism half of `treasurer`'s blindspot (`exchange/open/2026-09-19-002-blindspot-membership-intrinsic-motivation.md`): paying for a Dialecta membership, even $50 a ... |
+| [Moral Emotions and Moral Behavior](https://www.annualreviews.org/content/journals/10.1146/annurev.psych.56.091103.070145) | **The fingerprint, on "the good, bad and ugly."** Dan wants the bad on the mark and does not want it to shame. This source says the two are compatible exactly when the bad reads as someth... |
 | [Psychological Reactance and Promotional Health Messages: The Effects of Controlling Language, Lexical Concreteness, and the Restoration of Freedom](https://doi.org/10.1111/j.1468-2958.2007.00297.x) | Dialecta's rule that every commenter message below Breach ends with the door open (Founding Philosophy Article 4, Editorial Voice v1.2) is a restoration postscript. This is the study behi... |
+| [Steering User Behavior with Badges](https://www.cs.cornell.edu/home/kleinber/www13-badges.pdf) | This is the measured version of the platform's own source thesis, on the exact instrument under discussion. Article 8 says whatever a system rewards, people adapt toward. A badge with a c... |
 | [Broadcasting and Narrowcasting: How Audience Size Affects What People Share](https://doi.org/10.1509/jmr.13.0238) | The charter names "the audience effect" as a bias the classification card triggers. On this evidence it does not, and the effect belongs somewhere else. The card is a narrowcast: the engi... |
 | [Understanding Psychological Reactance: New Developments and Findings](https://pmc.ncbi.nlm.nih.gov/articles/PMC4675534/) | Reactance is the best supported of the four biases the charter names for the classification card, and the card is a textbook trigger: an unrequested judgment of a person's own words, deli... |
 | [Digital Social Norm Enforcement: Online Firestorms in Social Media](https://doi.org/10.1371/journal.pone.0155923) | Bears directly on P0-D2, which asks about login methods and whether sign-up is open or invite-only at cutover. Any argument that identity verification will lift discourse quality has this... |
 | [Emotion shapes the diffusion of moralized content in social networks](https://doi.org/10.1073/pnas.1618923114) | This is the mechanism the Founding Philosophy describes when it says the dominant platforms reward outrage, measured rather than asserted. The Heat and Stance tiers name the behavior this... |
+| [Reviewer bias in single- versus double-blind peer review](https://www.pnas.org/doi/10.1073/pnas.1707323114) | **The byline mark.** Community voting is 35 percent of a comment's classification (root `CLAUDE.md`). The comment card already carries the author's archetype tag in its header and the vot... |
 | [The Loss of Loss Aversion: Will It Loom Larger Than Its Gain?](https://doi.org/10.1002/jcpy.1047) | The charter names "loss aversion around tier" as a bias the classification card triggers. This source says that cannot be assumed. Of the four candidates the charter lists, this is the we... |
 | [Preventing harassment and increasing group participation through social norms in 2,190 online science discussions](https://www.pnas.org/doi/10.1073/pnas.1813486116) | This is the evidence `designer` asked for in `exchange/open/2026-09-19-003-blindspot-composer-gate-against-first-comment.md`: a low-friction signal of what is expected can do real cultura... |
 | [How behavioural sciences can promote truth, autonomy and democratic discourse online](https://doi.org/10.1038/s41562-020-0889-7) | The nudge and boost distinction is the sharpest tool this council has for testing a Dialecta feature against Article 2 of the Founding Philosophy, which says the AI must reflect, describe... |
@@ -301,7 +320,7 @@
 | [Shifting attention to accuracy can reduce misinformation online](https://doi.org/10.1038/s41586-021-03344-2) | This is the closest published analogue to the classification card, and it locates the mechanism precisely. The card works, to the extent it works, by putting attention on quality at the m... |
 | [Birdwatch: Crowd Wisdom and Bridging Algorithms can Inform Understanding and Reduce the Spread of Misinformation](https://arxiv.org/abs/2210.15723) | This is the answer to the hole that Brady et al. (2017) opens in community voting. Bridging-based ranking is built for the exact failure where one faction can carry a vote internally, bec... |
 
-<details><summary>Still to read: 17 lead(s)</summary>
+<details><summary>Still to read: 19 lead(s)</summary>
 
 - Vosoughi, Roy, Aral (2018), "The spread of true and false news online", Science — Novelty and emotion drive spread more than truth; bears on what the front page rewards
 - Bail et al. (2018), "Exposure to opposing views on social media can increase political polarization", PNAS — Cross-cutting exposure backfires without structure; bears on the Advocate mechanic and opinion maps
@@ -320,6 +339,8 @@
 - Dietvorst, Simmons, Massey (2015), "Algorithm aversion: people erroneously avoid algorithms after seeing them err", Journal of Experimental Psychology: General — Unverified lead. If it holds, one visibly wrong classification costs more trust than many right ones earn, which would make the borderline flag and the community re-review path load bearing rather than nice to have
 - Pennycook, Bear, Collins, Rand (2020), the implied truth effect, Management Science — Unverified lead. If attaching a warning to some items makes the unlabelled ones look more credible, then tiering every comment rather than only the poor ones is an advantage Dialecta already has and has never named
 - Cho, Kim, Acquisti (2012), empirical analysis of the Korean real name policy — Unverified lead. The natural experiment counterpart to Rost et al. (2016). Bears on P0-D2 and on any future argument for verified identity
+- Gneezy and Rustichini (2000), "A Fine Is a Price", Journal of Legal Studies — Unverified lead. The daycare late-pickup study. If it holds as remembered, a penalty attached to a social obligation reprices it and the effect persists after the penalty is withdrawn, which would bear on any clawback or condition attached to a founding commitment
+- Grossman (1981) and Milgrom (1981), the unravelling result in voluntary disclosure — Unverified lead. The formal account of why, in a small and enumerable population, the absence of a favourable mark becomes informative on its own. Would put a mechanism under the claim that a missing badge reads as a penalty once the cohort is countable
 
 </details>
 
@@ -441,14 +462,14 @@
 | --- | --- |
 | Model | sonnet |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
-| Research | 20 filed, 18 sourced (13 external, 5 from this repo), 2 unsourced |
+| Research | 21 filed, 19 sourced (14 external, 5 from this repo), 2 unsourced |
 | Reading list | 18 todo, 12 filed, 3 dead |
 | Positions | 64 |
 | Charter | `council/treasurer/charter.md` |
 | Brief | `council/treasurer/brief.md` |
 | Exchange | raised 4, addressed 4 |
 
-**What it has read.** 20 filed in `council/treasurer/research/`.
+**What it has read.** 21 filed in `council/treasurer/research/`.
 
 | Source | What it changes here |
 | --- | --- |
@@ -463,6 +484,7 @@
 | [Ghost(Pro) and Magic Pages: what leaving Ghost saves](https://ghost.org/pricing/) | ADR-001 (leave Ghost) is right for reasons that are not financial. The cash saving is $180/year at best and turns negative once the newsletter outgrows 100 sends a day. Nobody should defe... |
 | Medium Partner Program: the pooled-payout model and what it rewards | **This is the model Dialecta must not adopt, and the treasurer's objection is arithmetic before it is philosophical.** A pooled payout makes contributor cost scale linearly with contribut... |
 | [Patreon and Ko-fi: patronage fee structures](https://www.patreon.com/pricing) | Patreon's 10 percent is the same rate as Substack's and it buys less that Dialecta needs, since Dialecta already has its own site, auth and member table. Routing money through Patreon wou... |
+| [Prolific: participant pay and platform fee](https://www.prolific.com/pricing) | Dialecta has no academic or non-profit standing on file, so the standard 42.8 percent fee is |
 | [Resend: email pricing tiers and the daily cap](https://resend.com/pricing) | Resend is $0 until Dialecta has more than 100 people to email at once. That is the bend in the email cost curve, and it arrives at about 100 members rather than at any traffic number. |
 | Search for the prior subscription model plan: where it is not | **The 2026-09-19 claim was under-evidenced and the conclusion has now survived a real search.** Nothing changes in `../positions/monetization.md`, but the confidence behind "no ADR and no... |
 | [Stripe: processing fees, and why the fixed 30 cents decides the billing period](https://stripe.com/pricing) | **Bill annually, not monthly.** This is the single most concrete thing the treasurer can say about monetization, it costs nothing to implement, and it is worth more than any plausible opt... |
@@ -513,7 +535,7 @@
 | | |
 | --- | --- |
 | Model | opus |
-| Tools | `Read`, `Grep`, `Glob`, `Bash`, `Write`, `WebSearch`, `WebFetch` |
+| Tools | `Read`, `Grep`, `Glob`, `Bash`, `Write`, `WebSearch`, `WebFetch`, `mcp__supabase-dialecta-ro__*`, `mcp__dialecta-local-research__*`, `mcp__Claude_Browser__*`, `mcp__c15a8921-c7da-4dd0-bd48-11c142545139__list_tables`, `mcp__c15a8921-c7da-4dd0-bd48-11c142545139__list_migrations`, `mcp__c15a8921-c7da-4dd0-bd48-11c142545139__list_extensions`, `mcp__c15a8921-c7da-4dd0-bd48-11c142545139__get_advisors`, `mcp__c15a8921-c7da-4dd0-bd48-11c142545139__query_logs`, `mcp__c15a8921-c7da-4dd0-bd48-11c142545139__get_project`, `mcp__c15a8921-c7da-4dd0-bd48-11c142545139__list_edge_functions`, `mcp__c15a8921-c7da-4dd0-bd48-11c142545139__get_edge_function`, `mcp__c15a8921-c7da-4dd0-bd48-11c142545139__generate_typescript_types`, `mcp__c15a8921-c7da-4dd0-bd48-11c142545139__search_docs`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__list_projects`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__get_project`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__list_deployments`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__get_deployment`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__list_deployment_files`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__get_deployment_file_contents`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__list_deployment_events`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__get_runtime_logs`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__get_runtime_errors`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__list_project_domains`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__list_deployment_aliases`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__list_check_runs`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__get_deployment_check_run`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__get_git_deployment_context`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__list_project_routes`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__get_firewall_config`, `mcp__43ee893a-027f-4b27-8728-9c01d5b77e05__search_vercel_documentation` |
 | Research | 8 filed, 6 sourced (3 external, 3 from this repo), 2 unsourced |
 | Reading list | 0 todo, 0 filed, 0 dead (**no reading list**) |
 | Practices | 16 |
@@ -548,7 +570,7 @@
 | Tools | `Read`, `Edit`, `Write`, `Bash`, `Grep`, `Glob`, `WebSearch`, `WebFetch` |
 | Research | 15 filed, 15 sourced (10 external, 5 from this repo) |
 | Reading list | 3 todo, 12 filed, 0 dead |
-| Practices | 21 |
+| Practices | 24 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/builder/brief.md` |
 | Exchange | raised 2, addressed 11 |
@@ -598,7 +620,7 @@
 | Practices | 22 |
 | Charter | none, mandate lives in the agent file |
 | Brief | `team/decider/brief.md` |
-| Exchange | raised 2, addressed 21 |
+| Exchange | raised 2, addressed 22 |
 
 **What it has read.** 9 filed in `team/decider/knowledge/`.
 

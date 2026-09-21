@@ -4,6 +4,10 @@
       "command": "node",
       "args": ["tools/local-research/server.mjs"],
       "env": {}
+    },
+    "supabase-dialecta-ro": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=mguulnibvzusfvyuowwh&read_only=true&features=database,debugging,docs"
     }
   }
 }

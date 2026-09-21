@@ -93,6 +93,7 @@ scripts/          voice_check.py, extract-tokens.mjs, import-ghost.mjs, install-
 
 ## Working conventions
 
+- **Seats propose; the convener changes.** Dan, 2026-09-21: "The team agents shouldn't make changes on their own without going through the channels." A seat writes inside its own folder and in `exchange/`, and nowhere else on its own initiative. A change to the database, to Vercel, to GitHub, or to any file outside the seat's folder goes to the convener as an `exchange/` record naming the file, the line and the fix. The convener writes it, or dispatches the seat that should with an explicit brief. A seat briefed by the convener to make a specific change is going through the channel; a seat deciding on its own to make one is not. The convener holds write access and is answerable for every change landing.
 - Small, surgical edits. Tables over prose for status reports.
 - When a spec changes, update `docs/Dialecta_Project_Index.md` in the same change.
 - Handoffs go in `docs/handoffs/dialecta-handoff-YYYY-MM-DD-suffix.md`, write-once.
