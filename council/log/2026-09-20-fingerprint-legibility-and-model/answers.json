@@ -1,0 +1,398 @@
+{
+  "_what": "Every reader answer from the 2026-09-20 fingerprint reading test, exactly as returned. Readers were fresh general-purpose agents given only the named files. Descriptions 1 to 7 are in the prompts; truth is 1 Marcus Aurel, 2 Father Anselm, 3 Ivy Chen, 4 Tom Reilly, 5 Wen Zhao, 6 Dolores Vance, 7 Priya Raman.",
+  "descriptions": {
+    "1": "Argues constantly and well, and concedes almost nothing.",
+    "2": "Shows up every week without fail and states the other side better than the other side does. Never heated.",
+    "3": "Brand new. Writing about one subject, and already getting into arguments.",
+    "4": "Has only ever written about one thing and argues about it often, for years.",
+    "5": "Precise, careful about how much certainty a claim can carry, and narrow on purpose. Started in science and moved to the philosophy underneath it.",
+    "6": "Arrived angry and learned. The heat is all in the early years and the recent work is calm.",
+    "7": "Five subjects and counting. Broad rather than deep, and generous with opposing views."
+  },
+  "keys": {
+    "shipped": {
+      "A": 7,
+      "B": 5,
+      "C": 2,
+      "D": 6,
+      "E": 3,
+      "F": 1,
+      "G": 4
+    },
+    "specified": {
+      "A": 7,
+      "B": 1,
+      "C": 2,
+      "D": 5,
+      "E": 6,
+      "F": 4,
+      "G": 3
+    },
+    "ledger": {
+      "A": 5,
+      "B": 3,
+      "C": 2,
+      "D": 6,
+      "E": 7,
+      "F": 1,
+      "G": 4
+    },
+    "small_ring_64px": {
+      "A": 4,
+      "B": 2,
+      "C": 6,
+      "D": 1,
+      "E": 5,
+      "F": 3,
+      "G": 7
+    },
+    "small_field_64px": {
+      "A": 4,
+      "B": 3,
+      "C": 7,
+      "D": 5,
+      "E": 1,
+      "F": 2,
+      "G": 6
+    }
+  },
+  "conditions": {
+    "shipped_ring_legend_330px": [
+      {
+        "answer": "A=7 B=6 C=2 D=5 E=3 F=1 G=4",
+        "correct": 5,
+        "confidence": 8,
+        "tool_uses": 29,
+        "note": "measured the image with code; wrote crops and polar unwraps to the scratchpad"
+      },
+      {
+        "answer": "A=7 B=5 C=2 D=6 E=3 F=1 G=4",
+        "correct": 7,
+        "confidence": 7,
+        "tool_uses": 2
+      },
+      {
+        "answer": "A=7 B=5 C=2 D=6 E=3 F=1 G=4",
+        "correct": 7,
+        "confidence": 6,
+        "tool_uses": 2
+      }
+    ],
+    "specified_ring_legend_330px": [
+      {
+        "answer": "A=7 B=1 C=2 D=5 E=6 F=4 G=3",
+        "correct": 7,
+        "confidence": 8,
+        "tool_uses": 9,
+        "note": "measured the image with code"
+      },
+      {
+        "answer": "A=7 B=4 C=2 D=5 E=6 F=1 G=3",
+        "correct": 5,
+        "confidence": 6,
+        "tool_uses": 2
+      },
+      {
+        "answer": "A=7 B=6 C=2 D=5 E=1 F=4 G=3",
+        "correct": 5,
+        "confidence": 7,
+        "tool_uses": 2
+      }
+    ],
+    "shipped_ring_no_legend_330px": [
+      {
+        "answer": "A=7 B=5 C=2 D=6 E=3 F=4 G=1",
+        "correct": 5,
+        "confidence": 5,
+        "tool_uses": 2
+      },
+      {
+        "answer": "A=7 B=2 C=5 D=6 E=3 F=1 G=4",
+        "correct": 5,
+        "confidence": 6,
+        "tool_uses": 2
+      },
+      {
+        "answer": "A=7 B=2 C=5 D=6 E=3 F=1 G=4",
+        "correct": 5,
+        "confidence": 5,
+        "tool_uses": 2
+      }
+    ],
+    "ledger_legend_330px": [
+      {
+        "answer": "A=5 B=3 C=2 D=6 E=7 F=1 G=4",
+        "correct": 7,
+        "confidence": 7,
+        "tool_uses": 2
+      },
+      {
+        "answer": "A=5 B=3 C=2 D=6 E=7 F=1 G=4",
+        "correct": 7,
+        "confidence": 7,
+        "tool_uses": 3
+      },
+      {
+        "answer": "A=5 B=3 C=2 D=6 E=7 F=1 G=4",
+        "correct": 7,
+        "confidence": 8,
+        "tool_uses": 2
+      }
+    ],
+    "shipped_ring_legend_64px": [
+      {
+        "answer": "A=1 B=2 C=7 D=5 E=6 F=3 G=4",
+        "correct": 2,
+        "confidence": 3,
+        "tool_uses": 2
+      },
+      {
+        "answer": "A=1 B=6 C=7 D=5 E=2 F=3 G=4",
+        "correct": 1,
+        "confidence": 4,
+        "tool_uses": 2
+      },
+      {
+        "answer": "A=1 B=6 C=2 D=5 E=4 F=3 G=7",
+        "correct": 2,
+        "confidence": 3,
+        "tool_uses": 2
+      }
+    ],
+    "ledger_field_legend_64px": [
+      {
+        "answer": "A=4 B=3 C=7 D=5 E=1 F=2 G=6",
+        "correct": 7,
+        "confidence": 3,
+        "tool_uses": 2,
+        "note": "flagged F and G as a coin flip"
+      },
+      {
+        "answer": "A=4 B=3 C=7 D=5 E=1 F=2 G=6",
+        "correct": 7,
+        "confidence": 3,
+        "tool_uses": 2,
+        "note": "flagged F and G as a coin flip"
+      },
+      {
+        "answer": "A=4 B=3 C=7 D=5 E=1 F=2 G=6",
+        "correct": 7,
+        "confidence": 3,
+        "tool_uses": 3
+      }
+    ]
+  },
+  "single_mark_free_description": {
+    "_what": "One reader per mark, shipped ring render at 330px with the ring legend, nothing to compare against. Three blind scorers then matched the seven DESCRIPTION texts, shuffled as P to V, to the seven true descriptions.",
+    "readers": {
+      "Ivy Chen": {
+        "file": "MARK-sxxbzr.png",
+        "description": "They're new here and stick to one topic, having switched off an earlier one almost right away. They're fair to the other side and will lay out the opposing view properly before pushing back. Lately their arguments have run hot, and few people have engaged with them yet.",
+        "strongest": "Magnanimity",
+        "weakest": "Reach",
+        "heat": "recent",
+        "subjects": "changed once",
+        "tenure": "new",
+        "confidence": 5
+      },
+      "Marcus Aurel": {
+        "file": "MARK-gpuiea.png",
+        "description": "They'll stay in an argument with you as long as it takes, and they've been showing up regularly for years. They rarely state your side fairly before going after it, and they often sound surer than their evidence. They started out on one topic, moved to another, and lately their exchanges have been running hot.",
+        "strongest": "Discourse",
+        "weakest": "Magnanimity",
+        "heat": "recent",
+        "subjects": "changed once",
+        "tenure": "long",
+        "confidence": 5
+      },
+      "Wen Zhao": {
+        "file": "MARK-dnbizs.png",
+        "description": "They make precise, checkable points and don't sound surer than their evidence allows. They've shown up steadily on the same subject for a long time, but they tend to make their point and move on, and they don't often lay out the other side's case first. Lately they've been running hotter than they used to.",
+        "strongest": "Calibration",
+        "weakest": "Reach",
+        "heat": "recent",
+        "subjects": "one",
+        "tenure": "long",
+        "confidence": 6
+      },
+      "Priya Raman": {
+        "file": "MARK-dyzghy.png",
+        "description": "They'll write about almost anything, and they've moved well past the topic they started on, but their points can be loose and hard to pin down. They show up regularly and usually treat your side fairly before they disagree, though they don't always stick around for a long back and forth. They ran hot early on and have mostly cooled off since.",
+        "strongest": "Reach",
+        "weakest": "Acuity",
+        "heat": "early",
+        "subjects": "many",
+        "tenure": "a year or so",
+        "confidence": 5
+      },
+      "Father Anselm": {
+        "file": "MARK-bhkuvw.png",
+        "description": "They've been around a long time and show up regularly, and they'll lay out your side fairly before they push back on it. Their points can be hard to pin down, though, and they don't often stay for a long back-and-forth. They moved from one topic to another along the way, and lately their arguments have been getting heated.",
+        "strongest": "Consistency",
+        "weakest": "Acuity",
+        "heat": "recent",
+        "subjects": "changed once",
+        "tenure": "long",
+        "confidence": 5
+      },
+      "Dolores Vance": {
+        "file": "MARK-qhhakv.png",
+        "description": "They've been around a long time and show up like clockwork, and their points are usually sharp and stated with about as much confidence as the evidence supports. They don't tend to stay for a long back-and-forth; they make their case and move on. They ran hot early on but have cooled off since, and they've moved from the topic they started on to a different one that's now their main thing.",
+        "strongest": "Consistency",
+        "weakest": "Discourse",
+        "heat": "early",
+        "subjects": "changed once",
+        "tenure": "long",
+        "confidence": 6
+      },
+      "Tom Reilly": {
+        "file": "MARK-yfmyym.png",
+        "description": "They've been around a long time, they show up like clockwork, and they only ever write about one thing. Their points are sharp and specific, and they'll stick around to argue them out, but they rarely give the other side a fair hearing first. Lately they've been running hot.",
+        "strongest": "Consistency",
+        "weakest": "Reach",
+        "heat": "recent",
+        "subjects": "one",
+        "tenure": "long",
+        "confidence": 6
+      }
+    },
+    "scorer_order": {
+      "P": "Tom Reilly",
+      "Q": "Wen Zhao",
+      "R": "Ivy Chen",
+      "S": "Dolores Vance",
+      "T": "Marcus Aurel",
+      "U": "Father Anselm",
+      "V": "Priya Raman"
+    },
+    "scorers": [
+      {
+        "answer": "P=4 Q=5 R=3 S=6 T=1 U=2 V=7",
+        "correct": 7,
+        "confidence": 7
+      },
+      {
+        "answer": "P=4 Q=5 R=3 S=6 T=1 U=2 V=7",
+        "correct": 7,
+        "confidence": 8,
+        "note": "observed that all seven notes report heat at some point, so whichever note is matched to 2 must contradict Never heated"
+      },
+      {
+        "answer": "P=4 Q=5 R=3 S=6 T=1 U=2 V=7",
+        "correct": 7,
+        "confidence": 7
+      }
+    ]
+  },
+  "single_mark_fixed_render": {
+    "_what": "The single-mark condition rerun after the rebuttals, on fixed_render.py: the shipped render with designer's two noise fixes composed (floor gated on turbulence at the rim, amplitude over the axis's own rim extent at the core) and nothing else changed. Same legend, same prompt, fresh readers, fresh file names. Three blind scorers matched the notes, shuffled as P to V.",
+    "readers": {
+      "Ivy Chen": {
+        "file": "FIXED-sypiyp.png",
+        "description": "They're new here and haven't built much of a record yet, but they'll stay in a thread and keep trading replies with you instead of dropping a take and leaving. They rarely lay out your side fairly before going after it. They spent a short first stretch on one topic, switched to another and stuck with it, and their recent exchanges have run a little hot.",
+        "strongest": "Discourse",
+        "weakest": "Magnanimity",
+        "heat": "recent",
+        "subjects": "changed once",
+        "tenure": "new",
+        "confidence": 4
+      },
+      "Marcus Aurel": {
+        "file": "FIXED-ysdfew.png",
+        "description": "They show up all the time and will keep trading replies in a thread long after most people have wandered off, and their points are usually specific enough to pin down. They rarely lay out the other side's case fairly before going after it, and I wouldn't take how sure they sound as a guide to how right they are. Lately, arguing with them has been getting heated.",
+        "strongest": "Consistency",
+        "weakest": "Magnanimity",
+        "heat": "recent",
+        "subjects": "changed once",
+        "tenure": "long",
+        "confidence": 5
+      },
+      "Wen Zhao": {
+        "file": "FIXED-gbxvcx.png",
+        "description": "They make tight, specific points you can actually pin down, and they never sound surer than their evidence allows. They show up often, stay on the one topic they know, and keep their cool. Don't expect them to lay out your side before answering it, or to stick around for a long back-and-forth.",
+        "strongest": "Acuity",
+        "weakest": "Reach",
+        "heat": "none",
+        "subjects": "one",
+        "tenure": "long",
+        "confidence": 5
+      },
+      "Priya Raman": {
+        "file": "FIXED-zaoqfn.png",
+        "description": "They've been around a long time, turn up constantly, and will weigh in on almost anything; they started out on one main topic and later moved to another. They're fair to your side and will stay for the back-and-forth, but their points tend to be loose and hard to pin down. Lately their arguments have been running hot.",
+        "strongest": "Reach",
+        "weakest": "Acuity",
+        "heat": "recent",
+        "subjects": "changed once",
+        "tenure": "long",
+        "confidence": 6
+      },
+      "Father Anselm": {
+        "file": "FIXED-gofcld.png",
+        "description": "They've been around for ages and show up like clockwork, and they'll give your side a fair hearing without claiming more than they can back up. Don't expect a long back-and-forth, though: they make a broad point and move on, so it's hard to pin down exactly what they're claiming. They've switched to a new topic lately, and it's been getting heated.",
+        "strongest": "Consistency",
+        "weakest": "Discourse",
+        "heat": "recent",
+        "subjects": "changed once",
+        "tenure": "long",
+        "confidence": 5
+      },
+      "Dolores Vance": {
+        "file": "FIXED-gmkyim.png",
+        "description": "When they say they're sure, they usually have the evidence to back it, and their points are sharp enough to pin down. They make their case and move on instead of sticking around for a long back-and-forth, and they don't always give the other side a fair hearing first. They've shown up steadily for a long time, switched topics once along the way, and lately they've been running hot.",
+        "strongest": "Calibration",
+        "weakest": "Discourse",
+        "heat": "recent",
+        "subjects": "changed once",
+        "tenure": "long",
+        "confidence": 5
+      },
+      "Tom Reilly": {
+        "file": "FIXED-froeth.png",
+        "description": "They've been around for ages. They show up like clockwork and stay for the whole back and forth, and their points are specific enough to hold them to. They stick to one topic, rarely lay out your side fairly before going after it, and lately they've been running hotter than they used to.",
+        "strongest": "Consistency",
+        "weakest": "Reach",
+        "heat": "recent",
+        "subjects": "one",
+        "tenure": "long",
+        "confidence": 6
+      }
+    },
+    "scorer_order": {
+      "P": "Dolores Vance",
+      "Q": "Ivy Chen",
+      "R": "Father Anselm",
+      "S": "Tom Reilly",
+      "T": "Wen Zhao",
+      "U": "Priya Raman",
+      "V": "Marcus Aurel"
+    },
+    "key": {
+      "P": 6,
+      "Q": 3,
+      "R": 2,
+      "S": 4,
+      "T": 5,
+      "U": 7,
+      "V": 1
+    },
+    "scorers": [
+      {
+        "answer": "P=5 Q=3 R=2 S=4 T=6 U=7 V=1",
+        "correct": 5,
+        "confidence": 7
+      },
+      {
+        "answer": "P=5 Q=3 R=2 S=4 T=6 U=7 V=1",
+        "correct": 5,
+        "confidence": 7
+      },
+      {
+        "answer": "P=5 Q=3 R=2 S=4 T=6 U=7 V=1",
+        "correct": 5,
+        "confidence": 7,
+        "note": "six notes say the heat is recent, including the one matched to never heated; none notices early heat"
+      }
+    ]
+  }
+}

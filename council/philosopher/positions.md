@@ -18,6 +18,9 @@ with no filed note behind it is marked `(unsourced)`. Evidence points at
 | P-10. The composer gate and the nudge bar are not two strengths of one mechanism. Only the visible, non-blocking one has a field result behind it | Medium high | `2019-matias-norms-r-science` | 2026-09-20 |
 | P-11. Human review of a published tier does not recover the contributor's autonomy interest any better than a non-authoring contest path does, and it costs the platform a real legal position to get there. Community re-review is the answer that does not trade one for the other | Medium high | `2015-steindl-reactance`, `2007-miller-restoration-postscripts`, `council/legal/positions/2026-09-20-tier-label-first-party-speech.md` | 2026-09-20 |
 | P-12. A condition on a founding badge is acceptable in the unannounced, after-the-fact form and damaging in the announced form. What decides it is whether the contributor knows the threshold while writing, not how kindly the platform states it | Medium high | `1999-deci-koestner-ryan-undermining`, `2013-anderson-steering-badges` | 2026-09-20 |
+| P-13. The fingerprint can show the bad without shame only as dated, countable acts with a zero that looks like zero. A judging channel drawn as undated texture, or sharing a grammar with decorative noise, describes the person where it should describe the act | Medium high | `2007-tangney-moral-emotions`, reading test in `council/log/2026-09-20-fingerprint-legibility-and-model/` | 2026-09-20 |
+| P-14. A legible mark beside a vote makes the community vote a review of the author, and the vote then grows the mark. No ordinal channel belongs on a surface where a comment is being judged | Medium | `2017-tomkins-single-double-blind` | 2026-09-20 |
+| P-15. The trade-off penalty is the record editorialising. It draws a claim about people in general as a deficit in one person, and the archetype showcase was already bent to fit it. Delete it, by Dan's decision | High that it contradicts the specs, medium on deletion | (unsourced) in the literature; measured by `monotone.py` in the debate folder, and `dialecta-archetype-grid.jsx` read against `Dialecta_Contributor_Identity.md` | 2026-09-20 |
 
 ---
 
@@ -251,6 +254,14 @@ changed the shape of my answer: I no longer read "human in the loop" as a single
 verdict, and I now hold that pre-publication human review is the one contest design actually worth
 opposing on both grounds at once.
 
+**Scope, added 2026-09-20 in the fingerprint legibility debate.** P-11 was written for classification
+errors, where there is a comment to re-review. The reading test found an error of another kind: a
+stranger read heat into Father Anselm's mark, and none of his comments is misclassified. A community
+re-review of every one would confirm them all and leave the mark saying the same thing. A render
+error has nothing to contest. Its remedy is verification, a count anyone can check beside the mark,
+which makes the counts a precondition for a legible public mark. It does not replace the contest path
+this position asks for.
+
 ## P-12. What decides a conditioned badge, answering Dan
 
 Written in full in `positions/2026-09-20-charter-badge-and-price-ladder.md`. Summary for the table:
@@ -284,6 +295,49 @@ failure as the one above arriving from the other side: a mark that tripped at Pa
 have distinguished nobody, where a mark inside a published cohort of a hundred distinguishes too
 well. Both are a mark whose meaning nobody checked against the population carrying it.
 
+## P-13. Dated acts, and a zero that looks like zero
+
+Written in full in `positions/2026-09-20-fingerprint-legibility-and-model.md`. Summary for the table:
+Tangney, Stuewig and Mashek (2007) separate shame, a judgment of the global self, from guilt, a
+judgment of a specific act, and report that stable attributions for a failure go with shame
+(`2007-tangney-moral-emotions`). A dated act inside a larger record is the specific, unstable case,
+a scar. An undated texture across the whole shape is the global, stable one, a wound, and the ring
+model draws all tier history that way because `tierMix` holds no dates.
+
+The reading test supplied the measured case. All seven single-mark readers reported heat, the four
+heated records and the three calm ones alike, including Father Anselm, whose record holds none,
+because the noise floor draws the same wobble the legend calls heat. A count can read zero. An
+organic line never looks like zero. Proposed bar for the human study, set before it runs: a heat
+reading at least ten times likelier on a record with heat than on one without. The test's ratio was
+one.
+
+## P-14. The mark beside the vote
+
+Written in full in the same position. Tomkins, Zhang and Heavlin (2017) gave each paper two reviewers
+who could see its authors and two who could not; seeing raised the odds of recommending acceptance
+1.63 times for famous authors, among experts (`2017-tomkins-single-double-blind`). The comment card
+already carries the author's archetype tag on the same card as the vote controls, and community
+voting is 35 percent of a comment's classification. A legible byline mark turns that vote into a
+review of the person, and the vote feeds the tier that grows the mark. Article 6 protects difference
+without turning it into hierarchy. In a thread: one size for everyone, nominal channels only, the
+full mark a tap away.
+
+This sharpens P-6 without replacing it. A bridging aggregator corrects for which faction voted. It
+does nothing about a voter who judged the author before the comment. Honest limit: Tomkins measured
+experts on papers, so the direction should transfer and the size is unknown.
+
+## P-15. The trade-off penalty
+
+Written in full in the same position. Dolores Vance holds 22 graduations on Discourse, tied for her
+highest; the penalty draws it at 70 percent, fifth of six, and a stranger named Discourse her weakest
+pillar. The archetype grid says the trade-off pairs "are respected," and its data shows the cost:
+the Synthesizer's high Acuity, a pairing Contributor Identity calls "rare and visible," drops to 11,
+and the Illuminator's high Discourse drops to 8, her lowest. Dan exempted Consistency because
+penalising it "would have the platform say that showing up reliably costs you something elsewhere"
+(`packages/core/src/fingerprint-geometry.ts`). The penalty says that about fairness, to each person,
+including the ones whose record contradicts it. A real tendency shows in the record unaided. The
+exemption assumed the penalty stays, so its deletion is Dan's call.
+
 ---
 
 ## Where the evidence backed the founding documents
@@ -305,3 +359,7 @@ Recording this because an advisor who only finds faults is not being honest eith
   every surface: the structured analysis grid and the seven tier descriptions in the nomination picker
   are boosts, the nudge bar and the commenter message are nudges. Where a surface could be built
   either way, build the boost.
+- **Tier Psychology, "why shame doesn't work."** Asserted without a source. Tangney, Stuewig and
+  Mashek (2007) supply one: shame, a judgment of the self, goes with hiding and anger turned outward,
+  and guilt, a judgment of an act, with repair (`2007-tangney-moral-emotions`). The rule was right at
+  the naming layer. It has not yet reached the image (P-13).
