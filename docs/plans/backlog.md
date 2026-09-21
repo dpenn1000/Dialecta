@@ -66,8 +66,8 @@
 
 | Id | Item | Spec | Blocked by | State |
 | --- | --- | --- | --- | --- |
-| B-1 | Axis ledger: on resolution, write `axis_events` from `axisDeltasFor`; nightly (or on-write) replay into `axis_scores` | Axis Mapping v1; core/axis-mapping.ts | A-4 | Todo |
-| B-2 | Archetype monitor: assign from `axis_scores` pattern, write history, emit `feed_events` | Contributor Identity v1.1 | B-1 | Todo |
+| B-1 | Axis ledger: on each resolution and re-resolution, in `after()`, insert `axis_events` from `axisDeltasFor` under the uniqueness key and replay that member's `axis_scores`. A nightly Vercel Cron job reconciles, then replays everyone (ADR-005) | Axis Mapping v1; core/axis-mapping.ts; ADR-005 | A-4, the identity re-key, architect-06 item 8, the uniqueness key (ADR-005 precondition 1) | Todo |
+| B-2 | Archetype monitor: assign from `axis_scores` pattern, write history, emit `feed_events`, in the same `after()` step and nightly job as B-1, under ADR-005 precondition 7 | Contributor Identity v1.1; ADR-005 | B-1, Dan's ruling on "forming" | Todo |
 | B-3 | Profile page on Supabase Auth: hero, tier breakdown, stats (port from `api/profile/[id].js`), edit panel | Contributor Identity; components/dialecta-profile*.jsx | P0-4 | Todo |
 | B-4 | Fingerprint island: port `components/dialecta-fingerprint-engine.jsx` to TypeScript, fed by `axis_scores` and tier mix | Contributor Identity | B-1, B-3 | Todo |
 | B-5 | Community page: real members only, archetype filter, no seeded personas | Social UX Architecture | B-2 | Todo |

@@ -38,8 +38,14 @@ flowchart LR
   Q --> S
   W --> E[Editor island, TipTap]
   E --> R
-  S --> T[DB triggers: ledger replay, archetype]
+  R -. after the response .-> T[after(): ledger insert, replay, archetype]
+  N[Nightly Vercel Cron: reconcile, replay everyone] --> S
+  T --> S
 ```
+
+The downstream runner is ADR-005: `after()` in the action that resolves a comment, and a nightly
+job that reconciles. No database triggers and no queue until one of its two measured thresholds is
+crossed.
 
 Islands: comment composer, article editor, classification card, votes and nominations, fingerprint SVG, opinion maps. Everything else renders on the server. RLS replaces the service-role key on every browser path.
 
