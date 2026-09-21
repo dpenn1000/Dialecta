@@ -58,3 +58,25 @@ Appeal has rejected the theory that it alone confers standing.
   an express statutory sentence.
 
 *Filed 2026-09-20*
+
+## Addendum, 2026-09-21: the code text, read
+
+Cal. Bus. and Prof. Code Section 17602, as amended by Stats. 2024, ch. 515 (AB 2863), read at
+California Legislative Information through the fetch tool's extraction.
+https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=17602
+
+The firm's reading holds, and the stand-alone point is now statutory rather than inferred:
+subsection (a)(4) requires "express affirmative consent to the automatic renewal or continuous
+service offer terms", separately from (a)(2)'s consent "to the agreement containing" them. The
+terms must be presented "in visual proximity" to the request for consent (a)(1). The
+acknowledgment must carry the renewal terms, "cancellation policy, and information regarding how
+to cancel" (a)(3). Verification of consent is kept "for at least three years, or one year after the
+contract is terminated" (a)(6). A fee change needs notice "no less than 7 days and no more than 30
+days before the fee change takes effect" (g)(2). Online cancellation needs a "prominently located
+direct link or button" (d)(1), and an annual reminder is owed (h).
+
+**What it changes in the drafts:** nothing in the position, and three build details in
+`drafts/membership-terms.md`. The checkbox is its own act, beside the terms it consents to; the
+receipt email carries the three items (a)(3) names; and a single notice at the renewal reminder
+window can carry a price change only if it lands inside 7 to 30 days of the change, which is why
+the reminder and the price-change notice are one email sent no more than 30 days out.

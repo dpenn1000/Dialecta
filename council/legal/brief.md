@@ -113,8 +113,12 @@ which makes it worth answering before more is built on top of it.
 
 *The first three are done. These are the next.*
 
-1. **List the documents Dialecta owes before money changes hands, with what each one costs.**
-   This is the half of the charter the first sprint did not touch, and `## Done looks like`
+1. **Drafted 2026-09-21, at Dan's request: `drafts/`.** Terms of service, a privacy notice and
+   membership terms with the separate renewal consent, and a cover note listing every value left
+   for Dan, the build items each clause waits on, and what needs a lawyer before anything binds a
+   paying member. What remains of this item is the lawyer review and Dan's decisions.
+   *Originally:* **List the documents Dialecta owes before money changes hands, with what each one
+   costs.** This is the half of the charter the first sprint did not touch, and `## Done looks like`
    below names it. The reading list still carries `todo` rows for FTC privacy guidance, the DMLP
    terms of use guide, both insurance sources, and all three DMCA sources. The DMCA designated
    agent registration is six dollars and is the cheapest item this seat will ever propose.

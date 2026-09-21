@@ -94,8 +94,8 @@ the next session.
 | State | Source | Why this advisor needs it |
 | --- | --- | --- |
 | filed | Nguyen v. Barnes & Noble, 763 F.3d 1171 (9th Cir. 2014), https://en.wikipedia.org/wiki/Nguyen_v._Barnes_%26_Noble,_Inc. | Why a terms link alone, without an affirmative click, may not be enforceable. Bears on the sign-up flow in P0-D2 |
-| todo | Privacy and Security business guidance, FTC, https://www.ftc.gov/business-guidance/privacy-security | Whatever a privacy policy promises must be honoured under FTC Act Section 5. The baseline risk of posting one at all |
-| todo | Terms of Use, DMLP Harvard (archived), http://www.dmlp.org/legal-guide/terms-use | What a small site's terms should cover, written for this scale of operator |
+| filed | Privacy and Security business guidance, FTC, https://www.ftc.gov/business-guidance/privacy-security | Whatever a privacy policy promises must be honoured under FTC Act Section 5. The baseline risk of posting one at all. `2026-ftc-privacy-security-guidance.md`, 2026-09-21 |
+| filed | Terms of Use, DMLP Harvard (archived), http://www.dmlp.org/legal-guide/terms-use | What a small site's terms should cover, written for this scale of operator. Thinner than the row promised: no browsewrap, liability, forum or modification guidance. `2014-dmlp-terms-of-use.md`, 2026-09-21 |
 
 ## Insurance
 
@@ -109,9 +109,29 @@ the next session.
 
 | State | Source | Why this advisor needs it |
 | --- | --- | --- |
-| todo | DMCA Directory FAQs, US Copyright Office, https://www.copyright.gov/dmca-directory/faq.html | Designated agent registration is six dollars, expires every three years, and each legal entity needs its own. The cheapest item on any list this advisor will ever write |
-| todo | Section 512 resources, US Copyright Office, https://www.copyright.gov/512/ | The official notice and takedown walkthrough, including the reinstatement window |
-| todo | DMCA Safe Harbor, Copyright Alliance, https://copyrightalliance.org/education/copyright-law-explained/the-digital-millennium-copyright-act-dmca/dmca-safe-harbor/ | A second summary to cross-check the Copyright Office's own language. A rightsholder trade association, so its framing leans away from platforms |
+| filed | DMCA Directory FAQs, US Copyright Office, https://www.copyright.gov/dmca-directory/faq.html | Designated agent registration is six dollars, expires every three years, and each legal entity needs its own. The cheapest item on any list this advisor will ever write. **It also publishes the provider's street address**, which the row never said. `2026-usco-dmca-directory-faq.md`, 2026-09-21 |
+| filed | Section 512 resources, US Copyright Office, https://www.copyright.gov/512/ | The official notice and takedown walkthrough, including the reinstatement window. `2020-usco-section-512-resources.md`, 2026-09-21 |
+| filed | DMCA Safe Harbor, Copyright Alliance, https://copyrightalliance.org/education/copyright-law-explained/the-digital-millennium-copyright-act-dmca/dmca-safe-harbor/ | A second summary to cross-check the Copyright Office's own language. A rightsholder trade association, so its framing leans away from platforms. `2026-copyright-alliance-dmca-safe-harbor.md`, 2026-09-21 |
+
+## Terms drafting, added and filed 2026-09-21
+
+Read while drafting `drafts/`. Each came from a clause that turned on it.
+
+| State | Source | Why this advisor needs it |
+| --- | --- | --- |
+| filed | Berman v. Freedom Financial Network, 30 F.4th 849 (9th Cir. 2022), slip opinion, https://cdn.ca9.uscourts.gov/datastore/opinions/2022/04/05/20-16900.pdf | The act must say it accepts, and the link must be set apart by more than an underline. `2022-ca9-berman-v-freedom-financial.md` |
+| filed | Cal. Bus. and Prof. Code 22575 and 22577 (CalOPPA), primary | A privacy policy owed at any size, with a Do Not Track answer. `2026-ca-bpc-22575-caloppa.md` |
+| filed | Cal. Bus. and Prof. Code 17602, primary | The renewal consent, from the code text rather than a firm's alert. Addendum to `2025-ca-auto-renewal-law-ab-2863.md` |
+| filed | FTC, Complying with COPPA: FAQs, updated 2025-04-22, https://www.ftc.gov/business-guidance/resources/complying-coppa-frequently-asked-questions | The under-13 duty and why a terms clause is no defence. `2025-ftc-coppa-faq.md` |
+| filed | AAA Consumer Arbitration Rules, effective 2025-05-01, and the consumer fee schedule at second hand | What an arbitration clause would cost the business. `2025-aaa-consumer-arbitration-rules.md` |
+| filed | Blair v. Rent-A-Center, 928 F.3d 819 (9th Cir. 2019), at second hand | California's public-injunction rule and arbitration. `2019-ca9-blair-v-rent-a-center.md` |
+| filed | Anthropic Commercial Terms and API retention page (vendor) | What the classifier's provider keeps, and may not train on. `2026-anthropic-commercial-terms-and-api-retention.md` |
+| filed | BillTrack50 on Arizona HB 2991 (a tracking service) | No Arizona minors' social media law in force. `2026-az-hb-2991-minors-social-media.md` |
+| todo | Blair v. Rent-A-Center, slip opinion, https://cdn.ca9.uscourts.gov/datastore/opinions/2019/06/28/17-17221.pdf | Read at second hand only. Matters only if arbitration is ever added |
+| todo | The AAA 2025 Consumer Fee Schedule itself, at adr.org | The fee figures in the arbitration note came from search summaries and need checking against the schedule |
+| todo | Asset Marketing Systems v. Gagnon, 542 F.3d 748 (9th Cir. 2008) | Whether an implied or express licence can be revoked. The permanence licence rests on the answer |
+| todo | 17 U.S.C. 512, statute text, Cornell LII, https://www.law.cornell.edu/uscode/text/17/512 | The Copyright section was drafted from the Copyright Office's summary; check it against the statute |
+| todo | Anthropic, data retention for Covered Models, https://support.claude.com/en/articles/15425996-data-retention-practices-for-covered-models | Whether the model the classifier uses is one, and what that changes in the notice |
 
 ## Known gaps opened by the 2026-09-20 jurisdiction correction
 

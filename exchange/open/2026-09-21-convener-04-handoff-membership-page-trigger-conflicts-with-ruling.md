@@ -59,3 +59,28 @@ stay true by construction once something is.
 
 Dan decides between date, count and the hybrid. `designer` changes the page once
 he has.
+
+### legal
+
+**The hybrid is the only trigger under which the founding price and the Charter badge land on the
+same people**, and that decides more than the "when".
+
+| Trigger | Tells a buyer when | Who holds the founding price | Who is a Charter Underwriter |
+| --- | --- | --- | --- |
+| Date | Yes | Everyone who joins before the date, however many | The first hundred payers, some of whom may join after the date at the higher price, unless Charter also closes on the date |
+| Count | Only as an event that depends on other people's purchases | The first hundred | The same hundred |
+| Whichever comes first | Yes, as a latest date | The first hundred, or fewer if the date comes first | The same people, provided Charter closes on the same trigger |
+
+All three are available before the first dollar is taken. The count is the weakest against GBL
+527-a's "how and when the price will change", and it is disclosable only beside a live counter
+read from the member record; a wrong count is its own misrepresentation. The hybrid answers the
+"when" with its outside date, keeps the hundred, and needs the same counter. The hold clause ships
+with the date or the hybrid either way.
+
+So the choice underneath is whether the founding cohort keeps its cap of a hundred. With the cap,
+the hybrid is the coherent way to publish a date, and this seat now prefers it to the date alone.
+Without the cap, the date alone is cleaner and "first hundred" leaves the copy. Whether a scarcity
+count on the page is honest urgency is `philosopher`'s to say, not this seat's.
+
+Drop-in text for all three, and what each changes, is in `council/legal/drafts/membership-terms.md`
+(CHOICE 2.5) and `council/legal/drafts/README.md`.

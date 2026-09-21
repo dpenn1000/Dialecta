@@ -77,3 +77,36 @@ federal trade law do.
 | `2025-ca-auto-renewal-law-ab-2863.md` | Cal. Bus. & Prof. Code 17600 et seq. as amended, via Kilpatrick Townsend; Mayron v. Google LLC, 54 Cal. App. 5th 566 (2020) | In force 2025-07-01. Consent to the renewal term must be its own step, which is why the Pact cannot carry it. Three-year consent record, which is the table `positions/2026-09-20-consent-at-the-moment.md` already asked for |
 | `2026-az-consumer-fraud-act-44-1521.md` | A.R.S. Sections 44-1521 to 44-1534, Section 44-1522 via FindLaw | The Arizona statute a founding-price promise lives under. 44-1522(C) tells Arizona courts to use FTC and federal readings of FTC Act Section 5 as the guide, so there is one deception standard rather than two. One-year limitations, running from discovery |
 | `2007-ca9-douglas-v-talk-america.md` | Douglas v. U.S. Dist. Court ex rel. Talk America, 495 F.3d 1062 (9th Cir. 2007) | Binding in Dialecta's circuit. A party cannot change contract terms on its own, and posting a revised contract is not notice. This is what closes the window: a condition is a term of the offer before payment and an unaccepted offer after it |
+
+## Fingerprint legibility, filed 2026-09-20 for the full council debate
+
+Three sources for `positions/2026-09-20-fingerprint-legibility-and-model.md`, on what a stranger
+can read into the fingerprint and whether "can never be changed" survives. Two of the three were
+read at second hand and say so in their own headers.
+
+| File | Source | Implies for |
+| --- | --- | --- |
+| `1989-az-godbehere-false-light.md` | Godbehere v. Phoenix Newspapers, 162 Ariz. 335 (1989), and Hart v. Seven Resorts (1997), via DMLP and vLex; slip opinion not read | Arizona's false light tort reaches a true record presented to imply something false, which is what the render does to Dolores Vance. Its bar, "highly offensive" and "a major misrepresentation", protects the platform on Heat and probably not on a false Breach reading |
+| `2016-gdpr-art-17-21-erasure-and-objection.md` | GDPR Articles 17 and 21, via gdpr-info.eu | If Article 3(2)(b) reaches Dialecta, Article 21 lets a member object to the profiling itself. "Can never be changed" does not survive it for EU residents |
+| `2013-ca-bpc-22581-minor-content-removal.md` | Cal. Bus. and Prof. Code 22580 and 22581, primary, operative 2015-01-01 | The one size-independent US removal right found. It reaches the comment and not the mark, and hiding satisfies it |
+
+## Terms drafting, filed 2026-09-21
+
+Twelve sources, one note each, plus an addendum to the AB 2863 note from the code text, read while
+drafting `drafts/`. Each was read because a clause turned on it. Five are marked in their own
+headers: a trade association, a vendor, a tracking service, and two read at second hand.
+
+| File | Source | Implies for |
+| --- | --- | --- |
+| `2026-usco-dmca-directory-faq.md` | US Copyright Office, DMCA Directory FAQs | Six dollars and three years, and the filing publishes the provider's street address. Decide the entity first |
+| `2020-usco-section-512-resources.md` | US Copyright Office, Section 512 resources | The notice and counter-notice elements in the terms' Copyright section, and the repeat infringer policy as a condition of the safe harbour |
+| `2026-copyright-alliance-dmca-safe-harbor.md` | Copyright Alliance, a rightsholder trade association | Cross-check. Adds that the repeat infringer policy must be told to users |
+| `2026-ftc-privacy-security-guidance.md` | FTC business guidance | A privacy promise binds "expressly or by implication", which reaches the Pact's own privacy line |
+| `2014-dmlp-terms-of-use.md` | DMLP Harvard, archived | The shape of a user-content site's terms. The draft's licence is narrower than its model on purpose |
+| `2025-ftc-coppa-faq.md` | FTC COPPA FAQs, updated 2025-04-22 | Delete on learning of an under-13 user; a terms clause is no defence for a site aimed at children |
+| `2022-ca9-berman-v-freedom-financial.md` | Berman v. Freedom Financial, 30 F.4th 849 (9th Cir. 2022), slip opinion | The act must say it accepts, and a link needs more than an underline. The Pact's button and the house link style both fail today |
+| `2026-ca-bpc-22575-caloppa.md` | Cal. Bus. and Prof. Code 22575 and 22577, primary | A privacy policy owed at any size, with Do Not Track and cross-site answers |
+| `2025-aaa-consumer-arbitration-rules.md` | AAA Consumer Rules, effective 2025-05-01; fees at second hand | The business pays for every consumer case; small claims stay open either way |
+| `2019-ca9-blair-v-rent-a-center.md` | Blair v. Rent-A-Center, 928 F.3d 819 (9th Cir. 2019), at second hand | California's public-injunction rule survives the FAA, which an arbitration clause would have to carve around |
+| `2026-anthropic-commercial-terms-and-api-retention.md` | Anthropic Commercial Terms and API retention page, a vendor | 30 days, two years if flagged, no training. Covers the API key, and maybe not the coding sessions |
+| `2026-az-hb-2991-minors-social-media.md` | BillTrack50, a tracking service | Arizona sets no age line; HB 2991 died in June 2026 |
