@@ -19,7 +19,7 @@ const forumComment: ClassificationResult = {
   tribal_markers: false,
   tribal_example: null,
   article_engagement: 'specific',
-  opposing_view_engaged: true,
+  opposing_view_engaged: 'yes',
   ai_suggested_tier: 'forum',
   borderline_flag: false,
   borderline_other_tier: null,
@@ -49,7 +49,7 @@ describe('axisDeltasFor: the spec\'s five worked examples (Dialecta_Axis_Mapping
       {
         ...forumComment,
         specificity: 0,
-        opposing_view_engaged: false,
+        opposing_view_engaged: 'no',
         article_engagement: 'specific',
         ai_suggested_tier: 'echo',
       },
@@ -69,7 +69,7 @@ describe('axisDeltasFor: the spec\'s five worked examples (Dialecta_Axis_Mapping
     const deltas = deltasOf({
       ...forumComment,
       specificity: 0,
-      opposing_view_engaged: false,
+      opposing_view_engaged: 'no',
       article_engagement: 'general',
       ai_suggested_tier: 'heat',
     });
@@ -89,7 +89,7 @@ describe('axisDeltasFor: the spec\'s five worked examples (Dialecta_Axis_Mapping
         ...forumComment,
         specificity: 1,
         tribal_markers: true,
-        opposing_view_engaged: false,
+        opposing_view_engaged: 'no',
         article_engagement: 'general',
         ai_suggested_tier: 'stance',
       },
@@ -130,7 +130,7 @@ describe('axisDeltasFor: old-vs-new contrast (this exact case asserted consisten
       tribal_markers: true,
       tribal_example: 'you people',
       article_engagement: 'general',
-      opposing_view_engaged: false,
+      opposing_view_engaged: 'no',
       ai_suggested_tier: 'stance',
     });
     expect(deltas).toEqual({
@@ -204,15 +204,40 @@ describe('axisDeltasFor: Calibration (Calibration row: specificity >= 1 AND trib
 
 describe('axisDeltasFor: Magnanimity (Magnanimity row: opposing_view_engaged, yes or partially, equal weight)', () => {
   it('fires when the opposing view was engaged', () => {
-    expect(deltasOf({ ...forumComment, opposing_view_engaged: true }).magnanimity).toBe(1);
+    expect(deltasOf({ ...forumComment, opposing_view_engaged: 'yes' }).magnanimity).toBe(1);
+  });
+
+  it('fires on partially too, at the same weight ("Honest effort counts")', () => {
+    expect(deltasOf({ ...forumComment, opposing_view_engaged: 'partially' }).magnanimity).toBe(1);
+  });
+
+  // The spec's Magnanimity row reads "+1 either way" and its "Tuning knobs"
+  // table lists "Magnanimity yes vs partially weight | both +1 | Could make
+  // partially +0.5 or +0". So equal weight is the setting today, and a test
+  // that asserted a difference would be asserting the knob's future position
+  // rather than the spec's current one. What the three-valued type buys is not
+  // a different score now; it is that the knob remains turnable, because the
+  // classification still records which of the two answers it was.
+  it('scores partially and yes identically today, and the two are still distinguishable', () => {
+    const partial = { ...forumComment, opposing_view_engaged: 'partially' } as const;
+    const full = { ...forumComment, opposing_view_engaged: 'yes' } as const;
+    expect(deltasOf(partial)).toEqual(deltasOf(full));
+    expect(partial.opposing_view_engaged).not.toBe(full.opposing_view_engaged);
   });
 
   it('does not fire when it was not', () => {
-    expect(deltasOf({ ...forumComment, opposing_view_engaged: false }).magnanimity).toBe(0);
+    expect(deltasOf({ ...forumComment, opposing_view_engaged: 'no' }).magnanimity).toBe(0);
+  });
+
+  it('treats only "no" as the absence, so a new enum member would not silently score zero', () => {
+    const scores = (['yes', 'partially', 'no'] as const).map(
+      (answer) => deltasOf({ ...forumComment, opposing_view_engaged: answer }).magnanimity,
+    );
+    expect(scores).toEqual([1, 1, 0]);
   });
 
   it('is not gated by emotion, unlike the pre-fix code: high emotion still earns it', () => {
-    expect(deltasOf({ ...forumComment, opposing_view_engaged: true, emotion: 'high' }).magnanimity).toBe(1);
+    expect(deltasOf({ ...forumComment, opposing_view_engaged: 'yes', emotion: 'high' }).magnanimity).toBe(1);
   });
 });
 

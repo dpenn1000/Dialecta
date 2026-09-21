@@ -234,18 +234,13 @@ export async function POST(request: Request) {
   // policy at all, by design (baseline migration, "classifications_service_only");
   // this is the one path that may write it.
   //
-  // opposing_view_engaged: ClassificationResult folds the model's
-  // yes/partially/no answer to a boolean (packages/core/src/classification.ts,
-  // "yes and partially are true, no is false"), but the live column is the
-  // 3-valued enum public.opposing_view_level ('yes'|'partially'|'no')
-  // (baseline migration: "THE FIX: a true 3-value enum live, not the
-  // archived migration's boolean"). That is a real mismatch between
-  // packages/core's parsed type and the live schema, not something this
-  // route can resolve without either changing a shared, tested type or the
-  // column: folding back to 'yes'/'no' here is the minimal safe choice
-  // (never inserts an invalid enum value) but is lossy, a 'partially'
-  // answer is indistinguishable from 'yes' once stored. Flagged, not fixed,
-  // in this increment; see the report for the recommended follow-up.
+  // opposing_view_engaged passes straight through. ClassificationResult keeps
+  // the model's yes/partially/no answer as all three (packages/core/src/
+  // classification.ts, OpposingViewEngagement), which is the domain of the live
+  // column's enum public.opposing_view_level, so no widening step is needed and
+  // a 'partially' answer is stored as 'partially'. This line used to read
+  // `? 'yes' : 'no'` against a folded boolean, which could not produce the
+  // middle value at all.
   const serviceClient = createServiceClient();
   const { error: classificationInsertError } = await serviceClient
     .from('classifications')
@@ -257,7 +252,7 @@ export async function POST(request: Request) {
       tribal_markers: classification.tribal_markers,
       tribal_example: classification.tribal_example,
       article_engagement: classification.article_engagement,
-      opposing_view_engaged: classification.opposing_view_engaged ? 'yes' : 'no',
+      opposing_view_engaged: classification.opposing_view_engaged,
       ai_suggested_tier: classification.ai_suggested_tier,
       self_declared_tier: selfDeclaredTier,
       borderline_flag: classification.borderline_flag,

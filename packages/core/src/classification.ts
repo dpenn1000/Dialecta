@@ -19,6 +19,24 @@ export type Specificity = 0 | 1 | 2 | 3;
 export type Emotion = 'low' | 'medium' | 'high';
 export type ArticleEngagement = 'specific' | 'general';
 
+/**
+ * The model's three possible answers, kept as three.
+ *
+ * This matches the live column classifications.opposing_view_engaged, which is
+ * the enum public.opposing_view_level ('yes' | 'partially' | 'no'), and
+ * Dialecta_Data_Architecture.md entity 2, which specifies the same three.
+ *
+ * It used to be a boolean here, with "yes" and "partially" both folded to true.
+ * No score was wrong under that fold, because Dialecta_Axis_Mapping_v1.md gives
+ * Magnanimity +1 for either answer. What the fold destroyed was the input to the
+ * tuning knob the same spec names, "weight differential between yes and
+ * partially": once a row is stored, the difference cannot be recovered without
+ * re-running the classifier, which would be a new judgment rather than the
+ * original one. The fold also biased in one direction only, every "partially"
+ * inflating to "yes".
+ */
+export type OpposingViewEngagement = 'yes' | 'partially' | 'no';
+
 export interface ClassificationResult {
   claim_text: string;
   specificity: Specificity;
@@ -27,10 +45,11 @@ export interface ClassificationResult {
   tribal_example: string | null;
   article_engagement: ArticleEngagement;
   /**
-   * The model answers "yes|partially|no". This is folded to a boolean:
-   * "yes" and "partially" are true, "no" is false. A literal boolean is also accepted.
+   * The model answers "yes|partially|no" and all three are kept. A literal
+   * boolean is also accepted on input, since the model occasionally answers with
+   * one: true reads as "yes", false as "no".
    */
-  opposing_view_engaged: boolean;
+  opposing_view_engaged: OpposingViewEngagement;
   ai_suggested_tier: Tier;
   borderline_flag: boolean;
   borderline_other_tier: Tier | null;
@@ -134,14 +153,17 @@ export function parseClassification(raw: string): ClassificationResult {
     fail(raw, `"article_engagement" must be specific or general, got ${describe(obj.article_engagement)}`);
   }
 
-  let opposing: boolean;
+  // Three answers in, three answers out. "partially" gets its own branch rather
+  // than sharing one with "yes"; that shared branch was the fold.
+  let opposing: OpposingViewEngagement;
   const opposingRaw = obj.opposing_view_engaged;
   if (typeof opposingRaw === 'boolean') {
-    opposing = opposingRaw;
+    opposing = opposingRaw ? 'yes' : 'no';
   } else if (typeof opposingRaw === 'string') {
     const o = opposingRaw.toLowerCase().trim();
-    if (o === 'yes' || o === 'partially' || o === 'true') opposing = true;
-    else if (o === 'no' || o === 'false') opposing = false;
+    if (o === 'yes' || o === 'true') opposing = 'yes';
+    else if (o === 'partially') opposing = 'partially';
+    else if (o === 'no' || o === 'false') opposing = 'no';
     else fail(raw, `"opposing_view_engaged" must be yes, partially or no, got ${describe(opposingRaw)}`);
   } else {
     fail(raw, `"opposing_view_engaged" must be yes, partially or no, got ${describe(opposingRaw)}`);

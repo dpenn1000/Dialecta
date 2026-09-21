@@ -42,6 +42,7 @@ export {
   type ArticleEngagement,
   type ClassificationResult,
   type Emotion,
+  type OpposingViewEngagement,
   type Specificity,
 } from './classification';
 

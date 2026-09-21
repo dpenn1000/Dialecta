@@ -120,12 +120,15 @@ export function axisDeltasFor(
   const calibration = c.specificity >= CALIBRATION_SPECIFICITY_MIN && !c.tribal_markers ? 1 : 0;
 
   // Magnanimity (Magnanimity row): opposing_view_engaged, yes or partially,
-  // both +1 ("Honest effort counts"). ClassificationResult already folds
-  // "yes"/"partially" to true at parse time (classification.ts), so there is
-  // no separate partial-credit branch to write here. No emotion gate: the
-  // spec's emotion note lives on Calibration, not on this axis; the old code
-  // added one here that the spec does not have.
-  const magnanimity = c.opposing_view_engaged ? 1 : 0;
+  // both +1 ("Honest effort counts"). Written against "no" rather than against
+  // the two positive answers, so the two stay interchangeable here while
+  // remaining distinct in the stored classification. The spec's "Tuning knobs"
+  // table lists "Magnanimity yes vs partially weight: both +1, could make
+  // partially +0.5 or +0"; that knob turns here, and it needs the three-valued
+  // field (classification.ts, OpposingViewEngagement) to have something to read.
+  // No emotion gate: the spec's emotion note lives on Calibration, not on this
+  // axis; the old code added one here that the spec does not have.
+  const magnanimity = c.opposing_view_engaged !== 'no' ? 1 : 0;
 
   // Discourse (Discourse row): article_engagement === 'specific'.
   // Tier-independent (rule 2 gives Echo the same credit as Forum here when
