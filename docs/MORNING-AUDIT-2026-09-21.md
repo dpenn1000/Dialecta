@@ -16,10 +16,41 @@ Sized from the database with counts only: 3 comments, all published; 3 private c
 2 claim texts; 2 members' ids. Hidden Breach text and pending comments are not exposed today only
 because none exist yet; the first one is.
 
-Fixing it is a production deploy, so it waits for you. `security` is preparing the narrowed
+**A second live route belongs in the same deploy.** `legal` found that production
+`/api/article/upload-image` accepts image uploads from anyone who names a member id, and member ids
+are public, so the check proves nothing; a live upload route also brings the federal reporting duty
+for child sexual abuse material with it (`exchange/open/2026-09-21-legal-02`).
+
+Fixing either is a production deploy, so both wait for you. `security` is preparing the narrowed
 handler with tests, a map of what the live theme reads from it, whether the recovered tree
 reproduces production file for file, and the steps with a rollback:
 `council/security/hotfix-2026-09-21-api-comments/`.
+
+## 0B. The terms beside the Pact, drafted
+
+You asked for them tonight, and `legal` wrote four: terms of service, a privacy notice, membership
+terms with the separate renewal consent California requires, and a cover note, all in
+`council/legal/drafts/`. Every value nobody has decided is bracketed. The seat is not a lawyer, and
+the cover note ranks what a lawyer should review before anyone pays.
+
+Three decisions come first:
+
+1. **Who the operator legally is**: the name, whether there is an LLC, a street address, and a
+   contact email someone reads. The copyright agent filing publishes that street address, so filing
+   as yourself publishes your home address, and each legal entity files separately.
+2. **The founding price**: the price (2.6), what triggers the rise (2.5), and whether the lock has
+   an exit with notice and a refund.
+3. **What closing an account does to someone's record.** `legal` leans towards taking down the
+   profile and fingerprint and keeping the permanent comments under the person's name.
+
+And one question only you can answer: **which Claude plan and training setting govern the sessions
+that read the database.** Tonight's sessions read production personal data, including members'
+email addresses, and the privacy notice either names the terms that govern that or the access
+narrows until the sentence is untrue.
+
+What the terms cannot truthfully say yet: nobody can accept them, because the Pact's commit button
+records nothing and sign-in shows no terms; a membership buys no working feature in the new app; and
+seven Pact lines contradict them, each with a proposed fix in `exchange/open/2026-09-21-legal-01`.
 
 ## 0A. The fingerprint Council's answer
 
