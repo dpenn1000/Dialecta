@@ -1,0 +1,16 @@
+/*
+ * The article page's own rules, on top of the sheet and reading type in
+ * src/styles/dialecta-surfaces.css.
+ *
+ * Brass never letters on a light surface (designer D-27). The title used to
+ * wear .dialecta-brass, the polished gradient, whose palest stop measures
+ * 1.28:1 on the sheet. It letters in --brass-deep now, 7.27:1 on the paper
+ * and 6.69:1 on cream, and keeps the italic the gradient wore, so the hero
+ * reads as the same bronze voice. .dialecta-brass itself is unchanged: it is
+ * right on dark ground.
+ */
+
+.article-title {
+  font-style: italic;
+  color: var(--brass-deep);
+}

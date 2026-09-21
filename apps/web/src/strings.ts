@@ -14,6 +14,15 @@ export const strings = {
     name: 'Dialecta',
     tagline: 'A platform for constructive dialogue, informed debate, and idea-first discourse.',
   },
+
+  /**
+   * The site shell (src/components/shell/): header, primary navigation, the
+   * editorial drawer and the footer. The seven nav labels are the live Ghost
+   * navigation's, verbatim (the Ghost admin menu, mirrored in
+   * _recovered-next/app/components/SiteNav.js NAV_LINKS). drawerSubtitle is
+   * _theme/default.hbs's drawer header. footerNote is the Pact page footer,
+   * _theme/page-pact.hbs line 1551, verbatim.
+   */
   shell: {
     skipToContent: 'Skip to content',
     primaryNavLabel: 'Primary',
@@ -639,6 +648,218 @@ export const strings = {
     readingTime: (minutes: number) => `${minutes} min read`,
     revise: 'Revise this article',
     notFoundHeading: 'Article not found',
+  },
+
+  /**
+   * The discourse layer under an article: the comment feed and the comment
+   * composer (src/components/discourse), ported from
+   * _recovered-next/lib/theme/dialecta-discourse-layer.jsx and
+   * dialecta-private-draft.jsx. Recovered copy is verbatim unless a note says
+   * otherwise. Where it changed, the recovered line described something this
+   * build does not do.
+   */
+  discourse: {
+    kicker: 'The Conversation',
+    guidebook: 'What do these mean?',
+
+    tiers: {
+      /** "The Forum": the recovered badge's own label. */
+      label: (name: string) => `The ${name}`,
+      /** dialecta-tier-badge.jsx TIERS[].meaning, verbatim. */
+      meanings: {
+        forum: 'Specific claim, engaged with content. Disagreement welcome here.',
+        spark: 'An interesting idea, underdeveloped. Potential, not yet realized.',
+        echo: 'Restates the article or a prior comment without adding.',
+        fog: "Unclear. The reader can't identify what you believe.",
+        heat: 'Emotional, without a specific claim. Passion without a point.',
+        stance: 'Tribal framing or identity signaling. A position planted, not a conversation joined.',
+        breach: 'A personal attack on a person, not an idea. The Pact has been broken.',
+      } satisfies Record<Tier, string>,
+    },
+
+    topology: {
+      emptyTitle: "The conversation hasn't started yet",
+      // "will appear above" in the recovered panel; the shape replaces this panel.
+      emptyBody:
+        'Comments here are classified by depth and care, not by who wrote them. The shape of the conversation will appear here as comments arrive.',
+      shape: (n: number) => `The shape of this conversation · ${n} ${n === 1 ? 'comment' : 'comments'}`,
+      stripLabel: 'Comments by tier',
+      legendLabel: 'Filter by tier',
+      segment: (tier: string, n: number) => `Filter to ${tier}: ${n} ${n === 1 ? 'comment' : 'comments'}`,
+    },
+
+    control: {
+      label: 'Filter and sort',
+      showingOnly: 'Showing only',
+      showAll: 'Show all',
+      sort: 'Sort',
+      quality: 'Quality',
+      newest: 'Newest',
+    },
+
+    feed: {
+      label: 'Comments',
+      unavailable: "The conversation couldn't be loaded. Reloading the page tries again.",
+      /** Development only: shown when this machine has no service role key. */
+      devTierless:
+        'Development: tiers are not readable here because SUPABASE_SERVICE_ROLE_KEY is not set, so these cards carry none. A production build withholds the conversation instead of showing it untiered.',
+      noneInTier: (tier: string) => `No ${tier} comments yet.`,
+    },
+
+    card: {
+      you: 'You',
+      replyTag: 'Reply',
+      reply: 'Reply',
+      replyTo: (name: string) => `Reply to ${name}`,
+      ai: 'AI',
+      selfDeclared: 'self-declared',
+      engineVoice: 'Engine voice',
+      contrastDeclared: 'Commenter declared',
+      contrastEngine: 'Engine read',
+      // The recovered strip ended "Community voting will settle it." Voting is not in this build.
+      contrastTail: 'Both reads stay on the record.',
+      specificity: (n: number) => `specificity ${n}/3`,
+      specificityLabel: (n: number) => `Specificity ${n} of 3`,
+      pending: 'Pending review',
+      pendingNote: 'Only you can see this until it is published.',
+      /** Discourse Layer UX, "The Breach variant", its dash replaced by a colon. */
+      breach:
+        'Content suppressed: targets a person, not an idea. Visible here with explanation per platform transparency policy.',
+      suppressed: 'This comment is suppressed, so its text is not shown here.',
+      unread: "The classifier hasn't read this comment yet, so its text is held until it has a tier.",
+      anonymous: 'A contributor',
+    },
+
+    time: {
+      justNow: 'just now',
+      minutes: (n: number) => `${n}m ago`,
+      hours: (n: number) => `${n}h ago`,
+      days: (n: number) => `${n}d ago`,
+      weeks: (n: number) => `${n}w ago`,
+    },
+
+    /** What stands in for the composer when commenting is closed to this viewer. */
+    access: {
+      signedOut: 'Reading is open to everyone. Commenting needs a sign in, by an emailed link or with Google.',
+      signIn: 'Sign in',
+      noEmail: 'This account has no email on file, and a comment needs one. Add an email to the account to comment.',
+      noProfile:
+        "This sign in isn't linked to a contributor profile yet. A comment is signed with its profile's display name, so commenting needs one.",
+      incomplete: 'Add a display name to your profile to comment. It appears on every comment you post.',
+      unavailable: "Commenting isn't available right now. Reading is unaffected.",
+    },
+
+    compose: {
+      open: 'Add a comment',
+      resume: 'Return to your draft',
+      writingAs: (name: string) => `Writing as ${name}`,
+      /** Discourse Layer UX, Stage 1's nudge bar, its dash replaced by a colon. */
+      nudge: 'Forum level: identify a specific claim and engage with it directly.',
+      respondingTo: 'Responding to',
+      draftLabel: 'Your comment · private draft',
+      // The recovered placeholder went on "Type @ to mention a contributor."
+      // The mention picker is not in this build.
+      placeholder: 'Write what you actually think, the way you actually think it.',
+      words: (n: number) => `${n} ${n === 1 ? 'word' : 'words'}`,
+      // The recovered line read "saved locally" and nothing saved it. This build does.
+      saved: 'saved in this browser',
+      private: 'no one sees this yet',
+      restored: 'Your draft from before was restored.',
+      explainer:
+        "When you're ready, the engine will read what you've written and describe what it's doing. Not judge it. You'll see what it found before anyone else does.",
+      cancel: 'Cancel',
+      continue: 'Continue',
+      moreWords: (n: number) => `${n} more ${n === 1 ? 'word' : 'words'} to continue`,
+      replyingTo: (name: string) => `Replying to ${name}`,
+      cancelReply: 'Cancel reply',
+      preview:
+        'Development preview. Nothing is sent: the reading is a stand-in built from the reference commenter messages.',
+    },
+
+    rail: {
+      label: 'Comment stages',
+      draft: 'Draft',
+      declare: 'Self-declare',
+      reflect: 'Reflection',
+      posted: 'Posted',
+    },
+
+    declare: {
+      label: 'Self-declaration',
+      headingBefore: 'Which tier do',
+      headingEm: 'you',
+      headingAfter: 'think this is?',
+      // The recovered declaration came after the reading, with the engine's
+      // suggestion ringed in pale brass. /api/comment reads and records in one
+      // call, so the declaration comes first and travels with the comment.
+      sub: 'Your choice shows on your comment. The engine reads the comment next, and if its read differs from yours, both show side by side as part of the record.',
+      gridLabel: 'The seven tiers',
+      back: 'Back',
+      continue: 'Continue',
+    },
+
+    consent: {
+      label: 'Before you submit',
+      headingBefore: 'Once submitted, your comment is',
+      headingEm: 'yours permanently.',
+      // The recovered briefing promised sixty minutes to edit, rewrite or
+      // delete. No edit or delete path exists in this build.
+      lineRead: 'Submitting records your comment and hands it to the classifier, which reads it while you wait.',
+      lineVisible:
+        "Other readers see it once it's published. Until then only you can, and it can't be edited or deleted after this point.",
+      principleLabel: 'The principle',
+      principle:
+        'Slowness is a feature. The wait is not friction: it is ritual. The moment your post becomes permanent is designed to feel earned.',
+      back: 'Back',
+      submit: 'I understand. Submit.',
+    },
+
+    reflecting: {
+      eyebrow: 'Reading',
+      readyLabel: 'Ready',
+      readingLabel: 'Reading',
+      hold: 'The reading has arrived. Sitting with it before showing you.',
+      /** REFLECTION_PHASES (dialecta-private-draft.jsx lines 78-82), verbatim. */
+      phases: [
+        { at: 0, main: 'The engine is reading your draft', sub: 'Looking for the claim inside it.' },
+        { at: 2800, main: 'Considering specificity and shape', sub: 'How clear is the proposition?' },
+        { at: 5600, main: 'Weighing the engagement', sub: 'Are you in the article, or near it?' },
+      ],
+    },
+
+    posted: {
+      label: 'The reflection',
+      headingBefore: "Here's what the engine",
+      headingEm: 'noticed.',
+      // The recovered sub went on "You'll decide what to do with it." The
+      // comment is already recorded here, so there is nothing left to decide.
+      sub: 'Not a verdict. A description.',
+      claimLabel: 'The claim we found',
+      claimNone: "The engine couldn't identify a specific claim. That's information too.",
+      strengthLabel: 'What this does well',
+      shapeLabel: 'The shape of it',
+      specificity: (n: number) => `Specificity · ${n}/3`,
+      emotion: (e: string) => `Emotion · ${e}`,
+      engagement: (e: string) => `Engagement · ${e}`,
+      suggestedLabel: 'Suggested tier',
+      closeTo: 'close to',
+      closeToTail: 'one specific move would push it',
+      engineRead: 'Engine read',
+      selfDeclared: 'Self-declared',
+      // The recovered line read "Contrast visible · community can weigh in".
+      // Community nomination is not in this build.
+      contrast: 'Both reads show on your comment',
+      statusPending: 'Submitted · pending review',
+      statusPendingLine: 'Only you can see it until it is published.',
+      statusPublished: 'Published',
+      statusPublishedLine: 'It is in the conversation now.',
+      another: 'Write another comment',
+    },
+
+    errors: {
+      network: "The comment couldn't reach the server. Check the connection and try again.",
+      unreadable: "The server's response could not be read. Try again in a moment.",
+    },
   },
 
   /** Errors the publish route returns. The writer shows them in the publish box. */

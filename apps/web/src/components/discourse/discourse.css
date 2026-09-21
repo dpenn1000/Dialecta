@@ -1,0 +1,1343 @@
+/*
+ * The discourse layer: the comment feed and the comment composer.
+ *
+ * Ported from the inline styles of _recovered-next/lib/theme/
+ * dialecta-discourse-layer.jsx and dialecta-private-draft.jsx (59 style
+ * blocks against 2 class names in the feed alone, per designer). The look
+ * is theirs, rule for rule; it lives in classes so hover and keyboard focus
+ * get the same treatment and nothing re-renders to show a state.
+ *
+ * Colours come from tokens.css (generated) and dialecta-surfaces.css (the
+ * live theme's paper, wood and brass). Brass never letters on a light surface
+ * (designer D-27): on the paper, brass here is a line, a ring, a dot or a
+ * fill under ink. Two departures from the recovered files follow from that
+ * rule and from measurement:
+ *
+ *   1. Tier ink. Heat and Stance take designer's computed replacements
+ *      (D-24), below under "Tier colour". The generated --tier-heat-text and
+ *      --tier-stance-text fail WCAG 1.4.3 against their own fills.
+ *   2. Brass text. The recovered labels and links were --brass-mid (#b8862e),
+ *      3.15:1 on the paper against a 4.5:1 floor, and --brass-warm, 2.15:1,
+ *      and the stage headings lettered their accent word in .dialecta-brass,
+ *      whose palest stop measures 1.28:1. Text here uses --brass-deep
+ *      (7.27:1). Hairlines, dots, rules and gradients keep brass-mid and
+ *      brass-warm, and the avatar's brass fill carries ink initials, the
+ *      shell's Join button pattern.
+ *
+ * Every class is dd- prefixed. Nothing here restyles a class another file owns.
+ */
+
+/* ---------------------------------------------------------------------------
+   The handoff from the article to the conversation, from post.hbs's
+   .post-discourse-transition.
+   --------------------------------------------------------------------------- */
+
+.dd-transition {
+  display: flex;
+  align-items: center;
+  gap: 1.2em;
+  margin: 4em 0 2em;
+}
+
+.dd-transition::before,
+.dd-transition::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--brass-mid) 50%, transparent),
+    transparent
+  );
+}
+
+.dd-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  flex-shrink: 0;
+}
+
+.dd-root {
+  scroll-margin-top: 24px;
+  font-family: var(--font-body);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Tier colour. One rule per tier maps the generated tokens onto four local
+   roles; every tier-coloured surface (badge, topology segment, legend chip)
+   reads the roles.
+
+   The ink contract (designer D-19, corrected by D-24): ink clears 4.5:1
+   against both stops of its own fill, keeping the worse number. Five tiers
+   pass with the generated text colour. Heat and Stance do not:
+
+     Heat    #FCEAD8  1.96:1 top, 3.54:1 bottom   ->  #1D0A02  8.32:1, 4.61:1
+     Stance  #F4D8D0  4.26:1 top, 6.92:1 bottom   ->  #F9EAE6  4.91:1, 7.97:1
+
+   Heat changes direction (a dark ink on a mid-tone fill, the pattern Forum
+   to Fog already use) because no light ink reaches 4.5:1 on it: white tops
+   out at 2.30:1. Stance stays light, lighter. Checked with
+   council/designer/research/tier-palette-audit.py's own ratio(). These two
+   literals leave this file when the spec takes the correction and
+   `npm run tokens` carries it; decider has recommended it to Dan
+   (exchange/closed/2026-09-19-004).
+   --------------------------------------------------------------------------- */
+
+.dd-t[data-tier="forum"] {
+  --dd-top: var(--tier-forum-top);
+  --dd-bot: var(--tier-forum-bot);
+  --dd-border: var(--tier-forum-border);
+  --dd-ink: var(--tier-forum-text);
+}
+
+.dd-t[data-tier="spark"] {
+  --dd-top: var(--tier-spark-top);
+  --dd-bot: var(--tier-spark-bot);
+  --dd-border: var(--tier-spark-border);
+  --dd-ink: var(--tier-spark-text);
+}
+
+.dd-t[data-tier="echo"] {
+  --dd-top: var(--tier-echo-top);
+  --dd-bot: var(--tier-echo-bot);
+  --dd-border: var(--tier-echo-border);
+  --dd-ink: var(--tier-echo-text);
+}
+
+.dd-t[data-tier="fog"] {
+  --dd-top: var(--tier-fog-top);
+  --dd-bot: var(--tier-fog-bot);
+  --dd-border: var(--tier-fog-border);
+  --dd-ink: var(--tier-fog-text);
+}
+
+.dd-t[data-tier="heat"] {
+  --dd-top: var(--tier-heat-top);
+  --dd-bot: var(--tier-heat-bot);
+  --dd-border: var(--tier-heat-border);
+  --dd-ink: #1d0a02;
+}
+
+.dd-t[data-tier="stance"] {
+  --dd-top: var(--tier-stance-top);
+  --dd-bot: var(--tier-stance-bot);
+  --dd-border: var(--tier-stance-border);
+  --dd-ink: #f9eae6;
+}
+
+.dd-t[data-tier="breach"] {
+  --dd-top: var(--tier-breach-top);
+  --dd-bot: var(--tier-breach-bot);
+  --dd-border: var(--tier-breach-border);
+  --dd-ink: var(--tier-breach-text);
+}
+
+.dd-t {
+  background: linear-gradient(180deg, var(--dd-top), var(--dd-bot));
+  color: var(--dd-ink);
+}
+
+/* ---------------------------------------------------------------------------
+   The tier badge, from dialecta-tier-badge.jsx.
+   --------------------------------------------------------------------------- */
+
+.dd-tier {
+  --dd-pad-y: 3px;
+  --dd-pad-x: 8px;
+  --dd-font: 10px;
+  --dd-gap: 4px;
+  --dd-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dd-gap);
+  padding: var(--dd-pad-y) var(--dd-pad-x);
+  border: 1px solid var(--dd-border);
+  border-radius: var(--dd-radius);
+  font-family: var(--font-mono);
+  font-size: var(--dd-font);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.dd-tier[data-size="md"] {
+  --dd-pad-y: 5px;
+  --dd-pad-x: 12px;
+  --dd-font: 11px;
+  --dd-gap: 5px;
+  --dd-radius: 5px;
+}
+
+.dd-tier[data-size="lg"] {
+  --dd-pad-y: 7px;
+  --dd-pad-x: 16px;
+  --dd-font: 13px;
+  --dd-gap: 7px;
+  --dd-radius: 6px;
+}
+
+.dd-tier-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+/* Locked in docs/Dialecta_Discourse_Layer_UX.md, "Forum icon contrast", for
+   every surface that draws a Forum icon: badge, legend chip, filter chip. */
+.dd-t[data-tier="forum"] .dd-tier-icon {
+  color: var(--ink);
+}
+
+button.dd-tier {
+  cursor: pointer;
+  appearance: none;
+}
+
+button.dd-tier:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 3px;
+}
+
+/* The brass-bright ring alone measures under 2:1 against the paper, too faint
+   to carry a selected state. The outer brass-deep pixel carries it. */
+.dd-tier[aria-pressed="true"] {
+  box-shadow:
+    0 0 0 2px var(--paper-bright),
+    0 0 0 4px var(--brass-bright),
+    0 0 0 5px var(--brass-deep);
+  transform: translateY(-1px);
+}
+
+.dd-tier[data-suggested="true"] {
+  box-shadow:
+    0 0 0 2px var(--paper-bright),
+    0 0 0 3px var(--brass-pale);
+}
+
+/* ---------------------------------------------------------------------------
+   Shared type and controls.
+   --------------------------------------------------------------------------- */
+
+.dd-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 10px;
+}
+
+.dd-label--tight {
+  margin-bottom: 4px;
+}
+
+.dd-link {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  text-decoration: none;
+}
+
+.dd-link:hover,
+.dd-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dd-btn {
+  display: inline-block;
+  padding: 12px 26px;
+  border-radius: 4px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  cursor: pointer;
+  appearance: none;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.dd-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.dd-btn:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 2px;
+}
+
+.dd-btn--primary {
+  background: var(--ink);
+  color: var(--cream);
+  border: 1px solid var(--ink);
+}
+
+.dd-btn--primary:not(:disabled):hover {
+  background: var(--ink-soft);
+}
+
+.dd-btn--outline {
+  padding: 12px 20px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  font-size: 15px;
+}
+
+.dd-btn--outline:not(:disabled):hover {
+  background: color-mix(in srgb, var(--ink) 4%, transparent);
+}
+
+.dd-btn--grow {
+  flex: 1;
+  min-width: min(180px, 100%);
+}
+
+.dd-btn--wide {
+  width: 100%;
+}
+
+.dd-micro {
+  padding: 4px 10px;
+  background: var(--paper);
+  color: var(--secondary);
+  border: 1px solid var(--wood-edge);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.15s;
+}
+
+.dd-micro:hover {
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--wood-mid) 45%, transparent);
+}
+
+.dd-micro:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 2px;
+}
+
+.dd-plain-button {
+  background: transparent;
+  border: 0;
+  padding: 2px 6px;
+  cursor: pointer;
+  appearance: none;
+}
+
+.dd-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.dd-error {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--terra) 7%, var(--paper-bright));
+  border: 1px solid color-mix(in srgb, var(--terra) 40%, transparent);
+  border-left: 3px solid var(--terra);
+  border-radius: 4px;
+  font-family: var(--font-reading);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--terra);
+}
+
+.dd-diagnostic {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--terra);
+  overflow-wrap: anywhere;
+}
+
+.dd-error--block {
+  margin: 0 0 16px;
+}
+
+.dd-notice {
+  padding: 14px 16px;
+  border-left: 2px solid var(--brass-mid);
+  background: color-mix(in srgb, var(--brass-pale) 18%, transparent);
+  border-radius: 0 4px 4px 0;
+  font-family: var(--font-reading);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--body-ink);
+}
+
+/* ---------------------------------------------------------------------------
+   Topology bar: the shape of the conversation, and the filter.
+   --------------------------------------------------------------------------- */
+
+.dd-feed {
+  border-top: 1px solid var(--wood-edge);
+}
+
+.dd-topology {
+  padding: clamp(14px, 2vw, 20px) clamp(12px, 3vw, 20px) 12px;
+  background: color-mix(in srgb, var(--wood-mid) 4%, transparent);
+  border-bottom: 1px solid var(--wood-edge);
+}
+
+.dd-topology--empty {
+  padding: clamp(18px, 3vw, 26px) clamp(14px, 3vw, 20px);
+  text-align: center;
+}
+
+.dd-topology-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.dd-topology-title {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+}
+
+.dd-topology-empty-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tertiary);
+  margin-bottom: 12px;
+}
+
+.dd-topology-empty-body {
+  font-family: var(--font-reading);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--secondary);
+  margin: 0 auto 14px;
+  max-width: 520px;
+}
+
+/* The strip. designer's audit: Stance and Breach borders sit 9.22 CIEDE2000
+   apart, closer still under every simulated CVD, and Forum and Spark fills
+   barely separate from the paper. So each segment carries its tier's icon,
+   a channel colour vision does not touch (WCAG 1.4.1), and paper gaps
+   between segments mark where one tier stops. A segment is never narrower
+   than its icon. */
+.dd-strip {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  min-height: 22px;
+  border-radius: 5px;
+  background: var(--paper-bright);
+  border: 1px solid var(--wood-edge);
+  box-shadow: inset 0 1px 2px rgba(28, 24, 20, 0.08);
+  margin-bottom: 10px;
+}
+
+.dd-seg {
+  flex-basis: 0;
+  min-width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px var(--dd-border);
+  cursor: pointer;
+  appearance: none;
+  padding: 0;
+  transition: opacity 0.18s ease;
+}
+
+.dd-seg[data-dimmed="true"] {
+  opacity: 0.32;
+}
+
+.dd-seg:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 2px;
+}
+
+.dd-seg[data-tier="forum"] {
+  color: var(--ink);
+}
+
+.dd-legend {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.dd-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 8px;
+  border: 1px solid var(--dd-border);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    opacity 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.dd-chip[data-dimmed="true"] {
+  opacity: 0.42;
+}
+
+.dd-chip[aria-pressed="true"] {
+  box-shadow:
+    0 1px 3px rgba(28, 24, 20, 0.18),
+    inset 0 0 0 1px var(--brass-deep);
+}
+
+.dd-chip:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 2px;
+}
+
+.dd-chip-count {
+  margin-left: 2px;
+  opacity: 0.8;
+}
+
+/* ---------------------------------------------------------------------------
+   Control bar. Sticky, with the canonical metallic sub-nav gradient
+   (Discourse Layer UX, "Control Bar"; no token carries it). The site header
+   scrolls with the page (the shell sets --nav-height to 0), so the bar pins
+   to the top of the viewport.
+   --------------------------------------------------------------------------- */
+
+.dd-control {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px 12px;
+  flex-wrap: wrap;
+  padding: 8px clamp(12px, 3vw, 20px);
+  background: linear-gradient(to bottom, #eceae4 0%, #d8d4cc 48%, #eceae4 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid var(--wood-edge);
+}
+
+.dd-control-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+
+.dd-control-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--dd-border);
+}
+
+.dd-control .dd-plain-button {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dd-sort {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+
+.dd-sort select {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--wood-edge);
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.dd-sort select:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   The list and the comment card.
+   --------------------------------------------------------------------------- */
+
+.dd-list {
+  padding: clamp(16px, 3vw, 24px) 0 8px;
+}
+
+.dd-list-empty {
+  padding: clamp(32px, 6vw, 56px) 20px;
+  text-align: center;
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--tertiary);
+}
+
+.dd-card {
+  position: relative;
+  padding: clamp(14px, 2vw + 8px, 22px);
+  margin-bottom: 14px;
+}
+
+.dd-card[data-reply="true"] {
+  margin-left: clamp(20px, 4vw, 36px);
+  border-left: 2px solid color-mix(in srgb, var(--brass-mid) 35%, transparent);
+}
+
+/* Discourse Layer UX, "The Breach variant": 0.65 opacity. */
+.dd-card[data-withheld="breach"],
+.dd-card[data-withheld="suppressed"] {
+  opacity: 0.65;
+}
+
+/* The viewer's own comment while nobody else can see it: the recovered
+   malleable glow, which marked the same thing, a comment still private. */
+.dd-card[data-pending="true"] {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--brass-bright) 30%, transparent),
+    0 2px 8px rgba(28, 24, 20, 0.06),
+    0 1px 3px rgba(28, 24, 20, 0.04);
+}
+
+.dd-reply-tag {
+  position: absolute;
+  top: 14px;
+  left: -10px;
+  padding: 2px 6px;
+  background: var(--paper-bright);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+}
+
+.dd-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--wood-edge);
+}
+
+.dd-card[data-reply="true"] .dd-card-head {
+  padding-top: 8px;
+}
+
+.dd-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* Brass as a fill under ink: 5.45:1 on the darker stop, 7.98:1 on the
+   lighter. The recovered initials were cream, 2.90:1. */
+.dd-avatar {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brass-warm), var(--brass-mid));
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dd-name {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.dd-you {
+  margin-left: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  vertical-align: middle;
+}
+
+.dd-when {
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  color: var(--tertiary);
+}
+
+.dd-badges {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dd-badge-stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.dd-eyebrow-ai {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+}
+
+.dd-eyebrow-self {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--tertiary);
+}
+
+.dd-pending {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin: -4px 0 14px;
+}
+
+.dd-pending-pill {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--gold-pale);
+  border: 1px solid color-mix(in srgb, var(--brass-mid) 40%, transparent);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+}
+
+.dd-pending-note {
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 12.5px;
+  color: var(--secondary);
+}
+
+.dd-body {
+  margin: 0;
+  font-family: var(--font-reading);
+  font-size: clamp(14px, 1vw + 8px, 15.5px);
+  line-height: 1.75;
+  color: var(--body-ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.dd-body--withheld {
+  font-size: clamp(13px, 1vw + 7px, 14px);
+  font-style: italic;
+  color: var(--secondary);
+  white-space: normal;
+}
+
+.dd-mention {
+  color: var(--brass-deep);
+  font-weight: 500;
+  border-bottom: 1px dotted color-mix(in srgb, var(--brass-mid) 55%, transparent);
+}
+
+/* The contrast strip: the engine's voice, --gold-pale family with an amber
+   bar (Discourse Layer UX, "Design Decisions", Contrast strip surface). */
+.dd-contrast {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--brass-pale) 18%, transparent);
+  border-left: 2px solid var(--brass-mid);
+  border-radius: 0 4px 4px 0;
+}
+
+.dd-contrast-text {
+  margin: 0;
+  font-family: var(--font-reading);
+  font-size: 13px;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--secondary);
+}
+
+.dd-contrast-text strong {
+  font-style: normal;
+  color: var(--ink-soft);
+}
+
+.dd-card-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--wood-edge);
+}
+
+.dd-card-foot:empty {
+  display: none;
+}
+
+.dd-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.dd-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--wood-edge);
+}
+
+.dd-dot[data-on="true"] {
+  border-color: var(--brass-mid);
+  background: var(--brass-warm);
+}
+
+.dd-dots-label {
+  margin-left: 6px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: var(--tertiary);
+}
+
+/* ---------------------------------------------------------------------------
+   The composer, from dialecta-private-draft.jsx.
+   --------------------------------------------------------------------------- */
+
+.dd-compose {
+  margin-bottom: clamp(24px, 4vw, 36px);
+  scroll-margin-top: 16px;
+}
+
+/* The open composer: bands (reply banner, stage rail) and the stage below
+   them, framed once. The stages' own cards sit inside on the paper. */
+.dd-composer {
+  border: 1px solid var(--wood-edge);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--wood-mid) 2%, transparent);
+  overflow: hidden;
+}
+
+.dd-compose-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+}
+
+.dd-writing-as {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--tertiary);
+}
+
+.dd-access {
+  padding: clamp(18px, 3vw, 26px) clamp(16px, 3vw, 24px);
+  text-align: center;
+}
+
+.dd-access p {
+  margin: 0 auto 14px;
+  max-width: 460px;
+  font-family: var(--font-reading);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--body-ink);
+}
+
+.dd-access p:last-child {
+  margin-bottom: 0;
+}
+
+/* The sheet already pads the page edge, so a stage adds little at phone width. */
+.dd-stage {
+  padding: clamp(18px, 4vw, 28px) clamp(12px, 3vw, 26px) clamp(20px, 4vw, 28px);
+}
+
+.dd-card-pad {
+  padding: clamp(18px, 3vw, 28px);
+}
+
+.dd-stage--narrow {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.dd-preview {
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  border: 1px dashed var(--brass-mid);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: var(--brass-deep);
+}
+
+.dd-preview--feed {
+  margin: 16px 0;
+}
+
+.dd-reply-banner {
+  display: flex;
+  align-items: baseline;
+  gap: 6px 12px;
+  flex-wrap: wrap;
+  padding: 10px clamp(14px, 4vw, 26px);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--gold-pale) 60%, transparent),
+    color-mix(in srgb, var(--cream) 40%, transparent)
+  );
+  border-bottom: 1px solid var(--wood-edge);
+}
+
+.dd-reply-banner-label {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+}
+
+.dd-reply-banner-excerpt {
+  flex: 1 1 12rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-reading);
+  font-size: 12.5px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--secondary);
+}
+
+.dd-reply-banner .dd-plain-button {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dd-stub {
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  background: var(--paper);
+  border: 1px solid var(--wood-edge);
+  border-radius: 6px;
+}
+
+.dd-stub-title {
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.4vw + 10px, 18px);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.dd-nudge {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: var(--gold-pale);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.dd-draft {
+  padding: 18px 20px;
+}
+
+.dd-draft:focus-within {
+  border-color: var(--brass-mid);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass-mid) 14%, transparent);
+}
+
+.dd-textarea {
+  display: block;
+  width: 100%;
+  min-height: 170px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  background: transparent;
+  font-family: var(--font-reading);
+  font-size: clamp(15px, 1vw + 10px, 17px);
+  line-height: 1.7;
+  color: var(--body-ink);
+}
+
+.dd-textarea::placeholder {
+  color: var(--tertiary);
+  font-style: italic;
+}
+
+.dd-draft-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--wood-edge);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--tertiary);
+}
+
+.dd-draft-foot em {
+  font-style: italic;
+}
+
+.dd-explainer {
+  margin: 16px 4px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--tertiary);
+}
+
+.dd-restored {
+  margin: 0 0 12px;
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 12.5px;
+  color: var(--secondary);
+}
+
+/* The stage rail: the private draft's StageRail (lines 129-188), brass dots
+   on a wood rule. Only the active label shows on a phone; the dots carry the
+   rest, the same rule the writer's rail uses. */
+.dd-rail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px clamp(12px, 3vw, 20px);
+  border-bottom: 1px solid var(--wood-edge);
+  background: color-mix(in srgb, var(--wood-mid) 4%, transparent);
+  overflow-x: auto;
+}
+
+.dd-rail-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.dd-rail-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--wood-mid) 28%, transparent);
+  transition: all 0.3s ease;
+}
+
+.dd-rail-step[data-state="passed"] .dd-rail-dot {
+  background: var(--brass-mid);
+}
+
+.dd-rail-step[data-state="active"] .dd-rail-dot {
+  background: var(--brass-bright);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brass-pale) 45%, transparent);
+}
+
+.dd-rail-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tertiary);
+}
+
+.dd-rail-step[data-state="passed"] .dd-rail-label {
+  color: var(--secondary);
+}
+
+.dd-rail-step[data-state="active"] .dd-rail-label {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.dd-rail-rule {
+  width: 14px;
+  height: 1px;
+  margin-left: 2px;
+  flex-shrink: 0;
+  background: var(--wood-edge);
+}
+
+@media (max-width: 600px) {
+  .dd-rail-step:not([data-state="active"]) .dd-rail-label {
+    display: none;
+  }
+}
+
+.dd-h2 {
+  margin-bottom: 14px;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2vw + 10px, 26px);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* The stage heading's accent word: the recovered .dialecta-brass italic,
+   lettered in --brass-deep because the heading sits on paper. */
+.dd-accent {
+  font-style: italic;
+  color: var(--brass-deep);
+}
+
+.dd-rule {
+  height: 2px;
+  width: 40px;
+  margin-bottom: 18px;
+  background: var(--brass-mid);
+}
+
+.dd-p {
+  margin-bottom: 14px;
+  font-family: var(--font-reading);
+  font-size: clamp(14px, 1vw + 8px, 15px);
+  line-height: 1.7;
+  color: var(--body-ink);
+}
+
+.dd-p--quiet {
+  font-size: 13.5px;
+  font-style: italic;
+  color: var(--secondary);
+}
+
+.dd-principle {
+  margin-bottom: 22px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--brass-pale) 18%, transparent);
+  border-left: 2px solid var(--brass-mid);
+  border-radius: 4px;
+}
+
+.dd-principle-text {
+  font-family: var(--font-reading);
+  font-size: 13.5px;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--body-ink);
+}
+
+.dd-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 8px;
+  margin-bottom: 22px;
+}
+
+.dd-meaning {
+  margin-bottom: 22px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--brass-pale) 16%, transparent);
+  border-left: 2px solid var(--brass-warm);
+  border-radius: 4px;
+}
+
+.dd-slots {
+  margin-bottom: 16px;
+}
+
+.dd-slot {
+  padding: clamp(14px, 2vw + 8px, 22px);
+  border-bottom: 1px solid var(--wood-edge);
+}
+
+.dd-slot:last-child {
+  border-bottom: 0;
+}
+
+.dd-slot-text {
+  margin: 0;
+  font-family: var(--font-reading);
+  font-size: clamp(14px, 1vw + 8px, 15px);
+  line-height: 1.65;
+  color: var(--body-ink);
+}
+
+.dd-slot-text + .dd-meta {
+  margin-top: 12px;
+}
+
+.dd-slot-none {
+  font-style: italic;
+  color: var(--tertiary);
+}
+
+.dd-meta {
+  display: flex;
+  gap: 6px clamp(10px, 2vw, 16px);
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tertiary);
+}
+
+.dd-suggested {
+  display: flex;
+  align-items: center;
+  gap: 8px 12px;
+  flex-wrap: wrap;
+}
+
+.dd-close-to {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tertiary);
+}
+
+.dd-close-to em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 12.5px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--brass-deep);
+}
+
+.dd-tier-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 16px;
+  margin-bottom: 16px;
+}
+
+.dd-tier-row-label {
+  margin-bottom: 4px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tertiary);
+}
+
+.dd-tier-row-note {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+}
+
+.dd-status {
+  margin-bottom: 18px;
+}

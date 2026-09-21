@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { DiscourseSection, toArticleClaims } from '@/components/discourse/discourse-section';
 import { getPublishedArticle, isSupabaseConfigured } from '@/lib/articles';
 import { isOwnArticle } from '@/lib/article-ownership';
 import { sanitizeArticleHtml } from '@/lib/sanitize-html';
 import { topicLabel } from '@/lib/topics';
 import { strings } from '@/strings';
 import { SITE_URL } from '@/lib/site';
+import './article.css';
 
 /** Ghost's own reading speed for {{reading_time}}. */
 const WORDS_PER_MINUTE = 275;
@@ -26,6 +28,7 @@ function publishedDate(iso: string | null): string | null {
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 /**
@@ -76,7 +79,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   };
 }
 
-export default async function ArticlePage({ params }: ArticlePageProps) {
+export default async function ArticlePage({ params, searchParams }: ArticlePageProps) {
   const { slug } = await params;
 
   if (!isSupabaseConfigured()) {
@@ -102,11 +105,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   // on the page itself; it is a note for builders, so it lives here now.
   //
   // The layout is post.hbs's: breadcrumb, brass title, lede, byline, body, on
-  // the same paper sheet the writer at /write drafts on. The spine, the tier
-  // badge, the discourse chip and the author bio are not here yet.
+  // the same paper sheet the writer at /write drafts on, then "The
+  // Conversation": the discourse layer (src/components/discourse), below the
+  // body on the same sheet, as post.hbs placed #dialecta-comments. The spine,
+  // the article's own tier badge, the discourse chip and the author bio are
+  // not here yet.
   const own = await isOwnArticle(article.id);
   const topic = topicLabel(article.topic);
   const date = publishedDate(article.published_at);
+
+  // ?composer=preview runs the comment composer's stages with nothing sent,
+  // for checking the ritual without an account. Development only: a
+  // production build never reads the parameter.
+  const preview = process.env.NODE_ENV === 'development' && (await searchParams).composer === 'preview';
 
   return (
     <main className="dialecta-wide">
@@ -123,7 +134,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           ) : null}
         </div>
 
-        <h1 className="dialecta-article-title dialecta-brass">{article.title}</h1>
+        <h1 className="dialecta-article-title article-title">{article.title}</h1>
 
         {article.excerpt ? <p className="dialecta-lede">{article.excerpt}</p> : null}
 
@@ -154,6 +165,23 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <div
           className="dialecta-reading dialecta-reading--article"
           dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(article.body_html) }}
+        />
+
+        {/*
+          Rendered in the page's own HTML, not behind a Suspense boundary: a
+          streamed boundary is revealed by a script, so a reader without
+          JavaScript would see a loading line where the conversation is.
+          loadDiscourse never throws, so a failed read cannot take the
+          article down with it.
+        */}
+        <DiscourseSection
+          article={{
+            id: article.id,
+            slug: article.slug,
+            title: article.title,
+            claims: toArticleClaims(article.declared_claims),
+          }}
+          preview={preview}
         />
       </article>
     </main>
