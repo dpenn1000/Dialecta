@@ -93,9 +93,9 @@
 
 | Id | Item | Spec | Blocked by | State |
 | --- | --- | --- | --- | --- |
-| D-1 | 2-axis opinion map island, `opinion_positions` writes, aggregate heat cloud | Project Brief, Option A; components/dialecta-opinion-maps.jsx | C0-4 | Todo |
-| D-2 | Ternary map | Option B | D-1 | Todo |
-| D-3 | Delta mechanic: before/after placement, `delta_of` | Delta Mechanic Spec | D-1 | Todo |
+| D-1 | Port live's reading spine, Declare overlay and all three opinion maps, with reader placement (Stages A and C) | `team/architect/architecture/2026-09-21-delta-mechanic-port.md`; `_recovered-next/lib/theme/dialecta-opinion-map.jsx`; table `opinion_map_positions` | None; lands before Cutover (2026-09-21) | Steps 1 to 4 done (`25e4959`); the re-key and placement in progress |
+| D-2 | Ternary map | Merged into D-1, which ports all three map types | D-1 | Done in D-1 |
+| D-3 | Delta mechanic Stages D to F: the delta, the reveal, the public choice, Reviser detection | Delta Mechanic Spec; never built on live or here | D-1, the identity re-key (2.10) | Todo; needs its own plan |
 | D-4 | Aspirations and recommitment; Self-Snapshot (three voices) | Growth Layer Principles; Self-Snapshot Engine | B-2, A-8 | Todo |
 
 ## Done

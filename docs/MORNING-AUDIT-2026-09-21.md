@@ -6,6 +6,41 @@ section 6.*
 
 ---
 
+## Today's build
+
+Committed and on `backup/2026-09-21-overnight`; `main` is still not pushed.
+
+| Landed | Commits |
+| --- | --- |
+| Your login is linked to your profile (2.1). Publishing should work for you now, and your first publish tests 2.3's policy; commenting still needs 2.4 | `feebae9`, `3f60786` |
+| The five article photos moved off Ghost into the `article-media` bucket, and the article page shows them | `a975857`, `3f60786`, `85f056d` |
+| Long pages paint to the bottom again (designer regression 1) | `cca039f` |
+| Live's right-hand rail on every page but `/write` (regression 2) | `e8f6e7f` |
+| The reading spine, the author's declaration and the opinion maps, read-only (regression 3, steps 1 to 4) | `58a3ebe` plan, `25e4959` |
+| Comment times read like live's, and the featured photo slot (regressions 6 and 4) | `2b30710` |
+| Profiles gain live's Growth tab (regression 5) | `aa68e19` |
+
+**Open from today:**
+
+- **Comments open only after the Breach-body lock** (`security-01`): a release function, both
+  readers switched to it, then the revoke. Running now.
+- **Declare's placement step** waits on the `opinion_map_positions` migration you approved. It is
+  written as expand now and contract at cutover, because live still writes that table. Running now.
+- **Before cutover:** copy the three profile avatars and the site's logo, icon and two home photos
+  off Ghost the same way; redirect `/content/images/*` to the bucket so old links still resolve;
+  and don't rerun `scripts/import-ghost.mjs` as it stands, since it would write Ghost's photo URLs
+  back over ours.
+- **"Joined" on profiles is hidden.** No join date is stored, and a login's own date would be months
+  late for anyone from Ghost. The fix is `profiles.joined_at`, backfilled from Ghost's members.
+- **For `designer` to confirm:** the Pact parchment lost its 9px soft inner ring in the paint fix;
+  the content column is 1180px where live's is 1280px; the spine keeps two breakpoints (720px,
+  1199px) outside the app's set.
+- **`/login` shows a claim token in its address bar** (`?next=/claim?token=...`) until the form is
+  sent, and an analytics page view there would carry it. Scrub it the way `/claim` does before claim
+  links go to the other 13 members.
+
+---
+
 ## 0. First: the live comments API gives out private data
 
 **Production `/api/comments` returns, to anyone who asks, every comment's private commenter message,
@@ -110,7 +145,7 @@ Ranked by what they unblock. The first three are between you and publishing an a
 
 | | Decision | What it unblocks | Cost |
 | --- | --- | --- | --- |
-| **2.1** | **Link your login to your profile.** Sign in once at `/login`, then a claim token has to be issued for your profile and redeemed. `claim_profile()` exists and works; nothing has ever called it | Publishing, commenting as yourself, and opening `/analytics` in production | Ten minutes with a session that can write |
+| ~~2.1~~ | ~~Link your login to your profile~~ **Done 2026-09-21.** You claimed `dpenn1000` through the new `/claim` page, the first call `claim_profile()` has had | Publishing and `/analytics` as yourself; commenting also needs 2.4 | Done |
 | ~~2.2~~ | ~~Retire the Ghost id~~ **Done overnight.** `articles.ghost_post_id` is nullable, migration `20260921052443`, so a native article can now be saved. You had said the implementation is being fully rebuilt, which settled what I had framed as the Ghost-retirement decision | Native articles | Done |
 | ~~2.3~~ | ~~An author write policy on `articles`~~ **Done overnight by `security`.** Migration `20260921053807`: an author can write their own article and never its tier. Table-level insert and update were revoked, then granted back for exactly the columns the publish route writes; both author ids are pinned to the caller, keyed on `profiles.id` as the architect directed; and `published_at` must fall within five minutes of now, so nobody can date an article ahead and hold the top of the front page | Publishing | Done. It matches nobody until 2.1, so your first real publish is its test |
 | **2.4** | **Check that `apps/web`'s own env file defines `SUPABASE_SERVICE_ROLE_KEY`.** The name split is deliberate, not a mismatch: `apps/web/.env.example` uses `SUPABASE_SERVICE_ROLE_KEY` and says not to reintroduce the old name, while the root uses `SUPABASE_SERVICE_KEY` for the legacy `api/` and `scripts/`. **Next.js loads env files from the app's own directory, so the root `.env` does not enter into it.** While you are there, `apps/web/.env.example` is missing two names the code reads: `ANALYTICS_ADMIN_UIDS` and `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` | The comment pipeline, and on this machine most of what the prototype shows: without the key, `/api/comment` stores a comment and then fails with a 500 at the classification insert, and every profile says its fingerprint could not be read. Tiers no longer need it: they read through database functions `security` added overnight | A minute. *Corrected by the architect seat: this row first pointed you at the root `.env`, which was the wrong file* |
