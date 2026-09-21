@@ -21,9 +21,11 @@ getting written down.
 
 ## Where it is now
 
-Sprints 1 and 2 both ran 2026-09-19. Sixteen sources filed in `research/`, six of them from the seed.
-Eighteen standing positions in `positions.md`, each with confidence and a filed note behind it.
-Nothing is `(unsourced)`. It has still never argued in council.
+Three sprints ran 2026-09-19, and a fourth session on 2026-09-20 added `studio/`. Nineteen sources
+filed in `research/`, six of them from the seed. Twenty-six standing positions in `positions.md`,
+each with confidence and a filed note behind it. Nothing is `(unsourced)`. It has still never argued
+in council, though `2026-09-19-003` drew real answers from `philosopher` and `treasurer` and is
+functionally a debate that happened in the exchange instead.
 
 Sprint 2 exists because sprint 1 read entirely about behaviour and filed nothing on colour, space,
 type or layout, which is half of what this advisor is for. D-11 through D-18 are the craft half, and
@@ -49,10 +51,16 @@ with no message, which is the mechanism two government design systems say to avo
 research. On P0-D2: Google OAuth first, because Supabase's own documentation says magic link cannot
 deliver to anyone outside the project team without custom SMTP.
 
-Three records are open in `exchange/`: 2026-09-19-002 on the SMTP blocker, 2026-09-19-003 asking
-`philosopher` and `treasurer` for the evidence behind the composer gate before the debate, and
-2026-09-19-004 to `decider`, because the badge contrast defects sit inside a locked decision and
-`exchange/README.md` case 2 says that stops here.
+Four records were opened in `exchange/`, and two came back with more than was asked for.
+2026-09-19-002 on the SMTP blocker. 2026-09-19-003 on the composer gate, where `philosopher`
+returned Matias (2019), a randomised field experiment across 2,190 r/science discussions in which
+displaying the rules, changing nothing about enforcement, raised newcomer compliance 8 points and
+participation 70 percent, plus Steindl et al. on situational barriers as a reactance trigger in
+their own right; and `treasurer` priced classification at $0.002 a comment and showed the cost
+question was never the real one, the abuse path is. 2026-09-19-004 to `decider` on the badge
+contrast defects. 2026-09-19-005, where `builder` corrected this seat: the `aesthetic-suggest.js`
+text quoted in that record is v1, and production had already moved to a server-side polish engine
+with no suggestion cards, so the interaction argued for is not what was last live.
 
 The scope line held in sprint 2 and should keep holding. D-17 states it: the brightness ladder, the
 gold, the grain and the nav gradient are not in play, and every craft position is either additive or
@@ -71,38 +79,65 @@ The boundary on Trinity needs restating every time it comes up. Root `CLAUDE.md`
 guides descend from Trinity and the two are "kept separate on purpose". The same holds for design:
 take the laws and the method, never the palette or the cockpit look.
 
-## Proposed charter amendment, for Dan
+## Waiting on Dan
 
-`guard-docs.mjs` blocks this advisor from editing `charter.md`, correctly. This is the proposal, to
-accept, change or refuse.
+**Resolved 2026-09-20: the charter amendment.** This section used to propose two generative clauses
+because the charter was written entirely in defensive terms. Dan rewrote both the charter and the
+mandate instead, and went further than the proposal did. Recorded as D-26. Nothing is owed here.
 
-The charter is written entirely in defensive terms: what it fights for, what it would veto, what
-constrains it, what it measures. Three sprints produced two audits and one scan, which is what that
-charter asks for. Nothing in it says this advisor may propose something new, and nothing names
-craft. The mandate says the site should feel "native and inevitable" and then never mentions colour,
-space, type or beauty again.
+**Open: the mandate's tool list contradicts the mandate.** One line, and it is the thing standing
+between this seat and the job it has now been given.
 
-Two clauses would fix it, in the charter's existing register:
+`.claude/agents/designer.md` currently declares:
 
-> **I propose, not only object.** A council seat that only ever says no is a filter. I bring fresh
-> work: a surface nobody asked for, a mechanic that fits the thesis better than the one in the spec,
-> a way to make the thing people will actually love. I argue for it with the same evidence I demand
-> of others.
+```
+tools: Read, Grep, Glob, Write, WebSearch, WebFetch
+```
 
-> **Fit and finish are mine.** Colour that survives real eyes, space that carries meaning, type a
-> person reads without noticing, and the organic native feel that makes this place look like nowhere
-> else. Tokens are locked and I do not iterate on them for taste, but a number that is measurably
-> wrong is mine to raise, and a system with no rule behind it is mine to propose one for.
+No `Bash`, and no browser. The prose above that line asks for three things the line forbids. It says
+"compute it rather than judging it by eye: you wrote `council/designer/research/tier-palette-audit.py`
+for exactly this", and the advisor cannot run that script. It says "Compute what can be computed.
+Contrast, type scale ratios, spacing multiples and breakpoints are arithmetic", and the advisor
+cannot compute. It ends "End a session with `node scripts/land.mjs --agent designer`", and the
+advisor cannot land.
 
-The standing ask from the charter is unchanged and now blocks its own positions. D-7 says plainly
-that nothing about the composer can be settled until first-comment completion is instrumented. That
-is the next thing worth buying.
+Every measured finding this seat holds, the whole palette audit and the space audit, was produced by
+a lead session holding tools the advisor itself does not have. The seat owns the numbers and cannot
+reproduce them.
+
+The proposed line, verified against the Claude Code subagent documentation for the
+`mcp__<server>__*` pattern:
+
+```
+tools: Read, Edit, Write, Grep, Glob, Bash, WebSearch, WebFetch, mcp__Claude_Browser__*, mcp__visualize__*
+```
+
+`Bash` runs the audit, computes, and lands. `Edit` replaces wholesale rewrites of `positions.md`,
+which is how a session clobbers another session's rows. The browser is how this seat stops
+auditing a visual system without looking at it. `mcp__visualize__*` is how it shows Dan a rendered
+comparison instead of describing one.
+
+Two additions belong with it, both written out ready to paste in
+`council/designer/proposed-mandate-additions.md`: a short section on how to render and inspect a
+surface in this environment, because the method is not obvious and cost a session several wrong
+turns; and one sentence tightening the write rule, because `Bash` can write anywhere and the folder
+fence is currently prose rather than a mechanism.
+
+**Why this is not already done.** The auto mode classifier blocked the edit as self-modification,
+which is right: an agent widening its own tool grant is exactly the change a human should make.
+No workaround was attempted. The change is Dan's to apply.
+
+## The standing ask
+
+Unchanged, and it still blocks its own positions. D-7 says nothing about the composer can be
+settled until first-comment completion is instrumented. That is the next thing worth buying.
 
 ## Next three
 
-1. Answer the two open blindspots when the replies land, then revise D-2 and D-5 against them. A
-   position that survives the philosopher and the treasurer is worth more than one that was never
-   shown to them.
+1. The replies landed and they moved two positions. D-2 is confirmed rather than argued, on
+   Matias, and D-5 moves from preference to requirement, because treasurer tied it to the open
+   unauthenticated write path rather than to the Anthropic bill. Fold both into `positions.md`
+   with the new citations, and close `2026-09-19-003`.
 2. Write the instrumentation ask as a concrete proposal: the events, the surfaces they fire from, and
    where they are stored, for first-comment completion, composer abandonment and seven day return.
    D-7 makes every other position provisional until this exists.
