@@ -287,8 +287,16 @@ export function parseArticleRow(row: unknown): ArticleRow | null {
 
 // ─── comments ───────────────────────────────────────────────────────────────
 
-/** Never member_email, which is closed to anon, and never member_id, which is the bridge. */
-export const COMMENT_COLUMNS = 'id, article_slug, article_title, body, published_at';
+/**
+ * Never member_email, which is closed to anon, and never member_id, which is
+ * the bridge. body is no longer selected here either: comments.body is
+ * closed at the column grant once every reader stops selecting it directly
+ * (20260921184500_close_comments_body_and_mentions_to_public.sql). data.ts
+ * reads it separately through comment_bodies() and merges it onto each row
+ * before parseCommentRow() below sees it, so that function's own shape stays
+ * unchanged.
+ */
+export const COMMENT_COLUMNS = 'id, article_slug, article_title, published_at';
 
 export interface CommentRow {
   id: string;
@@ -296,6 +304,24 @@ export interface CommentRow {
   articleTitle: string | null;
   body: string;
   publishedAt: string | null;
+}
+
+/**
+ * The comments query's own shape, before comment_bodies() has merged body
+ * onto it: id, article_slug, article_title, published_at as PostgREST sent
+ * them. Deliberately not a transform like parseCommentRow below: the row it
+ * returns keeps its raw snake_case keys, so `{ ...shape, body }` is still a
+ * row parseCommentRow() can read. id is checked and guaranteed present so the
+ * caller can collect ids to pass to comment_bodies().
+ */
+export interface CommentRowShape extends Record<string, unknown> {
+  id: string;
+}
+
+export function parseCommentRowShape(row: unknown): CommentRowShape | null {
+  if (!isRecord(row) || !hasKeys(row, ['id', 'article_slug', 'article_title', 'published_at'])) return null;
+  const id = str(row.id);
+  return id === null ? null : { ...row, id };
 }
 
 export function parseCommentRow(row: unknown): CommentRow | null {

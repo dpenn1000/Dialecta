@@ -38,16 +38,24 @@ type ServerClient = Awaited<ReturnType<typeof createClient>>;
 type Row = Record<string, unknown>;
 
 // member_id is read so the server can tell the viewer's own comments apart.
-// It never leaves this file: toComment() does not copy it.
-const COMMENT_COLUMNS = 'id, parent_id, member_id, member_name, body, status, created_at, mentions';
+// It never leaves this file: toComment() does not copy it. body and mentions
+// are no longer read here: comments.body/mentions are closed at the column
+// grant once every reader stops selecting them directly
+// (20260921184500_close_comments_body_and_mentions_to_public.sql, applied
+// after this switch ships). They come from comment_bodies() below instead.
+const COMMENT_COLUMNS = 'id, parent_id, member_id, member_name, status, created_at';
 
-// A classification comes through two SECURITY DEFINER functions, since the
-// table itself is closed to both client roles (migration 20260921063139).
+// A classification or a body comes through a SECURITY DEFINER function, since
+// comments.body/mentions and the whole classifications table are closed to
+// both client roles (migrations 20260921063139, 20260921154615).
 // comment_tiers returns the public half every card shows: comment_id,
 // ai_suggested_tier, self_declared_tier, final_tier, specificity_score,
 // classified_at. own_comment_readings returns the private half, the commenter
 // message among it, and answers only for the caller's own comments.
-type ClassificationRead = 'comment_tiers' | 'own_comment_readings';
+// comment_bodies returns comment_id, body, mentions for whatever the caller
+// could already read whose newest classification is not Breach and whose
+// comment is not suppressed; an id it drops is withheld, not an error.
+type LatestRead = 'comment_tiers' | 'own_comment_readings' | 'comment_bodies';
 
 /** Enough for any article this platform has; the recovered read had no limit at all. */
 const COMMENT_LIMIT = 500;
@@ -194,9 +202,9 @@ async function readComments(supabase: ServerClient, article: { id: string; slug:
  * already read. An empty list returns before the call: own_comment_readings
  * refuses anon, and a signed-out reader has no comments of their own.
  */
-async function readLatest(
+export async function readLatest(
   supabase: ServerClient,
-  fn: ClassificationRead,
+  fn: LatestRead,
   commentIds: string[],
 ): Promise<Map<string, Row>> {
   const latest = new Map<string, Row>();
@@ -211,22 +219,19 @@ async function readLatest(
 }
 
 /**
- * The ids among these whose body this session may be shown: classified, and
- * not Breach, by the same tier rule every card applies. The one definition of
- * that rule for every surface that shows a comment's words; the discourse feed
- * applies it card by card in toComment(), and the profile's recent comments
+ * The ids among these whose body this session may be shown: whatever
+ * comment_bodies() returns a row for. That database function is now the one
+ * place the withheld predicate lives (classified, not Breach, not suppressed,
+ * and already readable under the comments RLS policies), so this no longer
+ * re-derives it from comment_tiers in JS. The discourse feed applies the same
+ * function card by card in toComment(), and the profile's recent comments
  * call this. A comment it leaves out shows no body anywhere.
  */
 export async function commentIdsWithShowableBodies(
   supabase: ServerClient,
   commentIds: string[],
 ): Promise<Set<string>> {
-  const showable = new Set<string>();
-  for (const [id, row] of await readLatest(supabase, 'comment_tiers', commentIds)) {
-    const tier = toTier(row);
-    if (tier && tier.final !== 'breach') showable.add(id);
-  }
-  return showable;
+  return new Set((await readLatest(supabase, 'comment_bodies', commentIds)).keys());
 }
 
 function toTier(row: Row | undefined): CommentTier | null {
@@ -243,16 +248,25 @@ function toTier(row: Row | undefined): CommentTier | null {
   return { ai, self, final };
 }
 
+/**
+ * comments.body and comments.mentions are no longer selected on the comments
+ * table (see COMMENT_COLUMNS above); they come from bodyRow, the caller's own
+ * per-id read of comment_bodies(). A comment_bodies() drops a row for reads
+ * as withheld here regardless of why: no classification yet, Breach, and
+ * suppressed all look the same to this function, since the database function
+ * is now the one place that predicate lives (its own "THE TWO DECISIONS"
+ * comment in the migration).
+ */
 function toComment(
   row: Row,
   tierRow: Row | undefined,
+  bodyRow: Row | undefined,
   memberId: string | null,
 ): DiscourseComment | null {
   const id = str(row.id);
   const status = statusOrNull(row.status);
   const createdAt = str(row.created_at);
-  const rawBody = str(row.body);
-  if (!id || !UUID_RE.test(id) || !status || !createdAt || rawBody === null) return null;
+  if (!id || !UUID_RE.test(id) || !status || !createdAt) return null;
 
   const rowMember = str(row.member_id);
   const isOwn = memberId !== null && rowMember === memberId;
@@ -266,19 +280,29 @@ function toComment(
   else if (!tier) withheld = 'unread';
   else if (tier?.final === 'breach') withheld = 'breach';
 
+  const rawBody = withheld ? null : str(bodyRow?.body);
+  // A non-withheld comment with no row back from comment_bodies() is this
+  // predicate and the database function's own copy of it disagreeing:
+  // comment_bodies() restates the same tier check independently (the
+  // migration's own "THE PRICE" note), so this should not happen. Log it and
+  // fail closed rather than render an empty body.
+  if (!withheld && rawBody === null) {
+    console.error('discourse: comment_bodies had no row for a non-withheld comment', { id });
+  }
+
   const parentId = str(row.parent_id);
   return {
     id,
     parentId: parentId && UUID_RE.test(parentId) ? parentId : null,
     authorName: nonBlank(row.member_name) ?? '',
-    body: withheld ? null : decodeStoredText(rawBody),
-    withheld,
+    body: rawBody !== null ? decodeStoredText(rawBody) : null,
+    withheld: withheld ?? (rawBody === null ? 'unread' : null),
     createdAt,
     status,
     isOwn,
     tier,
     specificity: specificityOrNull(tierRow?.specificity_score),
-    mentions: withheld ? [] : toMentions(row.mentions),
+    mentions: withheld || rawBody === null ? [] : toMentions(bodyRow?.mentions),
   };
 }
 
@@ -328,11 +352,12 @@ export async function loadDiscourse(article: { id: string; slug: string }): Prom
     const commentRows = await readComments(supabase, article);
     const ids = commentRows.map((r) => str(r.id)).filter((id): id is string => id !== null && UUID_RE.test(id));
     const tiers = await readLatest(supabase, 'comment_tiers', ids);
+    const bodies = await readLatest(supabase, 'comment_bodies', ids);
 
     const comments: DiscourseComment[] = [];
     for (const row of commentRows) {
       const id = str(row.id);
-      const comment = toComment(row, id ? tiers.get(id) : undefined, memberId);
+      const comment = toComment(row, id ? tiers.get(id) : undefined, id ? bodies.get(id) : undefined, memberId);
       if (comment) comments.push(comment);
     }
 

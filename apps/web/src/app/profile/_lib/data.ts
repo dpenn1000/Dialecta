@@ -32,7 +32,7 @@ import 'server-only';
  */
 import { cache } from 'react';
 import { createClient } from '@/lib/supabase/server';
-import { commentIdsWithShowableBodies } from '@/components/discourse/data';
+import { readLatest } from '@/components/discourse/data';
 import { createServiceClient } from '@/lib/supabase/service';
 import type { FingerprintData } from '@dialecta/core';
 import {
@@ -47,6 +47,7 @@ import {
   parseArticleRow,
   parseAxisRow,
   parseCommentRow,
+  parseCommentRowShape,
   parseFeedRow,
   parseProfileRow,
   toFingerprintData,
@@ -264,15 +265,26 @@ async function loadKeyed(supabase: Client, memberKey: string): Promise<Keyed> {
   if (comments.error) warn('comments', comments.error.message);
   if (feed.error) warn('feed_events', feed.error.message);
 
-  // A body shows here only by the rule the discourse feed applies: classified,
-  // and not Breach. A failed tier read shows none, since a Breach comment's
-  // words must not appear in full on its author's profile.
-  const recent = comments.error ? [] : parseRows('comments', comments.data, parseCommentRow);
-  let showable = new Set<string>();
+  // A body shows here only by the rule comment_bodies() applies: classified,
+  // not Breach, not suppressed (the migration's own "THE TWO DECISIONS", also
+  // applied in discourse/data.ts toComment()). A failed read shows none,
+  // since a Breach comment's words must not appear in full on its author's
+  // profile. recent is the comments query's own shape, body not yet among it
+  // (COMMENT_COLUMNS no longer selects it); comment_bodies() supplies it per
+  // id, and an id it has no entry for is dropped here rather than rendered
+  // without a body.
+  const recent = comments.error ? [] : parseRows('comments', comments.data, parseCommentRowShape);
+  let comments_: CommentRow[] = [];
   try {
-    showable = await commentIdsWithShowableBodies(supabase, recent.map((c) => c.id));
+    const bodies = await readLatest(supabase, 'comment_bodies', recent.map((c) => c.id));
+    comments_ = recent
+      .map((c) => {
+        const b = bodies.get(c.id);
+        return b ? parseCommentRow({ ...c, body: b.body }) : null;
+      })
+      .filter((c): c is CommentRow => c !== null);
   } catch (err) {
-    warn('comment_tiers', err instanceof Error ? err.message : String(err));
+    warn('comment_bodies', err instanceof Error ? err.message : String(err));
   }
 
   return {
@@ -280,7 +292,7 @@ async function loadKeyed(supabase: Client, memberKey: string): Promise<Keyed> {
     archetype: archetype.error || !archetype.data ? null : parseArchetypeRow(archetype.data),
     connections,
     commentCount: comments.error ? null : (comments.count ?? null),
-    comments: recent.filter((c) => showable.has(c.id)),
+    comments: comments_,
     feed: feed.error ? [] : parseRows('feed_events', feed.data, parseFeedRow),
   };
 }
