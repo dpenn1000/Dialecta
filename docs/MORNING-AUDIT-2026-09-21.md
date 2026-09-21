@@ -300,6 +300,23 @@ else, which serves as the acceptance test. `builder` implements.
 **`apps/web` has no tests at all**, and classification rows carry no prompt version although
 `packages/core/CLAUDE.md` requires one (`architect-06`, `-07`).
 
+**Known gaps in the new app, each found by the builder that hit it:**
+
+- `/api/comment` treats a plain comment as HTML, so anything after a `<` was lost. The composer
+  escapes before posting and the feed decodes for display, so text survives the round trip; the fix
+  is the route storing text as text, in the architect's step 5. The route also does not check that
+  the article it names exists.
+- Nothing moves a new comment off pending review, so only its author sees it. Stage 2.5 and
+  publishing are not built.
+- The feed is a client island the architect's list does not name (section 3).
+- Signing the Pact records nothing, and no sign-up screen shows the terms, so nobody can accept them
+  yet (section 0B).
+- Every visitor sees a profile's fingerprint. The Council recommends owner-only until the human
+  study passes (section 0A).
+- `current_profile_id()` and `current_member_is_author()` sit in `public`, so any signed-in session
+  can call them as endpoints. Each returns only the caller's own answer, so nothing leaks, but
+  `security`'s rule keeps policy helpers out of the exposed schema (`decider`'s finding).
+
 ---
 
 ## 7. What went wrong overnight, plainly
