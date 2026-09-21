@@ -8,6 +8,14 @@
  * --brass-mid (#b8862e): exact hex matches against
  * styles/dialecta-surfaces.css, carried over as color-mix() the same way
  * spine.css already treats this source file's rgba literals.
+ *
+ * One departure from the source: .post-discourse-chip-cta letters in
+ * --brass-deep, not the source's --brass-mid (apps/web/CLAUDE.md, "Brass
+ * never letters on a light surface", designer D-27; discourse.css
+ * documents --brass-mid at 3.15:1 on paper, under the 4.5:1 floor,
+ * against --brass-deep's 7.27:1). .post-discourse-chip-mark keeps
+ * --brass-warm: it is an aria-hidden ornament, not lettering, the same
+ * exemption the spine's own marks carry (spine.css, .post-spine-mark).
  */
 
 .post-discourse-chip {
@@ -69,7 +77,7 @@
 
 .post-discourse-chip-cta {
   font-style: italic;
-  color: var(--brass-mid);
+  color: var(--brass-deep);
   font-weight: 500;
   margin-left: 2px;
 }

@@ -9,6 +9,17 @@
  * .post-author-bio-blurb's color maps to --body (#3a342c), not
  * tokens.css's --text-prose (#5e6066): the source's own fallback,
  * #3a342c, is --body's exact value, not --text-prose's.
+ *
+ * One departure from the source: .post-author-bio-link letters in
+ * --brass-deep at rest, not the source's --brass-mid (apps/web/CLAUDE.md,
+ * "Brass never letters on a light surface", designer D-27; discourse.css
+ * documents --brass-mid at 3.15:1 on paper, under the 4.5:1 floor,
+ * against --brass-deep's 7.27:1). Its hover state, which the source spent
+ * on the same brass-deep this now rests on, becomes an underline instead:
+ * the same brass-mid-underline-on-hover treatment
+ * styles/dialecta-surfaces.css's own .dialecta-breadcrumb a:hover already
+ * uses. The underline is a line, not lettering, so D-27 does not apply
+ * to it.
  */
 
 .post-author-bio {
@@ -76,11 +87,13 @@
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--brass-mid);
+  color: var(--brass-deep);
   text-decoration: none;
   display: inline-block;
 }
 
 .post-author-bio-link:hover {
-  color: var(--brass-deep);
+  text-decoration: underline;
+  text-decoration-color: var(--brass-mid);
+  text-underline-offset: 3px;
 }
