@@ -38,14 +38,22 @@ def smoothstep(t):
     return t * t * (3 - 2 * t)
 
 
-def perimeter_noise(theta, ring_seed):
-    """Multi-octave wobble. Present on every fingerprint, at every purity."""
-    return (
-        math.sin(theta * 7.3 + ring_seed * 1.7) * 0.5
-        + math.sin(theta * 13.1 + ring_seed * 3.3 + 1.4) * 0.3
-        + math.sin(theta * 21.7 + ring_seed * 5.9 + 2.7) * 0.2
-        + math.sin(theta * 4.1 + ring_seed * 0.7) * 0.15
-    )
+OCTAVES = ((7.3, 1.7, 0.0, 0.5), (13.1, 3.3, 1.4, 0.3), (21.7, 5.9, 2.7, 0.2), (4.1, 0.7, 0.0, 0.15))
+
+
+def perimeter_noise(theta, ring_seed, only=None):
+    """
+    Multi-octave wobble. Present on every fingerprint, at every purity.
+
+    `only` restricts the sum to one octave index, for isolating which term
+    produces the spiral.
+    """
+    total = 0.0
+    for i, (f, c, k0, amp) in enumerate(OCTAVES):
+        if only is not None and i != only:
+            continue
+        total += math.sin(theta * f + ring_seed * c + k0) * amp
+    return total
 
 
 def turbulence_wave(theta, ring_seed, turbulence, mode="symmetric"):
@@ -72,7 +80,24 @@ def turbulence_wave(theta, ring_seed, turbulence, mode="symmetric"):
     return w * turbulence
 
 
-def build_rings(axis_grad, axis_turb, axis_purity, max_r, mode="symmetric"):
+def ring_seed_for(k, seed_mode):
+    """
+    The engine uses `k * 11.7 + 3.3`, and its comment says this exists "so
+    adjacent rings wiggle differently".
+
+    It does not do that. The seed is used as a PHASE, and a phase offset on a
+    function of theta is an angular rotation of that harmonic. A seed that
+    advances linearly in k therefore rotates every ring by a constant angle
+    from the one inside it, which is the construction of a spiral rather than a
+    decorrelation. "hashed" is the same idea done as intended: a seed with no
+    linear relationship between neighbouring rings.
+    """
+    if seed_mode == "hashed":
+        return (math.sin(k * 127.1 + 311.7) * 43758.5453) % (2 * math.pi)
+    return k * 11.7 + 3.3
+
+
+def build_rings(axis_grad, axis_turb, axis_purity, max_r, mode="symmetric", seed_mode="linear", only=None):
     """Returns a list of rings, each a list of (x, y), outermost first."""
     max_grad = max(min(g, GRAD_HORIZON) for g in axis_grad.values())
     ring_count = max(4, round(max_grad * 1.15 + 4))
@@ -86,7 +111,7 @@ def build_rings(axis_grad, axis_turb, axis_purity, max_r, mode="symmetric"):
     rings = []
     for k in range(ring_count):
         depth = k / max(1, ring_count - 1)
-        ring_seed = k * 11.7 + 3.3
+        ring_seed = ring_seed_for(k, seed_mode)
         pts = []
         for p in range(N_PERIMETER):
             theta = (p / N_PERIMETER) * math.pi * 2
@@ -108,7 +133,7 @@ def build_rings(axis_grad, axis_turb, axis_purity, max_r, mode="symmetric"):
             local_mat = min(axis_grad[a0], GRAD_HORIZON) * w0 + min(axis_grad[a1], GRAD_HORIZON) * w1
 
             base_amp = ((1 - local_purity) * 4 + 1.8) * (1 + (1 - depth) * 0.4)
-            radius += perimeter_noise(theta, ring_seed) * base_amp
+            radius += perimeter_noise(theta, ring_seed, only) * base_amp
 
             recency = 0.3 + (1 - depth) * 0.7
             maturity = 0.4 + min(local_mat / 22, 1) * 2.1
