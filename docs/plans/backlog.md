@@ -9,7 +9,7 @@
 > migrations from April and May 2026. Ten of the 13 tables `supabase/migrations/` creates exist
 > there with rows in them. These rows were written as greenfield and several of them describe
 > work that appears done. Read `docs/handoffs/dialecta-handoff-2026-09-19-supabase-reality.md`
-> and `exchange/open/2026-09-19-001-advice-supabase-schema-collision.md` before starting any of
+> and `exchange/closed/2026-09-19-001-advice-supabase-schema-collision.md` before starting any of
 > them. Do not run `supabase db push`.
 >
 > **2026-09-19 update: the question in `2026-09-19-001` is answered, pending Dan's confirmation.**
