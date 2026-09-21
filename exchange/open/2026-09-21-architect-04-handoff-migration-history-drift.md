@@ -54,9 +54,17 @@ ran.
 ## Not done
 
 In this order: move the baseline out of `supabase/migrations/`; rename the two remaining files;
-recover the three missing ones verbatim from `schema_migrations.statements`; restore `041504` to what
-ran and put the reset-safety change in a new migration; reconcile `043008`. Then run the check after
-every apply.
+recover the three missing ones verbatim from `schema_migrations.statements`; reconcile `043008`. Then
+run the check after every apply.
+
+`041504` is a ruling, not a cleanup, and the convener is right that my first fix does not work.
+`supabase db reset` replays migrations in order, so a later migration cannot soften an earlier one's
+self-check: restore the original and the replay fails again. Fidelity to what ran and replay on a
+fresh database pull opposite ways, and the cause is upstream. It is a data backfill keyed on live
+rows, sitting in the schema path that `db reset` replays. For `migrator` to rule on: keep the edited
+file and record the divergence in its header, or move data backfills out of the replayed path
+(`supabase/seed.sql` for development, a one-off script for production) and restore the file. The
+convener has left it as edited, with a comment saying so.
 
 ## Governing spec
 
