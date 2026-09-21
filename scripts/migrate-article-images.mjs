@@ -190,7 +190,8 @@ function sqlString(value) {
 }
 
 async function upload() {
-  const supabaseUrl = process.env.SUPABASE_URL;
+  // The project URL is public (it ships in every page); only the key is secret.
+  const supabaseUrl = process.env.SUPABASE_URL ?? 'https://mguulnibvzusfvyuowwh.supabase.co';
   const serviceKey = process.env.SUPABASE_SERVICE_KEY;
   const missing = [
     ['SUPABASE_URL', supabaseUrl],
