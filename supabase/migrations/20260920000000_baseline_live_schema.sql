@@ -805,7 +805,7 @@ create table public.quotes (
   source text,
   year integer,
   tags text[] not null default '{}',
-  status text not null default 'draft',  -- LIVE UNVERIFIED: candidate guess 'published' is what the select policy below filters on
+  status text not null default 'draft',  -- VERIFIED 2026-09-21 against live: values are live / draft / archived. Text, not an enum. 70 live, 2 draft
   created_by uuid references public.profiles (id) on delete set null,  -- LIVE UNVERIFIED: no relationship declared in types.ts; added here as the only plausible target and flagged rather than left as a bare uuid
   updated_by uuid references public.profiles (id) on delete set null,  -- LIVE UNVERIFIED: same as created_by
   created_at timestamptz not null default now(),
@@ -819,13 +819,18 @@ create trigger quotes_set_updated_at
 alter table public.quotes enable row level security;
 
 -- Measured filtered, not open, not closed: 2026-live-rls-surface.md ("quotes
--- filtered to 70 of 72"). LIVE UNVERIFIED: the exact predicate. This guesses
--- status = 'published' because a status column exists and 2 of 72 rows are held
--- back, which is consistent with a small number of drafts; confirm against
--- migration fetch before trusting.
-create policy "published quotes are public to read"
+-- filtered to 70 of 72"). VERIFIED 2026-09-21 against live: the policy is
+-- `quotes_public_read_live` and its predicate is `status = 'live'`. The guess
+-- below was wrong and `_recovered/supabase/migrations/007_quotes_table.sql` was
+-- right all along. Kept as the record of how the guess was reached, because the
+-- reasoning was sound and still produced the wrong answer: status = 'published'
+-- because a status column exists and 2 of 72 rows are held back, which is
+-- consistent with a small number of drafts. The held-back count was right, the
+-- word was not. This is the item the port debate chair refused to decide and
+-- named as the cheapest open question in it: one query.
+create policy "quotes_public_read_live"
   on public.quotes for select
-  using (status = 'published');
+  using (status = 'live');
 
 -- ---------------------------------------------------------------------------
 -- self_descriptions
