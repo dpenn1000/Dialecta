@@ -1,0 +1,564 @@
+/*
+ * The Guidebook's content cards, from _theme/page-guidebook.hbs: tier cards,
+ * engine stages, the classification standard, claim levels, the four map
+ * tools and the proposal form. The hero and the leaves are leaf.module.css.
+ *
+ * What changed, and why:
+ *  - Brass letters on paper only as --brass-deep (designer D-27). The map
+ *    badges' --gold-muted lettering (3.2:1) is --brass-deep.
+ *  - The stage numerals and the submit button set white on
+ *    linear-gradient(var(--gold-b), var(--gold)). --gold-b is defined nowhere,
+ *    so the live declaration was invalid and the numerals rendered white on
+ *    nothing: invisible. They are ink on a --gold-bright to --gold coin now.
+ *  - The tier cards read the --tier-* tokens unchanged. Heat and Stance
+ *    therefore carry designer's measured contrast defect (D-12: Heat 1.96:1);
+ *    D-24's computed inks are Dan's to adopt in the design spec, and the cards
+ *    follow the tokens when he does.
+ */
+
+.prose {
+  font-family: var(--font-reading);
+  font-size: 0.975rem;
+  line-height: 1.85;
+  color: var(--text-prose);
+  max-width: 680px;
+}
+
+.prose strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.proseGap {
+  margin-top: 16px;
+}
+
+.rulesList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 680px;
+  margin-top: 20px;
+}
+
+.rulesList li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-family: var(--font-reading);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-prose);
+}
+
+.ruleBullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+  margin-top: 9px;
+}
+
+/* ── Tier cards ────────────────────────────────────────────────────────── */
+.tierGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+.tierCard {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow:
+    0 4px 18px rgba(28, 24, 20, 0.1),
+    0 1px 3px rgba(28, 24, 20, 0.08),
+    0 0 0 0.5px rgba(28, 24, 20, 0.04);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  position: relative;
+}
+
+.tierCard:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 28px rgba(28, 24, 20, 0.14),
+    0 2px 6px rgba(28, 24, 20, 0.1),
+    0 0 0 0.5px rgba(28, 24, 20, 0.04);
+}
+
+.tierCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.tierIconWrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+    0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+.tierIconWrap svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* color: inherit, because globals.css colours every h3 directly, which would
+   put ink on the Heat, Stance and Breach cards. */
+.tierName {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.005em;
+  color: inherit;
+}
+
+.tierZone {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  opacity: 0.75;
+}
+
+.tierCardBody {
+  padding: 16px 22px 18px;
+}
+
+.tierDesc {
+  font-family: var(--font-reading);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  margin-bottom: 12px;
+  font-weight: 300;
+}
+
+.tierExample {
+  font-family: var(--font-reading);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  padding: 11px 15px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.05);
+  border-left: 3px solid rgba(0, 0, 0, 0.18);
+  font-style: italic;
+}
+
+.tierExampleLabel {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  opacity: 0.7;
+}
+
+.forum { background: linear-gradient(180deg, var(--tier-forum-top), var(--tier-forum-bot)); color: var(--tier-forum-text); }
+.spark { background: linear-gradient(180deg, var(--tier-spark-top), var(--tier-spark-bot)); color: var(--tier-spark-text); }
+.echo { background: linear-gradient(180deg, var(--tier-echo-top), var(--tier-echo-bot)); color: var(--tier-echo-text); }
+.fog { background: linear-gradient(180deg, var(--tier-fog-top), var(--tier-fog-bot)); color: var(--tier-fog-text); }
+.heat { background: linear-gradient(180deg, var(--tier-heat-top), var(--tier-heat-bot)); color: var(--tier-heat-text); }
+.stance { background: linear-gradient(180deg, var(--tier-stance-top), var(--tier-stance-bot)); color: var(--tier-stance-text); }
+.breach { background: linear-gradient(180deg, var(--tier-breach-top), var(--tier-breach-bot)); color: var(--tier-breach-text); }
+
+.forum .tierIconWrap {
+  background: linear-gradient(135deg, #f8e8a8 0%, #e8c45c 50%, #b8862e 100%);
+  border: 1px solid rgba(106, 84, 16, 0.45);
+}
+.spark .tierIconWrap {
+  background: linear-gradient(135deg, #f4d098 0%, #d4862c 60%, #8c5810 100%);
+  border: 1px solid rgba(106, 60, 8, 0.5);
+}
+.echo .tierIconWrap {
+  background: linear-gradient(135deg, #dce8c4 0%, #a8bc88 55%, #6a8048 100%);
+  border: 1px solid rgba(56, 68, 12, 0.45);
+}
+.fog .tierIconWrap {
+  background: linear-gradient(135deg, #ccd2dc 0%, #8c9aac 55%, #5a6478 100%);
+  border: 1px solid rgba(44, 56, 72, 0.45);
+}
+.heat .tierIconWrap {
+  background: linear-gradient(135deg, #f4b488 0%, #d86e2c 50%, #7c2c08 100%);
+  border: 1px solid rgba(56, 16, 4, 0.5);
+}
+.stance .tierIconWrap {
+  background: linear-gradient(135deg, #c46858 0%, #8a3428 55%, #401818 100%);
+  border: 1px solid rgba(40, 16, 16, 0.5);
+}
+.breach .tierIconWrap {
+  background: linear-gradient(135deg, #8a2828 0%, #4a1010 55%, #200404 100%);
+  border: 1px solid rgba(20, 4, 4, 0.6);
+}
+
+/* The cards' header and body keep the tier's gradient on both halves, as live
+   (.tc-* sat on the header and the body alike). */
+.tierCard .tierCardHeader,
+.tierCard .tierCardBody {
+  background: inherit;
+}
+
+/* ── Engine stages ─────────────────────────────────────────────────────── */
+.stageList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 8px;
+  max-width: 680px;
+  list-style: none;
+}
+
+.stage {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.stageHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.stageNumber {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stageName {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stageDesc {
+  font-family: var(--font-reading);
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text-prose);
+}
+
+.stageNote {
+  font-family: var(--font-reading);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.readsHeading {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 36px;
+  margin-bottom: 12px;
+}
+
+/* ── The classification standard: the one block on dark ─────────────── */
+.promptBox {
+  background: var(--bg-dark);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  margin-top: 20px;
+  max-width: 680px;
+  overflow-x: auto;
+}
+
+.promptLabel {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-secondary);
+  margin-bottom: 12px;
+}
+
+.promptBox pre {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--text-on-dark);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.callout {
+  max-width: 680px;
+  padding: 16px 20px;
+  background: var(--bg-white);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  box-shadow: var(--shadow-sm);
+  margin-top: 22px;
+}
+
+.callout .prose {
+  max-width: 100%;
+}
+
+/* ── Claim levels ──────────────────────────────────────────────────────── */
+.claimGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.claimCard {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.claimLevel {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.claimName {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.claimDesc {
+  font-family: var(--font-reading);
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--text-prose);
+  margin-bottom: 10px;
+}
+
+.claimEg {
+  font-family: var(--font-reading);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 8px 10px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+/* ── Opinion map tools ─────────────────────────────────────────────────── */
+.mapGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+.mapCard {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.mapBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gold-pale);
+  border: 1px solid rgba(212, 168, 74, 0.35);
+  border-radius: 20px;
+  padding: 3px 10px;
+  margin-bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+}
+
+.mapTitle {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.mapDesc {
+  font-family: var(--font-reading);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--text-prose);
+  margin-bottom: 12px;
+}
+
+.mapExample {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  overflow-wrap: anywhere;
+}
+
+/* ── The proposal form ─────────────────────────────────────────────────── */
+.submitBox {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 28px 30px;
+  box-shadow: var(--shadow-md);
+  max-width: 680px;
+  margin-top: 8px;
+}
+
+.submitTitle {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.submitDesc {
+  font-family: var(--font-reading);
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text-prose);
+  margin-bottom: 18px;
+}
+
+.submitField {
+  margin-bottom: 14px;
+}
+
+.submitField label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.submitField input,
+.submitField textarea {
+  width: 100%;
+  padding: 9px 12px;
+  font-family: var(--font-reading);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.submitField input:focus,
+.submitField textarea:focus {
+  border-color: var(--gold);
+}
+
+.submitField textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color: var(--ink);
+  border: none;
+  cursor: pointer;
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: opacity 0.15s;
+}
+
+.submitBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.seam {
+  font-family: var(--font-reading);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-top: 12px;
+}
+
+.afterForm {
+  margin-top: 28px;
+}
+
+@media (max-width: 720px) {
+  .tierGrid,
+  .claimGrid,
+  .mapGrid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .stage,
+  .submitBox,
+  .callout {
+    padding: 16px 18px;
+  }
+  .promptBox {
+    padding: 16px 14px;
+  }
+  .promptBox pre {
+    font-size: 0.72rem;
+  }
+}

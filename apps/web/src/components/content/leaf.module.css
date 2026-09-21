@@ -1,0 +1,195 @@
+/*
+ * The monograph "bible" the About and Guidebook pages share, and the hero the
+ * Community page borrows: an eyebrow, a display title with an italic word, an
+ * italic lede and an asterism, then paper leaves with a wood spine. Copied from
+ * _theme/page-about.hbs and page-guidebook.hbs, whose rules are identical here.
+ *
+ * What changed, and why:
+ *  - Brass never letters on a light surface (designer D-27). The hero eyebrow
+ *    and italic word were --hero-brass on the stone gradient (2.71:1 at the
+ *    darkest stone). The eyebrow is ink; the italic word is walnut, the page's
+ *    own wood, 3.67:1 at the darkest stone and far above it on the paler
+ *    stone the hero actually sits on, which clears the 3:1 floor for type this
+ *    size (--brass-deep would be 2.09:1 there). The leaf labels and italic words
+ *    were --card-brass on paper (1.85:1); they letter in --brass-deep, that
+ *    gradient's own deepest stop, 6.69:1 on cream. The asterisms and bullet
+ *    dots stay brass: ornament.
+ *  - The walnut family (--walnut, --cherry, --burnt, --mahogany) is page-scoped
+ *    here as it was live; it is in neither tokens.css nor dialecta-surfaces.css.
+ *  - The asterism is an element, not ::after content, so a screen reader does
+ *    not announce three stars.
+ */
+
+.main {
+  max-width: none;
+  margin: 0;
+  padding: clamp(24px, 4vw, 48px) 0 0;
+  --walnut: #4a2810;
+  --cherry: #6e3917;
+  --burnt: #8a4a18;
+  --mahogany: #5e2a14;
+}
+
+.column {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 32px) clamp(60px, 8vw, 120px);
+  position: relative;
+  z-index: 1;
+  color: var(--ink);
+}
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+.hero {
+  margin-bottom: clamp(40px, 6vw, 72px);
+  padding-bottom: clamp(28px, 4vw, 48px);
+  position: relative;
+}
+
+.heroCompact {
+  margin-bottom: clamp(14px, 2vw, 22px);
+  padding-bottom: 0;
+}
+
+.asterism {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1vw + 0.7rem, 1.4rem);
+  color: var(--gold);
+  letter-spacing: 0.4em;
+  margin-top: clamp(28px, 3vw, 40px);
+  opacity: 0.55;
+}
+
+.heroEyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  color: var(--ink);
+  display: inline-block;
+}
+
+.heroTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6vw + 0.5rem, 4.4rem);
+  font-weight: 500;
+  line-height: 1.05;
+  color: var(--text-primary);
+  margin: 0 0 24px;
+  letter-spacing: -0.01em;
+  max-width: 14ch;
+}
+
+.heroTitleCommunity {
+  font-size: clamp(2rem, 5vw + 0.5rem, 3.6rem);
+  max-width: none;
+  margin-bottom: 10px;
+}
+
+.heroTitle em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--walnut);
+}
+
+.heroLede {
+  font-family: var(--font-reading);
+  font-size: clamp(1rem, 0.5vw + 0.92rem, 1.25rem);
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-lede);
+  max-width: 56ch;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* The live subtitle was --secondary, about 2.3:1 on the dark stone a phone
+   puts under it; --text-lede is what the other heroes' ledes already use. */
+.heroLedeCommunity {
+  font-size: clamp(0.95rem, 0.5vw + 0.85rem, 1.1rem);
+  max-width: 60ch;
+}
+
+/* ── Leaf: a paper-grained section card with a wood spine ────────────── */
+.leaf {
+  background-color: var(--paper);
+  background-image: var(--paper-grain);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: clamp(14px, 2.4vw, 26px);
+  margin-bottom: clamp(18px, 3vw, 32px);
+  scroll-margin-top: 24px;
+  box-shadow:
+    0 1px 3px rgba(74, 40, 16, 0.04),
+    0 4px 18px rgba(74, 40, 16, 0.06);
+  position: relative;
+}
+
+.leaf::before {
+  content: '';
+  position: absolute;
+  top: clamp(8px, 1.5vw, 14px);
+  bottom: clamp(8px, 1.5vw, 14px);
+  left: 0;
+  width: 3px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--burnt) 16%,
+    var(--cherry) 50%,
+    var(--burnt) 84%,
+    transparent 100%
+  );
+  border-radius: 0 2px 2px 0;
+}
+
+.leafLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: inline-block;
+  color: var(--brass-deep);
+}
+
+.leafTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw + 0.6rem, 2.4rem);
+  font-weight: 500;
+  line-height: 1.12;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  letter-spacing: -0.005em;
+}
+
+.leafTitle em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--brass-deep);
+}
+
+.leafDesc {
+  font-family: var(--font-reading);
+  font-size: clamp(0.95rem, 0.4vw + 0.85rem, 1.05rem);
+  color: var(--text-secondary);
+  line-height: 1.75;
+  font-weight: 400;
+  max-width: 720px;
+  margin-bottom: 28px;
+  font-style: italic;
+}
+
+@media (max-width: 720px) {
+  .heroTitle {
+    max-width: none;
+  }
+  .heroTitle br,
+  .leafTitle br {
+    display: none;
+  }
+}

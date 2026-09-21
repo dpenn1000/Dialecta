@@ -1,0 +1,293 @@
+/*
+ * The article feed: index.hbs's .post-feed, .post-card and .feed-join-cta,
+ * copied from _theme/assets/css/style.css ("POST FEED", "FEED JOIN CTA", "FEED
+ * CARD ADDITIONS"). Changed, and why:
+ *  - Brass letters on paper only as --brass-deep (designer D-27; 6.69:1 on
+ *    cream). The card title's hover and the tag's default were var(--amber);
+ *    both are --brass-deep now. The brass spine on hover is a rule and stays.
+ *  - Topic tags read their colour mixed 72% toward ink (see format.ts).
+ *  - The whole card was clickable through an onclick; here the title link
+ *    stretches over the card, which works without script and with a keyboard.
+ *  - Under 480px the card and the call to action pad 20px instead of 32px and
+ *    40px, so a 380px phone keeps a readable measure.
+ */
+
+.main {
+  max-width: none;
+  margin: 0;
+  padding: clamp(20px, 3vw, 40px) 0 clamp(48px, 6vw, 80px);
+  --cherry: #6e3917;
+  --walnut: #4a2810;
+}
+
+.column {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 1.5vw + 10px, 32px);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.feed {
+  display: grid;
+  gap: 32px;
+}
+
+.card {
+  position: relative;
+  background-color: var(--paper);
+  background-image: var(--paper-grain);
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  padding: 28px 32px;
+  box-shadow: 0 2px 12px rgba(28, 24, 20, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  background: linear-gradient(
+    to bottom,
+    #8c5a18 0%,
+    #b8862e 20%,
+    #ecb438 38%,
+    #fef0a0 50%,
+    #ecb438 62%,
+    #b8862e 78%,
+    #7a5010 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover {
+  background-color: #f0e9d6;
+  box-shadow:
+    inset 0 2px 8px rgba(28, 24, 20, 0.15),
+    inset 0 1px 3px rgba(28, 24, 20, 0.08);
+  transform: scale(0.99);
+}
+
+.card:hover::before,
+.card:focus-within::before {
+  opacity: 1;
+}
+
+.card:focus-within {
+  outline: 2px solid var(--brass-mid);
+  outline-offset: 2px;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--topic, var(--brass-deep)) 72%, var(--ink));
+  margin-bottom: 8px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 10px;
+  text-wrap: balance;
+}
+
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.titleLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.titleLink:focus-visible {
+  outline: none;
+}
+
+.card:hover .titleLink {
+  color: var(--brass-deep);
+}
+
+.excerpt {
+  font-family: var(--font-reading);
+  font-size: 0.95rem;
+  color: var(--secondary);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--tertiary);
+}
+
+.author {
+  font-weight: 500;
+  color: var(--secondary);
+}
+
+.metaSep {
+  margin: 0 4px;
+  color: var(--border-dark);
+}
+
+.empty {
+  font-family: var(--font-reading);
+  font-style: italic;
+  color: var(--secondary);
+}
+
+/* ── The join card ─────────────────────────────────────────────────────── */
+
+.join {
+  margin-top: 16px;
+  padding: 40px 40px 36px;
+  background: rgba(28, 24, 20, 0.88);
+  border: 1px solid rgba(184, 134, 46, 0.3);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.joinLabel {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--cream);
+  letter-spacing: 0.01em;
+}
+
+.joinSub {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: rgba(247, 242, 232, 0.55);
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+.joinBtn {
+  margin-top: 8px;
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: linear-gradient(135deg, #ecb438 0%, #b8862e 100%);
+  text-decoration: none;
+  padding: 10px 28px;
+  border-radius: 2px;
+  transition: opacity 0.15s;
+}
+
+.joinBtn:hover {
+  opacity: 0.88;
+}
+
+.joinSignin {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: rgba(247, 242, 232, 0.35);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.joinSignin:hover {
+  color: var(--gold);
+}
+
+/* ── The article index hero (page-articles.hbs) ───────────────────────── */
+
+.hero {
+  text-align: center;
+  margin-bottom: clamp(20px, 3vw, 36px);
+}
+
+.heroEyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: inline-block;
+  color: var(--ink);
+}
+
+.heroTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw + 0.5rem, 3.6rem);
+  font-weight: 500;
+  line-height: 1.05;
+  color: var(--text-primary);
+  margin: 0 auto 12px;
+  letter-spacing: -0.01em;
+  max-width: 14ch;
+}
+
+.heroTitle em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--walnut);
+}
+
+.heroLede {
+  font-family: var(--font-reading);
+  font-size: clamp(0.95rem, 0.5vw + 0.85rem, 1.1rem);
+  font-style: italic;
+  color: var(--text-lede);
+  line-height: 1.65;
+  max-width: 56ch;
+  margin: 0 auto;
+}
+
+.heroRule {
+  height: 2px;
+  width: clamp(160px, 30vw, 280px);
+  margin: clamp(16px, 2.5vw, 24px) auto 0;
+  background: var(--brass-gradient);
+  border-radius: 1px;
+  opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 22px 20px;
+  }
+  .title {
+    font-size: 1.45rem;
+  }
+  .join {
+    padding: 32px 20px 28px;
+  }
+}

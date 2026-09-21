@@ -1,47 +1,50 @@
-import Link from 'next/link';
 import { getPublishedArticles, isSupabaseConfigured } from '@/lib/articles';
+import { ArticleCard } from '@/components/content/article-card';
+import { JoinCta } from '@/components/content/join-cta';
+import { isSignedIn } from '@/components/content/session';
+import s from '@/components/content/feed.module.css';
 import { strings } from '@/strings';
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * The front page: _theme/index.hbs, visitor branch. The article feed, then the
+ * join card for anyone not signed in.
+ *
+ * The live index had a second branch: a signed-in member saw their own profile
+ * at the root, mounted by assets/js/home.js (_recovered-next/lib/theme/
+ * home-page-mount.jsx). That surface is the profile builder's, at
+ * /profile/[id], and a session cannot resolve to a profile until
+ * profiles.user_id is set, so members get the feed here, without the join
+ * card. Wiring the member branch is one redirect once identity lands.
+ */
 export default async function FrontPage() {
   if (!isSupabaseConfigured()) {
     return (
-      <main>
-        <h1>Dialecta</h1>
-        <p>
-          Front page placeholder. Implements the front page described in docs/Dialecta_Social_UX_Architecture.md
-          and the site structure notes in docs/Dialecta_Project_Index.md.
-        </p>
-        <p className="notice">{strings.notices.supabaseNotConfigured}</p>
+      <main className={s.main}>
+        <div className={s.column}>
+          <h1 className={s.srOnly}>{strings.content.articlesIndex.title}</h1>
+          <p className="notice">{strings.notices.supabaseNotConfigured}</p>
+        </div>
       </main>
     );
   }
 
-  const articles = await getPublishedArticles();
+  const [articles, signedIn] = await Promise.all([getPublishedArticles(), isSignedIn()]);
 
   return (
-    <main>
-      <h1>Dialecta</h1>
-      <p>
-        Implements the front page described in docs/Dialecta_Social_UX_Architecture.md and the site structure
-        notes in docs/Dialecta_Project_Index.md.
-      </p>
-      {articles.length === 0 ? (
-        <p className="notice">{strings.notices.noArticlesYet}</p>
-      ) : (
-        <ul>
-          {articles.map((a) => (
-            <li key={a.id}>
-              <h2>
-                <Link href={`/articles/${a.slug}`}>{a.title}</Link>
-              </h2>
-              {a.author ? <p>{a.author.display_name}</p> : null}
-              {a.excerpt ? <p>{a.excerpt}</p> : null}
-            </li>
-          ))}
-        </ul>
-      )}
+    <main className={s.main}>
+      <div className={s.column}>
+        <h1 className={s.srOnly}>{strings.content.articlesIndex.title}</h1>
+        <div className={s.feed}>
+          {articles.length === 0 ? (
+            <p className={s.empty}>{strings.notices.noArticlesYet}</p>
+          ) : (
+            articles.map((article) => <ArticleCard key={article.id} article={article} />)
+          )}
+          {signedIn ? null : <JoinCta />}
+        </div>
+      </div>
     </main>
   );
 }

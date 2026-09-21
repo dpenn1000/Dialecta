@@ -1,0 +1,722 @@
+/*
+ * The Stewards, from _theme/page-stewards.hbs's <style> block. The live file
+ * carried a whole second site (its own :root, body, fixed nav); only the
+ * page's own rules come across, scoped here.
+ *
+ * What changed, and why:
+ *  - Brass letters on paper only as --brass-deep (designer D-27; the convener
+ *    allows it, 6.69:1 on cream). The masthead eyebrow and the two italic
+ *    pair lines were --hero-brass on the stone; they are ink and walnut, as
+ *    the other heroes. Section eyebrows, the family names' card-brass, each
+ *    order's essence (--gold-muted), the Tell label (--amber), the doorway's
+ *    italic word and its motto (--brass-warm) all letter in --brass-deep.
+ *  - Family colour carries identity, as live, but where it letters (the index
+ *    names, the family label and name, the active chip) it mixes 72% toward
+ *    ink: Essayistic (#b87a18) and Declared (#b8862e) are brasses and fail on
+ *    cream. Borders and rules keep the raw family colour.
+ *  - The cadence names render in ink at 1.18rem, which is what the live page
+ *    showed: its second .cadence-name rule overrode the per-cadence colours.
+ *  - The family picker is links to ?family=, rendered on the server, where
+ *    live it toggled a data attribute from script and a #hash.
+ *  - --nav-height is 0 now (the header scrolls with the page), so the sticky
+ *    chips sit at top: 0 and the sticky family panel just under them.
+ */
+
+.main {
+  max-width: none;
+  margin: 0;
+  padding: clamp(20px, 3vw, 40px) 0 0;
+  --walnut: #4a2810;
+  --cherry: #6e3917;
+  --burnt: #8a4a18;
+}
+
+.page {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 32px) clamp(40px, 5vw, 80px);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Masthead ──────────────────────────────────────────────────────────── */
+.masthead {
+  text-align: center;
+  padding: 4px clamp(16px, 3vw, 24px) 8px;
+  margin-bottom: clamp(20px, 3vw, 28px);
+  position: relative;
+}
+
+.mastheadEyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  color: var(--ink);
+  display: inline-block;
+  font-weight: 500;
+}
+
+.mastheadTitle {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.mastheadPrefix {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 2.8vw, 2rem);
+  color: var(--text-secondary);
+  line-height: 1;
+  margin-bottom: 6px;
+  letter-spacing: 0.005em;
+}
+
+.mastheadLogo {
+  display: block;
+  margin: 0 auto 8px;
+  height: clamp(56px, 7.5vw, 84px);
+  width: auto;
+}
+
+.mastheadPair {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.mastheadPairLine {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  line-height: 1.18;
+  color: var(--walnut);
+  letter-spacing: 0.005em;
+}
+
+.opening {
+  max-width: 660px;
+  margin: 18px auto 28px;
+  text-align: center;
+}
+
+.opening p {
+  font-family: var(--font-reading);
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: var(--text-body);
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+
+.opening p:last-child {
+  margin-bottom: 0;
+}
+
+.lede {
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+/* ── Sections ──────────────────────────────────────────────────────────── */
+.section {
+  margin-bottom: clamp(28px, 4vw, 48px);
+  scroll-margin-top: 24px;
+}
+
+.sectionEyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: var(--brass-deep);
+  display: inline-block;
+  font-weight: 500;
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw + 0.6rem, 2.2rem);
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  line-height: 1.15;
+}
+
+.sectionLede {
+  font-family: var(--font-reading);
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin-bottom: 32px;
+  font-weight: 400;
+}
+
+.headerCard {
+  position: relative;
+  background-color: var(--paper-bright);
+  background-image: var(--paper-grain);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 26px 28px 24px 38px;
+  margin: 0 0 32px;
+  box-shadow: 0 1px 6px rgba(74, 40, 16, 0.05);
+  overflow: hidden;
+}
+
+.headerCard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: linear-gradient(
+    to bottom,
+    #8c5a18 0%,
+    #b8862e 18%,
+    #ecb438 38%,
+    #fef0a0 50%,
+    #ecb438 62%,
+    #b8862e 82%,
+    #7a5010 100%
+  );
+  border-radius: 0 2px 2px 0;
+}
+
+.headerCard .sectionTitle {
+  margin-bottom: 10px;
+}
+
+.headerCard .sectionLede {
+  margin-bottom: 0;
+  max-width: 720px;
+}
+
+/* ── Cadence ───────────────────────────────────────────────────────────── */
+.cadenceGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 24px 18px;
+  margin-top: 8px;
+  list-style: none;
+}
+
+.cadence {
+  text-align: center;
+}
+
+.cadenceName {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.18rem;
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  letter-spacing: -0.005em;
+}
+
+.cadenceDesc {
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  font-weight: 400;
+  max-width: 22ch;
+  margin: 0 auto;
+}
+
+/* ── The Orders shell ──────────────────────────────────────────────────── */
+.shell {
+  position: relative;
+}
+
+.family {
+  --family-ink: color-mix(in srgb, var(--family-color, #b8862e) 72%, var(--ink));
+}
+
+.essayistic { --family-color: #b87a18; }
+.argumentative { --family-color: #9e2020; }
+.synthetic { --family-color: #6a3a9a; }
+.scholarly { --family-color: #2650a0; }
+.narrative { --family-color: #8a2858; }
+.practitioner { --family-color: #287858; }
+.journalistic { --family-color: #dc5418; }
+.pedagogical { --family-color: #267080; }
+.speculative { --family-color: #3a3888; }
+.declared { --family-color: #b8862e; }
+
+/* The bar is the <nav>, a direct child of the tall shell, so it has the room
+   to stick; the list inside it only lays the chips out. */
+.chipsBar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 14px 0 12px;
+  margin: 0 0 8px;
+  background: rgba(247, 242, 232, 0.94);
+  backdrop-filter: saturate(140%) blur(6px);
+  -webkit-backdrop-filter: saturate(140%) blur(6px);
+  border-bottom: 1px solid rgba(184, 115, 42, 0.18);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+}
+
+.chip {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid rgba(184, 115, 42, 0.26);
+  border-radius: 3px;
+  padding: 7px 13px;
+  color: #5a5248;
+  text-decoration: none;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.chip:hover {
+  border-color: var(--family-color, rgba(184, 115, 42, 0.55));
+  color: var(--family-ink, var(--ink));
+}
+
+.chip[aria-current='true'] {
+  border-color: var(--family-color, var(--brass-deep));
+  background: color-mix(in srgb, var(--family-color, #b8862e) 12%, transparent);
+  color: var(--family-ink, var(--brass-deep));
+  font-weight: 600;
+}
+
+.chipIndex {
+  --family-color: #7a4a14;
+  border-style: dashed;
+}
+
+.chipIndex[aria-current='true'] {
+  border-style: solid;
+}
+
+.indexIntro {
+  margin: 18px 0 28px;
+  max-width: 640px;
+}
+
+.indexIntro p {
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.indexList {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+.indexItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  border-left: 3px solid transparent;
+  border-radius: 4px;
+  padding: 18px 22px;
+  text-decoration: none;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.indexItem:hover {
+  background: color-mix(in srgb, var(--family-color, #b8862e) 6%, transparent);
+  border-color: rgba(184, 115, 42, 0.18);
+  border-left-color: var(--family-color, var(--gold-muted));
+  transform: translateX(2px);
+}
+
+.indexName {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.85rem;
+  line-height: 1.05;
+  color: var(--family-ink, var(--text-primary));
+  margin-bottom: 6px;
+  letter-spacing: -0.005em;
+}
+
+.indexTagline {
+  display: block;
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 1.02rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.familySticky {
+  position: sticky;
+  top: 56px;
+  background: rgba(247, 242, 232, 0.96);
+  backdrop-filter: saturate(140%) blur(6px);
+  -webkit-backdrop-filter: saturate(140%) blur(6px);
+  padding: 22px 0 18px;
+  margin: 14px 0 28px;
+  border-bottom: 1px solid color-mix(in srgb, var(--family-color, #b8862e) 28%, transparent);
+  z-index: 5;
+}
+
+.familyLabel {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--family-ink, var(--brass-deep));
+  margin-bottom: 8px;
+}
+
+.familyName {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(2.4rem, 4vw + 1rem, 3.6rem);
+  margin: 2px 0 14px;
+  color: var(--family-ink, var(--brass-deep));
+  letter-spacing: -0.005em;
+  line-height: 1.02;
+}
+
+.familyDescription {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 0.7vw + 0.9rem, 1.32rem);
+  line-height: 1.55;
+  color: var(--text-body);
+  max-width: 680px;
+  margin: 0;
+}
+
+/* ── Order cards ───────────────────────────────────────────────────────── */
+.orderGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  gap: 20px;
+  list-style: none;
+}
+
+.orderCard {
+  background-color: var(--paper);
+  background-image: var(--paper-grain);
+  border: 1px solid var(--border-medium);
+  border-left: 4px solid var(--family-color, var(--gold-muted));
+  border-radius: var(--radius-lg);
+  padding: 18px 18px 16px 22px;
+  box-shadow:
+    0 1px 3px rgba(74, 40, 16, 0.06),
+    0 6px 18px rgba(74, 40, 16, 0.09);
+  position: relative;
+  height: 100%;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.orderCard:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 3px rgba(74, 40, 16, 0.06),
+    0 10px 24px rgba(74, 40, 16, 0.13);
+}
+
+.ornament {
+  font-size: 1.4rem;
+  color: var(--gold-muted);
+  margin-bottom: 6px;
+  line-height: 1;
+  font-family: var(--font-display);
+}
+
+.orderName {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  line-height: 1.15;
+}
+
+.essence {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.02rem;
+  color: var(--brass-deep);
+  margin-bottom: 14px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.definition {
+  font-family: var(--font-reading);
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: var(--text-body);
+  margin-bottom: 14px;
+  font-weight: 400;
+}
+
+.tell {
+  font-family: var(--font-reading);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
+}
+
+.tellLabel {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+.orderCardDeclared {
+  background: linear-gradient(180deg, #fffdf8 0%, #f9f0d8 100%);
+  border-color: var(--gold);
+  border-width: 1px;
+  border-left: 4px solid var(--family-color, var(--gold));
+  box-shadow:
+    0 4px 24px rgba(212, 168, 74, 0.15),
+    0 0 0 1px rgba(212, 168, 74, 0.18);
+}
+
+.orderCardDeclared .ornament {
+  color: var(--gold-bright);
+}
+
+/* ── The door is open ──────────────────────────────────────────────────── */
+.doorway {
+  position: relative;
+  background-color: var(--paper);
+  background-image: var(--paper-grain);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 48px 40px 44px 56px;
+  margin: 64px 0 48px;
+  text-align: center;
+  box-shadow: 0 2px 14px rgba(74, 40, 16, 0.08);
+  overflow: hidden;
+}
+
+.doorway::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(
+    to bottom,
+    #8c5a18 0%,
+    #b8862e 18%,
+    #ecb438 38%,
+    #fef0a0 50%,
+    #ecb438 62%,
+    #b8862e 82%,
+    #7a5010 100%
+  );
+  border-radius: 0 3px 3px 0;
+}
+
+.doorwayEyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+.doorwayTitle {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+
+.doorwayTitle em {
+  font-style: italic;
+  color: var(--brass-deep);
+}
+
+.doorwayMotto {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--brass-deep);
+  margin-bottom: 24px;
+  letter-spacing: 0.01em;
+}
+
+.doorwayBody {
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.doorwayBody p {
+  font-family: var(--font-reading);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-body);
+  margin-bottom: 14px;
+  font-weight: 400;
+}
+
+.doorwayBody p:last-child {
+  margin-bottom: 0;
+}
+
+/* The page's own closing note (the site footer follows it). */
+.closing {
+  text-align: center;
+  padding: 40px 20px 0;
+  border-top: 1px solid var(--border-light);
+  margin-top: 48px;
+}
+
+.closing p {
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--text-tertiary);
+  line-height: 1.7;
+  max-width: 580px;
+  margin: 0 auto 8px;
+}
+
+.closingMeta {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-style: normal;
+  margin-top: 14px;
+}
+
+@media (min-width: 720px) {
+  .indexList {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .cadenceGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px 22px;
+  }
+}
+
+@media (max-width: 760px) {
+  .headerCard {
+    padding: 20px 22px 18px 30px;
+    margin-bottom: 22px;
+  }
+  .headerCard::before {
+    width: 4px;
+  }
+  .chipsBar {
+    padding: 10px 0 8px;
+  }
+  .chips {
+    gap: 4px;
+  }
+  .chip {
+    padding: 6px 10px;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+  }
+  .familySticky {
+    position: relative;
+    top: auto;
+    padding: 16px 0 14px;
+    margin: 10px 0 22px;
+  }
+  .indexName {
+    font-size: 1.55rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .cadenceGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .masthead {
+    padding: 32px 12px 44px;
+    margin-bottom: 44px;
+  }
+  .mastheadPrefix {
+    font-size: 1.3rem;
+  }
+  .mastheadLogo {
+    height: 64px;
+    margin-bottom: 14px;
+  }
+  .mastheadPairLine {
+    font-size: 1.5rem;
+  }
+  .opening p {
+    font-size: 1rem;
+  }
+  .doorway {
+    padding: 40px 24px;
+  }
+  .doorwayTitle {
+    font-size: 1.9rem;
+  }
+  .orderGrid {
+    grid-template-columns: 1fr;
+  }
+}
