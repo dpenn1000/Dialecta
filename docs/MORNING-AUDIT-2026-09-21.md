@@ -225,12 +225,14 @@ else, which serves as the acceptance test. `builder` implements.
   destructive statement "may require the user to confirm", which makes read-only how it behaves
   rather than a guarantee, so nothing should send it a write. Every write tonight went through
   `apply_migration`.
-- **I named three migration files with timestamps I made up** rather than the versions the database
-  recorded. The CLI compares by timestamp alone, so all three looked like pending migrations and a
-  `db push` would have tried to run them again. Renamed to their live versions, and the email-fix
-  file now carries the `notify pgrst` line that live actually ran. The wider drift from before
-  tonight, including three live migrations with no file anywhere on disk, is `migrator`'s, and the
-  architect seat has the full reconciliation (`architect-04`).
+- **I named five migration files with timestamps I made up** rather than the versions the database
+  recorded, and I fixed only three of them the first time. The CLI compares by timestamp alone, so each
+  looked like a pending migration and a `db push` would have tried to run it again. All five now carry
+  their live versions and the SQL live actually ran. Three more migrations from tonight, mine and the
+  architect's, had no file at all; they are restored byte for byte from the history table. Measured
+  after: 14 of 16 September migrations match live, and nothing reads as pending. The two that differ,
+  `041504` and `043008`, are data fixes edited after they ran so a fresh replay would pass, and the ruling
+  on them is `migrator`'s, along with the twenty April and May migrations that have no file (`architect-04`).
 
 Each was caught by a seat or by measuring, and each is corrected in the file where it happened.
 

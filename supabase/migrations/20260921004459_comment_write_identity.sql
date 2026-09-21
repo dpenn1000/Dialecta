@@ -1,3 +1,7 @@
+-- Recorded as 20260921004459 by apply_migration. This file carried the made-up version 20260920200500
+-- until 2026-09-21, so the CLI read it as pending; renamed to the version live recorded,
+-- and its SQL made identical to what ran (architect-04).
+--
 -- Comment write path: session-verified identity, not a client-supplied member_uuid.
 --
 -- security's 2026-09-20 path-to-launch position (council/security/positions/2026-09-20-path-to-launch.md):
@@ -16,7 +20,7 @@
 -- default posture classifications already has (baseline migration,
 -- "classifications_service_only").
 --
--- profiles.user_id (added by 20260920000200_profile_claim_tokens.sql) is not
+-- profiles.user_id (added by 20260921004417_profile_claim_tokens.sql) is not
 -- in the anon/authenticated column grant list
 -- (20260920192954_close_ghost_member_id_as_public_credential.sql), and
 -- ghost_member_id was deliberately removed from that same list. A plain
@@ -30,7 +34,6 @@
 -- column grants or a public-profile view, and it waits on the decision
 -- below"); that stays exactly where it was, not freelanced here.
 
-begin;
 
 -- ---------------------------------------------------------------------------
 -- current_ghost_member_id(): the caller's own member_id, or null.
@@ -87,8 +90,12 @@ $$;
 revoke all on function public.get_own_profile_for_comment() from public;
 grant execute on function public.get_own_profile_for_comment() to authenticated;
 
+-- The comment below is the one live stored. The file once carried a longer one that never
+-- ran: member_name is profiles.display_name, and the route treats a null or blank value as
+-- an incomplete profile, the same shape as the recovered requireCompleteProfile() helper
+-- (_recovered/api/_profile-validation.js).
 comment on function public.get_own_profile_for_comment() is
-  'The caller''s own profile, resolved from the verified session (auth.uid()), for the comment write path. Returns zero rows for a signed-in session with no claimed profile. member_name is profiles.display_name; the route treats a null/blank value as an incomplete profile, same shape as the recovered requireCompleteProfile() helper (_recovered/api/_profile-validation.js), not ported verbatim because it also handled an HTTP response shape this function has no business owning.';
+  'The caller''s own profile, resolved from the verified session (auth.uid()), for the comment write path. Returns zero rows for a signed-in session with no claimed profile.';
 
 -- ---------------------------------------------------------------------------
 -- comments: insert and select of the caller's own rows only.
@@ -131,4 +138,3 @@ create policy "members select their own comments"
   to authenticated
   using (member_id = public.current_ghost_member_id());
 
-commit;

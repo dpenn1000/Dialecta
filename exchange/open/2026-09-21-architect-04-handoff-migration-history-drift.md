@@ -85,3 +85,25 @@ live version has a file under the same version, with the same SQL-only md5.
 ## Do not touch
 
 `supabase/` is held by the articles builder session tonight. Coordinate through the convener.
+
+### Done by the convener, 2026-09-21, and re-measured with this record's own normalisation
+
+The first three steps of "Not done", in its order:
+
+1. `20260920000000_baseline_live_schema.sql` moved to `supabase/migrations/_archived_2026-09-20/`, where
+   the CLI does not read it.
+2. `20260920000200` renamed to `20260921004417_profile_claim_tokens.sql` and `20260920200500` to
+   `20260921004459_comment_write_identity.sql`. Both dropped the `begin;`/`commit;` wrapper live never
+   ran, and `004459` now carries the `COMMENT ON` string live stored; the longer one it had is kept as a
+   `--` comment above the statement.
+3. `012248`, `035036` and `035136` recovered from `schema_migrations.statements`, byte for byte: each
+   file's md5 equals the live statement's.
+
+Measured after, `team/architect/checks/migration-history.sql` against every file: **14 of 16**
+September versions match by SQL-only md5, and **no file reads as pending**.
+
+**`043008`'s cause is now established.** The file carries an early return live never ran:
+`if not exists (select 1 from public.articles where ghost_post_id = '69f2937b4e51770001fb5218') then
+raise notice ...; return; end if;`. Every other fragment matches live when split on `;` and hashed one
+by one. It is the same shape as `041504`, a data fix edited after it ran so that a replay on a fresh
+database passes, so the one `migrator` ruling covers both.

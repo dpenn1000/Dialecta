@@ -1,3 +1,7 @@
+-- Recorded as 20260921004417 by apply_migration. This file carried the made-up version 20260920000200
+-- until 2026-09-21, so the CLI read it as pending; renamed to the version live recorded,
+-- and its SQL made identical to what ran (architect-04).
+--
 -- Claim tokens: how a legacy Ghost member takes over their profiles row.
 --
 -- Source: council/security/positions/2026-09-20-path-to-launch.md and
@@ -108,7 +112,6 @@ alter table public.profile_claim_tokens enable row level security;
 --      There is no other table's RLS policy this definer function, owned by
 --      postgres, could be quietly bypassing by running as its owner.
 
-begin;
 
 create or replace function public.claim_profile(token text)
 returns uuid
@@ -167,4 +170,3 @@ $$;
 revoke all on function public.claim_profile(text) from public;
 grant execute on function public.claim_profile(text) to authenticated;
 
-commit;
