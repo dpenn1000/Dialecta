@@ -2673,6 +2673,35 @@ export const strings = {
       close: 'Close',
     },
     /**
+     * Reflect's overlay chrome, member-gated (spine.tsx resolves canPlace
+     * before building this overlay at all, matching live's {{#if @member}}
+     * in _theme/post.hbs:806). kicker/titlePlain/titleEm/skip are live's
+     * own copy verbatim (_theme/post.hbs:818-820, :838).
+     *
+     * body is NOT live's verbatim static paragraph. Live's actual text
+     * (post.hbs:822-827) reads: "Mark your position on the article's
+     * opinion axes. After reading, you'll mark again, and the platform
+     * measures the shift. Your declaration is private until you choose to
+     * surface it in the conversation." Two claims in that sentence are
+     * false of what either live or this app has ever built: no delta,
+     * magnitude or shift is computed anywhere (the port plan's own "Where
+     * live departs from the spec" table, checked by exhaustive grep), and
+     * there is no way for a reader to surface a placement in the
+     * conversation (Stage F is schema-only: comments.delta_acknowledged
+     * exists, no UI ever sets it). Rewritten to state only what this build
+     * does: capture a placement before reading, allow placing again in
+     * Declare, and the one true privacy fact (opinion_map_self_read scopes
+     * a SELECT to the row's own profile_id, so no other reader's query can
+     * return it).
+     */
+    reflect: {
+      kicker: '⁂ The Delta Mechanic · Pre-read',
+      titlePlain: 'Where do you stand',
+      titleEm: 'before reading?',
+      body: "Mark where you stand before you read. You can place yourself again after, in Declare. Your placement is private: other readers can't see it.",
+      skip: 'Skip for now',
+    },
+    /**
      * The Discourse segment's meta line, and the byline chip's count
      * (components/discourse-chip) reads the same function so the two never
      * disagree. Both draw on one real count
@@ -2796,6 +2825,56 @@ export const strings = {
       heading: { one: 'The opinion map', many: 'The opinion maps' },
       intro: { one: 'Where the argument splits.', many: 'Two debates this article opens.' },
       authorPosition: 'Where the author lands',
+    },
+    /**
+     * The placement island, src/components/opinion-map/placement-client.tsx.
+     * Step 6 of the architect's 2026-09-21 delta-mechanic port plan. Ported
+     * from usePlacement/PlacementButtonRow/PlacementCard in
+     * _recovered-next/lib/theme/dialecta-opinion-map-placement.jsx, live's
+     * copy verbatim except reflectPrompt (see below).
+     *
+     * signInRequired is the one message placement-client.tsx shows for
+     * BOTH a signed-out caller and a signed-in one with no claimed profile,
+     * matching live: usePlacement's commit() shows this same single line
+     * for its one no-identity case ("Sign in to place yourself",
+     * dialecta-opinion-map-placement.jsx:60), never distinguishing further.
+     * In practice this island only renders for a reader spine.tsx already
+     * resolved as canPlace, so this is the backstop for the RPC coming back
+     * empty anyway (an expired session, or a direct call bypassing the
+     * UI), not the everyday path.
+     */
+    placement: {
+      tapHint: 'Tap anywhere on the map to place yourself.',
+      tapAgain: "Tap again to move it. Commit when you're ready.",
+      commit: 'Commit position',
+      committing: 'Committing…',
+      replace: 'Re-place',
+      saveFailed: 'Could not save your placement',
+      signInRequired: 'Sign in to place yourself',
+      /**
+       * Reflect's per-map-type prompt (live's buildPreReadPrompt(),
+       * dialecta-opinion-map-placement.jsx:647-670), verbatim including the
+       * comma splice in postPlacement ("Read the piece, we'll check back at
+       * the end") and the "not a fence" contrast in binaryBody: a real
+       * alternative reading (a fence sitter, not a real position) the
+       * reader would otherwise assume, not padding.
+       */
+      reflectPrompt: {
+        eyebrow: 'Before you read',
+        headline: {
+          cartesian: 'Two questions in play. Where do you stand on each?',
+          ternary: 'Three ways of seeing this. Where do you weight yourself?',
+          binary: 'One spectrum. Where do you start?',
+        },
+        cartesianBody:
+          'Two independent questions. Tap once on the plane to mark where you stand on both at once. You can re-place after reading.',
+        ternaryBody: (topic: string | null) =>
+          `${topic ? `On the question of "${topic.toLowerCase()}," ` : 'On the question this article addresses, '}pick a position by tapping anywhere in the triangle. The three corners represent competing positions; your tap weights how much each one fits you. You can re-place after reading.`,
+        binaryBody:
+          'A continuum between two positions. Tap anywhere along the line; the middle is a real position, not a fence. You can re-place after reading.',
+        postPlacement: "Got it. Read the piece, we'll check back at the end.",
+        closeLabel: 'Begin reading →',
+      },
     },
   },
 } as const;

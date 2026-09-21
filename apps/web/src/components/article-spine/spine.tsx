@@ -31,7 +31,8 @@
  * feature, not part of this plan.
  */
 import { Fragment } from 'react';
-import { ArticleDeclaration } from '@/components/article-declaration/declaration';
+import { ArticleDeclaration, ArticleReflectPlacement } from '@/components/article-declaration/declaration';
+import { readShellMember } from '@/components/shell/member';
 import { strings } from '@/strings';
 import { SpineClient } from './spine-client';
 import './spine.css';
@@ -76,20 +77,55 @@ function SpineNav({ discourseMeta }: { discourseMeta: string | null }) {
 }
 
 const DECLARE_TITLE_ID = 'post-overlay-declare-title';
+const REFLECT_TITLE_ID = 'post-overlay-reflect-title';
 
-export function ArticleSpine({ articleId, discourseCount }: { articleId: string; discourseCount: number | null }) {
+/**
+ * canPlace: resolved once here (readShellMember(), the same "signed in
+ * with a claimed profile" check the header and drawer already use), then
+ * threaded to both overlays, so Reflect's whole overlay and Declare's
+ * placement islands answer from one read instead of two that could
+ * disagree with each other mid-request. Step 6 of the architect's port
+ * plan: Reflect is members only, matching live's {{#if @member}}
+ * (_theme/post.hbs:806) exactly, so a signed-out or unclaimed reader gets
+ * reflectOverlay={null}, the same "nothing to open" shape steps 1 to 4
+ * already wired (spine-client.tsx's open() bails when reflectOverlay is
+ * absent). Declare's read-only maps stay open to everyone; only the
+ * placement island beside each one is gated (declaration.tsx).
+ */
+export async function ArticleSpine({ articleId, discourseCount }: { articleId: string; discourseCount: number | null }) {
+  const member = await readShellMember();
+  const canPlace = member !== null;
+
   return (
     <SpineClient
       articleId={articleId}
       declareTitleId={DECLARE_TITLE_ID}
+      reflectTitleId={REFLECT_TITLE_ID}
       nav={<SpineNav discourseMeta={s.discourseMeta(discourseCount)} />}
+      reflectOverlay={
+        canPlace ? (
+          <>
+            <div className="post-overlay-kicker">{s.reflect.kicker}</div>
+            <h2 id={REFLECT_TITLE_ID} className="post-overlay-title">
+              {s.reflect.titlePlain} <em>{s.reflect.titleEm}</em>
+            </h2>
+            <p className="post-overlay-body">{s.reflect.body}</p>
+            <ArticleReflectPlacement articleId={articleId} />
+            <div className="post-overlay-actions">
+              <button type="button" className="post-overlay-skip" data-overlay-close>
+                {s.reflect.skip}
+              </button>
+            </div>
+          </>
+        ) : null
+      }
       declareOverlay={
         <>
           <div className="post-overlay-kicker">{s.declare.kicker}</div>
           <h2 id={DECLARE_TITLE_ID} className="post-overlay-title">
             <em>{s.declare.titleEm}</em> {s.declare.titleRest}
           </h2>
-          <ArticleDeclaration articleId={articleId} />
+          <ArticleDeclaration articleId={articleId} canPlace={canPlace} />
           <div className="post-overlay-actions">
             <button type="button" className="post-overlay-skip" data-overlay-close>
               {s.declare.close}

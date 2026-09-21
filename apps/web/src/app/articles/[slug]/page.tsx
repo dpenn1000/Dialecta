@@ -137,12 +137,13 @@ export default async function ArticlePage({ params, searchParams }: ArticlePageP
         The reading-stage spine: sticky under the nav on desktop, fixed to
         the bottom on mobile. Sits outside the paper sheet, as it does on
         live (a full-width bar above the card, not inset inside it).
-        Steps 1 to 4 of the architect's 2026-09-21 delta-mechanic port
+        Steps 1 to 6 of the architect's 2026-09-21 delta-mechanic port
         plan; see components/article-spine/spine.tsx for the full port
-        note and what is deliberately not built yet (Reflect's own
-        content and the placement island). Bio and Share's target
-        sections (#post-author-bio, #post-share) render below as of
-        2026-09-21.
+        note, including Reflect's member gating and the placement island
+        (components/opinion-map/placement-client.tsx). Step 7, reading a
+        committed placement back after a reload, is deferred (the plan's
+        own Decision 5). Bio and Share's target sections
+        (#post-author-bio, #post-share) render below as of 2026-09-21.
       */}
       <ArticleSpine articleId={article.id} discourseCount={commentCount} />
 

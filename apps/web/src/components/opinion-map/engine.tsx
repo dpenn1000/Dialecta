@@ -13,16 +13,20 @@
  * 2026-09-21-delta-mechanic-port.md, build order #4): render only, no
  * placement, no writes.
  *
- * Where step 6 plugs in: `placement-client.tsx` (not built in this pass)
- * is a 'use client' island that layers tap-to-stage and an explicit
- * Commit button on top of these same figures for a signed-in reader's own
- * placement, exactly as `InteractiveMap` in
- * dialecta-opinion-map-placement.jsx does today. It should reuse the pure
- * helpers exported below (ternaryColor, axisColor, barycentricToXY,
- * xyToBarycentric, clampBarycentric, inTriangle, binaryBlend,
- * densityRenderScale) rather than re-deriving the coordinate math, the
- * same way the source file's own header docstring intends them: "also
- * exported for future placement / heatmap engines."
+ * Where step 6 plugs in: `placement-client.tsx` is a 'use client' island
+ * that layers tap-to-stage and an explicit Commit button on top of these
+ * same figures for a signed-in reader's own placement, exactly as
+ * `InteractiveMap` in dialecta-opinion-map-placement.jsx does today. It
+ * reuses the pure helpers exported below (ternaryColor, axisColor,
+ * barycentricToXY, xyToBarycentric, clampBarycentric, inTriangle,
+ * binaryBlend, densityRenderScale) rather than re-deriving the coordinate
+ * math, the same way the source file's own header docstring intends them:
+ * "also exported for future placement / heatmap engines." It also imports
+ * the four landscape-palette constants below (POLE_COLORS, POLE_LABEL_COLORS,
+ * AXIS_COLORS, AXIS_LABEL_COLORS), exported 2026-09-21 alongside step 6
+ * (a purely additive change; nothing about their existing use here moved
+ * or changed) so the interactive figures paint the identical hues these
+ * read-only ones do, from one place, rather than a second hardcoded copy.
  *
  * Colors: two families. The surface tokens (ink, paper-bright, wood-edge,
  * the font stack) already exist in styles/tokens.css and
@@ -43,20 +47,20 @@ const s = strings.opinionMap.maps;
 
 // ─── Landscape palette (component-specific; see the header comment) ───────
 
-const POLE_COLORS: Readonly<Record<0 | 1 | 2, string>> = {
+export const POLE_COLORS: Readonly<Record<0 | 1 | 2, string>> = {
   0: '#f0a018',
   1: '#1a6ff0',
   2: '#e83516',
 };
 
-const POLE_LABEL_COLORS: Readonly<Record<0 | 1 | 2, string>> = {
+export const POLE_LABEL_COLORS: Readonly<Record<0 | 1 | 2, string>> = {
   0: '#a06320',
   1: '#1a4d9c',
   2: '#a02010',
 };
 
-const AXIS_COLORS = { L: '#f0a018', R: '#1a6ff0', T: '#22c55e', B: '#e83516' } as const;
-const AXIS_LABEL_COLORS = { L: '#a06320', R: '#1a4d9c', T: '#1d7a3a', B: '#a02010' } as const;
+export const AXIS_COLORS = { L: '#f0a018', R: '#1a6ff0', T: '#22c55e', B: '#e83516' } as const;
+export const AXIS_LABEL_COLORS = { L: '#a06320', R: '#1a4d9c', T: '#1d7a3a', B: '#a02010' } as const;
 
 // ─── Color math ─────────────────────────────────────────────────────────
 

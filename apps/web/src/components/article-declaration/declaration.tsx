@@ -1,10 +1,13 @@
 /**
- * The author's declaration inside the Declare overlay: Core Claim, Scope
- * Boundary, Strongest Objection, the article's opinion maps (render only),
- * and a native <details> disclosure of the engine's own reading. Server
- * component, no client JS: <details>/<summary> gives the expand/collapse
- * live spent a useState on (dialecta-article-classification.jsx:309) for
- * free.
+ * The article's opinion-map declaration surfaces, both fed by the same
+ * loadArticleDeclaration() read: ArticleDeclaration (Core Claim, Scope
+ * Boundary, Strongest Objection, the article's opinion maps, and a native
+ * <details> disclosure of the engine's own reading, inside the Declare
+ * overlay) and ArticleReflectPlacement (map 0 only, author position
+ * hidden, inside the Reflect overlay). Core Claim/Scope/Objection/the
+ * disclosure stay server-only, no client JS: <details>/<summary> gives the
+ * expand/collapse live spent a useState on
+ * (dialecta-article-classification.jsx:309) for free.
  *
  * Ported from ArticleDeclaration in
  * _recovered-next/lib/theme/dialecta-article-classification.jsx (lines
@@ -12,14 +15,14 @@
  * on mguulnibvzusfvyuowwh's five live rows; see components/opinion-map/data.ts
  * for which two source fields were dropped and why.
  *
- * Steps 3 and 4 of the architect's port plan (team/architect/architecture/
- * 2026-09-21-delta-mechanic-port.md, build order #3 and #4). Render only:
- * every map here is OpinionMapFigure, the read-only figure from
- * components/opinion-map/engine.tsx. The tap-to-place, Commit-button
- * island (`placement-client.tsx`, InteractiveMap's live equivalent) is
- * step 6 and is not built in this pass; it mounts here, one per post-read
- * map, in the same position each OpinionMapFigure sits at now, adding its
- * own placement UI beside this read-only figure rather than replacing it.
+ * Steps 3, 4 and 6 of the architect's port plan (team/architect/architecture/
+ * 2026-09-21-delta-mechanic-port.md, build order #3, #4 and #6).
+ * OpinionMapFigure (components/opinion-map/engine.tsx) stays the read-only
+ * figure every reader sees, unchanged; PlacementClient
+ * (components/opinion-map/placement-client.tsx), the tap-to-place,
+ * Commit-button island ported from live's InteractiveMap, takes its place
+ * for a canPlace caller, one per post-read map: the same map with the
+ * author's marker and the reader's own, drawn once, as live draws it.
  */
 import type { CSSProperties } from 'react';
 import { tierName, type Tier } from '@dialecta/core';
@@ -27,11 +30,13 @@ import { TierIcon } from '@/components/discourse/tier-badge';
 import { strings } from '@/strings';
 import { loadArticleDeclaration, type FlaggedPassage, type Tension } from '../opinion-map/data';
 import { OpinionMapFigure } from '../opinion-map/engine';
+import { PlacementClient } from '../opinion-map/placement-client';
 import '../opinion-map/opinion-map.css';
 import './declaration.css';
 
 const s = strings.opinionMap.declaration;
 const sm = strings.opinionMap.maps;
+const sp = strings.opinionMap.placement;
 
 function Field({ label, value }: { label: string; value: string | null }) {
   if (!value) return null;
@@ -126,7 +131,7 @@ function AiDisclosure({
   );
 }
 
-export async function ArticleDeclaration({ articleId }: { articleId: string }) {
+export async function ArticleDeclaration({ articleId, canPlace }: { articleId: string; canPlace: boolean }) {
   const { declaration, aiAnalysis } = await loadArticleDeclaration(articleId);
   if (!declaration) return null;
 
@@ -154,9 +159,13 @@ export async function ArticleDeclaration({ articleId }: { articleId: string }) {
 
           <div className="om-figures">
             {maps.map((m, i) => (
-              // Step 6 plugs PlacementClient in here, alongside this
-              // read-only figure, for a signed-in reader's own placement.
-              <OpinionMapFigure key={i} map={m} />
+              <div className="om-figure-group" key={i}>
+                {canPlace ? (
+                  <PlacementClient map={m} articleId={articleId} mapIndex={i} stage="post_read" showAuthorPosition />
+                ) : (
+                  <OpinionMapFigure map={m} />
+                )}
+              </div>
             ))}
           </div>
 
@@ -183,5 +192,42 @@ export async function ArticleDeclaration({ articleId }: { articleId: string }) {
         />
       ) : null}
     </section>
+  );
+}
+
+/**
+ * Reflect's pre-read content: map 0 only, author position hidden (a
+ * reader's first mark should not be anchored by seeing where the author
+ * landed, dialecta-opinion-map-placement.jsx:14-15), the per-map-type
+ * "before you read" prompt, and "Begin reading" as the commit's own close
+ * action. article-spine/spine.tsx only renders this at all once it has
+ * already resolved canPlace true (readShellMember(), matching live's
+ * {{#if @member}}), so the extra loadArticleDeclaration() read below runs
+ * for a claimed member opening Reflect, not for every visitor. Renders
+ * nothing when the article has no first map or the read fails
+ * (loadArticleDeclaration's own fail-open shape), so a broken read cannot
+ * leave the overlay open with nothing in it.
+ */
+export async function ArticleReflectPlacement({ articleId }: { articleId: string }) {
+  const { declaration } = await loadArticleDeclaration(articleId);
+  const map = declaration?.opinionMaps[0] ?? null;
+  if (!map) return null;
+
+  const body =
+    map.type === 'cartesian' ? sp.reflectPrompt.cartesianBody
+    : map.type === 'binary' ? sp.reflectPrompt.binaryBody
+    : sp.reflectPrompt.ternaryBody(map.topic);
+
+  return (
+    <PlacementClient
+      map={map}
+      articleId={articleId}
+      mapIndex={0}
+      stage="pre_read"
+      showAuthorPosition={false}
+      prompt={{ eyebrow: sp.reflectPrompt.eyebrow, headline: sp.reflectPrompt.headline[map.type], body }}
+      postPlacementText={sp.reflectPrompt.postPlacement}
+      committedCloseLabel={sp.reflectPrompt.closeLabel}
+    />
   );
 }

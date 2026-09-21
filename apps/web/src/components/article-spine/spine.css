@@ -298,6 +298,17 @@
   color: var(--brass-deep);
 }
 
+/* Reflect's static intro paragraph (_theme/post.hbs:822-827, .post-overlay-body).
+   Declare carries no equivalent: its content starts straight into
+   ArticleDeclaration's own fields. */
+.post-overlay-body {
+  font-family: var(--font-reading);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--secondary);
+  margin: 0 0 20px;
+}
+
 .post-overlay-actions {
   display: flex;
   justify-content: flex-end;
