@@ -3,3 +3,12 @@
 # supersedes another. Ordering within the file is not load bearing.
 docs/handoffs/current.md   merge=union
 exchange/ledger.md         merge=union
+
+# Byte-exact evidence. _recovered/ is the production API as deployed, and a deploy
+# from a copy of it is verified by SHA-1 against Vercel's file ids, so git must
+# store and check out every byte as it is. Two production files use CRLF
+# (api/classify.js, whose prompt text reaches the model, and vercel.json);
+# normalising them would change what a redeploy sends. The hotfix beside it is
+# deployed from the same copy and gets the same treatment.
+_recovered/**                                      -text
+council/security/hotfix-2026-09-21-api-comments/** -text
