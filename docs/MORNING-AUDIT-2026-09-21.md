@@ -160,9 +160,14 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
 - **The architect seat's top-to-bottom review**, in your own session "engineerL architect seat
   handoff". It has been given everything found tonight so it starts from what is fixed. Its rebuild
   map is in, section 2A.
-- **Four builders**, one surface each: the site shell and design system; the discourse layer; profiles
-  and the fingerprint; the front page with the Pact, Guidebook and Community. Their files are
-  landing in `apps/web` now and get committed as each one reports.
+- **Builders.** Done and committed: the site shell (`18ccd76`), the discourse layer (`1cb785a`), and
+  profiles with the fingerprint (`84c1fd4`). Still writing: the front page with the Pact, Guidebook,
+  Community, About and Stewards; and a fifth on the gaps nobody owned, which are the `/fingerprint`
+  explainer page compared side by side with the live one you liked, the writer's brass lettering on
+  paper, and sign-in returning you to the article you were reading.
+- **`security`, on reading tiers without the service key**: database functions that let a comment
+  show its tier with only the public key, and a decision on withholding Breach bodies at the database
+  rather than only on the server, which `legal` asked for.
 - **`decider` on three architecture rulings**: the identity key, "forming", and the downstream runner
   (2.10), with positions from six seats. `council/log/2026-09-21-identity-forming-and-the-runner.md`.
 - **`legal`, drafting the terms that sit beside the Pact**, at your request: terms of service, a
