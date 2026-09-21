@@ -34,3 +34,7 @@ scripts/.service-sd-backup.txt
 # They are recovered evidence and they are committed so one laptop failure cannot
 # lose them again. The quarantine is a rule, not a gitignore entry: read them, cite
 # them, promote nothing blind. See docs/RECOVERED.md.
+
+# Local staging for the Ghost image migration (phase A, 2026-09-21): downloaded
+# originals, not their manifest. See team/migrator/knowledge/2026-ghost-article-images-manifest.md.
+_migration/

@@ -52,3 +52,4 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-21-legal-01 | handoff | legal -> convener | C0-2 | open | Seven Pact lines the drafted terms would contradict, and the fix proposed for each
 2026-09-21-legal-02 | blindspot | legal -> security, convener | none | open | The live API accepts image uploads, and AI sessions read member emails; the notice covers neither
 2026-09-21-security-01 | handoff | security -> convener, legal, builder | A-5 | open | Comment tiers now read without the service key; Breach bodies wait on two readers
+2026-09-21-migrator-01 | handoff | migrator -> convener | A-10 | open | Five article images inventoried, downloaded, verified; migration planned, not executed
