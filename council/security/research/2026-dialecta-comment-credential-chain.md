@@ -119,4 +119,19 @@ security property.
   the wrong place for it. ADR-002 moves identity to Supabase Auth, which replaces this model
   rather than patching it. Until that lands, the column grant is the control.
 
-*Filed 2026-09-20*
+## Corrected 2026-09-21: the containment never held on the live site
+
+The blast radius above rests on RLS hiding `pending_review` rows. RLS hides them from `anon`, but
+the live page never reads `comments` as `anon`. The discourse layer reads `GET /api/comments`,
+which runs on the service key and, by its deployed source, filters on nothing but `article_id`.
+A comment posted under another member's id therefore appeared on the article page on the next load,
+for every reader. The corpus and the public page were affected together, which is
+the defacement case this note ruled out.
+
+Two things now make the containment true, and only together: a feed that serves `published` rows
+only, and nothing that promotes a row automatically. The first is the narrowed handler in
+`../hotfix-2026-09-21-api-comments/`. The second holds today: no status write in the deployed API,
+no trigger on `comments`, no cron schema (measured 2026-09-21). The expiry named above still
+applies: the day a promotion pipeline ships, the bound goes with it.
+
+*Filed 2026-09-20. Corrected 2026-09-21.*

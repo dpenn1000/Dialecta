@@ -22,7 +22,7 @@ Two subtrees were truncated by the file listing at depth and are not yet enumera
 | `/api/comment` | `api/comment.js` | Ghost `member_uuid` in the POST body, resolved against `profiles.ghost_member_id` | Its own docblock states `member_id` and `member_name` come from the profile rather than the request, and that `member_email` is taken from the request body. Calls `/api/classify`. Handler body unread |
 | `/api/comment/[id]` | `api/comment/[id].js` | unread | |
 | `/api/comment/[id]/...` | not enumerated | unread | Subtree truncated in the listing |
-| `/api/comments` | `api/comments.js` | none on GET. Read 2026-09-20 from the recovered artifact, not probed | Returns fifteen `classifications` columns whole, for every comment on an article in any status, and the bodies of Breach comments. `?viewer=` returns that member's nominations to whoever supplies the id. `positions/2026-09-20-fingerprint-legibility-and-model.md` |
+| `/api/comments` | `api/comments.js` | none on GET. Read 2026-09-20 from the recovered artifact; the recovered file hashes to the deployed uid (2026-09-21). Not probed | Returns fifteen `classifications` columns whole, for every comment on an article in any status, and the bodies of Breach comments. `?viewer=` returns that member's nominations to whoever supplies the id. `positions/2026-09-20-fingerprint-legibility-and-model.md`. Narrowed replacement, field map and options: `../hotfix-2026-09-21-api-comments/` |
 | `/api/classify` | `api/classify.js` | unread | Anthropic call. Root `CLAUDE.md` records the system prompt as inline here |
 | `/api/profile/[id]` | `api/profile/[id].js` | none on GET | A GET inserts a `profiles` row with a caller controlled `display_name`. Found 2026-09-20, recorded in `practices.md` and in ledger record 2026-09-20-005. Read 2026-09-20: the main GET returns `select('*')` and a seven-tier count including Breach; `_snapshots` and `_self_snapshot` return `fp_snapshots`, `aspirations` and self-descriptions for any `member_id` |
 | `/api/profile/cover-search` | `api/profile/cover-search.js` | unread | |
@@ -36,7 +36,7 @@ Two subtrees were truncated by the file listing at depth and are not yet enumera
 | `/api/article/aesthetic-suggest` | `api/article/aesthetic-suggest.js` | unread | Anthropic call. Named in ledger record 2026-09-19-005 |
 | `/api/article/suggest-topics` | `api/article/suggest-topics.js` | unread | Anthropic call |
 | `/api/article/repolish` | `api/article/repolish.js` | unread | Anthropic call |
-| `/api/article/upload-image` | `api/article/upload-image.js` | unread | Write path to storage |
+| `/api/article/upload-image` | `api/article/upload-image.js` | `member_uuid` in the POST body, checked only for a matching profile, plus `is_author` for article photos. Read 2026-09-21; the recovered file hashes to the deployed uid. Not probed | Re-encodes with sharp and uploads through Ghost's Admin API, which hosts it on Ghost's CDN. Called by `shell.js`, `home.js` and `editor.js`. Disabled replacement: `../hotfix-2026-09-21-api-comments/` |
 | `/api/article/admin-resetup-maps` | `api/article/admin-resetup-maps.js` | unread | Name implies an admin action outside `api/admin/` |
 | `/api/admin/members` | `api/admin/members.js` | unread | Member records are the PII concentration on this platform |
 | `/api/admin/member-tier` | `api/admin/member-tier.js` | unread | Writes a paid tier |
