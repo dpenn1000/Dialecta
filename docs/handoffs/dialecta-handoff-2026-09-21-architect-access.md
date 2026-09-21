@@ -4,6 +4,11 @@ For Dan, written overnight 2026-09-21. Every row was tested tonight, not assumed
 been changed: each fix is a proposal, and the ones outside `team/architect/` go through the
 convener and the council.
 
+**Update, same night.** Item 1 is applied. Dan ruled "all review access to all platforms"; the
+convener wrote it into `.claude/agents/architect.md` at `29ad3f9`, read tools only, and
+`supabase-dialecta-ro` is in `.mcp.json`. It waits on Dan's one-time sign-in (`/mcp` in a session
+started in `C:\Dialecta`).
+
 ## What works
 
 | Access | Through | Tested by |

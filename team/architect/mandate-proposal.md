@@ -1,13 +1,14 @@
 # Proposed mandate changes
 
-For the convener or Dan to apply to `.claude/agents/architect.md` together with the name decision,
-so the file changes once. Nothing here is applied. Written 2026-09-21 from Dan's direction that
-night: "not only the overseer of code but also the data engineer", "Code and Data expert. Both seats",
-"Scalability, Speed, Table organization, and hygiene".
+For the convener or Dan to apply to `.claude/agents/architect.md`. Written 2026-09-21 from Dan's
+direction that night: "not only the overseer of code but also the data engineer", "Code and Data
+expert. Both seats", "Scalability, Speed, Table organization, and hygiene".
 
-If the name changes, rename `.claude/agents/architect.md`, `team/architect/` and the `name:` field,
-leave the ids of records already filed as they are, and run `team/architect/tools/doc-paths.mjs`
-afterwards: a complete rename leaves no instruction document naming the old path.
+**Status, same night.** The name is settled: `architect` (Dan). The convener applied the access half
+at `29ad3f9`, in a narrower form than section 1 proposed: read tools named one by one across
+Supabase, Vercel, the browser and the notes index, with `execute_sql`, every deploy tool and every env
+tool withheld, plus a "Your access" table and Dan's channels rule. Section 3's false read-only claim
+is replaced. **Still proposed:** sections 2, 4 and 5.
 
 ## 1. The `tools:` line
 

@@ -48,3 +48,4 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-21-architect-05 | handoff | architect -> decider, migrator, security, builder | none | open | A person is keyed three ways and an article two; one decision fixes sixteen tables
 2026-09-21-architect-06 | handoff | architect -> builder | none | open | Standards for apps/web, decided: typed clients, tests, CI gates, a shared tsconfig
 2026-09-21-architect-07 | handoff | architect -> migrator, builder | none | open | Classification rows carry no prompt version, and one free hygiene migration
+2026-09-21-architect-08 | handoff | architect -> decider, migrator, builder, security, convener | none | open | The rebuild architecture: build the spine first, then port onto it; six decisions

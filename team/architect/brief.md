@@ -61,16 +61,18 @@ other tools.
 - **Three of this seat's own tool runs reported clean and were wrong.** `tools/README.md` records
   each and what now prevents it.
 
-**Open with Dan:** whether the seat is named `architect` or `engineer`, asked 2026-09-21, and the
-mandate update that goes with it: the data half made explicit and the read-only server in its tools.
+**Settled with Dan, 2026-09-21:** the name stays `architect`, and the seat has read-only review
+access on every platform (`.claude/agents/architect.md`, "Your access", applied by the convener at
+`29ad3f9`). The rest of `mandate-proposal.md` is still proposed.
 
 ## Next three
 
-1. **Get the read-only database server into the seat's own tools** (access handoff, item 1). Until
-   then the checks run only from a lead session, and the mandate's read-only claim is habit, not
-   enforcement.
+1. **Run the eight checks through `supabase-dialecta-ro` once Dan signs in.** The grant is in the
+   seat's tools. The first run through it proves the access works and whether each baseline still
+   holds.
 2. **Make the checks continual.** `migration-history.sql` found the same drift twice in two hours.
    Run it after every applied migration, then on a schedule once a read-only credential exists.
-3. **Watch the routed findings land**, starting with the two decisions that block the most:
-   identity (`architect-05`) and "forming" (`architect-03`). The measure of this seat is how many
-   findings get fixed.
+3. **Hold the rebuild to the map** (`architecture/2026-09-21-rebuild-map.md`, Dan's request of
+   2026-09-21): the spine's three steps first, and each landing checked against its fitness function.
+   Identity (`architect-05`, the map's step 2) and "forming" (`architect-03`) block the most. The
+   measure of this seat is how many findings get fixed.
