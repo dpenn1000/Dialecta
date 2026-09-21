@@ -1,0 +1,17 @@
+# A Meta-Analytic Review of Experiments Examining the Effects of Extrinsic Rewards on Intrinsic Motivation
+
+**Source:** Deci, E. L., Koestner, R., and Ryan, R. M. (1999). "A Meta-Analytic Review of Experiments Examining the Effects of Extrinsic Rewards on Intrinsic Motivation." Psychological Bulletin, 125(6), 627-668. DOI 10.1037/0033-2909.125.6.627 https://home.ubalt.edu/tmitch/642/articles%20syllabus/Deci%20Koestner%20Ryan%20meta%20IM%20psy%20bull%2099.pdf
+
+## Summary
+
+A meta-analysis of 128 experiments on what happens to a person's freely chosen interest in an activity after a reward is attached to it. Engagement-contingent, completion-contingent and performance-contingent rewards all significantly undermined free-choice intrinsic motivation (d = -0.40, -0.36 and -0.28), as did all rewards, all tangible rewards and all expected rewards taken as aggregates. Engagement-contingent and completion-contingent rewards also undermined self-reported interest (d = -0.15 and -0.17). Two categories did not undermine: unexpected rewards and task-noncontingent rewards. The authors give the mechanism plainly: those two "did not have a detrimental effect because participants were not doing the task in order to get those rewards, so they did not feel controlled by them." Positive feedback ran the other way, enhancing free-choice behavior (d = 0.33) and self-reported interest (d = 0.31). Their own applied note: unexpected rewards "may be a way, upon occasion, to convey appreciation for a task well done without harming intrinsic motivation," with the caveat that "people may begin to expect the 'unexpected' rewards if they are given very often."
+
+## Implies for Dialecta
+
+- Splits the Charter badge question along a line that is not about tone. An announced condition ("write three articles this year and the badge locks") is an expected, tangible, completion-contingent reward, the configuration measured at d = -0.36 against the very motivation the platform is built to cultivate. A mark granted afterward for writing that already happened is an unexpected reward, measured at no detrimental effect, and closer to positive feedback, measured at d = +0.33. Same badge, opposite predicted signs, decided by whether the person knew about it while writing.
+- Names the cost of the proposal in the platform's own currency. The contributor Dialecta wants is the one who writes because the discourse matters. The undermining effect is specifically the loss of free-choice engagement once the reward is removed or satisfied, which is what the first hundred would carry into year two.
+- Carries a caveat the platform has to hold if it adopts the after-the-fact form: an unexpected reward given routinely becomes an expected one. A founding-cohort recognition granted once is protected by its own rarity. The same recognition turned into a standing annual practice is not.
+- Bears on the Growth Layer more widely than on the badge, since the 90-day recommitment cycle and Practice Layer coaching are both places where an achievement marker could be attached to an activity that only works if it is freely chosen.
+- Limit worth naming: the corpus is largely laboratory studies with short horizons, and mostly children and college students on experimenter-set tasks. Nothing in it tested a voluntary online community over a year. It establishes the direction and the moderator that matters (expected against unexpected), not the size of the effect at Dialecta's scale.
+
+*Filed 2026-09-20*

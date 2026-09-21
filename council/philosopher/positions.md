@@ -17,6 +17,7 @@ with no filed note behind it is marked `(unsourced)`. Evidence points at
 | P-9. A membership price, not its size, is what risks moving a contributor from social norms to market norms. The fix is structural separation of payment from classification, not a smaller fee | Medium high | `2004-heyman-ariely-market-norms` | 2026-09-20 |
 | P-10. The composer gate and the nudge bar are not two strengths of one mechanism. Only the visible, non-blocking one has a field result behind it | Medium high | `2019-matias-norms-r-science` | 2026-09-20 |
 | P-11. Human review of a published tier does not recover the contributor's autonomy interest any better than a non-authoring contest path does, and it costs the platform a real legal position to get there. Community re-review is the answer that does not trade one for the other | Medium high | `2015-steindl-reactance`, `2007-miller-restoration-postscripts`, `council/legal/positions/2026-09-20-tier-label-first-party-speech.md` | 2026-09-20 |
+| P-12. A condition on a founding badge is acceptable in the unannounced, after-the-fact form and damaging in the announced form. What decides it is whether the contributor knows the threshold while writing, not how kindly the platform states it | Medium high | `1999-deci-koestner-ryan-undermining`, `2013-anderson-steering-badges` | 2026-09-20 |
 
 ---
 
@@ -211,6 +212,14 @@ to build and enforce. I will not extend this into an argument against membership
 arithmetic on what the platform needs to survive stands, and $936 a year is not a sum worth abandoning
 a funding model over. Recommendation: fund it, and keep the wall.
 
+**Scope, added 2026-09-20 when the price ladder was put to this seat.** The switch happens once. A
+member who has paid anything already holds market norms, so price movement after that first dollar,
+including $50 against a pre-announced $100, is movement inside a frame they hold rather than a second
+conversion. This position reaches the decision to charge. It does not reach what the price later
+does, and stretching it that far would be using a source where it does not apply. The one extension
+that does follow: a locked founding price is a louder market signal than a price, so the wall this
+position asks for covers the lock on the same terms.
+
 ## P-10. The gate and the nudge bar are different mechanisms, answering `designer`
 
 Matias's field experiment isolated the variable designer's D-2 asks about: display the norm, change
@@ -241,6 +250,39 @@ work better than an employee's review would, not just more cheaply. Legal's Sect
 changed the shape of my answer: I no longer read "human in the loop" as a single mechanism with one
 verdict, and I now hold that pre-publication human review is the one contest design actually worth
 opposing on both grounds at once.
+
+## P-12. What decides a conditioned badge, answering Dan
+
+Written in full in `positions/2026-09-20-charter-badge-and-price-ladder.md`. Summary for the table:
+the Tier Psychology shame argument does not transfer to a badge, because it was built for a label
+applied to a person's thinking against their will, and a mark for having written articles is
+voluntary, countable and about output. Charter Writers already hands the first 25 published authors
+lifetime comp, so earned distinctions are established practice here and my objection to one more is
+soft.
+
+What is not soft is the shape. Deci, Koestner and Ryan (1999), across 128 studies, found expected
+completion-contingent rewards undermine free-choice motivation at d = -0.36 while unexpected and
+task-noncontingent ones do no damage, because a person not working for the reward does not feel
+controlled by it. Anderson et al. (2013) measured the rest on several million Stack Overflow users:
+a visible threshold produces a rush before the line, a fall to baseline after, and effort steered off
+other contributions. That last finding widens the charter's Goodhart veto past the Fingerprint to any
+countable threshold attached to a visible mark.
+
+Three smaller rulings carried in the same position. A condition applied to a badge already granted is
+a revocation rather than an absent mark, which is a question of sequence and not of psychology.
+Absence becomes legible when the cohort is small and countable, so the size of the founding group
+should never be published beside the mark. And where a marker has to rest on a threshold, set it at
+one: Anderson's acceleration needs a gap to close, and a threshold of one has no gradient.
+
+**Predicate correction, 2026-09-20.** The first draft of this ruling rendered the marker on
+`is_charter` plus `is_author`, inherited from the convener's framing rather than from the schema.
+`is_author` records permission rather than work. Migration 006 calls it the gate on
+`/api/article/submit`, and migration 010 flips it inside the same update that writes
+`pact_signed_name`, so signing the Pact sets it. The predicate is a count of a member's rows in
+`articles` at `status = 'published'`. The error is worth keeping on the record because it is the same
+failure as the one above arriving from the other side: a mark that tripped at Pact signature would
+have distinguished nobody, where a mark inside a published cohort of a hundred distinguishes too
+well. Both are a mark whose meaning nobody checked against the population carrying it.
 
 ---
 

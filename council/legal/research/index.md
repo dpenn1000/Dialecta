@@ -61,3 +61,19 @@ and merging two independently-sourced reads into one would erase the fact that t
 | `1990-scotus-milkovich-v-lorain-journal.md` | Milkovich v. Lorain Journal Co., 497 U.S. 1 (1990) | No privilege attaches to the word "opinion". A disclaimer buys nothing; publishing the basis beside the badge is what works. Breach is the tier where this bites hardest |
 | `1977-restatement-583-consent-to-defamation.md` | Restatement (Second) of Torts Section 583, via CACI 1721 | Consent to publication is a complete defence, and a contributor who submits a comment knowing the result will be published has given it. The Pact is the strongest evidence of it |
 | `2008-ca9-roommates-material-contribution.md` | Fair Housing Council v. Roommates.com, 521 F.3d 1157 (9th Cir. 2008) (en banc), primary | Binding here. Stage 2 is structurally the Roommates questionnaire and survives because selecting a tier is not unlawful. Answers the AI-suggestion question favourably while `aesthetic-suggest` cannot touch content |
+
+## Taking money, filed 2026-09-20 for the founding-cohort debate
+
+The charter's second half, and the one the first sprint did not touch: what is owed before money
+changes hands. Filed for `positions/2026-09-20-charter-badge-and-price-ladder.md`. The pattern
+across all six: the operator's own state governs almost none of this. The subscriber's state and
+federal trade law do.
+
+| File | Source | Implies for |
+| --- | --- | --- |
+| `2010-usc-8403-rosca.md` | 15 U.S.C. Sections 8403 and 8404, primary, Cornell LII | Three duties on any recurring internet charge, in force and untouched by the 2025 vacatur. Material terms must be on screen BEFORE the billing field, which is what puts the badge condition and the price ladder on the checkout page |
+| `2026-ftc-negative-option-rule-status.md` | Federal Register 2026-04952, FTC press release, four named firms | The click-to-cancel rule was vacated 2025-07-08. An ANPRM published 2026-03-13, comments closed 2026-04-13, no proposed text as of today. Do not build to it; ROSCA plus California plus New York covers what it asked for |
+| `2024-ny-gbl-527-a-auto-renewal.md` | N.Y. Gen. Bus. Law Section 527-a, primary, nysenate.gov | **The statute that already knows what a price ladder is.** "How and when the price will change" is an enumerated material term. Also the 14-day cancel-with-pro-rata-refund mechanism to borrow for the grandfather clause. AG only, no private right of action |
+| `2025-ca-auto-renewal-law-ab-2863.md` | Cal. Bus. & Prof. Code 17600 et seq. as amended, via Kilpatrick Townsend; Mayron v. Google LLC, 54 Cal. App. 5th 566 (2020) | In force 2025-07-01. Consent to the renewal term must be its own step, which is why the Pact cannot carry it. Three-year consent record, which is the table `positions/2026-09-20-consent-at-the-moment.md` already asked for |
+| `2026-az-consumer-fraud-act-44-1521.md` | A.R.S. Sections 44-1521 to 44-1534, Section 44-1522 via FindLaw | The Arizona statute a founding-price promise lives under. 44-1522(C) tells Arizona courts to use FTC and federal readings of FTC Act Section 5 as the guide, so there is one deception standard rather than two. One-year limitations, running from discovery |
+| `2007-ca9-douglas-v-talk-america.md` | Douglas v. U.S. Dist. Court ex rel. Talk America, 495 F.3d 1062 (9th Cir. 2007) | Binding in Dialecta's circuit. A party cannot change contract terms on its own, and posting a revised contract is not notice. This is what closes the window: a condition is a term of the offer before payment and an unaccepted offer after it |
