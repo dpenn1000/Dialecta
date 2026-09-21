@@ -1,7 +1,7 @@
 # The design system, ported
 
 *designer position, 2026-09-20, Phase 2. Answers the frame's question three: where layouts,
-colour, paper grain and wood actually live in `_recovered-next/` and `_theme/`, and whether each
+colour, paper grain and wood live in `_recovered-next/` and `_theme/`, and whether each
 ports independent of the components that consume it. Extends the Phase 1 read at
 `council/designer/positions/2026-09-20-recovered-source-read.md` and D-11 through D-26; does not
 restate them.*
@@ -13,8 +13,8 @@ both live entirely inside style.css's single, 149-line `:root` block, the live G
 `_theme/assets/css/style.css`, not the design spec. The token generator's own regex already
 matches that block's shape, so retargeting it costs a path change plus two named value decisions,
 not a rewrite. Layout does not port independently: `shell.jsx`'s 226 lines are Ghost `.dataset`
-plumbing and do not survive the move. Wood is real but thin: only a one-pixel border rim actually
-renders anywhere; the plank gradient is defined and never painted, in 3,286 lines.
+plumbing and do not survive the move. Wood is real but thin: only a one-pixel border rim renders
+anywhere; the plank gradient is defined and never painted, in 3,286 lines.
 
 ## Dan's four things, located
 
@@ -71,8 +71,8 @@ is exactly why it needs to be a named decision now rather than discovered later 
 component starts rendering the wrong amber. And the flip cannot be silent for a third reason:
 style.css defines zero `--tier-*` values, so flipping the generator's source before the tier tokens
 land in style.css itself would delete all 28 tier colours from tokens.css. Sequence: land
-`--tier-*` in style.css first (D-19 and D-24's contract, already computed, not new work here), then
-flip the generator.
+`--tier-*` in style.css first (D-19 and D-24 already worked out that contract), then flip the
+generator.
 
 **`design/dialecta-design-spec.html` is adapted, not dropped.** Its role changes from value source
 to generated-from, already recommended in Phase 1, not re-argued here. One mechanical follow-on:
@@ -112,7 +112,7 @@ into the next codebase.
 is two layered `repeating-linear-gradient` passes plus a `linear-gradient` colour ramp, not an
 image or a filter. Nothing but CSS.
 
-**Nearly none of it is currently live, which changes what "porting wood" actually delivers.** I
+**Nearly none of it is currently live, which changes what "porting wood" delivers.** I
 grepped every non-comment consumption site. `--wood-warm/mid/deep` are read exactly once,
 circularly, inside `--wood-grain`'s own definition. `--wood-grain` itself, the finished plank
 texture, is never applied to any element's `background` anywhere in 3,286 lines, only named in two
@@ -151,7 +151,7 @@ It already targets `app/layout.js`, already imports `@/lib/theme/style.css` dire
 of any tokens.css question, already binds next/font for the four canonical families to the exact
 custom property names style.css expects (`--font-display`, `--font-reading`, `--font-mono`,
 `--font-body`, lines 13 to 41), already loads the nine signature hand-fonts in one Google Fonts
-`<link>` (lines 75 to 78). I read what's actually live at `apps/web/src/app/layout.tsx` today, 37
+`<link>` (lines 75 to 78). I read what's live at `apps/web/src/app/layout.tsx` today, 37
 lines: `tokens.css` plus `globals.css`, Plausible analytics wired through `next/script` and
 `getPlausibleConfig`, metadata sourced from `strings.ts` and `SITE_URL`, and
 `twitter: { card: 'summary' }` set explicitly, which `apps/web/CLAUDE.md` binds as a rule, not a
@@ -181,10 +181,9 @@ Line 208, inside the same element's `style` object: `color: tier.text`, the badg
 colour, not just the icon. Both read off the same hardcoded `TIER_BY_KEY` object Phase 1 already
 found duplicated across four other files. For Heat, `tier.text` is `#FCEAD8` over a fill that runs
 `#E89868` to `#C46028`, the measured 1.96:1 D-12 raised against the spec, now confirmed in the
-component that actually renders.
+component that renders.
 
-This is the single highest-leverage file in the tree, not because the defect is worse here than
-elsewhere, but because the fix is cheaper here than anywhere else. The file's own docstring says
+Fixing this one file is the cheapest way to reach the whole defect. The file's own docstring says
 it's shared by Private Draft and Discourse Layer, comment cards, contrast strips, nomination
 panels, one import. Fixing it once reaches all of them; leaving it means the same edit has to be
 made correctly, separately, in four files that currently agree only by coincidence of copy-paste.
@@ -210,15 +209,14 @@ has one for type: six `clamp()` steps, `--type-display` down to `--type-meta`, u
 counted 55 separate hand-picked font-size literals elsewhere in the file, the same 60 total the
 frame cites. The gap isn't existence, it's adoption.
 
-Adopt during the port, not after, but opportunistically, not as its own sweep. The frame's own
-table has 21 files that need nothing for identity reasons; every other file among the 51 is already
-being opened for an identity or business-logic edit builder and security are sizing under question
-two. A file already open for that edit costs nothing extra to also swap a `font-size: 0.84rem` for
-the nearest `var(--type-*)` step where the two already match or are close. It costs real, separate
-calendar time to reopen dozens of declarations across files nobody otherwise needed to touch.
-Inside the 21 that need nothing, leave the literals alone rather than opening a file solely for
-this. Same logic, same reason, for the nine ad hoc breakpoint values against the five named
-`--bp-*` tokens.
+Adopt it opportunistically, during the port. The frame's own table has 21 files that need nothing
+for identity reasons; every other file among the 51 is already being opened for an identity or
+business-logic edit builder and security are sizing under question two. A file already open for
+that edit costs nothing extra to also swap a `font-size: 0.84rem` for the nearest `var(--type-*)`
+step where the two already match or are close. Reopening dozens of declarations later, in files
+nobody otherwise needed to touch, costs real calendar time a file already open does not. Inside the
+21 that need nothing, leave the literals alone rather than opening a file solely for this. Same
+logic, same reason, for the nine ad hoc breakpoint values against the five named `--bp-*` tokens.
 
 This extends D-25, it doesn't reverse it. D-25's four-number scale was proposed for the design
 spec's gap, which is real: the spec defines no spacing scale at all. style.css's gap is smaller, a
@@ -250,3 +248,33 @@ Their own copies of `TIER_BY_KEY` need the same fix as the tier badge, mechanica
 verified each copy is byte-identical to the badge's, only that Phase 1 found the same 28 values by
 grep in each. Mark that adapted, provisionally, pending a direct read of each file before anyone
 commits to it.
+
+## Rebuttal
+
+Wood, checked everywhere named. `_theme/assets/` has no wood imagery. `page-pact.hbs` has no
+mention of wood at all. `page-stewards.hbs` does: a 3px gradient spine built from `--walnut
+#4a2810`, `--cherry #6e3917`, `--burnt #8a4a18`, a second wood vocabulary, independently named,
+matching none of style.css's `--wood-*` values. And `components/dialecta-dashboard.jsx`, the
+project's own build audit, logs a `WoodFrameProgressBar.jsx` component Complete, artifact path
+`Components/WoodFrameProgressBar.jsx`. Repo-wide search: zero hits. Built, marked done, and lost
+before this recovery was made.
+
+One correction to my own Phase 2 read: I called the wood-edge treatment nearly unused. That
+measured style.css's internal references only, not the class it produces. Counted:
+`dialecta-wood-frame` and bare `var(--wood-edge)` hairlines appear 30 times across
+`dialecta-discourse-layer.jsx` and `dialecta-private-draft.jsx`, the two busiest surfaces in the
+tree, nine of them the full card treatment. Wood is not neglected: used constantly, and
+every use is the same rim.
+
+Tier badge: philosopher's as-is doesn't dispute my contrast finding. Philosopher never saw it:
+their own cross-check list names P-1 through P-11 and the charter, not my Phase 1 read. Not a
+values disagreement. The frame itself defines as-is as import and token fixes only; a hardcoded
+hex literal is neither. Shipping the file unfixed is a defect carried forward wearing a port's
+name, by the frame's own rule, not my opinion. Mine to call, and nothing here is contested.
+
+Settled: `_recovered-next/app/globals.css` drops. Its `:root` re-defines tokens a third time
+(`--amber` matches the spec, not style.css); apps/web's own globals.css defines no tokens at all,
+only consumes them, so there is nothing to merge. `dialecta-archetype-grid.jsx` is not redundant
+with `archetypes.ts`: eight names against eight full fingerprint profiles feeding the engine's
+real data shape. `_theme/scripts/build-archetype-svgs.jsx` imports it directly and rasterizes its
+eight archetypes to the PNGs already sitting in `_theme/assets/`. Adapted, not dropped.
