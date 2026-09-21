@@ -10,7 +10,7 @@ is routed through `exchange/` so the owner finds it without reading this file.
 | --- | --- |
 | Code | Tracked files on local `main` in `C:\Dialecta`, read overnight. Three builder sessions were changing `supabase/`, `apps/web/src/lib/articles.ts`, `/write`, `/api/article` and `/analytics` at the time, so findings there are provisional and go through the convener |
 | Database | Live `mguulnibvzusfvyuowwh`, PostgreSQL 17.6, read only through `pg_catalog`, `supabase_migrations` and the unified logs |
-| Instruments | The seven checks in `../checks/`, the five tools in `../tools/`, the Supabase advisors, and two read-only sweeps run for this review: the schema the code assumes against the live schema, and the paths the instruction documents name against the tree |
+| Instruments | The eight checks in `../checks/`, the six tools in `../tools/`, the Supabase advisors, and two read-only sweeps run for this review: the schema the code assumes against the live schema, and the paths the instruction documents name against the tree |
 | Not reviewed | Query cost, which needs traffic this database does not have; security posture, which is `security`'s; the legacy `api/` folder, frozen while production serves the `dialecta-api` build |
 
 ## First move
@@ -24,16 +24,19 @@ would have to move are counted in dozens today.
 | # | Finding | Where | Fix | Owner | Record |
 | --- | --- | --- | --- | --- | --- |
 | 1 | A person is keyed three ways and an article two. 14 of 18 Ghost-keyed person references have no foreign key; `opinion_map_self_read` compares Ghost ids with the JWT `sub`, so no Supabase Auth reader can see their own rows | `checks/identity-columns.sql`; policy on `opinion_map_positions` | Key on `profiles.id` and `articles.id`; Ghost ids become attributes; foreign keys; policies through `profiles.user_id` | `decider`, then `migrator`, `security` | `architect-05` |
-| 2 | The migration tree and the live history disagree: 5 files renamed, 3 missing, 2 whose SQL is not what ran, and the unapplied baseline read as pending by the CLI. It recurred two hours after it was first reported | `supabase/migrations/`; `checks/migration-history.sql` | Move the baseline out; rename; recover; reconcile; run the check after every apply | `migrator` | `architect-04` |
+| 2 | The migration tree and the live history disagree. After the convener's fixes, re-measured: 7 of 14 match; 2 files still under another version, 3 missing, 2 whose SQL is not what ran (one edited after it was applied), and the unapplied baseline read as pending by the CLI | `supabase/migrations/`; `checks/migration-history.sql` | Move the baseline out; rename; recover; restore the edited file and put its change in a new migration; run the check after every apply | `migrator` | `architect-04` |
+| 2a | The Ghost import script cannot import an article: it never sets `author_member_id` (NOT NULL, no default) and its `--author-id` flag writes a column that does not exist. Two of tonight's migrations name it as the path for a real import | `scripts/import-ghost.mjs:91-104`, `:102` | Set `author_member_id` and `author_profile_id` from the Ghost author; drop `author_id` | `builder` | `architect-06` |
 | 3 | "forming" is an archetype in the spec, `packages/core` and a dead function, and a confidence level in live | `packages/core/src/archetypes.ts:20-22`; `docs/Dialecta_Data_Architecture.md:157` | Decide the model; drop `initialise_contributor_axes`; make core match | `decider`, then `migrator`, `builder` | `architect-03` |
 | 4 | Generated types are two days stale and imported by nothing; four clients carry no `<Database>` | `supabase/types.ts`; `apps/web/src/lib/supabase/{client,middleware,server,service}.ts` | Regenerate, then wire, then fix what `tsc` surfaces. The ast-grep rule is the acceptance | `builder` | `architect-06` |
 | 5 | Classification rows cannot say which prompt produced them, though `packages/core/CLAUDE.md:10` requires it, and two classifiers are about to run side by side | `packages/core/src/classification.ts:11-16`; live `classifications` | `prompt_version` and `model` columns, nullable; the comment route writes both | `migrator`, `builder` | `architect-07` |
 | 6 | `apps/web` has no tests and no test script; every write path is untested | `apps/web/src/app/api/*`, `auth/callback`, `login/actions.ts`, `middleware.ts` | vitest; the comment route first | `builder` | `architect-06` |
 | 7 | CI does not run lint, which passes today | `.github/workflows/ci.yml` | Add lint and dependency-cruiser now; the ast-grep rule after #4 | `builder` | `architect-06` |
-| 8 | A free hygiene set: 12 unindexed foreign keys, a CHECK restating the `tier` enum, two spellings of one share channel, six core tables with no comment | `checks/table-hygiene.sql`, `check-value-lists.sql` | One migration, every table under 18 rows | `migrator` | `architect-07` |
+| 8 | A free hygiene set: 12 unindexed foreign keys, 9 redundant indexes (3 exact duplicates of a unique index), a CHECK restating the `tier` enum, two spellings of one share channel, six core tables with no comment | `checks/table-hygiene.sql`, `redundant-indexes.sql`, `check-value-lists.sql` | One migration, every table under 18 rows | `migrator` | `architect-07` |
 | 9 | No shared tsconfig; 8 of 19 options already agree | `apps/web/tsconfig.json`, `packages/core/tsconfig.json` | A root base for the 8; version-enforced keys stay local | `builder` | `architect-06` |
 | 10 | Env templates lag the code: 2 names missing from `apps/web`'s, 13 from the root's | `apps/web/.env.example`, `.env.example` | Add them | `builder` | `architect-06` |
 | 11 | Dead code: an unused, untyped browser client and an unused root dependency | `apps/web/src/lib/supabase/client.ts`; root `package.json` | Delete or wire; drop | `builder` | `architect-06` |
+| 12 | The engine's axis event is `{ axis, delta, tier_at_contribution }`; live `axis_events` has `tier` and no `delta`. Latent, since nothing writes the table yet | `packages/core/src/axis-mapping.ts:155-160` | Settle the shape before the ledger writer lands | `builder` | `architect-06` |
+| 13 | Living documents name paths that moved: three links to a record now in `exchange/closed/`, and a "did not copy" list naming three files the repository now holds | `docs/plans/backlog.md:12`; `team/decider/practices.md:20-21`; `CLAUDE.md:91` | Update the paths; trim the list | convener, `decider` | this file; `tools/doc-paths.mjs` |
 
 ## Clean, measured
 
@@ -45,13 +48,18 @@ A result is worth as much when it comes back clean, so these are stated with the
 - 0.10% textual duplication. This repository's duplication is semantic, restated value lists and a
   spec against an engine, which is why the catalog checks carry the weight.
 - 0 enum drift between the generated types and `pg_enum`.
+- The schema sweep checked about 30 call sites in `apps/web`, `scripts/` and `packages/core` against
+  the live catalog. Every table, column, foreign-key embed name, enum and CHECK literal, and the one
+  RPC shape used in `apps/web` matches live. Ten flagged NOT NULL omissions, across eight columns,
+  are all covered by column defaults read from `pg_attrdef`, and a unique index backs the import
+  script's `onConflict`.
 - Lint passes on every tracked `apps/web` file.
 - The two author keys on `articles` agree on 5 of 5 rows; the slug and title copied onto `comments`
   agree on 3 of 3. Both agree by construction and nothing enforces it.
 
 ## Decided within this seat's mandate
 
-- The seat's instruments: the seven checks and five tools, pinned, in this folder.
+- The seat's instruments: the eight checks and six tools, pinned or written here, in this folder.
 - The order for typed clients, the CI gate ladder, and a root tsconfig base scoped to the options that
   already agree, with project references deferred (`architect-06`).
 - Three corrections to this seat's own first sprint, recorded where they were made.

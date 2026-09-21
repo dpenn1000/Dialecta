@@ -8,7 +8,7 @@ Calibrated 2026-09-21 against tracked files on local `main`, with a known-answer
 a clean result could mean the tool saw nothing. **Three of the first runs reported clean and were
 wrong.** The numbers below are the ones that survived a second method.
 
-## The five
+## The six
 
 | Tool | Version, licence | Catches | Cannot catch |
 | --- | --- | --- | --- |
@@ -17,6 +17,7 @@ wrong.** The numbers below are the ones that survived a second method.
 | knip | 6.37.0, ISC | Unused files, exports, types and dependencies across the workspaces | Code that is used and wrong |
 | jscpd | 5.3.0, MIT | Copy and paste, including near-miss clones with `--similarity` | The same knowledge written two different ways. This repository's real duplication is that kind |
 | squawk | 2.65.0, Apache-2.0 or MIT | Lock and safety hazards in migration SQL | Whether a migration fits the live database. It never reads the catalog |
+| `doc-paths.mjs` | this seat's own, plain Node | A path in a living instruction document that no longer resolves: renamed through git, moved to another directory, or gone | A path meant for another location (the OneDrive archive) against a stale one; a rename made outside git |
 
 ## How to run each
 
@@ -32,6 +33,7 @@ Pass tracked files (`git ls-files`) so another session's uncommitted work is not
 | knip | `npx knip@6.37.0 --config team/architect/tools/knip.json --reporter json --no-exit-code`, then keep only tracked paths |
 | jscpd | `npx jscpd@5.3.0 --min-tokens 50 --reporters console $(git ls-files 'apps/web/src/**' 'packages/core/src/**' \| grep -E '\.(ts\|tsx)$')` |
 | squawk | `npx squawk-cli@2.65.0 --pg-version=17.6 --reporter gcc $(git ls-files 'supabase/migrations/*.sql' \| grep -v _archived)` |
+| doc-paths | `node team/architect/tools/doc-paths.mjs [repoRoot]`, add `--json` for machine output. Reads tracked living documents only; about 130 ms |
 
 ## Baseline, 2026-09-21
 
@@ -42,6 +44,7 @@ Pass tracked files (`git ls-files`) so another session's uncommitted work is not
 | knip | 1 unused file (`apps/web/src/lib/supabase/client.ts`), 1 unused dependency (root `@supabase/supabase-js`), 16 unused exports, 7 unused types | Filtered to tracked files. It also reported `eslint-config-next` unused, and that was false: `apps/web/eslint.config.mjs` loads it by name through `FlatCompat`, and `eslint` over the tracked files exits 0. `knip.json` now ignores it for `apps/web` |
 | jscpd | 1 clone, 8 lines, 0.10% of 8,001 lines in 55 files, inside `stages-publish.tsx` | Tracked `.ts` and `.tsx` in both workspaces |
 | squawk | 168 issues; 143 in the unapplied baseline, 25 across four applied migrations | `prefer-robust-stmts`, `require-concurrent-index-creation` and the two timeout rules lead |
+| doc-paths | 57 living documents: 947 OK, 4 RENAMED, 17 MOVED, 120 MISSING, 72 AMBIGUOUS | First run said 406 MOVED and 252 MISSING. Calibrated three times: routes and package names skipped, nested paths resolved by suffix, a bare filename resolved by name, quarantine excluded. RENAMED and MOVED are now all real; MISSING still mixes stale paths with paths meant for the OneDrive archive, so it is a finder, not a gate |
 
 ## Three false cleans, and what now prevents each
 

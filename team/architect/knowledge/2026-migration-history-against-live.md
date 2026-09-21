@@ -60,6 +60,14 @@ Live now holds 34. The pattern repeated inside two hours, and the round-number v
 `051000`) show why: they were chosen by hand before applying. That is the case for running the check
 after every apply, not the case for more care.
 
+## Re-run after the fixes
+
+The convener renamed three files and restored the `notify` line (`c42ebf1`). The check confirmed all
+three, and found one new difference: commit `de0b9f6` edited `20260921041504` after it had been
+applied, so the file no longer says what ran. Seven of the fourteen since September match by version
+and content. The rule this adds: an applied migration file is never edited; a change goes in a new
+migration.
+
 ## Why the versions drifted
 
 `apply_migration` in the Supabase MCP records the version as the timestamp at the moment it applies.

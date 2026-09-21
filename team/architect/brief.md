@@ -32,8 +32,8 @@ judges what the changes have added up to. A finding visible in a diff belongs to
 | --- | --- |
 | Notes | 20 under `knowledge/`, indexed in `knowledge/index.md` |
 | Practices | 36 in `practices.md`, each citing a filed note or the charter |
-| Database instruments | 7 read-only catalog checks in `checks/`, each run against live |
-| Code instruments | 5 pinned tools in `tools/`, calibrated against known answers |
+| Database instruments | 8 read-only catalog checks in `checks/`, each run against live |
+| Code instruments | 5 pinned tools and 1 of the seat's own in `tools/`, calibrated against known answers |
 | Library | `references/README.md`: vendor rulebooks pinned by commit, standards texts, tool docs |
 | Access | `docs/handoffs/dialecta-handoff-2026-09-21-architect-access.md`: what works, and the read-only database server this seat still lacks |
 

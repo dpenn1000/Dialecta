@@ -34,11 +34,29 @@ The unapplied `20260920000000_baseline_live_schema.sql` sits in `supabase/migrat
 reads it as pending: `migration list` compares "only the timestamps", and `db push --include-all`
 applies migrations "not found on remote history table".
 
+### Re-measured after the convener's fixes, backup branch at `c42ebf1`
+
+The convener renamed its three files to their live versions and restored the `notify` line.
+Re-measured by version and SQL-only md5, not read from the commit message:
+
+| State | Versions |
+| --- | --- |
+| Fixed and confirmed | `004527`, `043631`, `044120`: right version, same SQL as live |
+| Still under another version | `004417` (file `20260920000200_profile_claim_tokens.sql`), `004459` (file `20260920200500_comment_write_identity.sql`) |
+| Still no file anywhere | `012248`, `035036`, `035136` |
+| SQL differs from what ran | `043008`, cause not established; **`041504`, new**: commit `de0b9f6` edited the backfill "to survive a db reset" after it had been applied |
+| Local only, read as pending | `20260920000000_baseline_live_schema.sql` |
+
+Seven of fourteen now match. The new one is the other half of this drift: a migration edited after it
+ran. A change to an applied migration belongs in a new migration, and the file that ran stays as it
+ran.
+
 ## Not done
 
-The fixes, in this order: move the baseline out of `supabase/migrations/`; rename the five files to
-the versions live recorded; recover the three missing files verbatim from `schema_migrations.statements`;
-reconcile `043008` and the missing `notify` in `051000`; then run the check after every apply.
+In this order: move the baseline out of `supabase/migrations/`; rename the two remaining files;
+recover the three missing ones verbatim from `schema_migrations.statements`; restore `041504` to what
+ran and put the reset-safety change in a new migration; reconcile `043008`. Then run the check after
+every apply.
 
 ## Governing spec
 

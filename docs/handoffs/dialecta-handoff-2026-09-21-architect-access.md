@@ -66,7 +66,7 @@ Suggested order: `plpgsql_check` first, tried on a Supabase branch before produc
 
 ### 4. A read-only credential for scheduled checks
 
-The seven checks run by hand today. Running them on a schedule needs a read-only database role and
+The eight checks run by hand today. Running them on a schedule needs a read-only database role and
 its connection string as a GitHub Actions secret, then a workflow `builder` writes. The repository is
 public, so the role must be read-only in the database, not only by convention.
 

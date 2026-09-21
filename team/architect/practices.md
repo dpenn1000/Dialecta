@@ -4,7 +4,7 @@
 until a filed note backs it.*
 
 First training sprint filed 2026-09-20: eight notes, six leads worked, two live examples settled.
-Second sprint, 2026-09-21: twelve notes, seven catalog checks, five calibrated tools, one pinned
+Second sprint, 2026-09-21: twelve notes, eight catalog checks, six calibrated tools, one pinned
 library.
 
 ## From the charter
@@ -41,6 +41,7 @@ library.
 | Before recommending a schema option, cite what the spec says. "Live did it deliberately" is not a reason under the house rule that the spec wins | Settled | Same note, correcting this seat's own first-sprint ranking |
 | A literal that names a stored value comes from `Constants` or sits under a test that compares it with the catalog | High | `2026-enum-and-check-lists-against-unions.md`: five enums restated by hand; the `forming` constant is what a restatement does when it goes wrong |
 | A migration file is named after it is applied, from the version live records, and a check compares the tree with `schema_migrations` by version and by content | Settled | `2026-migration-history-against-live.md`: 2 of 31 matched by version; content matched for all five tracked files once comments were stripped |
+| An applied migration file is never edited. A change to it goes in a new migration, so the file that ran stays as it ran | Settled | Same note, re-run: a fix commit edited `20260921041504` after it was applied, and only the content comparison caught it |
 | Identify a column by its values as well as its name | High | `2026-live-schema-hygiene-census.md`: `opinion_map_positions.reader_id` escaped the name pattern and holds Ghost ids that no Supabase Auth `sub` will ever equal |
 | Judge an `unused_index` finding against traffic, never alone | High | Same note: 40 unused indexes on a database with 3 comments says nothing about need |
 | A syntactic rule is bound to its import, or it matches every function that shares the name | Settled | `../tools/README.md`: 14 flagged sites became the 4 real ones |

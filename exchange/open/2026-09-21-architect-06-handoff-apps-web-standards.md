@@ -31,6 +31,20 @@ Measured on tracked files, 2026-09-21, with the calibrated tools in `team/archit
 6. `apps/web/src/lib/supabase/client.ts` is imported by nothing, and the root `package.json`
    depends on `@supabase/supabase-js` with no root code using it.
 
+Outside `apps/web`, from the same sweep, checked against the live catalog including column defaults:
+
+7. **`scripts/import-ghost.mjs` cannot import an article.** `toRow()` (lines 91 to 104) never sets
+   `articles.author_member_id`, which is NOT NULL with no default, and its `--author-id` flag
+   (line 102) writes `author_id`, a column live `articles` does not have. Tonight's migrations lean
+   on this script: `20260921040353` calls it "a drop-in" and `20260921041504` says "a real import
+   later overwrites every value written here". Fix: set `author_member_id` from the Ghost author,
+   and `author_profile_id` with it; drop `author_id`. The other columns it omits all have defaults,
+   and a unique index backs its `onConflict: 'ghost_post_id'`.
+8. **`packages/core/src/axis-mapping.ts:155-160`** shapes an axis event as
+   `{ axis, delta, tier_at_contribution }`. Live `axis_events` has `tier`, not `tier_at_contribution`,
+   and no `delta` column. Nothing writes `axis_events` yet, so this is latent; settle it before the
+   ledger writer lands, not after.
+
 Decided, as this seat's standards call:
 
 - **Typed clients, in this order:** regenerate `supabase/types.ts` (`npm run types`), wire

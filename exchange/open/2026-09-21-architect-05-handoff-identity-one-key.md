@@ -31,6 +31,10 @@ Measured on live, read only (`team/architect/checks/identity-columns.sql`, `tabl
   9) all hold Ghost post ids as text, with no foreign key. `comments` also copies `article_slug` and
   `article_title`, which match `articles` on all 3 rows today. `articles` carries two author keys,
   `author_member_id` and `author_profile_id`; all 5 rows agree and nothing enforces it.
+- **The new write path is about to mix the formats.** `apps/web/src/app/api/comment/route.ts:213`
+  writes `comments.article_id` from a value it checks only for uuid shape, meaning `articles.id`.
+  The 3 existing rows hold Ghost post ids, and the legacy production API keeps writing those. Two
+  writers, two formats, one text column with no foreign key to say which is right.
 
 ## Not done
 

@@ -31,5 +31,6 @@ summary, and what it implies for a named Dialecta surface or a named practice.
 | [2026-vendor-agent-rulebooks.md](2026-vendor-agent-rulebooks.md) | `supabase/agent-skills`, `vercel-labs/agent-skills` | Supabase's Postgres rules pinned at v1.6.0; Vercel's cited only, having no licence |
 | [2026-architectural-fitness-functions.md](2026-architectural-fitness-functions.md) | Ford, Parsons, Kua, Sadalage; Thoughtworks Radar; Hunt and Thomas | The industry name for this seat's standing checks, and the dimensions that decide where each lives |
 
-Instruments filed the same sprint: `../checks/` (seven catalog queries), `../tools/` (five pinned
-code tools with configs and a known-answer control), `../references/` (the pinned library).
+Instruments filed the same sprint: `../checks/` (eight catalog queries), `../tools/` (five pinned
+code tools and a document-path check, with configs and a known-answer control), `../references/`
+(the pinned library).
