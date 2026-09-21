@@ -439,3 +439,38 @@ the code it tests.
   `articles.declaration` on project `mguulnibvzusfvyuowwh`.
 - Reorder the fields, and remove the Note to the Author. `declaration.tsx:149-151` and `:183-193`.
   Depends on questions 6 and 7.
+
+## Dan's decisions
+
+Dan, 2026-09-21, in the session, against the chair's twelve questions.
+
+| # | Question | Dan |
+| --- | --- | --- |
+| 1 | The article classifier gets a home in this repo, with a named deploy target | Yes |
+| 2 | Retire the binary as a reader-facing shape | Yes |
+| 3 | The opinion maps get a section in the design spec | Yes |
+| 4 | Caption the author's dot as the engine's estimate | **Only if the author did not select one.** "The Author should be encouraged to select opinions, and build out the options before it is published. We had an AI suggestion tool in the old model, with the Author having control over the final axes." |
+| 5 | Authors set their own mark before publishing | Yes |
+| 6 | The Note to the Author leaves the reader's page | Asked what it is; answer pending |
+| 7 | The overlay leads with the Strongest Objection | Sure |
+| 8 | The engine names a sensitive-inference category in the rationale before Save | Sure |
+| 9 | Word budgets of 35, 30 and 40 on the author's three fields, at compose time | Yes |
+| 10 | A substantive re-run needs a fresh Stage 2.5 sign-off and a logged prior version | Yes |
+| 11 | "On the Far Shore of Fear" settles on one tier | Asked for clarification; answer pending |
+| 12 | Adopt the voice-editor's label corrections | Asked for an explanation; answer pending |
+
+**How the convener read item 4.** "Select one" means the author set their own position on the map.
+Today no author has: all seven live marks equal the engine's proposal exactly (philosopher, checked
+against the picker). So today every dot is captioned as the engine's estimate, and a map carries the
+author's caption only once its author sets the mark.
+
+**What the old model did, checked against the recovered editor.** Dan's memory is right about the
+axes. `dialecta-opinion-map-picker.jsx` offered the engine's two to four candidates and a "Build my
+own" exit; `dialecta-editor.jsx` `MapEditor` (line 1897) then let the author change the map type and
+edit every pole, axis and topic field (`TernaryFields`, `CartesianFields`, `BinaryFields`), remove a
+map, or add a blank one, up to two. What the author never had was control of their own position:
+`MapPreview` (line 1845) only draws `map.author_position`, which the engine supplied. The Template's
+Question 5 ("Suggest 2 to 3 axes or poles you think readers will actually split on", author-seeded,
+engine refines) never reached the build either.
+
+**Not yet decided:** items 6, 11 and 12. The ADR and each seat's `positions.md` follow those answers.
