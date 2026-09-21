@@ -8,8 +8,8 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `circulation` | advisory | sonnet | yes | yes | 12 | 8 (1w/7r) | 31 | 1 | 0 |
 | `designer` | advisory | sonnet | yes | yes | 19 | 19 (16w/3r) | 37 | 5 | 6 |
-| `legal` | advisory | opus | yes | yes | 34 | 33 (32w/1r) | 45 | 7 | 2 |
-| `philosopher` | advisory | opus | yes | yes | 17 | 17 (17w/0r) | 12 | 1 | 5 |
+| `legal` | advisory | opus | yes | yes | 34 | 33 (32w/1r) | 55 | 7 | 2 |
+| `philosopher` | advisory | opus | yes | yes | 17 | 17 (17w/0r) | 15 | 1 | 5 |
 | `security` | advisory | opus | yes | yes | 50 | 49 (46w/3r) | 32 | 4 | 4 |
 | `treasurer` | advisory | sonnet | yes | yes | 21 | 19 (14w/5r) | 64 | 4 | 4 |
 | `architect` | working | opus | yes | yes | 8 | 6 (3w/3r) | 16 | 2 | 0 |
@@ -19,7 +19,7 @@
 | `reviewer` | working | opus | yes | yes | 17 | 17 (13w/4r) | 26 | 1 | 7 |
 | `spec-reader` | working | haiku | yes | yes | 11 | 10 (0w/10r) | 22 | 1 | 4 |
 | `voice-editor` | working | sonnet | yes | yes | 11 | 11 (1w/10r) | 17 | 2 | 1 |
-| **total** | 13 seats | | | | **240** | **228** | **372** | | |
+| **total** | 13 seats | | | | **240** | **228** | **385** | | |
 
 `Notes` is filed sources. `Sourced` is how many name a source it can be checked against, split into `w` for an external URL and `r` for a file in this repository cited with a version, a date or a commit. Both count: a seat whose job is spec conformance cites specs, and doing that with a commit SHA is stricter provenance than a link, not weaker. `Standing` is positions for an advisor, practices for a practitioner. `Raised` and `Addressed` count exchange records in each direction.
 
@@ -207,7 +207,7 @@
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
 | Research | 34 filed, 33 sourced (32 external, 1 from this repo), 1 unsourced |
 | Reading list | 23 todo, 22 filed, 3 dead |
-| Positions | 45 |
+| Positions | 55 |
 | Charter | `council/legal/charter.md` |
 | Brief | `council/legal/brief.md` |
 | Exchange | raised 7, addressed 2 |
@@ -292,8 +292,8 @@
 | Model | opus |
 | Tools | `Read`, `Grep`, `Glob`, `Write`, `WebSearch`, `WebFetch` |
 | Research | 17 filed, 17 sourced (17 external, 0 from this repo) |
-| Reading list | 19 todo, 13 filed, 0 dead |
-| Positions | 12 |
+| Reading list | 19 todo, 15 filed, 0 dead |
+| Positions | 15 |
 | Charter | `council/philosopher/charter.md` |
 | Brief | `council/philosopher/brief.md` |
 | Exchange | raised 1, addressed 5 |
