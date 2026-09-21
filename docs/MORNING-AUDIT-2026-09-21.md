@@ -257,6 +257,9 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
 - **Builders: all five done and committed.** The site shell, the discourse layer, profiles with the
   fingerprint, the content pages, and the gaps: `/fingerprint`, the writer's brass, sign-in that
   returns you, and a root 404.
+- **One more builder, on `/fingerprint`'s weight**: drawing the figures on the server so the page
+  stops hydrating 17 of them, and making the halo scale with a figure's size so small ones stop
+  drowning in it. The 400px render must stay pixel-identical, and the builder proves it with a diff.
 - **`security`, preparing the production fix** for `/api/comments` and the upload route, section 0.
   Its tier-read functions are done and in use (section 4).
 - **`decider` on three architecture rulings**: the identity key, "forming", and the downstream runner
