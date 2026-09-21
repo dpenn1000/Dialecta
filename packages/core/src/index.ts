@@ -102,3 +102,28 @@ export {
   type RingField,
   type TextureInput,
 } from './fingerprint-texture';
+
+export {
+  FINGERPRINT_RENDER,
+  FINGERPRINT_WHEEL,
+  blendHex,
+  deriveAxisMetrics,
+  fingerprintSalt,
+  planFingerprint,
+  topicPhasesFromHistory,
+  type AxisMetrics,
+  type ClarityBucket,
+  type FingerprintAxisData,
+  type FingerprintData,
+  type FingerprintHalo,
+  type FingerprintHaloStroke,
+  type FingerprintPlan,
+  type FingerprintRenderParams,
+  type FingerprintRing,
+  type FingerprintSegment,
+  type HaloBlur,
+  type PlanOptions,
+  type TopicColor,
+  type TopicPalette,
+  type TopicPhase,
+} from './fingerprint-plan';

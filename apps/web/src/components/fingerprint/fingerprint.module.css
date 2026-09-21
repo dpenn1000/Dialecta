@@ -1,0 +1,69 @@
+/*
+ * The fingerprint's chrome. Every colour here is a token; the colours the
+ * engine blends (rings, seeds, halo) arrive in the paint plan instead.
+ */
+
+.svg {
+  display: block;
+  overflow: visible;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Engine: T.borderLight. */
+.guide,
+.axisLine {
+  stroke: var(--border-light);
+}
+
+/* The Newborn potential ring, one token darker than the engine's, because it
+   is most of what a newborn fingerprint shows. See guide.newbornOpacity. */
+.guideNewborn {
+  stroke: var(--border-dark);
+}
+
+/* Engine: T.gold, which is the live site's #b8862e, --brass-mid here. */
+.anchorDot {
+  fill: var(--brass-mid);
+}
+
+.anchorRing {
+  stroke: var(--brass-mid);
+}
+
+/* Engine: T.fontMono, T.textSecondary, uppercase. */
+.label {
+  fill: var(--text-secondary);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+}
+
+.halo {
+  pointer-events: none;
+}
+
+/* A newly earned ring. Engine :895-901. */
+.grow line {
+  animation: grow 1.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes grow {
+  0% {
+    opacity: 0;
+    stroke-width: 0.4;
+  }
+  50% {
+    opacity: 1;
+    stroke-width: 2.4;
+  }
+  100% {
+    opacity: 0.92;
+    stroke-width: 1.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grow line {
+    animation: none;
+  }
+}

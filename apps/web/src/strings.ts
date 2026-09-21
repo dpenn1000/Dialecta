@@ -354,6 +354,328 @@ export const strings = {
     },
   },
 
+  /**
+   * The contributor profile at /profile/[id] and the Thinking Fingerprint on it.
+   * Owned by the profile builder. Copy is the recovered profile's own
+   * (_recovered-next/lib/theme/dialecta-profile.jsx) after a voice pass: every
+   * dash is rewritten, and a line that described something this build does not
+   * do is changed and noted beside it.
+   */
+  profile: {
+    metaDescription: (name: string) => `${name} on Dialecta: Thinking Fingerprint, archetype and writing.`,
+    notFoundHeading: 'Contributor not found',
+    notFound: 'No contributor has that address.',
+    unnamed: 'Unnamed contributor',
+
+    // Hero, left column.
+    platformChip: 'Platform',
+    formingLabel: 'Pattern still forming',
+    aspiringTo: 'Aspiring to',
+    setAspiration: 'Set aspiration',
+    seeWriting: { own: 'See my writing', other: 'See their writing' },
+    handle: (slug: string) => `@${slug}`,
+    /** The contributor card's glyph when no Order is assigned. The recovered fallback. */
+    orderFallbackOrnament: '✒',
+
+    // Hero, right column.
+    contributor: 'Contributor',
+    member: 'Member',
+    fingerprintTitle: 'Thinking Fingerprint',
+    caption: {
+      // The recovered caption said "Strong on X and Y" for any count above
+      // zero, which its own comment called too strong at two graduations.
+      // These state the count instead of grading it.
+      two: (a: string, na: number, b: string, nb: number) => `Most graduations on ${a} (${na}) and ${b} (${nb}).`,
+      one: (a: string, n: number) => `${n} ${n === 1 ? 'graduation' : 'graduations'} so far, all on ${a}.`,
+      newborn: "Six seed points, one for each pillar. A pillar's first graduation draws its first ring.",
+      unavailable: 'The fingerprint could not be read just now.',
+    },
+    devUnlinked:
+      'Development note: axis_scores is keyed on ghost_member_id, which the public key cannot read, and SUPABASE_SERVICE_ROLE_KEY is not set for the one server-side lookup that bridges a profile to it. The fingerprint stays unread until one of the two changes.',
+    devLookupFailed:
+      'Development note: the server-side lookup from this profile to its ghost_member_id ran and returned nothing. The server log names the error, if there was one.',
+
+    fingerprint: {
+      aria: (name: string, summary: string) => `Thinking Fingerprint for ${name}. ${summary}`,
+      newborn: 'No graduations yet: six seed points inside the guide ring.',
+      summary: (list: string) => `Graduations by pillar: ${list}.`,
+      pillar: (name: string, n: number) => `${name} ${n}`,
+    },
+
+    // Tabs and the Engagement pane.
+    tabsLabel: 'Profile sections',
+    tabs: { engagement: 'Engagement', about: 'About', influences: 'Influences', articles: 'Articles' },
+    stats: {
+      comments: 'Comments',
+      // Replaces the recovered "Forum density", which needs each comment's
+      // tier; that lives in classifications, closed to the public key.
+      graduations: 'Graduations',
+      articles: 'Articles',
+      readers: 'Readers',
+    },
+    connections: {
+      heading: 'Connections',
+      readers: { label: 'Readers', desc: 'Following this contributor.' },
+      sources: { label: 'Sources', desc: 'Followed by this contributor.' },
+      correspondents: { label: 'Correspondents', desc: 'Mutual follows.' },
+      sparring: { label: 'Sparring Partners', desc: 'Earned through sustained debate.' },
+    },
+    comments: {
+      heading: 'Recent comments',
+      // The recovered placeholder promised each comment's tier. Tiers live in
+      // classifications, which this page cannot read, so they are not shown.
+      empty: 'Comments this contributor publishes appear here.',
+      on: (title: string) => `On ${title}`,
+    },
+
+    // The About pane.
+    about: {
+      heading: 'About this Contributor',
+      noBioOwn: 'No bio yet. A short paragraph on who you are and what you think about.',
+      noBio: 'No bio yet.',
+      wrestlingHeading: "What I'm wrestling with",
+      wrestlingPrompt: "Name a single open question you're working through right now. Refresh it whenever it changes.",
+      mindHeading: "Where I've changed my mind",
+      mindPrompt: 'Where you used to land, where you land now, and what shifted you. Up to three entries.',
+      from: 'From',
+      to: 'To',
+      tiersHeading: 'The Four Connection Tiers',
+      tiers: [
+        {
+          label: 'Readers',
+          desc: "People who follow you. They want to read what you think, without you needing to read them back. The asymmetry is honest: you don't owe anyone reciprocity.",
+        },
+        {
+          label: 'Sources',
+          desc: "People you follow. Voices you're learning from. Naming them makes intellectual humility visible, and makes the people you're paying attention to part of your public identity.",
+        },
+        {
+          label: 'Correspondents',
+          desc: "Mutual follows. People you've each chosen to keep up with: a sustained two-way relationship that both parties have opted into.",
+        },
+        {
+          label: 'Sparring Partners',
+          desc: "Auto-derived from engagement. People you've debated with across multiple articles. Earned, never declared. Noticed by the platform when a real intellectual relationship forms.",
+        },
+      ],
+    },
+
+    // The Influences pane.
+    influences: {
+      eyebrow: 'Intellectual DNA',
+      heading: 'Books that shaped how this contributor thinks',
+      byAuthor: (author: string) => `by ${author}`,
+      emptyOwn: [
+        'Name the works that shaped how you think.',
+        'Books, series, publications, papers: anything literary you keep returning to.',
+      ],
+      empty: 'No influences shared yet.',
+    },
+    fieldNotes: {
+      eyebrow: 'Field Notes',
+      // The recovered heading was first person ("how I think") beside a third
+      // person books heading. One voice for both.
+      heading: 'Images that inform how this contributor thinks',
+      sub: 'Not a gallery. Things that catch the eye.',
+      emptyOwn: [
+        'Four photos that inform how you think.',
+        'A bookshelf, a window view, a notebook page. Not posed, not curated.',
+      ],
+      empty: 'No field notes yet.',
+    },
+
+    // The Articles pane.
+    articles: {
+      heading: 'Articles',
+      untitled: 'Untitled article',
+    },
+
+    // The feed under the tabs, "what's alive" on this profile.
+    feed: {
+      heading: "What's alive",
+      spotlight: 'Thread Spotlight',
+      opinionShift: 'Opinion shift',
+      joinThread: 'Join this thread',
+      by: (name: string) => `by ${name}`,
+      // The recovered feed was the viewer's platform-wide stream. On a public
+      // profile with no viewer identity it is this contributor's own: their
+      // published articles and the public milestones about them.
+      empty: 'No articles or milestones yet. Both appear here as they happen.',
+      ago: {
+        now: 'just now',
+        minutes: (n: number) => `${n} min ago`,
+        hours: (n: number) => `${n} hr ago`,
+        days: (n: number) => `${n}d ago`,
+        weeks: (n: number) => `${n}w ago`,
+      },
+      someone: 'A contributor',
+      event: {
+        archetypeShift: (name: string, from: string | null, to: string | null) =>
+          `${name} shifted from ${from ?? 'a prior archetype'} toward ${to ?? 'a new archetype'}.`,
+        milestone: (name: string, pillar: string | null, threshold: string | null) =>
+          `${name}'s ${pillar ?? 'fingerprint'} pillar reached ${threshold ?? 'a new milestone'}.`,
+        sparringRecognized: (name: string, other: string | null) =>
+          `${name} and ${other ?? 'another contributor'} are now Sparring Partners.`,
+        sparringShift: (name: string, other: string | null) =>
+          `${name}'s sparring relationship with ${other ?? 'a partner'} is shifting in shape.`,
+        aspirationDeclared: (name: string, label: string | null) =>
+          `${name} declared an aspiration: ${label ?? 'a new archetype'}.`,
+        recommitment: (name: string) => `${name} recommitted to their aspiration after the ninety-day check-in.`,
+        firstForum: (name: string) => `${name} earned their first Forum-tier comment.`,
+        newReader: (name: string, followee: string | null) => `${name} started reading ${followee ?? 'someone new'}.`,
+        correspondent: (name: string, other: string | null) =>
+          `${name} and ${other ?? 'another contributor'} became Correspondents.`,
+        delta: (name: string) => `${name} published a Delta acknowledgment.`,
+        other: (name: string) => `${name} reached a new milestone.`,
+      },
+    },
+
+    // The archetype modal. Guidance text is the recovered profile's, which the
+    // Contributor Identity spec names as the canonical home for it.
+    archetypeModal: {
+      eyebrowOwn: 'Aspiration',
+      eyebrow: 'Archetypes',
+      heading: 'The eight archetypes',
+      introOwn:
+        'Your archetype is assigned from how you engage. An aspiration is one you declare, and each archetype below names the behaviors that move you toward it.',
+      intro: 'Each archetype names a cognitive move the platform recognizes from a body of comment history.',
+      assignedOwn: 'Your assigned archetype',
+      assigned: 'Assigned archetype',
+      locked: 'Locked',
+      toward: (label: string) => `Moving toward ${label}`,
+      hint: 'Select an archetype to read what moves someone toward it.',
+      clear: 'Clear aspiration',
+      done: 'Done',
+      close: 'Close',
+      // Nothing in apps/web writes profiles.aspirational_archetype yet.
+      notSaved: 'Saving an aspiration is not wired up yet, so this choice lasts until the page reloads.',
+      open: 'Read about the eight archetypes',
+    },
+    archetypes: {
+      skeptic: {
+        label: 'The Skeptic',
+        icon: '🔎',
+        desc: 'Questions premises before accepting conclusions.',
+        guidance:
+          "Challenge stated assumptions before engaging conclusions. Identify what would have to be true for the author's claim to hold, then ask whether it is.",
+      },
+      synthesizer: {
+        label: 'The Synthesizer',
+        icon: '🌀',
+        desc: 'Finds unexpected connections across domains.',
+        guidance:
+          'Engage across more topic areas and connect them explicitly. Reference an idea from one article while commenting on another. The primary signal is topic breadth across the six pillars.',
+      },
+      advocate: {
+        label: 'The Advocate',
+        icon: '⚖',
+        desc: 'Argues the strongest version of views they disagree with.',
+        guidance:
+          'Before disputing a position, state it in its strongest form, stronger than its own defenders usually manage. Then engage what you have built rather than a weaker version of it. Comments that name a counter-argument before answering it are the primary Advocate signal.',
+      },
+      builder: {
+        label: 'The Builder',
+        icon: '🏗',
+        desc: 'Extends ideas into practical frameworks.',
+        guidance:
+          'Extend as well as critique. After identifying a flaw, propose a structure that fixes it. Comments that add scaffolding to an idea register as Builder behavior.',
+      },
+      empiricist: {
+        label: 'The Empiricist',
+        icon: '🔬',
+        desc: 'Grounds every claim in evidence and data.',
+        guidance:
+          'Name your sources. Cite studies, data, or named research in place of intuition. The platform tracks claim Acuity and evidence grounding as the primary Empiricist signals.',
+      },
+      contextualist: {
+        label: 'The Contextualist',
+        icon: '🗺',
+        desc: 'Situates ideas in their historical and cultural frame.',
+        guidance:
+          'Place arguments in time and place. Comments that explain why an idea landed differently in a different era or context, and show why that difference matters, are the core Contextualist signal.',
+      },
+      illuminator: {
+        label: 'The Illuminator',
+        icon: '💡',
+        desc: 'Makes complex ideas accessible without losing nuance.',
+        guidance:
+          'Restate a complex argument in simpler terms, then show why the simplification matters. The platform tracks comments that reduce jargon without reducing accuracy.',
+      },
+      reviser: {
+        label: 'The Reviser',
+        icon: '↻',
+        desc: 'Publicly updates their position when given good reasons.',
+        guidance:
+          'When an argument or piece of evidence changes your mind, say so, and say what changed it. This archetype is the only one defined by movement over time, so progress shows up across articles rather than within a single one. Changing your mind well is a skill, and here it is a recognized one.',
+      },
+    },
+
+    // /profile/fingerprint-lab, development only.
+    lab: {
+      title: 'Fingerprint lab',
+      intro:
+        'Development only. The profile renderer on fixed inputs: the three demo contributors as their axis_scores rows read on 2026-09-21, the recovered profile mock with topic history, and the two states nearly every real profile is in today. Every number comes from FINGERPRINT_RENDER in packages/core.',
+      demoNote: (resonance: number) =>
+        `Demo fixture. Tier mix and graduations from axis_scores, no topic history, resonance ${resonance}.`,
+      mock: 'Recovered profile mock',
+      mockNote: 'USER.fingerprint from dialecta-profile.jsx: topic history on every pillar, resonance 0.62.',
+      early: 'Early',
+      earlyNote: 'Two or three graduations a pillar and none on Discourse: the shape of the three real profiles with axis rows.',
+      newborn: 'Newborn',
+      newbornNote: 'No axis rows at all: eight of the eleven real profiles.',
+      small: 'Avatar size, 120px, no labels',
+    },
+
+    // Steward Orders, from dialecta-profile-order.jsx. The profile row stores
+    // the label and family; the ornament is looked up here by id.
+    orderFamilies: {
+      essayistic: 'Essayistic',
+      argumentative: 'Argumentative',
+      synthetic: 'Synthetic',
+      scholarly: 'Scholarly',
+      narrative: 'Narrative',
+      practitioner: 'Practitioner',
+      journalistic: 'Journalistic',
+      pedagogical: 'Pedagogical',
+      speculative: 'Speculative',
+      declared: 'Declared',
+    },
+    orders: {
+      essayist: { label: 'The Essayist', family: 'essayistic', ornament: '❦' },
+      aphorist: { label: 'The Aphorist', family: 'essayistic', ornament: '✦' },
+      memoirist: { label: 'The Memoirist', family: 'essayistic', ornament: '✥' },
+      diarist: { label: 'The Diarist', family: 'essayistic', ornament: '❧' },
+      blogger: { label: 'The Blogger', family: 'essayistic', ornament: '✜' },
+      pamphleteer: { label: 'The Pamphleteer', family: 'argumentative', ornament: '❖' },
+      polemicist: { label: 'The Polemicist', family: 'argumentative', ornament: '❂' },
+      dialectician: { label: 'The Dialectician', family: 'argumentative', ornament: '✺' },
+      provocateur: { label: 'The Provocateur', family: 'argumentative', ornament: '✤' },
+      cartographer: { label: 'The Cartographer', family: 'synthetic', ornament: '✧' },
+      anthologist: { label: 'The Anthologist', family: 'synthetic', ornament: '❀' },
+      translator: { label: 'The Translator', family: 'synthetic', ornament: '✠' },
+      theorist: { label: 'The Theorist', family: 'synthetic', ornament: '✪' },
+      philologist: { label: 'The Philologist', family: 'scholarly', ornament: '✦' },
+      lexicographer: { label: 'The Lexicographer', family: 'scholarly', ornament: '✜' },
+      historian: { label: 'The Historian', family: 'scholarly', ornament: '❦' },
+      empiricist: { label: 'The Empiricist', family: 'scholarly', ornament: '✤' },
+      fabulist: { label: 'The Fabulist', family: 'narrative', ornament: '✿' },
+      playwright: { label: 'The Playwright', family: 'narrative', ornament: '✥' },
+      screenwriter: { label: 'The Screenwriter', family: 'narrative', ornament: '❂' },
+      biographer: { label: 'The Biographer', family: 'narrative', ornament: '❀' },
+      clinician: { label: 'The Clinician', family: 'practitioner', ornament: '✚' },
+      diagnostician: { label: 'The Diagnostician', family: 'practitioner', ornament: '✦' },
+      naturalist: { label: 'The Naturalist', family: 'practitioner', ornament: '❧' },
+      correspondent: { label: 'The Correspondent', family: 'journalistic', ornament: '✠' },
+      annalist: { label: 'The Annalist', family: 'journalistic', ornament: '❖' },
+      reportorial: { label: 'The Reportorial', family: 'journalistic', ornament: '✜' },
+      critic: { label: 'The Critic', family: 'journalistic', ornament: '✺' },
+      marginalia: { label: 'The Marginalia', family: 'journalistic', ornament: '✥' },
+      glossator: { label: 'The Glossator', family: 'pedagogical', ornament: '❦' },
+      futurist: { label: 'The Futurist', family: 'speculative', ornament: '✪' },
+      satirist: { label: 'The Satirist', family: 'declared', ornament: '✦' },
+    },
+  },
+
   login: {
     heading: 'Sign in',
     tagline: 'Sign in to comment, and to keep your Thinking Fingerprint attached to your name.',
