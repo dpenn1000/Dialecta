@@ -1,0 +1,539 @@
+/*
+ * The Living Fingerprint page, ported rule for rule from the <style> block of
+ * _theme/page-fingerprint.hbs (lines 3-213). The carousel's rules are the
+ * inline style objects of the live HeroCarousel,
+ * _recovered-next/lib/theme/fingerprint-page-mount.jsx lines 96-160.
+ *
+ * Tokens resolve as tokens.css defines them, as the Guidebook port does. Live,
+ * several of these names were never defined (--text-primary, --text-secondary,
+ * --text-tertiary, --radius-md, --shadow-sm, --border-rule), so dialecta.org
+ * draws this page with square unshadowed cards, an invisible lede rule and
+ * section divider, and every title and description in --body. The port draws
+ * what the template wrote, with two exceptions where the written token fails
+ * on the stone end of the page gradient and the live colour does not: the
+ * section descriptions and the colophon stay --body, as live renders them.
+ *
+ * What changed, and why:
+ *  - Brass never letters on a light surface (designer D-27). Measured, WCAG
+ *    2.x, against the page gradient's darkest stop (#8c8780) and cream:
+ *      hero eyebrow       --hero-brass gradient to ink: 4.95:1 on the
+ *                         darkest stone, 15.81:1 on cream
+ *      hero italic word   --hero-brass gradient to walnut (below): 3.37:1 on
+ *                         the darkest stone, over the 3:1 large-type floor;
+ *                         --brass-deep would be 2.09:1 there
+ *      section labels     --card-brass gradient to ink, because they sit on
+ *                         the bare page, not on paper: 4.95:1 and 15.81:1
+ *      card sublabels     --amber (#b8862e live, 3.18:1 on the card) to
+ *                         --brass-deep, 7.34:1 on --bg-white
+ *      carousel kicker    #b8862e (2.67:1 on --gold-pale) to --brass-deep,
+ *                         6.16:1
+ *      active archetype   #b8862e (3.18:1) to --brass-deep, 7.34:1
+ *      "About" label      #b8862e (3.18:1) to --brass-deep, 7.34:1
+ *      colophon name      --amber on the page (2.90:1 on cream) to ink
+ *    Brass stays as line and fill: the lede rule, the section divider, the
+ *    colophon's top rule, the picker's left bar and borders.
+ *  - Walnut is the About and Guidebook hero's italic colour
+ *    (components/content/leaf.module.css, #4a2810 page-scoped there). No
+ *    token carries it, so it is mixed from two that exist and lands within
+ *    one unit of that value.
+ *  - The carousel's inactive archetype line was --text-tertiary on the
+ *    picker's gold-pale, 3.99:1 at 9px. It is --secondary, 6.34:1.
+ *  - Breakpoints move to the live RESPONSIVE CONTRACT's values
+ *    (dialecta-surfaces.css: max-width 767 and 539, min-width 1100), from the
+ *    template's 720 and 480.
+ *  - Width. The template set max-width 1180px, and the live sidebar held the
+ *    page to 883px, which is what made each grid two across. There is no
+ *    sidebar here, so the page takes that width itself, and the four stages
+ *    stay a two-by-two panel instead of a row of three and an orphan.
+ *  - The texture pair was `1fr 1fr` at every width: two 137px columns at
+ *    320px. It wraps to one column on a phone, like the other two grids.
+ *  - The figures are live SVG now, not the baked PNGs. Stages and textures
+ *    draw at the size the PNGs were rasterised from (180 and 240, at 2x
+ *    density). The archetypes draw at the baker's 400 and are shown at 200,
+ *    which is how the live PNGs were made (_theme/scripts/
+ *    build-archetype-svgs.jsx), so their line weight matches.
+ */
+
+.page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 48px) clamp(16px, 3vw, 32px) 0;
+  --fp-walnut: color-mix(in srgb, var(--brass-deep) 50%, var(--ink));
+}
+
+/* ── Hero ──────────────────────────────────────────────────────────────── */
+
+.hero {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  color: var(--ink);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6vw + 0.5rem, 4.4rem);
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin-bottom: 24px;
+  max-width: 14ch;
+}
+
+.title em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--fp-walnut);
+}
+
+.lede {
+  font-family: var(--font-reading);
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--text-lede);
+  font-weight: 300;
+  font-style: italic;
+  max-width: 50ch;
+  margin-bottom: 24px;
+}
+
+.rule {
+  height: 2px;
+  width: 60px;
+  background: var(--border-rule);
+  margin-bottom: 24px;
+}
+
+/* ── Sections ──────────────────────────────────────────────────────────── */
+
+.section {
+  margin-bottom: 80px;
+}
+
+.sectionHeadCentered {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.sectionLabel {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+
+.sectionDesc {
+  font-size: 0.9rem;
+  color: var(--body);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 680px;
+  margin-bottom: 32px;
+}
+
+.sectionHeadCentered .sectionDesc {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sectionDesc em {
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, var(--border-rule), transparent 60%);
+  margin-bottom: 32px;
+  opacity: 0.3;
+}
+
+/* ── Cards: stages, archetypes, texture ────────────────────────────────── */
+
+.stageGrid,
+.archGrid,
+.texGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 20px;
+}
+
+.texGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+}
+
+.card {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 28px clamp(18px, 2.5vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+  box-shadow: var(--shadow-sm);
+  min-width: 0;
+}
+
+.texCard {
+  padding: 32px 24px;
+  gap: 0;
+}
+
+/* Two classes, so these widths outrank the island's own .svg rule however
+   the two stylesheets are ordered. The SVG keeps its viewBox, so a width
+   here scales strokes and blur with it, the way the live PNGs scaled. */
+.card .stageFig {
+  width: 180px;
+}
+
+.card .archFig {
+  width: 200px;
+}
+
+.card .texFig {
+  width: 240px;
+}
+
+.stageText {
+  width: 100%;
+  max-width: 580px;
+  min-width: 0;
+}
+
+.sublabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 6px;
+}
+
+.texCard .sublabel {
+  margin-top: 18px;
+  margin-bottom: 4px;
+}
+
+.stageTitle,
+.archTitle,
+.texTitle {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: italic;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.stageTitle {
+  font-size: 1.6rem;
+  line-height: 1.1;
+}
+
+.archTitle {
+  font-size: 1.4rem;
+}
+
+.texTitle {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.stageDesc,
+.archDesc,
+.texDesc {
+  font-family: var(--font-reading);
+  color: var(--text-secondary);
+}
+
+.stageDesc {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  max-width: 580px;
+}
+
+.archDesc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.texDesc {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+/* ── The carousel ──────────────────────────────────────────────────────── */
+
+.carousel {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: clamp(28px, 4vw, 48px) clamp(20px, 4vw, 40px);
+  box-shadow: 0 4px 24px color-mix(in srgb, var(--ink) 5%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 3vw, 36px);
+  align-items: stretch;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.picker {
+  background: linear-gradient(135deg, var(--gold-pale) 0%, var(--bg-white) 75%);
+  border: 1px solid var(--gold);
+  border-left: 4px solid var(--brass-mid);
+  border-radius: 0 10px 10px 0;
+  padding: 24px 22px;
+}
+
+.pickerKicker {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 10px;
+}
+
+.pickerHeading {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.pickerIntro {
+  font-family: var(--font-reading);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.pickerList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pick {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--amber) 25%, transparent);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.pick[aria-pressed='true'] {
+  background: var(--bg-white);
+  border-color: var(--brass-mid);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--amber) 15%, transparent);
+}
+
+.pick:focus-visible {
+  outline: 2px solid var(--brass-deep);
+  outline-offset: 2px;
+}
+
+.pickName {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--secondary);
+  margin-bottom: 3px;
+}
+
+.pickArchetype {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+
+.pick[aria-pressed='true'] .pickName {
+  color: var(--text-primary);
+}
+
+.pick[aria-pressed='true'] .pickArchetype {
+  color: var(--brass-deep);
+}
+
+.carouselFigure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding-top: clamp(8px, 1vw, 16px);
+}
+
+/* The live carousel drew at 380 from 1100px up and at 200 below it. */
+.carouselFigure .carouselWide {
+  display: none;
+}
+
+.carouselFigure .carouselNarrow {
+  display: block;
+}
+
+@media (min-width: 1100px) {
+  .carouselFigure .carouselWide {
+    display: block;
+  }
+
+  .carouselFigure .carouselNarrow {
+    display: none;
+  }
+}
+
+.about {
+  max-width: 520px;
+  border-top: 1px solid var(--border-light);
+  padding-top: 20px;
+  text-align: center;
+}
+
+.aboutLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass-deep);
+  margin-bottom: 6px;
+}
+
+.aboutBio {
+  font-family: var(--font-reading);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ── Colophon ──────────────────────────────────────────────────────────── */
+
+.colophon {
+  border-top: 2px solid var(--brass-mid);
+  padding-top: 32px;
+  margin-top: 48px;
+  text-align: center;
+}
+
+.colophonName {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.colophonEdition {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--body);
+}
+
+.colophonTag {
+  font-family: var(--font-reading);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--body);
+  margin-top: 12px;
+}
+
+/* ── Phones. The template's size cuts, at the contract's breakpoints. ──── */
+
+@media (max-width: 767px) {
+  .archGrid,
+  .texGrid {
+    gap: 14px;
+  }
+
+  .stageGrid .card {
+    padding: 22px 18px;
+    gap: 16px;
+  }
+
+  .archGrid .card {
+    padding: 22px 18px;
+    gap: 14px;
+  }
+
+  .card .stageFig {
+    width: 140px;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .sectionTitle {
+    font-size: clamp(1.4rem, 5vw + 0.4rem, 2rem);
+  }
+
+  .sectionDesc {
+    font-size: 0.88rem;
+  }
+
+  .stageTitle {
+    font-size: 1.35rem;
+  }
+
+  .archTitle {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 539px) {
+  .card .archFig,
+  .card .texFig {
+    width: 180px;
+  }
+
+  .card .stageFig {
+    width: 110px;
+  }
+}

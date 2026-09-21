@@ -127,3 +127,5 @@ export {
   type TopicPalette,
   type TopicPhase,
 } from './fingerprint-plan';
+
+export { RETURN_PATH_FALLBACK, RETURN_PATH_MAX_LENGTH, safeReturnPath } from './return-path';

@@ -724,7 +724,6 @@ export const strings = {
    */
   writer: {
     pageTitle: 'Write',
-    wordmark: 'Dialecta',
     railLabel: 'Writing stages',
     writingAs: (name: string) => `Writing as ${name}`,
     signIn: 'Sign in',
@@ -970,6 +969,177 @@ export const strings = {
     readingTime: (minutes: number) => `${minutes} min read`,
     revise: 'Revise this article',
     notFoundHeading: 'Article not found',
+  },
+
+  /**
+   * /fingerprint, The Living Fingerprint (src/app/fingerprint), ported from
+   * _theme/page-fingerprint.hbs. Every line is the template's own, verbatim,
+   * unless its note says otherwise. title and description are the Ghost
+   * page's meta as dialecta.org/fingerprint/ served it on 2026-09-20.
+   *
+   * contributors.kicker through contributors.about are the live carousel,
+   * _recovered-next/lib/theme/fingerprint-page-mount.jsx lines 130-158. Its
+   * names, archetype labels and bios were never in the template: the carousel
+   * read them from /api/profile/seed:* at run time, and they are copied here
+   * as that API returned them on 2026-09-20. Two bios carried an em dash;
+   * each fix is marked on the line.
+   *
+   * Each figure's alt is the template's img alt, now the SVG's aria-label.
+   */
+  fingerprintPage: {
+    title: 'The Fingerprint | a visual trace of how you actually think',
+    description:
+      "The Living Fingerprint: Dialecta's pattern-of-thought visual. Six pillars drawn from your real contributions. What you actually think, made visible.",
+    eyebrow: 'Dialecta · Identity Element',
+    heading: 'The Thinking *Fingerprint*',
+    lede: "An identity artifact that grows with you. No two contributors produce the same shape, and they shouldn't.",
+
+    contributors: {
+      label: 'Three Contributors',
+      title: 'The same six axes. Three completely different lives.',
+      desc: 'Select a contributor to see how their fingerprint reflects their actual engagement history: the topics they wrote about, the tiers they earned, the axes they developed.',
+      kicker: 'Three Contributors',
+      heading: 'Compare',
+      intro:
+        'Three mature contributors with dramatically different engagement patterns. The same six pillars produce radically different shapes depending on how each person actually behaves.',
+      /** New: the picker's accessible name. The live picks were unlabelled divs. */
+      pickLabel: 'Choose a contributor',
+      about: 'About',
+      people: {
+        'maya-reiss': {
+          name: 'Maya Reiss',
+          archetype: 'The Reviser',
+          bio: 'Retired librarian. Eighteen months on Dialecta, about seventy comments. Writes weekly and carefully, mostly about theology with secondary interests in mental health and psychology. Updates her positions publicly when the evidence shifts. Reads more than she replies.',
+        },
+        'wen-zhao': {
+          name: 'Wen Zhao',
+          archetype: 'The Synthesizer',
+          // Dash fix: the em dash after "learned the hard way" is a colon.
+          bio: 'Software engineer, 34. Six months on Dialecta, almost daily. Arrived politically fired up and learned the hard way: early Discourse rings carry visible Heat and Stance from political fights that have since calmed. These days writes mostly about music theory, acoustics, and the cross-domain patterns he sees as an engineer.',
+        },
+        'father-anselm-okafor': {
+          name: 'Father Anselm Okafor',
+          archetype: 'The Contextualist',
+          // Dash fix: the em dash after "is theology" is a full stop, and "Small" takes its capital.
+          bio: "Catholic priest and theology teacher, 68. Ten months on Dialecta, about ninety comments. Almost everything he writes is theology. Small inflections in Calibration and Discourse come from pastoral conversations where psychology and mental health touch his work. Works within the tradition rather than inventing new framings, and wouldn't have it any other way.",
+        },
+      },
+    },
+
+    stages: {
+      label: '02 · Stages of Growth',
+      title: 'A fingerprint grows ring by ring.',
+      desc: "The same contributor seen at four moments in her life on the platform. Each axis develops independently; some petals bloom faster than others. That's the point.",
+      items: {
+        newborn: {
+          count: '0 comments',
+          title: 'Newborn',
+          desc: 'Six seed points marking the potential of who you could become. The center holds.',
+          alt: 'Newborn fingerprint',
+        },
+        early: {
+          count: '~5 comments',
+          title: 'Early',
+          desc: 'First petals appear. A young reader writes about her own anxiety, raw and unformed: more venting than claiming. Discourse already carries Heat. The fingerprint tilts low, speaking before thinking.',
+          alt: 'Early fingerprint',
+        },
+        emerging: {
+          count: '~50 comments',
+          title: 'Emerging',
+          desc: 'A character begins to show. Mental-health experience is still the foundation, but psychology now appears in her recent rings. Old Heat persists at the center; outer rings calm. Calibration grows as she learns to update her positions publicly.',
+          alt: 'Emerging fingerprint',
+        },
+        mature: {
+          count: '200+ comments',
+          title: 'Mature',
+          desc: 'A fully-formed identity. Innermost rings blue from early anxiety writing, middle rings teal from clinical psychology, outer rings warm brown from the philosophical questions psychology opens up. The Discourse petal still carries a small Heat core: the learning scar of someone who arrived writing from feeling and figured out how to reason.',
+          alt: 'Mature fingerprint',
+        },
+      },
+    },
+
+    archetypes: {
+      label: '03 · How to Read a Fingerprint',
+      title: 'Eight archetypes. Eight shapes.',
+      desc: 'Certain axes compete for the same cognitive budget. Acuity trades against Reach. Discourse trades against Calibration and Magnanimity. A contributor cannot max everything at once. The trade-offs make a true circle structurally impossible and force every fingerprint into a real shape.',
+      sublabel: 'Archetype',
+      items: {
+        skeptic: {
+          title: 'The Skeptic',
+          desc: 'Questions premises before accepting conclusions. High Acuity reaches the rim with high Consistency. Magnanimity sits shorter than its neighbors because she is sharper than she is generous. Tier history is Forum-clean. The halo reads cool steel: she works in philosophy, science, and the psychology of judgment.',
+          alt: 'Skeptic fingerprint',
+        },
+        synthesizer: {
+          title: 'The Synthesizer',
+          desc: 'Finds unexpected connections across domains. Reach extends to the edge while Consistency stays modest, the signature of someone whose positions evolve as new connections appear. Calibration runs high, Magnanimity higher. Tier history is Forum and Spark, no Breach. The halo carries every color: there is no domain she has not engaged with.',
+          alt: 'Synthesizer fingerprint',
+        },
+        advocate: {
+          title: 'The Advocate',
+          desc: 'Argues the strongest version of opposing views. Heavy Calibration and Magnanimity, heavy Discourse. The contributor others want to argue with because she treats their arguments better than they do. Discourse carries visible wave texture; high-volume engagement with hard positions leaves a wake before calming. Topic focus: politics and economics.',
+          alt: 'Advocate fingerprint',
+        },
+        builder: {
+          title: 'The Builder',
+          desc: 'Extends ideas into practical frameworks. Acuity is precise and Consistency runs high; frameworks have to hold. Discourse and Magnanimity sit shorter because she is building, not debating. Tier history is Forum-heavy. The halo reads warm: science, technology, environment, the domains where ideas turn into things.',
+          alt: 'Builder fingerprint',
+        },
+        empiricist: {
+          title: 'The Empiricist',
+          desc: 'Grounds every claim in evidence and data. Acuity reaches the rim with Calibration close behind; new data updates the position, but only when the data is real. Tier history is the cleanest on the platform, almost pure Forum across every axis. The halo reads green and clinical-blue: science, health, environment.',
+          alt: 'Empiricist fingerprint',
+        },
+        contextualist: {
+          title: 'The Contextualist',
+          desc: 'Situates ideas in their historical and cultural frame. Magnanimity and Reach are tall: she sees how positions arise from where the contributor stands. Acuity is moderate because she is not prosecuting one claim, she is mapping the field. The halo reads warm brown and deep purple: history, culture, philosophy, theology.',
+          alt: 'Contextualist fingerprint',
+        },
+        illuminator: {
+          title: 'The Illuminator',
+          desc: 'Makes complex ideas accessible without losing nuance. High Acuity, high Magnanimity, high Reach. She has to understand it, frame it generously, and know enough domains to translate between them. Discourse is shorter because she is teaching, not debating. Tier history is Forum-clean. The halo carries arts purple, philosophy indigo, and a band of science blue.',
+          alt: 'Illuminator fingerprint',
+        },
+        reviser: {
+          title: 'The Reviser',
+          desc: 'Publicly updates positions when shown evidence. Signature: extraordinarily high Calibration, the axis that measures willingness to revise. Her tier history is unusually clean because the process of public updating protects her from Fog and Heat. Modest Reach; she refines rather than invents. The halo reads green: renewable energy is her dominant territory.',
+          alt: 'Reviser fingerprint',
+        },
+      },
+    },
+
+    texture: {
+      label: '04 · Reading the Texture',
+      title: 'Same shape. Different history.',
+      /** *what* and *how* are the template's <em>, rendered by components/content/rich.tsx. */
+      desc: 'Two contributors can have identical graduation counts and still produce wildly different fingerprints. The shape comes from *what* was earned. The texture comes from *how* it was earned. Purity drives color saturation, turbulence generates visible wave patterns in the rings, and clarity modulates how crisp the lines render. The texture remembers.',
+      items: {
+        calm: {
+          label: 'Calm Waters',
+          title: 'The Confident Path',
+          desc: 'A clinical psychologist who came up through a clean academic path. Her primary territory is psychology, with a middle period writing about music and the neuroscience of listening: visible as a band of purple in her middle rings. Pristine tier history across every axis. Lines render crisp and the rings sit smooth.',
+          alt: 'Calm Waters fingerprint',
+        },
+        turbulent: {
+          label: 'Turbulent Waters',
+          title: 'The Climbed Path',
+          desc: 'Same field, same final graduations, same purple middle-period interest in music. But this clinician came up through messier conversations. Heat, Stance, and Fog scattered through her history. Visible wave activity ripples through the rings, and the lines render slightly diffuse where Fog dominated. The texture remembers the climb.',
+          alt: 'Turbulent Waters fingerprint',
+        },
+      },
+    },
+
+    colophon: {
+      name: 'Dialecta',
+      edition: 'Thinking Fingerprint · v1 · April 2026',
+      tag: 'Ideas are the protagonist.',
+    },
+  },
+
+  /** The site-wide 404, src/app/not-found.tsx, for any address no route answers. New copy. */
+  notFoundPage: {
+    heading: 'Page not found',
+    body: 'Nothing is published at this address.',
+    home: 'Read the articles',
   },
 
   /**

@@ -67,10 +67,15 @@
    Top bar: who you are writing as, and the save state
    --------------------------------------------------------------------------- */
 
+/* The writer's own "Dialecta" wordmark sat at the left of this bar and linked
+   home. The site header above it already carries both, so it is gone, along
+   with .dw-wordmark and the brass-deep link rule it was the only target of.
+   What remains is the "Writing as" line, kept at the right edge where it sat
+   beside the wordmark. */
 .dw-topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 16px;
   flex-wrap: wrap;
   max-width: 980px;
@@ -81,23 +86,6 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--tertiary);
-}
-
-.dw-topbar a {
-  color: var(--brass-deep);
-  text-decoration: none;
-}
-
-.dw-topbar a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.dw-wordmark {
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  letter-spacing: 0.01em;
-  text-transform: none;
 }
 
 .dw-precondition {
@@ -197,21 +185,38 @@
    Type
    --------------------------------------------------------------------------- */
 
+/* Brass never letters on a light surface (designer D-27). Measured, WCAG 2.x:
+   the recovered labels were --brass-mid, 2.90:1 on cream and 3.18:1 on paper,
+   and the gold tone --brass-warm, 1.98:1 and 2.17:1. A label on paper now
+   letters in --brass-deep, 7.34:1 on --paper-bright. A label on the bare page
+   (every stage opener, Consent, Posted) letters in ink, because at the top of
+   a phone screen the page is the stone end of the body gradient, where
+   --brass-deep measures 2.09:1 at the darkest stop and ink 4.95:1. The gold
+   tone keeps its gold as a line under the word rather than in it. */
 .dw-label {
   font-family: var(--font-mono);
   font-size: 9.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--brass-mid);
+  color: var(--ink);
   margin-bottom: 12px;
   font-weight: 500;
 }
 
-.dw-label--gold {
-  color: var(--brass-warm);
+.dialecta-paper .dw-label,
+.dialecta-sheet .dw-label {
+  color: var(--brass-deep);
 }
 
-.dw-label--terra {
+.dw-label--gold {
+  text-decoration-line: underline;
+  text-decoration-color: var(--brass-warm);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.6em;
+}
+
+/* Two classes, so the paper rule above cannot repaint an error label. */
+.dw-label.dw-label--terra {
   color: var(--terra);
 }
 
@@ -316,8 +321,11 @@
   field-sizing: content;
 }
 
+/* Was --brass-deep at 38% alpha: brass lettering at 1.87:1 on the sheet. The
+   house placeholder colour instead, the one the lede and the body use,
+   3.12:1, which clears the 3:1 floor for type this large. */
 .dw-title-input::placeholder {
-  color: rgba(122, 74, 16, 0.38);
+  color: var(--text-muted);
 }
 
 .dw-lede-input {
@@ -568,15 +576,25 @@
   color: var(--secondary);
 }
 
+/* The shell's link treatment: ink over a brass underline. It was --brass-deep
+   type, and the one place it renders, the restored-draft line, sits on the
+   bare page under the stage rail, the stone end of the gradient on a phone
+   (2.09:1 at the darkest stop; ink 4.95:1). */
 .dw-link-button {
   background: none;
   border: 0;
   padding: 0;
   font: inherit;
-  color: var(--brass-deep);
-  text-decoration: underline;
+  color: var(--ink);
+  text-decoration-line: underline;
+  text-decoration-color: var(--brass-mid);
+  text-decoration-thickness: 1px;
   text-underline-offset: 2px;
   cursor: pointer;
+}
+
+.dw-link-button:hover {
+  text-decoration-color: var(--brass-deep);
 }
 
 .dw-brass-button {
@@ -897,8 +915,9 @@
   transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Was --brass-mid, 2.53:1 on the pressed card; --brass-deep is 5.83:1 there. */
 .dw-option:hover .dw-option-kicker {
-  color: var(--brass-mid);
+  color: var(--brass-deep);
 }
 
 .dw-option-title {
@@ -1012,9 +1031,18 @@
   color: var(--text-muted);
 }
 
+/* Was --brass-mid type, 2.90:1 on cream. Now the shell's link: ink, 15.81:1,
+   over a brass underline. */
 .dw-footer a {
-  color: var(--brass-mid);
-  text-decoration: none;
+  color: var(--ink);
+  text-decoration-line: underline;
+  text-decoration-color: var(--brass-mid);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.dw-footer a:hover {
+  text-decoration-color: var(--brass-deep);
 }
 
 @media (prefers-reduced-motion: reduce) {

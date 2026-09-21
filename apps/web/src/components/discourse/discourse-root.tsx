@@ -20,6 +20,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { loginHref } from '@/lib/return-path';
 import { strings } from '@/strings';
 import { DiscourseFeed } from './feed';
 import { PrivateDraft } from './private-draft';
@@ -46,13 +47,20 @@ function accessText(viewer: ViewerState): string {
   }
 }
 
-function AccessNote({ viewer }: { viewer: ViewerState }) {
+/**
+ * Signing in from here comes back to this article, at the conversation:
+ * the #dialecta-comments section below, where the composer will then be.
+ */
+function AccessNote({ viewer, articleSlug }: { viewer: ViewerState; articleSlug: string }) {
   return (
     <div className="dialecta-paper dialecta-wood-frame dd-access">
       <p>{accessText(viewer)}</p>
       {viewer.kind === 'signed-out' ? (
         <p>
-          <Link className="dd-btn dd-btn--primary" href="/login">
+          <Link
+            className="dd-btn dd-btn--primary"
+            href={loginHref(`/articles/${encodeURIComponent(articleSlug)}#dialecta-comments`)}
+          >
             {s.access.signIn}
           </Link>
         </p>
@@ -124,7 +132,7 @@ export function DiscourseRoot({ article, data, preview }: DiscourseRootProps) {
             readings={readings}
           />
         ) : (
-          <AccessNote viewer={data.viewer} />
+          <AccessNote viewer={data.viewer} articleSlug={article.slug} />
         )}
       </div>
 

@@ -106,8 +106,11 @@ export function ComposeStage({
       <StageOpener label={copy.stageLabel} heading={copy.heading} sub={copy.sub} />
 
       <article className="dialecta-sheet dw-sheet">
+        {/* The breadcrumb the published article opens with, "Articles › topic"
+            (app/articles/[slug]/page.tsx). It read "Dialecta › topic", a second
+            wordmark under the site header's own. */}
         <div className="dialecta-meta" style={{ letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20 }}>
-          {strings.writer.wordmark}
+          {strings.articlePage.breadcrumb}
           <span aria-hidden="true" style={{ margin: '0 10px', color: 'var(--brass-mid)' }}>
             ›
           </span>

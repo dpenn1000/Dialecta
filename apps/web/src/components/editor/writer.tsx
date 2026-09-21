@@ -26,6 +26,7 @@
 import './writer.css';
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
+import { loginHref } from '@/lib/return-path';
 import { strings } from '@/strings';
 import { StageRail } from './stage-rail';
 import { ComposeStage, ConsentStage, DeclareStage } from './stages-draft';
@@ -258,8 +259,8 @@ export default function Writer({ authorName, signedIn, profileLinked, initialArt
   const precondition = !signedIn ? (
     <>
       {strings.writer.signedOut}{' '}
-      {/* /login has no return path: auth/callback always lands on /. */}
-      <Link href="/login" style={{ color: 'var(--brass-deep)' }}>
+      {/* Back to the writer after signing in. The draft is in localStorage, so it is still here. */}
+      <Link href={loginHref('/write')} style={{ color: 'var(--brass-deep)' }}>
         {strings.writer.signIn}
       </Link>
     </>
@@ -267,20 +268,23 @@ export default function Writer({ authorName, signedIn, profileLinked, initialArt
     strings.writer.noProfile
   ) : null;
 
+  // The recovered editor drew its own "Dialecta" wordmark at the left of this
+  // bar, linking home. The site header directly above it now carries both, so
+  // the bar holds only the line saying whose draft this is, and is not drawn
+  // when there is no one to name.
+  const writingLine = initialArticle
+    ? strings.writer.editing(initialArticle.title)
+    : authorName
+      ? strings.writer.writingAs(authorName)
+      : null;
+
   return (
     <div className="dw-root">
-      <header className="dw-topbar">
-        <Link href="/" className="dw-wordmark">
-          {strings.writer.wordmark}
-        </Link>
-        <span>
-          {initialArticle
-            ? strings.writer.editing(initialArticle.title)
-            : authorName
-              ? strings.writer.writingAs(authorName)
-              : null}
-        </span>
-      </header>
+      {writingLine ? (
+        <header className="dw-topbar">
+          <span>{writingLine}</span>
+        </header>
+      ) : null}
 
       {precondition && stage !== S.POSTED ? (
         <div className="dw-precondition dialecta-paper" role="note">
