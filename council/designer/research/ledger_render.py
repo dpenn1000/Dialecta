@@ -45,6 +45,56 @@ from palette_check import FIXED as TOPICS  # noqa: E402
 AXES = G.AXES
 BG, INK, MUTED = G.BG, G.INK, G.MUTED
 
+# Six equal-lightness hues that survive all three dichromacies, from
+# `six_hue_search.py`. Worst pair across normal vision and the three
+# dichromacies is 0.0387, against 0.0065 for the engine's own six and 0.0018
+# for the twelve territories. All six sit at L 0.51 to 0.54, so no pillar
+# renders heavier than another.
+AXIS_HUE6 = {
+    "acuity": "#007673", "calibration": "#667900", "magnanimity": "#0079a8",
+    "discourse": "#6753dc", "consistency": "#8b34b6", "reach": "#b70f61",
+}
+
+# Territory as a lightness offset on the axis hue. Twelve steps is far too many
+# to identify a territory by, and that is not the job: the job is that a change
+# of territory is VISIBLE as a band. Offsets alternate around the topic wheel so
+# neighbours land far apart, which is when a change reads.
+_TOPIC_ORDER = list(TOPICS)
+_ALT = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11]
+TOPIC_LIGHTNESS = {t: -0.125 + _ALT.index(i) / 11 * 0.25 for i, t in enumerate(_TOPIC_ORDER)}
+
+COLOUR_MODE = "territory"   # "territory" | "axis" | "axis+era"
+
+
+def _oklch(rgb):
+    from palette_and_spacing import srgb_to_oklch
+    return srgb_to_oklch(rgb)
+
+
+def _from_oklch(L, C, H):
+    from palette_respace import oklch_to_srgb
+    return oklch_to_srgb(L, C, H)
+
+
+_CACHE = {}
+
+
+def mark_colour(axis, topic, depth):
+    """One mark's colour, under whichever scheme is being tested."""
+    key = (COLOUR_MODE, axis, topic, round(depth, 2))
+    if key in _CACHE:
+        return _CACHE[key]
+    if COLOUR_MODE == "territory":
+        base, deep = TOPICS.get(topic or "", ("#8a8278", "#5a5248"))
+        out = G.mix(G.hex_rgb(base), G.hex_rgb(deep), depth * 0.55)
+    else:
+        L, C, H = _oklch(G.hex_rgb(AXIS_HUE6[axis]))
+        if COLOUR_MODE == "axis+era":
+            L = max(0.30, min(0.76, L + TOPIC_LIGHTNESS.get(topic, 0.0)))
+        out = _from_oklch(max(0.26, L - depth * 0.10), C, H)
+    _CACHE[key] = out
+    return out
+
 # Sector spread is wider than the 60 degrees a sector owns, so neighbours
 # overlap. The overlap is the anti-notch: a pillar with no history still sits
 # inside its neighbours' tails.
@@ -331,9 +381,8 @@ def colour_field(marks, S):
         k = np.exp(-(dx * dx + dy * dy) / (2 * sig * sig))
         D[lo_y:hi_y, lo_x:hi_x] += t["weight"] * k
         if t["weight"] > 0:
-            base, deep = TOPICS.get(m["topic"] or "", ("#8a8278", "#5a5248"))
             depth = 1.0 - m["r"] / max(1.0, S * 0.41)
-            col = np.array(G.mix(G.hex_rgb(base), G.hex_rgb(deep), depth * 0.55), dtype=np.float32)
+            col = np.array(mark_colour(m["axis"], m["topic"], depth), dtype=np.float32)
             C[lo_y:hi_y, lo_x:hi_x] += (t["weight"] * k)[..., None] * col
     safe = np.maximum(D, 1e-5)[..., None]
     return D, C / safe
@@ -385,9 +434,8 @@ def field_render(profile, S=640, heat_bias=0.0, px=None, ink=False, dots=False,
         dr.line(poly + [poly[0]], fill=INK, width=max(2, int(S / 300)))
     if dots:
         for m in marks:
-            base, deep = TOPICS.get(m["topic"] or "", ("#8a8278", "#5a5248"))
             depth = 1.0 - m["r"] / max(1.0, tenure_radius(years, S))
-            draw_mark(dr, m, S, G.mix(G.hex_rgb(base), G.hex_rgb(deep), depth * 0.75), ink_only=ink)
+            draw_mark(dr, m, S, mark_colour(m["axis"], m["topic"], depth * 1.35), ink_only=ink)
     return img.resize((px, px), Image.LANCZOS) if px else img
 
 
@@ -443,7 +491,87 @@ def field_render_breach(profile, S=640, heat_bias=0.0, px=None, breaches=(), upt
     dr.line(poly + [poly[0]], fill=INK, width=max(2, int(S / 300)))
     if dots:
         for m in marks:
-            base, deep = TOPICS.get(m["topic"] or "", ("#8a8278", "#5a5248"))
             depth = 1.0 - m["r"] / max(1.0, tenure_radius(years, S))
-            draw_mark(dr, m, S, G.mix(G.hex_rgb(base), G.hex_rgb(deep), depth * 0.75), ink_only=ink)
+            draw_mark(dr, m, S, mark_colour(m["axis"], m["topic"], depth * 1.35), ink_only=ink)
+    return img.resize((px, px), Image.LANCZOS) if px else img
+
+
+# THE BREACH CURVE, retuned 2026-09-20 on Dan's note that one bad day "takes
+# over the entire center with a massive glow for years".
+#
+# Two changes to the mechanic and one to its arithmetic.
+#
+# It ATTENUATES rather than subtracts. `D *= (1 - depth * kernel)` cannot punch
+# through to nothing, so a Breach thins the record and never erases it. The old
+# additive form could drive the field negative, which is what produced the moat
+# around the core.
+#
+# Its width is fixed at the size of the record ON THE DAY, so it stays the same
+# number of pixels while the disc grows past it. A bad day was a certain size.
+#
+# Its depth decays. At the moment it happens the band is unmistakable; within
+# months it is something you notice; within a year it is something you find;
+# after that it is a hairline that never quite goes.
+BREACH_DEPTH0 = 0.62     # attenuation on the day
+BREACH_FLOOR = 0.07      # what never leaves
+BREACH_TAU = 0.50        # years to fall by 1/e toward the floor
+BREACH_WIDTH = 0.16      # sigma, as a fraction of the record's radius that day
+
+
+def breach_depth(years_since):
+    return BREACH_FLOOR + (BREACH_DEPTH0 - BREACH_FLOOR) * math.exp(-max(0.0, years_since) / BREACH_TAU)
+
+
+def apply_breaches(D, S, years_now, breaches):
+    """
+    `breaches` are years-since-joining. Each thins the record at the radius it
+    happened at, by a depth that falls with time and a width fixed on the day.
+    Several compound multiplicatively, so a pattern of them stays visible where
+    one does not.
+    """
+    if not breaches:
+        return D
+    cx = cy = S / 2
+    r0 = S * 0.022
+    ys, xs = np.mgrid[0:S, 0:S].astype(np.float32)
+    rr = np.hypot(xs - cx, ys - cy)
+    keep = np.ones_like(D)
+    for at in breaches:
+        if at > years_now:
+            continue
+        rmax_then = tenure_radius(at, S)
+        frac = at / max(1e-6, years_now)
+        rad = r0 + frac ** 0.75 * (tenure_radius(years_now, S) - r0)
+        sig = max(2.0, BREACH_WIDTH * rmax_then)
+        keep *= 1.0 - breach_depth(years_now - at) * np.exp(-((rr - rad) ** 2) / (2 * sig * sig))
+    return D * np.clip(keep, 0.0, 1.0)
+
+
+def render_at(profile, S=640, heat_bias=0.0, px=None, breaches=(), years=None, dots=False):
+    """One contributor at one moment, with any Breaches that had happened by then."""
+    p = with_years(profile) if "years" not in profile else profile
+    full = p["years"]
+    years = full if years is None else years
+    upto = max(0.02, min(1.0, years / full))
+    ev = synth_ledger(p, heat_bias)[: max(1, int(len(synth_ledger(p, heat_bias)) * upto))]
+    marks = place(ev, S, years)
+    D, C = colour_field(marks, S)
+    D = apply_breaches(D, S, years, breaches)
+    poly = outline_of(D, S, p.get("resonance", 0.0), marks, years)
+    shape = Image.new("L", (S, S), 0)
+    ImageDraw.Draw(shape).polygon(poly, fill=255)
+    d = np.clip(D, 0, None)
+    hi = np.percentile(d[d > 0], 96) if (d > 0).any() else 1.0
+    a = np.clip(d / max(1e-6, hi), 0, 1) ** 0.62
+    alpha = Image.fromarray((a * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(S / 110))
+    alpha = Image.composite(alpha, Image.new("L", (S, S), 0), shape)
+    img = Image.new("RGB", (S, S), BG)
+    img = Image.composite(Image.fromarray(np.clip(C, 0, 255).astype(np.uint8)), img,
+                          alpha.point(lambda v: int(v * 0.90)))
+    dr = ImageDraw.Draw(img)
+    dr.line(poly + [poly[0]], fill=INK, width=max(2, int(S / 300)))
+    if dots:
+        for m in marks:
+            depth = 1.0 - m["r"] / max(1.0, tenure_radius(years, S))
+            draw_mark(dr, m, S, mark_colour(m["axis"], m["topic"], depth * 1.35))
     return img.resize((px, px), Image.LANCZOS) if px else img
