@@ -20,7 +20,7 @@ work is stopped because it has not been.
 | 1.4 | **`stage` against `delta_of`** | Evidence leans `stage`: already live, matches the spec, and a recovered file assumes it. Whether the Delta mechanic should ever support more than one revision is a product question | `migrator`, port debate |
 | 1.5 | **Whether comment-side Stage 2.5 exists at all** | Ships flagged off either way. This decides whether it is ever turned on, and it needs a written spec the day it is | `builder`, `2026-09-20-builder-01` |
 | 1.6 | **The 40-Order taxonomy** | No document anywhere describes what the 40 Orders are. `spec-reader` wants the port of `dialecta-profile-order.jsx` held until someone writes it down | port debate |
-| 1.7 | **The lost wood** | `--wood-grain` is defined and painted nowhere in 3,286 lines. `WoodFrameProgressBar.jsx` was marked Complete in the project's own build audit and is missing from the repository entirely. Worth recovering, or not | `designer`, port debate |
+| 1.7 | ~~**The lost wood**~~ **FOUND 2026-09-21.** It was renamed, not lost: `WoodFrameProgressBar.jsx` became `_recovered-next/lib/theme/dialecta-reflection-bar.jsx`, 306 lines against the 165 the audit recorded, and the Council had already ruled it ports as-is. Three searches missed it because all three searched the old name. `--wood-grain` the CSS token is still unpainted, which is a separate and much smaller question | closed |
 | 1.8 | **A CVD-safe twelve-colour palette costs resemblance** | Optimised, twelve territory hues reach seventeen times better separation under colour blindness. The cost is that politics stops being red and history stops being brown | `designer`, section 5 |
 
 ---
