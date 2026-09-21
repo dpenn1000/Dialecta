@@ -72,6 +72,7 @@ access on every platform (`.claude/agents/architect.md`, "Your access", applied 
    holds.
 2. **Make the checks continual.** `migration-history.sql` found the same drift twice in two hours.
    Run it after every applied migration, then on a schedule once a read-only credential exists.
-3. **Watch the routed findings land**, starting with the two decisions that block the most:
-   identity (`architect-05`) and "forming" (`architect-03`). The measure of this seat is how many
-   findings get fixed.
+3. **Hold the rebuild to the map** (`architecture/2026-09-21-rebuild-map.md`, Dan's request of
+   2026-09-21): the spine's three steps first, and each landing checked against its fitness function.
+   Identity (`architect-05`, the map's step 2) and "forming" (`architect-03`) block the most. The
+   measure of this seat is how many findings get fixed.
