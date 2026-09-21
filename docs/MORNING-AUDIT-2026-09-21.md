@@ -41,6 +41,11 @@ Committed and on `backup/2026-09-21-overnight`; `main` is still not pushed.
 - **For `designer` to confirm:** the Pact parchment lost its 9px soft inner ring in the paint fix;
   the content column is 1180px where live's is 1280px; the spine keeps two breakpoints (720px,
   1199px) outside the app's set.
+- **Live's share previews, yours to edit in Ghost Admin** (`convener-07`). Three articles' excerpts
+  end mid-sentence with an ellipsis, and the Far Shore one runs the subtitle into the opening
+  paragraphs. It is a data edit on three posts with candidate lines ready, not a deploy. The
+  card type stays `summary_large_image` until cutover; Ghost sends its own tag and the theme
+  can't remove it. `scripts/check-live-share-tags.py` reads live before and after.
 - **`/login` shows a claim token in its address bar** (`?next=/claim?token=...`) until the form is
   sent, and an analytics page view there would carry it. Scrub it the way `/claim` does before claim
   links go to the other 13 members.
