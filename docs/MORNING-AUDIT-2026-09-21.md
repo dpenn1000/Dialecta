@@ -96,10 +96,9 @@ Every page sits inside the ported header, drawer and footer.
 | `/profile/fingerprint-lab` | **The fingerprint on real data**: three demo profiles' real `axis_scores` rows, plus Newborn and Early. `?example=wen-zhao&size=760` draws one large. Development only |
 | `/write` | The publishing engine: nine stages from blank page to publish. Publishing needs 2.1 |
 | `/analytics` | Platform analytics with real numbers, every card naming the decision it changes. Open under `next dev`, gated in production |
-| `/login` | Magic link and Google |
+| `/login` | Magic link and Google. Every sign-in link now brings you back to the page you clicked it on |
 
-Still being built as you read this, if it has not landed: `/fingerprint`, the explainer page, with its
-renders compared side by side against the live one you liked.
+| `/fingerprint` | **The explainer page, every figure drawn by the new engine.** Compared side by side against the live page you liked, same data, same size: `docs/fingerprint-examples/live-vs-new/`, starting with `compare-archetypes-1.png`. Silhouette, halo and colour track the live renders closely; the rings run concentric where live's swirl, which is the spiral you asked to lose |
 
 **It is a prototype, as you asked.** Nothing here is deployed, and nothing can be until the cutover.
 
@@ -255,11 +254,9 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
 - **The architect seat's top-to-bottom review**, in your own session "engineerL architect seat
   handoff". It has been given everything found tonight so it starts from what is fixed. Its rebuild
   map is in, section 2A.
-- **Builders.** Done and committed: the site shell (`18ccd76`), the discourse layer (`1cb785a`), and
-  profiles with the fingerprint (`84c1fd4`). Still writing: the front page with the Pact, Guidebook,
-  Community, About and Stewards; and a fifth on the gaps nobody owned, which are the `/fingerprint`
-  explainer page compared side by side with the live one you liked, the writer's brass lettering on
-  paper, and sign-in returning you to the article you were reading.
+- **Builders: all five done and committed.** The site shell, the discourse layer, profiles with the
+  fingerprint, the content pages, and the gaps: `/fingerprint`, the writer's brass, sign-in that
+  returns you, and a root 404.
 - **`security`, preparing the production fix** for `/api/comments` and the upload route, section 0.
   Its tier-read functions are done and in use (section 4).
 - **`decider` on three architecture rulings**: the identity key, "forming", and the downstream runner
@@ -325,6 +322,12 @@ else, which serves as the acceptance test. `builder` implements.
   yet (section 0B).
 - Every visitor sees a profile's fingerprint. The Council recommends owner-only until the human
   study passes (section 0A).
+- `/fingerprint` sends 4.3MB of HTML on every request, from 35,000 nodes, because every figure
+  hydrates. Drawing the static figures without hydrating them fixes it, in `components/fingerprint`.
+- On `/fingerprint`, the Early figure's copy ("Discourse already carries Heat") does not describe its
+  data, which has Discourse at 0 and no Heat; Mature's colour words no longer match the twelve-topic
+  palette; and the demo carousel has no topic history, so "the topics they wrote about" shows
+  nothing. Each is a fixture or a line of your copy.
 - `current_profile_id()` and `current_member_is_author()` sit in `public`, so any signed-in session
   can call them as endpoints. Each returns only the caller's own answer, so nothing leaks, but
   `security`'s rule keeps policy helpers out of the exposed schema (`decider`'s finding).
