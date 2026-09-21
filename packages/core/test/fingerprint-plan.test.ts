@@ -331,7 +331,9 @@ describe('planFingerprint: the resonance halo', () => {
   });
 
   it('is three strokes of the silhouette plus a clipped two-stroke inner bleed, never a fill', () => {
-    const plan = planFingerprint(WEN, { size: SIZE, resonance: 1, salt: 7 });
+    // At the reference size, where the engine's own halo numbers hold. At any
+    // other size the widths and blurs scale; see "the halo scales" below.
+    const plan = planFingerprint(WEN, { size: FINGERPRINT_RENDER.halo.referenceSize, resonance: 1, salt: 7 });
     const halo = plan.halo;
     if (!halo) throw new Error('no halo');
     expect(halo.path).toBe(plan.rings[plan.rings.length - 1]?.path);
@@ -366,6 +368,79 @@ describe('planFingerprint: the resonance halo', () => {
     );
     expect(calm.halo?.innerColor).toBe(calm.halo?.color);
     expect(heated.halo?.innerColor).not.toBe(heated.halo?.color);
+  });
+});
+
+describe('planFingerprint: the halo scales with the figure', () => {
+  const H = FINGERPRINT_RENDER.halo;
+  const REF = H.referenceSize;
+  const RESONANCE = 0.71;
+  const planAt = (size: number, params = FINGERPRINT_RENDER) =>
+    planFingerprint(WEN, { size, resonance: RESONANCE, salt: 7, showLabels: false, params });
+  const haloAt = (size: number, params = FINGERPRINT_RENDER) => {
+    const halo = planAt(size, params).halo;
+    if (!halo) throw new Error(`no halo at ${size}`);
+    return halo;
+  };
+
+  it('takes its reference size from FINGERPRINT_RENDER: 400, the size the live page baked its figures at', () => {
+    expect(REF).toBe(400);
+  });
+
+  it('draws the engine numbers exactly at the reference size, so that render does not move', () => {
+    // Exact, not close: at the reference size the scale is 1, and every value
+    // must be the same double the unscaled engine maths gives.
+    const curve = RESONANCE ** H.curve;
+    const width = H.width.base + curve * H.width.gain;
+    const opacity = H.opacity.base + curve * H.opacity.gain;
+    const halo = haloAt(REF);
+    expect(halo.blurNear).toBe(H.blurNear.base + curve * H.blurNear.gain);
+    expect(halo.blurFar).toBe(H.blurFar.base + curve * H.blurFar.gain);
+    expect(halo.outer.map((s) => s.width)).toEqual(H.outer.map((s) => width * s.width));
+    expect(halo.inner.map((s) => s.width)).toEqual(H.inner.map((s) => width * s.width));
+    expect(halo.outer.map((s) => s.opacity)).toEqual(H.outer.map((s) => opacity * s.opacity));
+    expect(halo.inner.map((s) => s.opacity)).toEqual(H.inner.map((s) => opacity * s.opacity));
+  });
+
+  it('scales every stroke width and both blurs by size over the reference size, at any size', () => {
+    const ref = haloAt(REF);
+    for (const size of [120, 180, 200, 240, 260, 296, 380, 640]) {
+      const k = size / REF;
+      const halo = haloAt(size);
+      expect(halo.blurNear).toBeCloseTo(ref.blurNear * k, 9);
+      expect(halo.blurFar).toBeCloseTo(ref.blurFar * k, 9);
+      halo.outer.forEach((s, i) => expect(s.width).toBeCloseTo((ref.outer[i]?.width ?? NaN) * k, 9));
+      halo.inner.forEach((s, i) => expect(s.width).toBeCloseTo((ref.inner[i]?.width ?? NaN) * k, 9));
+    }
+  });
+
+  it('leaves opacity, hue and the flavoured inner colour alone', () => {
+    const ref = haloAt(REF);
+    const small = haloAt(180);
+    expect(small.outer.map((s) => [s.opacity, s.color, s.blur])).toEqual(ref.outer.map((s) => [s.opacity, s.color, s.blur]));
+    expect(small.inner.map((s) => [s.opacity, s.color, s.blur])).toEqual(ref.inner.map((s) => [s.opacity, s.color, s.blur]));
+    expect([small.color, small.colorDeep, small.innerColor]).toEqual([ref.color, ref.colorDeep, ref.innerColor]);
+  });
+
+  it('keeps the inward bleed the same share of the figure at 180 as at 400', () => {
+    // How far the wider inner stroke reaches inside the silhouette, as a
+    // fraction of the ring: half its width plus two blur deviations.
+    const reach = (size: number) => {
+      const plan = planAt(size);
+      const halo = plan.halo;
+      const widest = Math.max(...(halo?.inner.map((s) => s.width) ?? [NaN]));
+      return (widest / 2 + 2 * (halo?.blurNear ?? NaN)) / plan.maxR;
+    };
+    expect(reach(180)).toBeCloseTo(reach(REF), 9);
+    expect(reach(260)).toBeCloseTo(reach(REF), 9);
+  });
+
+  it('follows a replacement reference size, so the Council can move it in one place', () => {
+    const params = { ...FINGERPRINT_RENDER, halo: { ...H, referenceSize: 180 } };
+    const own = haloAt(180, params);
+    const ref = haloAt(REF);
+    expect(own.blurNear).toBe(ref.blurNear);
+    expect(own.outer.map((s) => s.width)).toEqual(ref.outer.map((s) => s.width));
   });
 });
 

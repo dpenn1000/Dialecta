@@ -128,4 +128,11 @@ export {
   type TopicPhase,
 } from './fingerprint-plan';
 
+export {
+  renderFingerprintSvg,
+  type FingerprintSvg,
+  type FingerprintSvgClasses,
+  type FingerprintSvgOptions,
+} from './fingerprint-svg';
+
 export { RETURN_PATH_FALLBACK, RETURN_PATH_MAX_LENGTH, safeReturnPath } from './return-path';

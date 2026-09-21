@@ -42,8 +42,16 @@
   pointer-events: none;
 }
 
+/* Every segment of a ring at its ring's opacity, which the renderer writes
+   once on the ring as --ring-opacity (renderFingerprintSvg in core). It sits
+   on each segment, never on the group: group opacity would composite the
+   round-cap joints differently from the engine's per-line opacity. */
+.ring path {
+  opacity: var(--ring-opacity);
+}
+
 /* A newly earned ring. Engine :895-901. */
-.grow line {
+.grow path {
   animation: grow 1.4s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
@@ -63,7 +71,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .grow line {
+  .grow path {
     animation: none;
   }
 }

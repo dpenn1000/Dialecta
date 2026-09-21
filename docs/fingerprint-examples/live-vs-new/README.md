@@ -14,6 +14,7 @@ run on the three seed rows.
 | `zoom-advocate-rings.png` | Live's spiral whorl against the new concentric rings, close up |
 | `page-fingerprint-1440-overview.png` | The whole new page |
 | `writer-before-after-1440.png` | The writer's labels moved from brass to ink on light surfaces |
+| `halo-scaled-mature.png` | The halo before and after it scales with size, at 180, 260 and 400px. At 400, the reference size, the two are pixel-identical; below it, the old fixed-pixel halo flooded the shape |
 
 The fingerprint Council's reading of what you liked on the live page: lightness, from pale colours
 and smooth blending, which either colour choice keeps (`council/log/2026-09-20-fingerprint-legibility-and-model.md`).

@@ -1,7 +1,7 @@
 /**
  * The /fingerprint page's example data. Data, not maths: every fingerprint on
- * the page is drawn by planFingerprint from one of these, through the
- * components/fingerprint island, at FINGERPRINT_RENDER's current values.
+ * the page is drawn by planFingerprint from one of these, through
+ * components/fingerprint, at FINGERPRINT_RENDER's current values.
  *
  * REUSED, per the brief: the three demo contributors, Newborn and Early are
  * the fingerprint lab's fixtures (../../profile/fingerprint-lab/examples.ts),

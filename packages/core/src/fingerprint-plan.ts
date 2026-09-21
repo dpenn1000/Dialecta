@@ -132,6 +132,7 @@ export interface FingerprintRenderParams {
   };
   readonly purity: { readonly saturation: boolean };
   readonly halo: {
+    readonly referenceSize: number;
     readonly curve: number;
     readonly width: { readonly base: number; readonly gain: number };
     readonly opacity: { readonly base: number; readonly gain: number };
@@ -238,6 +239,16 @@ export const FINGERPRINT_RENDER: FingerprintRenderParams = {
     saturation: true,
   },
   halo: {
+    /**
+     * TUNING: the geometry size, in px, at which the widths and blurs below are
+     * drawn as written. At any other size every halo width and both blurs are
+     * multiplied by size / referenceSize, so a 180px figure carries the 400px
+     * halo shrunk. The engine drew them as fixed pixels at every size, which at
+     * 180px let the inward bleed cover most of the shape. 400 is the size the
+     * live page baked its figures at (_theme/scripts/build-archetype-svgs.jsx,
+     * RENDER_SIZE), the halo the live page shows. Opacity does not scale.
+     */
+    referenceSize: 400,
     /** TUNING: resonance ** curve, which widens the low end. Engine :701. */
     curve: 0.7,
     width: { base: 1.5, gain: 8 },
@@ -333,6 +344,7 @@ export interface FingerprintHaloStroke {
   blur: HaloBlur;
 }
 
+/** Widths and blurs arrive already in proportion to the figure's size; see planHalo. */
 export interface FingerprintHalo {
   path: string;
   color: string;
@@ -797,7 +809,7 @@ export function planFingerprint(data: FingerprintData, options: PlanOptions): Fi
     guideOpacity: P.guide.opacity,
     seedDots: [],
     rings: built,
-    halo: silhouette && resonance > 0 ? planHalo(silhouette.path, axisData, resonance, topics, P) : null,
+    halo: silhouette && resonance > 0 ? planHalo(silhouette.path, axisData, resonance, size, topics, P) : null,
   };
 }
 
@@ -810,11 +822,18 @@ export function planFingerprint(data: FingerprintData, options: PlanOptions): Fi
  * with no fill. A first test render on 2026-09-20 drew it as a blurred FILL,
  * which floods the whole interior with up to 0.68 of the topic hue; that is not
  * what the engine does and not what this plans.
+ *
+ * Widths and blurs are in proportion to the figure: the engine's numbers hold
+ * at halo.referenceSize, and scale by size / referenceSize everywhere else.
+ * The silhouette scales with size, so a halo that did not would bleed across
+ * a small figure and vanish on a large one. At the reference size the factor
+ * is exactly 1 and every number is the engine's own, to the bit.
  */
 function planHalo(
   path: string,
   axisData: ReadonlyArray<FingerprintAxisData | undefined>,
   resonance: number,
+  size: number,
   topics: TopicPalette,
   P: FingerprintRenderParams,
 ): FingerprintHalo {
@@ -858,23 +877,26 @@ function planHalo(
   const curve = resonance ** P.halo.curve;
   const width = P.halo.width.base + curve * P.halo.width.gain;
   const opacity = P.halo.opacity.base + curve * P.halo.opacity.gain;
+  // A reference size that is not a positive number would scale the halo to
+  // nothing or to infinity; the engine's fixed pixels are the safer reading.
+  const scale = P.halo.referenceSize > 0 && Number.isFinite(size) ? size / P.halo.referenceSize : 1;
 
   return {
     path,
     color,
     colorDeep,
     innerColor,
-    blurNear: P.halo.blurNear.base + curve * P.halo.blurNear.gain,
-    blurFar: P.halo.blurFar.base + curve * P.halo.blurFar.gain,
+    blurNear: (P.halo.blurNear.base + curve * P.halo.blurNear.gain) * scale,
+    blurFar: (P.halo.blurFar.base + curve * P.halo.blurFar.gain) * scale,
     outer: P.halo.outer.map((s) => ({
       color: s.tone === 'deep' ? colorDeep : color,
-      width: width * s.width,
+      width: width * s.width * scale,
       opacity: opacity * s.opacity,
       blur: s.blur,
     })),
     inner: P.halo.inner.map((s) => ({
       color: innerColor,
-      width: width * s.width,
+      width: width * s.width * scale,
       opacity: opacity * s.opacity,
       blur: s.blur,
     })),

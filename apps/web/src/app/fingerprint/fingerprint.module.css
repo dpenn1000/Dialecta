@@ -203,7 +203,7 @@
   gap: 0;
 }
 
-/* Two classes, so these widths outrank the island's own .svg rule however
+/* Two classes, so these widths outrank the figure's own .svg rule however
    the two stylesheets are ordered. The SVG keeps its viewBox, so a width
    here scales strokes and blur with it, the way the live PNGs scaled. */
 .card .stageFig {

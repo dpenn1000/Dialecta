@@ -22,11 +22,15 @@
  *    and the stylesheet shows one at the live breakpoint, 1100px, so the first
  *    paint is already the right one.
  *
+ * Its two figures are the only ones on the page drawn by FingerprintClient,
+ * since a pick changes their data; every other figure is the server
+ * component and hydrates nothing.
+ *
  * Every string arrives as a prop, so this island does not ship strings.ts.
  */
 import { useState } from 'react';
 import type { FingerprintData } from '@dialecta/core';
-import { Fingerprint } from '@/components/fingerprint';
+import { FingerprintClient } from '@/components/fingerprint/FingerprintClient';
 import styles from '../fingerprint.module.css';
 
 export interface CarouselContributor {
@@ -84,7 +88,7 @@ export function ContributorCarousel({
       </div>
 
       <div className={styles.carouselFigure}>
-        <Fingerprint
+        <FingerprintClient
           data={active.data}
           size={380}
           resonance={active.resonance}
@@ -92,7 +96,7 @@ export function ContributorCarousel({
           label={active.label}
           className={styles.carouselWide}
         />
-        <Fingerprint
+        <FingerprintClient
           data={active.data}
           size={200}
           resonance={active.resonance}

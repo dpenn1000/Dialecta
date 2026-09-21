@@ -1,8 +1,8 @@
 /**
  * The hero card: identity on the left, the Order and the Thinking Fingerprint
  * on the right. Ported from the HERO IDENTITY SECTION of dialecta-profile.jsx.
- * A server component; the fingerprint and the archetype controls inside it
- * are the only islands.
+ * A server component, and so is the fingerprint inside it, which hydrates
+ * nothing; the archetype controls are the only island.
  *
  * Left out, each because what it called does not exist in apps/web: the
  * settings drawer the name opened, the Share and Edit controls, the Follow

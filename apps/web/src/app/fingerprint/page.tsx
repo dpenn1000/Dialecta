@@ -26,16 +26,21 @@ type TextureKey = keyof typeof t.texture.items;
  * contributors, the stages of growth, the eight archetypes, the texture pair)
  * and the page's own colophon.
  *
- * Every fingerprint here is drawn live by the components/fingerprint island
- * from planFingerprint in @dialecta/core, at FINGERPRINT_RENDER's current
- * values. The live page drew the carousel with the recovered engine and showed
- * the other fourteen as PNGs baked from it. That engine is retired by the port
- * ruling (docs/FINGERPRINT.md), so a Council change to FINGERPRINT_RENDER now
- * reaches every figure on this page at once, with nothing to re-bake.
+ * Every fingerprint here is drawn from planFingerprint in @dialecta/core, at
+ * FINGERPRINT_RENDER's current values. The live page drew the carousel with
+ * the recovered engine and showed the other fourteen as PNGs baked from it.
+ * That engine is retired by the port ruling (docs/FINGERPRINT.md), so a Council
+ * change to FINGERPRINT_RENDER now reaches every figure on this page at once,
+ * with nothing to re-bake.
+ *
+ * The stages, archetypes and textures are drawn on the server by
+ * components/fingerprint and hydrate nothing; their figures do not change
+ * after load. The carousel is the only client state, and its two figures are
+ * the only ones the browser draws, through FingerprintClient, because a pick
+ * changes their data.
  *
  * The example data is ./_lib/examples.ts: the fingerprint lab's fixtures where
- * one exists, and the April data sets ported where none does. The carousel is
- * the only client state; everything else is server-rendered.
+ * one exists, and the April data sets ported where none does.
  */
 export default function FingerprintPage() {
   const c = t.contributors;
