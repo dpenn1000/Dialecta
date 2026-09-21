@@ -5,11 +5,16 @@ The Next.js 15 (App Router, TypeScript) front end. Root `CLAUDE.md` holds the lo
 ## Conventions
 
 - **Server components by default.** A file is a client component only when it needs state, effects or browser APIs. Client islands, and only these until a spec says otherwise: the comment composer, the classification card, votes, the Thinking Fingerprint, the opinion maps, the article editor (TipTap, `src/components/editor/`, backlog A-10). Keep each island small and pass it data from a server component.
+  Two more exist as of 2026-09-21, each a recorded exception rather than a precedent: the shell's nav and drawer (`src/components/shell/nav-client.tsx`, for the drawer's focus trap), and the comment feed (`src/components/discourse/feed.tsx`, so filter and sort stay instant as in the original). The feed's place on this list is the architect's to rule on; filter and sort can become plain links if it is refused.
 - **Tokens come from `src/styles/tokens.css`.** That file is generated from `design/dialecta-design-spec.html` by `npm run tokens` (repo root). Never edit it by hand and never hard-code a color, font, radius or shadow that a token provides. `globals.css` sets the canonical page background and font stack from the tokens.
 - **Strings a person reads live in `src/strings.ts`.** Page copy, notices, commenter messages, button labels. The voice hook (`scripts/voice_check.py --strict`) runs over that file in CI, so it must contain no em dashes, en dashes, `--` pauses or stacked exclamation points. Placeholder pages may keep their one-line description inline until they are built.
 - **Shared logic lives in `@dialecta/core`** (`packages/core`): tiers, pillars, archetypes, classification parsing, tier resolution, axis mapping. Do not duplicate it here. Import from `@dialecta/core`; Next transpiles the package source (`transpilePackages` in `next.config.ts`).
 - **Articles come from Supabase, never Ghost.** ADR-001/003 in `docs/decisions/`. `src/lib/articles.ts` reads the `articles` table (`status = 'published'`); the editor writes `body_json` and `body_html` together. Ghost appears only in `scripts/import-ghost.mjs`, a one-time import. No Ghost imports or env in this app.
 - **Data access:** `src/lib/supabase/server.ts` in server code, `src/lib/supabase/client.ts` in islands. Any page that needs env is guarded and renders a notice from `strings.notices` when it is missing.
+- **Each surface's queries live in one `server-only` module** that names every column it reads: `src/components/discourse/data.ts`, `src/app/profile/_lib/data.ts`. This is the architect's `lib/data` rule arriving one surface at a time (`team/architect/architecture/2026-09-21-rebuild-map.md`, rule 1). What leaves those modules for the browser carries no member id and no email.
+- **Two page paths still read on the service role, both stopgaps with a named exit.** The discourse layer reads tiers from `classifications`, which is closed to both client roles, and only for comment ids the session's own row-level read returned. The profile reads one column, the Ghost member id, to join a profile to its six Ghost-keyed tables. The first retires when `security`'s tier-read functions land; the second when identity is keyed on `profiles.id` (the architect's build order, step 2). Add no third: the rebuild map's rule 2 keeps the service key in pipeline code only.
+- **The shell wraps every page** (`src/app/layout.tsx`, `src/components/shell/`). Do not draw a page-level nav or site footer. A `<main>` with no class gets the paper sheet at 820px; a `<main>` with any class styles itself. The header scrolls with the page, so `--nav-height` is 0 and anything sticky uses `top: 0`.
+- **Brass never letters on a light surface** (designer D-27). On paper, brass is a line, a ring, a dot or a fill under ink; text takes ink with a brass underline, or `--brass-deep` (6.69:1 on cream).
 - **Ids are `uuid`.** `articles.ghost_post_id` (`text`) is legacy, only the import script touches it. See `supabase/CLAUDE.md`.
 - **Route params are promises** in Next 15: `const { slug } = await params;`.
 - Voice rules apply to anything a contributor sees. Observational, never evaluative. "This reads as Heat", never "classified as".
@@ -50,7 +55,8 @@ not contain. Until one of them happens, the integration point sits ready and sil
 | `/pact` | Dialecta_Project_Brief.md (Pact page), components/dialecta-pact.html |
 | `/guidebook` | Dialecta_Project_Brief.md (Living Guidebook), Dialecta_Tier_Psychology.md |
 | `/community` | Dialecta_Social_UX_Architecture.md |
-| `/profile/[id]` | Dialecta_Contributor_Identity.md, Dialecta_Growth_Scroll.md |
+| `/profile/[id]` | Dialecta_Contributor_Identity.md, Dialecta_Growth_Scroll.md. `[id]` is a `profiles.id` or a handle |
+| `/profile/fingerprint-lab` | Development only, 404 in production: the renderer on fixture copies of real `axis_scores` rows |
 | `/api/health` | Proves the `@dialecta/core` workspace link |
 | `/sitemap.xml` | `sitemap.ts`; static pages plus every published article, from Supabase |
 | `/robots.txt` | `robots.ts`; allows everything but `/api/` and `/auth/`, points at the sitemap |
