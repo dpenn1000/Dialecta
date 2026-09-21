@@ -5,6 +5,10 @@ positions, and direct queries against the live database. Every claim about live 
 document was measured today rather than read from a doc, because six things in this repository were
 wrong about live state this week and each one was cheap to check.*
 
+**Overtaken during the night by `docs/MORNING-AUDIT-2026-09-21.md`, which starts there.** The rows
+below were measured when written; where later work changed one, the audit carries the current
+state, and the three facts in section 3 are corrected in place.
+
 **Read the first section if you read nothing else.** Everything in it is free to decide, and other
 work is stopped because it has not been.
 
@@ -42,22 +46,26 @@ work is stopped because it has not been.
 
 ## 3. Built and verified, not live
 
-`apps/web` is 28 files and 1,439 lines. `packages/core` is 1,291 lines behind 95 tests. **Nothing in
-either is deployed.** The live site is still Ghost.
+`apps/web/src` is 106 `.ts` and `.tsx` files and 17,648 lines, and `packages/core/src` is 2,363 lines behind
+173 tests (counted with `find` and `wc -l`, late on 2026-09-21; they were 28 files, 1,439 lines, 1,291
+lines and 95 tests when this was first written). **Nothing in either is deployed.** The live site is
+still Ghost.
 
 Landed in the database on 2026-09-20 and 2026-09-21: `profiles.user_id`, `profile_claim_tokens`,
 `claim_profile()`, `current_ghost_member_id()`, `get_own_profile_for_comment()`, the two `comments`
 policies, and three `anon` revokes.
 
-Still written and not applied: `20260920000000_baseline_live_schema.sql`, which carries 27 markers
+Still written and not applied, and since moved to `supabase/migrations/_archived_2026-09-20/` so the
+CLI no longer reads it as pending: `20260920000000_baseline_live_schema.sql`, which carries 27 markers
 saying it has not been checked against live. `architect` found nine of them wrong, including two
 type errors that would leave the database unable to hold Ghost-keyed article ids. It counts 26
 markers where the file says 27, could not reconcile the difference, and refused to adopt either
 number.
 
-**The whole client write surface of the live database is one thing: `comments` INSERT, scoped to the
-caller's own `member_id`.** Every other table is read-only or closed to both client roles. Measured
-today across nine tables.
+**The whole client write surface of the live database was one thing when measured: `comments`
+INSERT, scoped to the caller's own `member_id`.** Every other table was read-only or closed to both
+client roles, across nine tables. A second has since been added on purpose: an author's own
+`articles` INSERT and UPDATE, on named columns only and never the tier (`20260921053807`).
 
 ---
 
