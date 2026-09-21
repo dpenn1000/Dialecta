@@ -706,6 +706,23 @@ export const strings = {
     signInFailed: 'That sign in link was not valid or has expired. Try again.',
   },
 
+  /**
+   * The claim page (app/claim/page.tsx), where a legacy member links their
+   * sign in to the profile they already have. Every failed check gets the
+   * same sentence, so the page never says which one failed (security,
+   * council/security/positions/2026-09-20-path-to-launch.md).
+   */
+  claim: {
+    pageTitle: 'Claim your profile',
+    heading: 'Claim your profile',
+    missingCode: 'This link is missing its claim code. Use the link exactly as it was sent to you.',
+    signInPrompt: "Sign in first. You'll return here to finish linking your profile.",
+    signInCta: 'Sign in',
+    explain: 'This finishes linking your sign in to your existing profile and comments.',
+    submitCta: 'Claim my profile',
+    failed: 'That claim link is not valid, has expired, or was already used. Ask for a new one if you still need it.',
+  },
+
   comment: {
     malformedRequest: 'That request could not be read.',
     signInRequired: 'Sign in to comment.',
