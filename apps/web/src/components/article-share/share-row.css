@@ -1,0 +1,129 @@
+/*
+ * The end-of-article share row. Ported rule for rule from
+ * _theme/assets/css/style.css:3160-3242 (.post-share-end through
+ * .post-share-btn.copied) plus the row subset of its 700px breakpoint
+ * (:3263-3286; the popover rules in that block belong to the spine's own
+ * Share segment, out of scope here per spine.tsx's note). Every color
+ * resolves against an existing token in styles/dialecta-surfaces.css or
+ * styles/tokens.css; none is a literal hex, per apps/web/CLAUDE.md.
+ */
+
+.post-share-end {
+  margin: clamp(40px, 6vw, 64px) auto clamp(20px, 3vw, 32px);
+  max-width: 720px;
+  padding: 24px 0 4px;
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+}
+
+.post-share-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass-warm);
+  margin-bottom: 18px;
+}
+
+.post-share-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.post-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 14px 7px 7px;
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--body);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background 0.15s;
+}
+
+.post-share-btn:hover,
+.post-share-btn:focus-visible {
+  border-color: var(--brass-warm);
+  color: var(--ink);
+  background: var(--brass-pale);
+  outline: none;
+}
+
+.post-share-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--brass-pale);
+  color: var(--brass-deep);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.post-share-btn:hover .post-share-glyph,
+.post-share-btn:focus-visible .post-share-glyph {
+  background: var(--brass-warm);
+  color: var(--bg-white);
+}
+
+.post-share-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.post-share-btn.copied {
+  border-color: var(--brass-mid);
+  background: var(--brass-pale);
+}
+
+.post-share-btn.copied .post-share-glyph {
+  background: var(--brass-mid);
+  color: var(--bg-white);
+}
+
+.post-share-btn.copied .post-share-label::after {
+  content: ' ✓';
+  color: var(--brass-deep);
+  margin-left: 2px;
+}
+
+@media (max-width: 700px) {
+  .post-share-row {
+    gap: 8px;
+  }
+
+  .post-share-btn {
+    padding: 6px 12px 6px 6px;
+  }
+
+  .post-share-glyph {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+
+  .post-share-label {
+    font-size: 9px;
+  }
+}

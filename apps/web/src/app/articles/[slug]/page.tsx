@@ -2,6 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArticleSpine } from '@/components/article-spine/spine';
+import { loadVisibleCommentCount } from '@/components/article-spine/discourse-count';
+import { ArticleTierBadges } from '@/components/article-tier-badges/tier-badges';
+import { DiscourseChip } from '@/components/discourse-chip/discourse-chip';
+import { AuthorBio } from '@/components/author-bio/author-bio';
+import { ShareRow } from '@/components/article-share/share-row';
 import { DiscourseSection, toArticleClaims } from '@/components/discourse/discourse-section';
 import { getPublishedArticle, isSupabaseConfigured } from '@/lib/articles';
 import { isOwnArticle } from '@/lib/article-ownership';
@@ -107,15 +112,19 @@ export default async function ArticlePage({ params, searchParams }: ArticlePageP
   //
   // The layout is post.hbs's: the reading spine (src/components/article-spine,
   // steps 1 to 4 of the 2026-09-21 delta-mechanic port plan), then breadcrumb,
-  // brass title, lede, byline, body, on the same paper sheet the writer at
-  // /write drafts on, then "The Conversation": the discourse layer
+  // brass title, lede, byline, the tier badges and discourse chip, body, the
+  // author bio and share row, on the same paper sheet the writer at /write
+  // drafts on, then "The Conversation": the discourse layer
   // (src/components/discourse), below the body on the same sheet, as post.hbs
-  // placed #dialecta-comments. The article's own tier badge (the separate
-  // #dialecta-tier-badge mount near the meta bar), the discourse byline chip
-  // and the author bio section are not here yet.
+  // placed #dialecta-comments.
   const own = await isOwnArticle(article.id);
   const topic = topicLabel(article.topic);
   const date = publishedDate(article.published_at);
+  // One real count, shared by the spine's Discourse meta and the byline
+  // chip below, so the two numbers can never disagree.
+  // components/article-spine/discourse-count.ts's own header explains why
+  // this is not part of components/discourse/data.ts.
+  const commentCount = await loadVisibleCommentCount({ id: article.id, slug: article.slug });
 
   // ?composer=preview runs the comment composer's stages with nothing sent,
   // for checking the ritual without an account. Development only: a
@@ -131,24 +140,24 @@ export default async function ArticlePage({ params, searchParams }: ArticlePageP
         Steps 1 to 4 of the architect's 2026-09-21 delta-mechanic port
         plan; see components/article-spine/spine.tsx for the full port
         note and what is deliberately not built yet (Reflect's own
-        content, the placement island, Bio and Share's target sections).
+        content and the placement island). Bio and Share's target
+        sections (#post-author-bio, #post-share) render below as of
+        2026-09-21.
       */}
-      <ArticleSpine articleId={article.id} />
+      <ArticleSpine articleId={article.id} discourseCount={commentCount} />
 
       <article className="dialecta-sheet dialecta-article">
         {/*
           post.hbs's figure.post-feature: the first element in the article,
           bled to the card's edges, above the breadcrumb and title (confirmed
           DOM order on dialecta.org, 2026-09-21: post-feature, post-breadcrumb,
-          post-title). Inert today: article.feature_image is never selected
-          (see the field's own comment in lib/articles.ts), so this renders
-          nothing until that lands. A plain <img>, not next/image: the same
+          post-title). The five legacy photos live in the article-media
+          bucket, moved off Ghost on 2026-09-21. A plain <img>, not next/image: the same
           call this app already made for a per-row image whose host is not
           fixed (Avatar, profile/_components/bits.tsx: "avatar_url points at
           Ghost, Gravatar and Supabase Storage, and next/image would need
-          every one of them listed in next.config.ts"). Live serves this one
-          from dialecta.org's Ghost today; ADR-001 retires Ghost, so whatever
-          host this column holds once it exists should not be assumed fixed.
+          every one of them listed in next.config.ts"). The column holds a URL, so
+          its host is not assumed fixed.
         */}
         {article.feature_image ? (
           <figure className="article-feature">
@@ -192,6 +201,20 @@ export default async function ArticlePage({ params, searchParams }: ArticlePageP
         </div>
 
         {/*
+          The article's own tier badges (live's #dialecta-tier-badge) and
+          the discourse byline chip (live's .post-discourse-chip), both
+          near the byline as live places them. ArticleTierBadges renders
+          nothing when the article carries no tier at all; DiscourseChip
+          always renders, with or without a real count.
+        */}
+        <ArticleTierBadges
+          declaredTier={article.declared_tier}
+          aiSuggestedTier={article.ai_suggested_tier}
+          finalTier={article.final_tier}
+        />
+        <DiscourseChip count={commentCount} />
+
+        {/*
           Sanitized immediately before render, with nothing in between (the
           mutation-XSS timing rule in lib/sanitize-html.ts). body_html is
           reachable through more than the editor: see that module's own
@@ -211,6 +234,15 @@ export default async function ArticlePage({ params, searchParams }: ArticlePageP
           body, before the conversation.
         */}
         <div id="post-content-end-sentinel" aria-hidden="true" style={{ height: 1, width: 1 }} />
+
+        {/*
+          The author bio card (live's #post-author-bio) and the
+          end-of-article share row (live's #post-share), where the spine's
+          Bio and Share segments point. Both after the body, before the
+          conversation, matching live's own DOM order.
+        */}
+        <AuthorBio author={article.author} />
+        <ShareRow title={article.title} slug={article.slug} />
 
         {/*
           Rendered in the page's own HTML, not behind a Suspense boundary: a

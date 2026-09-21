@@ -13,19 +13,22 @@
  * exactly: post.hbs's own header comment admits Read's "active" state
  * is not yet scroll-driven ("Future stages will wire scroll-progress for
  * Read"), so hardcoding it here is a faithful port, not a shortcut.
- * Discourse's meta stays empty. Live prints a fixed "12 voices" on every
- * article (post.hbs calls it a placeholder twice), and a number that is
- * the same everywhere is made-up data, which the port-or-rewrite ruling
- * keeps out. The real count from components/discourse/data.ts is a small
- * follow-up.
+ * Discourse's meta is the one real count from
+ * components/article-spine/discourse-count.ts, computed once by the page
+ * and passed down as discourseCount so the byline chip
+ * (components/discourse-chip) can show the same number without a second
+ * read. Live prints a fixed "12 voices" on every article (post.hbs calls
+ * it a placeholder twice); a number that is the same everywhere is made-up
+ * data, which the port-or-rewrite ruling keeps out, so a null count (the
+ * read failed) renders no meta at all rather than a wrong one.
  *
- * Read, Discourse, Bio and Share are plain anchor-jump segments; Bio and
- * Share point at ids this app does not render yet (#post-author-bio, an
- * author bio block; #post-share, an end-of-article share row), so those
- * two are present for the six-segment layout but inert until that
- * content exists, same treatment as Reflect's overlay below. Share's
- * native-share/popover behavior and its /api/share/track call are a
- * different, unstarted feature, not part of this plan.
+ * Read and Bio are plain anchor-jump segments; Bio points at
+ * #post-author-bio, an author bio block (components/author-bio), rendered
+ * as of 2026-09-21. Share points at #post-share, an end-of-article share
+ * row (components/article-share), also rendered as of 2026-09-21, but the
+ * segment itself stays a plain anchor jump: its native-share/popover
+ * behavior and its /api/share/track call are a different, unstarted
+ * feature, not part of this plan.
  */
 import { Fragment } from 'react';
 import { ArticleDeclaration } from '@/components/article-declaration/declaration';
@@ -52,31 +55,34 @@ function SegmentMark({ state }: { state: string }) {
   );
 }
 
-function SpineNav() {
+function SpineNav({ discourseMeta }: { discourseMeta: string | null }) {
   return (
     <nav className="post-spine" aria-label={s.navLabel}>
-      {SEGMENTS.map((seg, i) => (
-        <Fragment key={seg.stage}>
-          <a className="post-spine-segment" href={seg.href} data-stage={seg.stage} data-state={seg.state}>
-            <SegmentMark state={seg.state} />
-            <span className="post-spine-label">{seg.label}</span>
-            {seg.meta ? <span className="post-spine-meta">{seg.meta}</span> : null}
-          </a>
-          {i < SEGMENTS.length - 1 ? <span className="post-spine-rule" aria-hidden="true" /> : null}
-        </Fragment>
-      ))}
+      {SEGMENTS.map((seg, i) => {
+        const meta = seg.stage === 'discourse' ? discourseMeta : seg.meta;
+        return (
+          <Fragment key={seg.stage}>
+            <a className="post-spine-segment" href={seg.href} data-stage={seg.stage} data-state={seg.state}>
+              <SegmentMark state={seg.state} />
+              <span className="post-spine-label">{seg.label}</span>
+              {meta ? <span className="post-spine-meta">{meta}</span> : null}
+            </a>
+            {i < SEGMENTS.length - 1 ? <span className="post-spine-rule" aria-hidden="true" /> : null}
+          </Fragment>
+        );
+      })}
     </nav>
   );
 }
 
 const DECLARE_TITLE_ID = 'post-overlay-declare-title';
 
-export function ArticleSpine({ articleId }: { articleId: string }) {
+export function ArticleSpine({ articleId, discourseCount }: { articleId: string; discourseCount: number | null }) {
   return (
     <SpineClient
       articleId={articleId}
       declareTitleId={DECLARE_TITLE_ID}
-      nav={<SpineNav />}
+      nav={<SpineNav discourseMeta={s.discourseMeta(discourseCount)} />}
       declareOverlay={
         <>
           <div className="post-overlay-kicker">{s.declare.kicker}</div>

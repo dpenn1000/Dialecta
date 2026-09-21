@@ -2672,6 +2672,86 @@ export const strings = {
       titleRest: 'what shifted',
       close: 'Close',
     },
+    /**
+     * The Discourse segment's meta line, and the byline chip's count
+     * (components/discourse-chip) reads the same function so the two never
+     * disagree. Both draw on one real count
+     * (components/article-spine/discourse-count.ts): the published
+     * comments on the article, not a distinct-commenter count. Live prints
+     * a fixed "12 voices" on every article; a number that never changes is
+     * exactly the made-up data this replaces. Null when the count could
+     * not be read, so a caller omits it rather than shows a wrong one.
+     */
+    discourseMeta: (count: number | null) =>
+      count === null ? null : count === 0 ? 'No voices yet' : count === 1 ? '1 voice' : `${count} voices`,
+  },
+
+  /**
+   * The article's own tier badges near the byline (live's
+   * #dialecta-tier-badge), ported from ArticleTierBadge in
+   * _recovered-next/lib/theme/dialecta-article-classification.jsx (lines
+   * 103 to 183): what the author declared at publish, what the engine
+   * read, and the tier the article carries. Reuses discourse/tier-badge.tsx's
+   * TierBadge and discourse.css's dd-tier-row/dd-tier-row-label classes,
+   * the same "label over a badge" shape private-draft.tsx already uses for
+   * a comment's own Engine read / Self declared pair, rather than a second
+   * copy of the same chip. See components/article-tier-badges/.
+   */
+  articleTierBadges: {
+    authorDeclared: 'Author declared',
+    engineRead: 'Engine read',
+    final: 'Final',
+    notDeclared: 'Not declared',
+    notReadYet: 'Not read yet',
+    notFinalYet: 'Not final yet',
+  },
+
+  /**
+   * The byline chip (live's .post-discourse-chip), a single-line affordance
+   * under the meta bar pointing down at the conversation. Ported from
+   * _theme/post.hbs:185-190. The voice count is articleSpine.discourseMeta;
+   * this block carries only the chip's own fixed copy.
+   */
+  discourseChip: {
+    label: 'Discourse',
+    cta: 'join the conversation →',
+  },
+
+  /**
+   * The author bio card at the end of the article body (live's
+   * #post-author-bio), ported from _theme/post.hbs:242-261. Live renders
+   * this from Ghost's primary_author, then patches it client side to the
+   * real Supabase author when the article has one (the byline-override
+   * script). This app reads the real author directly at query time
+   * (lib/articles.ts's author_profile_id join), so there is one render and
+   * no script. See components/author-bio/.
+   */
+  authorBio: {
+    visitProfile: (name: string) => `Visit ${name}'s profile →`,
+  },
+
+  /**
+   * The end-of-article share row (live's #post-share), where the spine's
+   * Share segment points. Ported from _theme/post.hbs:272-298. The five
+   * platform links are plain hrefs built on the server from the article's
+   * own title and canonical URL; Copy link and the native share sheet need
+   * the browser and live in components/article-share/share-actions.tsx, a
+   * recorded client-island exception (apps/web/CLAUDE.md). Live's own
+   * /api/share/track write is not ported.
+   */
+  articleShare: {
+    sectionLabel: 'Share this article',
+    eyebrow: 'Pass it on',
+    x: 'X',
+    facebook: 'Facebook',
+    linkedin: 'LinkedIn',
+    reddit: 'Reddit',
+    email: 'Email',
+    copyLink: 'Copy link',
+    share: 'Share…',
+    nativeShareLabel: 'Share',
+    shareOn: (platform: string) => `Share on ${platform}`,
+    shareViaEmail: 'Share via email',
   },
 
   /**

@@ -1,0 +1,14 @@
+/*
+ * The empty-tier placeholder text ("Not declared" and its two siblings).
+ * The badge itself (TierBadge, .dd-tier) and the column label
+ * (.dd-tier-row-label) are discourse.css's; this file exists for the one
+ * rule that has nowhere else to live. Every color resolves against an
+ * existing token in styles/dialecta-surfaces.css, per apps/web/CLAUDE.md.
+ */
+
+.atb-empty {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-style: italic;
+  color: var(--tertiary);
+}

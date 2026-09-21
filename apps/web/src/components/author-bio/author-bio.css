@@ -1,0 +1,86 @@
+/*
+ * The author bio card. Ported rule for rule from
+ * _theme/assets/css/style.css:2974-3032 (the .post-author-bio block).
+ * Every color resolves against an existing token in
+ * styles/dialecta-surfaces.css; none is a literal hex, per
+ * apps/web/CLAUDE.md. The source's own var(--token, #fallback) pairs drop
+ * the fallback, same as spine.css: this app's token value is the true one,
+ * the source's fallback hex is that component's own approximation of it.
+ * .post-author-bio-blurb's color maps to --body (#3a342c), not
+ * tokens.css's --text-prose (#5e6066): the source's own fallback,
+ * #3a342c, is --body's exact value, not --text-prose's.
+ */
+
+.post-author-bio {
+  margin: clamp(40px, 6vw, 60px) auto clamp(20px, 4vw, 32px);
+  padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 28px);
+  text-align: center;
+  background: var(--paper-bright);
+  border: 1px solid var(--brass-pale);
+  border-radius: 4px;
+  max-width: 580px;
+}
+
+.post-author-bio-avatar {
+  margin: 0 auto 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-author-bio-img,
+.post-author-bio-initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 1px solid var(--brass-pale);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--brass-deep);
+  overflow: hidden;
+}
+
+.post-author-bio-img {
+  object-fit: cover;
+}
+
+.post-author-bio-text {
+  display: block;
+}
+
+.post-author-bio-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--ink);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.post-author-bio-blurb {
+  font-family: var(--font-reading);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--body);
+  margin: 0 auto 14px;
+  max-width: 460px;
+}
+
+.post-author-bio-link {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass-mid);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.post-author-bio-link:hover {
+  color: var(--brass-deep);
+}

@@ -1,0 +1,87 @@
+/*
+ * The discourse byline chip. Ported rule for rule from
+ * _theme/assets/css/style.css:1175-1234 (the .post-discourse-chip block).
+ * Every color below resolves against an existing token in
+ * styles/dialecta-surfaces.css, per apps/web/CLAUDE.md; none is typed as a
+ * literal hex or rgba. rgba(245,223,160,*) is --brass-pale (#f5dfa0),
+ * rgba(236,180,56,*) is --brass-bright (#ecb438), rgba(184,134,46,*) is
+ * --brass-mid (#b8862e): exact hex matches against
+ * styles/dialecta-surfaces.css, carried over as color-mix() the same way
+ * spine.css already treats this source file's rgba literals.
+ */
+
+.post-discourse-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 13px;
+  margin: 12px 0 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--brass-pale) 26%, transparent),
+    color-mix(in srgb, var(--brass-bright) 10%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--brass-mid) 28%, transparent);
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.post-discourse-chip:hover {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--brass-pale) 42%, transparent),
+    color-mix(in srgb, var(--brass-bright) 16%, transparent)
+  );
+  border-color: color-mix(in srgb, var(--brass-mid) 44%, transparent);
+}
+
+.post-discourse-chip-mark {
+  color: var(--brass-warm);
+  letter-spacing: 0.4em;
+  font-size: 0.78em;
+  font-style: normal;
+  opacity: 0.78;
+  margin-right: 2px;
+}
+
+.post-discourse-chip-label {
+  font-weight: 600;
+  color: var(--brass-deep);
+}
+
+.post-discourse-chip-count {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--body);
+  opacity: 0.74;
+}
+
+.post-discourse-chip-cta {
+  font-style: italic;
+  color: var(--brass-mid);
+  font-weight: 500;
+  margin-left: 2px;
+}
+
+@media (max-width: 600px) {
+  .post-discourse-chip {
+    font-size: 0.88rem;
+    padding: 5px 11px;
+    gap: 6px;
+  }
+
+  .post-discourse-chip-cta {
+    display: none;
+  }
+}
