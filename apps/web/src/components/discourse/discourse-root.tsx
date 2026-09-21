@@ -132,7 +132,6 @@ export function DiscourseRoot({ article, data, preview }: DiscourseRootProps) {
         comments={comments}
         unavailable={data.unavailable}
         diagnostic={data.diagnostic}
-        tierless={data.tierless}
         renderedAt={data.renderedAt}
         onReply={canCompose ? handleReply : null}
       />

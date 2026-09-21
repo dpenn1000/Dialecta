@@ -105,12 +105,6 @@ export interface DiscourseData {
   unavailable: boolean;
   /** Development only: why the read failed, shown under the notice. Never set in production. */
   diagnostic?: string;
-  /**
-   * Development only: the tiers could not be read because this machine has no
-   * service role key, so cards render without them under a banner saying so.
-   * A production build withholds the conversation instead (`unavailable`).
-   */
-  tierless?: boolean;
   /** Server clock at render, so relative times hydrate to the same text they rendered with. */
   renderedAt: string;
 }

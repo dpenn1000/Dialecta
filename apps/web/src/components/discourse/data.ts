@@ -23,7 +23,6 @@ import 'server-only';
  */
 import { isTier, resolveFinalTier, type Tier } from '@dialecta/core';
 import { createClient } from '@/lib/supabase/server';
-import { createServiceClient } from '@/lib/supabase/service';
 import type {
   CommentMention,
   CommentStatus,
@@ -42,12 +41,13 @@ type Row = Record<string, unknown>;
 // It never leaves this file: toComment() does not copy it.
 const COMMENT_COLUMNS = 'id, parent_id, member_id, member_name, body, status, created_at, mentions';
 
-// The public half of a classification: what every card shows.
-const TIER_COLUMNS = 'comment_id, ai_suggested_tier, self_declared_tier, final_tier, specificity_score, classified_at';
-
-// The private half, fetched only for the viewer's own comment ids.
-const READING_COLUMNS =
-  'comment_id, claim_text, strength, commenter_message, specificity_score, emotion, article_engagement, borderline_flag, borderline_other_tier, classified_at';
+// A classification comes through two SECURITY DEFINER functions, since the
+// table itself is closed to both client roles (migration 20260921063139).
+// comment_tiers returns the public half every card shows: comment_id,
+// ai_suggested_tier, self_declared_tier, final_tier, specificity_score,
+// classified_at. own_comment_readings returns the private half, the commenter
+// message among it, and answers only for the caller's own comments.
+type ClassificationRead = 'comment_tiers' | 'own_comment_readings';
 
 /** Enough for any article this platform has; the recovered read had no limit at all. */
 const COMMENT_LIMIT = 500;
@@ -188,24 +188,21 @@ async function readComments(supabase: ServerClient, article: { id: string; slug:
 }
 
 /**
- * The newest classification per comment. classifications is closed to the
- * public key (policy classifications_service_only, `using (false)`), so this
- * runs on the service role, and only for ids the session's own RLS-scoped
- * read of comments already returned. It can reveal a tier for nothing the
- * viewer could not already see. A SECURITY DEFINER function with the same
- * scope would let this read drop the service role; that is a migration, and
- * it is the convener's to land.
+ * The newest classification per comment, read on the session's own client.
+ * Each function restates the comments read policies (published, or the
+ * caller's own), so it returns a tier for nothing this session could not
+ * already read. An empty list returns before the call: own_comment_readings
+ * refuses anon, and a signed-out reader has no comments of their own.
  */
-async function readLatest(columns: string, commentIds: string[]): Promise<Map<string, Row>> {
+async function readLatest(
+  supabase: ServerClient,
+  fn: ClassificationRead,
+  commentIds: string[],
+): Promise<Map<string, Row>> {
   const latest = new Map<string, Row>();
   if (commentIds.length === 0) return latest;
-  const service = createServiceClient();
-  const { data, error } = await service
-    .from('classifications')
-    .select(columns)
-    .in('comment_id', commentIds)
-    .order('classified_at', { ascending: false });
-  if (error) throw new Error(`classifications read failed: ${error.message}`);
+  const { data, error } = await supabase.rpc(fn, { comment_ids: commentIds });
+  if (error) throw new Error(`${fn} failed: ${error.message}`);
   for (const row of rows(data)) {
     const id = str(row.comment_id);
     if (id && !latest.has(id)) latest.set(id, row);
@@ -231,7 +228,6 @@ function toComment(
   row: Row,
   tierRow: Row | undefined,
   memberId: string | null,
-  failClosed: boolean,
 ): DiscourseComment | null {
   const id = str(row.id);
   const status = statusOrNull(row.status);
@@ -248,7 +244,7 @@ function toComment(
   const tier = toTier(tierRow);
   let withheld: Withheld | null = null;
   if (status === 'suppressed') withheld = 'suppressed';
-  else if (!tier && failClosed) withheld = 'unread';
+  else if (!tier) withheld = 'unread';
   else if (tier?.final === 'breach') withheld = 'breach';
 
   const parentId = str(row.parent_id);
@@ -300,14 +296,6 @@ export async function loadDiscourse(article: { id: string; slug: string }): Prom
     return { viewer: { kind: 'unavailable' }, comments: [], ownReadings: [], unavailable: true, renderedAt };
   }
 
-  // Without the service role nothing can read a tier (see readLatest). In a
-  // production build that withholds the conversation. Under `next dev` the
-  // cards render untiered with a banner, so the layout can be checked on a
-  // machine that has no service key; nothing here is served that the public
-  // key could not already read from comments directly.
-  const serviceReady = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY);
-  const tierless = !serviceReady && process.env.NODE_ENV === 'development';
-
   let viewer: ViewerState = { kind: 'signed-out' };
   let memberId: string | null = null;
   try {
@@ -320,21 +308,21 @@ export async function loadDiscourse(article: { id: string; slug: string }): Prom
   try {
     const commentRows = await readComments(supabase, article);
     const ids = commentRows.map((r) => str(r.id)).filter((id): id is string => id !== null && UUID_RE.test(id));
-    const tiers = tierless ? new Map<string, Row>() : await readLatest(TIER_COLUMNS, ids);
+    const tiers = await readLatest(supabase, 'comment_tiers', ids);
 
     const comments: DiscourseComment[] = [];
     for (const row of commentRows) {
       const id = str(row.id);
-      const comment = toComment(row, id ? tiers.get(id) : undefined, memberId, !tierless);
+      const comment = toComment(row, id ? tiers.get(id) : undefined, memberId);
       if (comment) comments.push(comment);
     }
 
     const ownIds = comments.filter((c) => c.isOwn).map((c) => c.id);
-    const readingRows = tierless ? new Map<string, Row>() : await readLatest(READING_COLUMNS, ownIds);
+    const readingRows = await readLatest(supabase, 'own_comment_readings', ownIds);
     const ownReadings: OwnReading[] = [];
     for (const [commentId, row] of readingRows) ownReadings.push(toReading(commentId, row));
 
-    return { viewer, comments, ownReadings, unavailable: false, renderedAt, ...(tierless ? { tierless } : {}) };
+    return { viewer, comments, ownReadings, unavailable: false, renderedAt };
   } catch (err) {
     console.error('discourse: conversation read failed', err);
     // The writer's diagnostics pattern (strings.article.diagnostics): name the

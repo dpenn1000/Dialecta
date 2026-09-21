@@ -439,14 +439,12 @@ export interface DiscourseFeedProps {
   unavailable: boolean;
   /** Development only, from data.ts. */
   diagnostic?: string | undefined;
-  /** Development only, from data.ts: the cards carry no tiers on this machine. */
-  tierless?: boolean | undefined;
   renderedAt: string;
   /** Null when the viewer cannot comment, which hides Reply, as the recovered feed did. */
   onReply: ((c: DiscourseComment) => void) | null;
 }
 
-export function DiscourseFeed({ comments, unavailable, diagnostic, tierless, renderedAt, onReply }: DiscourseFeedProps) {
+export function DiscourseFeed({ comments, unavailable, diagnostic, renderedAt, onReply }: DiscourseFeedProps) {
   const now = useNow(renderedAt);
   const [filter, setFilter] = useState<Filter>('all');
   const [sort, setSort] = useState<SortKey>('quality');
@@ -494,7 +492,6 @@ export function DiscourseFeed({ comments, unavailable, diagnostic, tierless, ren
 
   return (
     <div className="dd-feed">
-      {tierless ? <p className="dd-preview dd-preview--feed">{s.feed.devTierless}</p> : null}
       <TopologyBar comments={comments} filter={filter} onFilter={setFilter} />
       {comments.length > 0 ? <ControlBar filter={filter} onFilter={setFilter} sort={sort} onSort={setSort} /> : null}
 

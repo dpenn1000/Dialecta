@@ -1022,9 +1022,6 @@ export const strings = {
     feed: {
       label: 'Comments',
       unavailable: "The conversation couldn't be loaded. Reloading the page tries again.",
-      /** Development only: shown when this machine has no service role key. */
-      devTierless:
-        'Development: tiers are not readable here because SUPABASE_SERVICE_ROLE_KEY is not set, so these cards carry none. A production build withholds the conversation instead of showing it untiered.',
       noneInTier: (tier: string) => `No ${tier} comments yet.`,
     },
 
