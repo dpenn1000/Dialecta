@@ -79,10 +79,19 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
   not happen. Tonight's builders were told not to run git, so nothing broke. A future session
   following `CLAUDE.md` would do it. Either `land.mjs` becomes the convener's tool, or your rule gets
   an exception for a seat's own folder, and the two lines should agree.
+  **The architect's recommendation:** change `land.mjs`'s default to push the seat's own branch and print
+  the merge request, and keep the direct push to `main` behind an explicit flag only the convener uses.
+  The script's fence and gates stay; only its destination changes, so the tooling enforces your rule
+  instead of contradicting it. Governance rather than production safety, since a push to `main` does
+  not deploy, so there is no urgency.
 - **Line 68 is a locked decision that `design/dialecta-design-spec.html` is canonical.** The port
   ruling found `style.css` authoritative, you said the Ghost version is what was settled for the live
   build, and every builder tonight worked from `style.css`. A session reading line 68 could "fix" all
   of it back to the spec. It is marked "do not re-open without Dan asking", so it is yours to re-open.
+  **The architect's recommendation:** whichever you pick, generate `tokens.css` from exactly one source.
+  The generator (`npm run tokens`) and its drift check (`npm run tokens -- --check`) already exist. Name
+  the one source, make the other an output or retire it, and run the check in CI so the two can never
+  diverge silently again. `designer` should own which source; the single-source rule is the architect's.
 
 ---
 
