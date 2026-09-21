@@ -21,3 +21,5 @@ grant select (
   status, created_at, published_at, delta_acknowledged, hardened_at, parent_id,
   mentions
 ) on public.comments to anon, authenticated;
+
+notify pgrst, 'reload schema';

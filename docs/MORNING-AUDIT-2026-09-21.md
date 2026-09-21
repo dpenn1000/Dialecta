@@ -36,7 +36,10 @@ Ranked by what they unblock. The first three are between you and publishing an a
 | **2.1** | **Link your login to your profile.** Sign in once at `/login`, then a claim token has to be issued for your profile and redeemed. `claim_profile()` exists and works; nothing has ever called it | Publishing, commenting as yourself, and opening `/analytics` in production | Ten minutes with a session that can write |
 | **2.2** | **Retire the Ghost id.** `articles.ghost_post_id` is `NOT NULL`, so an article that never lived in Ghost cannot be saved. `alter table public.articles alter column ghost_post_id drop not null;` | Native articles | One line. It is the Ghost-retirement decision in miniature, which is why nobody made it for you |
 | **2.3** | **An author insert policy on `articles`.** Drafted by `builder` and deliberately not applied: it keys on `current_ghost_member_id()` plus `is_author`, and matches nobody until 2.1 is done | Publishing | Apply after 2.1 |
-| **2.4** | **Check one env variable name.** `apps/web/src/lib/supabase/service.ts:30` reads `SUPABASE_SERVICE_ROLE_KEY`; the root `.env` may call it `SUPABASE_SERVICE_KEY`. If they differ, every comment's classification insert fails | The comment pipeline | A minute. No session could read your env files, which is the guard working |
+| **2.4** | **Check that `apps/web`'s own env file defines `SUPABASE_SERVICE_ROLE_KEY`.** The name split is deliberate, not a mismatch: `apps/web/.env.example` uses `SUPABASE_SERVICE_ROLE_KEY` and says not to reintroduce the old name, while the root uses `SUPABASE_SERVICE_KEY` for the legacy `api/` and `scripts/`. **Next.js loads env files from the app's own directory, so the root `.env` does not enter into it.** While you are there, `apps/web/.env.example` is missing two names the code reads: `ANALYTICS_ADMIN_UIDS` and `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` | The comment pipeline | A minute. *Corrected by the architect seat: this row first pointed you at the root `.env`, which was the wrong file* |
+| **2.8** | **The architect seat's name: `architect` or `engineer`.** You asked it tonight. Its argument is in your "engineerL architect seat handoff" session | Nothing, but it is yours | A word |
+| **2.9** | **Give the architect seat read-only database access.** It currently cannot reach the database at all, and the connector every session has used is not read-only. From `C:\Dialecta`: `claude mcp add --scope project --transport http supabase-dialecta-ro "https://mcp.supabase.com/mcp?project_ref=mguulnibvzusfvyuowwh&read_only=true&features=database,debugging,docs"`, authorise once, then add the tool to the seat's frontmatter | Every sweep the seat runs | Five minutes. Full list in `docs/handoffs/dialecta-handoff-2026-09-21-architect-access.md` on its branch. **Not run by the convener: adding a connector changes your configuration, which is yours to do** |
+| **2.10** | **Two identity decisions that block the most, both through `decider`** since each amends a spec or an ADR-level choice. First: a person is keyed three ways and an article two, 14 of 18 Ghost-keyed person columns have no foreign key, and `opinion_map_self_read` compares Ghost ids to the JWT subject, so no Supabase Auth reader can see their own rows (`architect-05`). Second: "forming" is an archetype in the spec and `packages/core` and a confidence level on live (`architect-03`) | Most of what comes after the prototype | A debate each |
 | **2.5** | **The price rise trigger.** The membership page raises the price on the hundredth member; `legal` and `philosopher` ruled to publish a date. A third option nobody has argued: first hundred or one year, whichever comes first | The membership page. `exchange/open/2026-09-21-convener-04` | A sentence |
 | **2.6** | **The Underwriter price itself**, $50 against $100. Both seats support the ladder | The gifting rebuild and the Vercel licence | Free to decide |
 | **2.7** | **Colour: rings by axis or by territory.** Pending the fingerprint debate, section 5 | The fingerprint | After you read the debate |
@@ -108,8 +111,19 @@ all fingerprint data belongs to three demo profiles, and no code in the reposito
 
 **No Supabase client in `apps/web` is type-checked against the schema.** `supabase/types.ts` is
 imported by nothing, so a query naming a column that does not exist compiles. That one missing type
-parameter is behind two separate failures tonight. Now that the article columns exist it can be
-wired, and it is the architect seat's.
+parameter is behind two separate failures tonight.
+
+**It cannot simply be wired yet, because the type file is two days stale.** It was generated
+2026-09-19 and knows nothing about tonight: no `slug`, `title`, `excerpt`, `published_at`,
+`body_html` or `author_profile_id` on `articles`, no `profiles.user_id`, no `profile_claim_tokens`.
+Verified by searching it. Wiring it today would type the app against the old schema. The order,
+set by the architect seat: regenerate with `npm run types`, then wire the four clients
+(`lib/supabase/client.ts:15`, `middleware.ts:31`, `server.ts:21`, `service.ts:34`), then fix what
+`tsc` surfaces. The seat has a calibrated `ast-grep` rule that finds exactly those four and nothing
+else, which serves as the acceptance test. `builder` implements.
+
+**`apps/web` has no tests at all**, and classification rows carry no prompt version although
+`packages/core/CLAUDE.md` requires one (`architect-06`, `-07`).
 
 ---
 
@@ -121,6 +135,16 @@ wired, and it is the architect seat's.
 - I misquoted a migration inside quotation marks in `SUBSCRIPTION-MODEL.md`: "cannot pay themselves"
   for "didn't pay themselves", hardship for honour. Corrected, and the correction is visible.
 - I briefed the writer as the editor component. You meant the whole Ghost replacement.
+- **I told every agent tonight that the database connector's `execute_sql` is read-only. It is not;
+  it runs anything.** No agent wrote through it as far as the record shows, since each used
+  `apply_migration` for writes, but the safety assumption every brief rested on was false. This is
+  part of why 2.9 matters.
+- **I named three migration files with timestamps I made up** rather than the versions the database
+  recorded. The CLI compares by timestamp alone, so all three looked like pending migrations and a
+  `db push` would have tried to run them again. Renamed to their live versions, and the email-fix
+  file now carries the `notify pgrst` line that live actually ran. The wider drift from before
+  tonight, including three live migrations with no file anywhere on disk, is `migrator`'s, and the
+  architect seat has the full reconciliation (`architect-04`).
 
 Each was caught by a seat or by measuring, and each is corrected in the file where it happened.
 
