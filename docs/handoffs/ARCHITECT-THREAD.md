@@ -44,8 +44,17 @@ fail, since `archetype_id` is NOT NULL with no default. **Still open, needs a re
 **It corrected the convener.** My revoke migration closed the three functions I named and verified.
 `architect` measured the whole schema and found four more holding `anon` EXECUTE, and established
 why the pattern keeps failing: the per-schema `REVOKE ... FROM PUBLIC` form is accepted, succeeds,
-and does nothing. Only the global form works. One of the four is revoked; three trigger functions
-are left open with the reasoning recorded.
+and does nothing. Only the global form works. Three trigger functions are left open with the
+reasoning recorded.
+
+**Correction, 2026-09-21.** This paragraph first said one of the four was revoked. It was not. The
+convener revoked `initialise_contributor_axes` from `anon` and left `PUBLIC` holding it, and every
+role inherits from `PUBLIC`, so `anon` could still execute it. The convener never re-measured that
+function after revoking it. `architect` caught it from the ACL, `{=X/postgres, ...}`, where the
+leading `=X` is `PUBLIC`. Closed properly by
+`revoke_public_execute_on_initialise_contributor_axes` and measured afterwards: `anon` false,
+`authenticated` true. It is the mirror of the night before, when the migrations revoked from
+`PUBLIC` and left `anon`. **On Supabase a function needs both revoked, and needs measuring after.**
 
 **On the baseline migration** it counts 26 markers where the file says 27, could not reconcile the
 difference, and refused to adopt either number. Nine markers are wrong, two of them type errors
