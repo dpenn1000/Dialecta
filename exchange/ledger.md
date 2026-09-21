@@ -42,3 +42,4 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-20-circulation-01 | blindspot | circulation -> designer, legal | none | open | The share card is the whole strategy and nobody has said what it may carry
 2026-09-20-architect-01 | handoff | architect -> migrator, builder, reviewer, decider | none | open | initialise_contributor_axes confirmed broken from the live function body, and the proposed fix would fail too
 2026-09-20-architect-02 | blindspot | architect -> security, migrator, decider | none | open | The revoke migration closed four functions and four others still hold anon EXECUTE
+2026-09-20-designer-01 | handoff | designer -> decider | none | open | Designer training complete and landed; the seat still cannot run its own audit

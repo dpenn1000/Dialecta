@@ -80,3 +80,24 @@ above noise, which is recorded as a dead end rather than retried.*
 | todo | `Evercoder/culori` or `gka/chroma.js` | Would replace the hand-rolled CIEDE2000 in `tier-palette-audit.py` if the audit moves into CI | Weigh against the script currently having zero dependencies |
 | todo | `dequelabs/axe-core` or `pa11y/pa11y` | The rendered-page half of D-18. Catches what a token file cannot, such as opacity on dimmed filter buttons | MPL-2.0 and LGPL-3.0 respectively |
 | todo | `system-fonts/modern-font-stacks`, CC0 | What Dialecta's four webfaces fall back to before they load, classified by typeface style | Bears on whether the page feels native in the first 200ms |
+
+## Added in sprint 4: making the generative mode possible
+
+*Scanned 2026-09-20, after Dan asked for this seat to work in both modes on request. These are
+chosen for what they let the seat DO, not for what they teach it. Verified via the GitHub API at
+the time of scanning.*
+
+| State | Lead | Why it matters here | Note |
+| --- | --- | --- | --- |
+| todo | `microsoft/playwright`, Apache-2.0, 96,417 stars | The single highest-value addition. Real screenshots headlessly, breakpoint testing at 380px, and visual regression against the design spec. Turns "look at it" from a session-only act into something CI repeats | This repo has no visual testing of any kind: `devDependencies` is empty and nothing references playwright, puppeteer, percy or chromatic. Pairs with D-18, which currently proposes only a token-level contrast check |
+| todo | `uswds/uswds`, 7,198 stars | A public-sector design system with a published spacing and type token set and accessibility as a floor rather than a trade. The closest worked example of what D-15, D-20 and D-25 are asking for | Licence reads NOASSERTION; check terms before copying anything, though the value here is the shape rather than the values |
+| todo | `carbon-design-system/carbon`, Apache-2.0, 9,471 stars | The same, from IBM, with an explicit type scale and an 8px grid. Read alongside USWDS so the shape is drawn from two systems rather than one | |
+| todo | `tabler/tabler-icons`, MIT, 21,740 stars | Over 6,100 icons under a clean MIT licence. Dialecta has seven bespoke tier icons and no general UI set, and the charter names iconography as this seat's | `lucide-icons/lucide` is the alternative at 24,628 stars, but its licence reads NOASSERTION where Tabler's is plainly MIT |
+| todo | `adobe-fonts/source-serif`, OFL-1.1, 2,377 stars | Dialecta already uses Source Serif 4 as `--font-reading`. The upstream carries the optical sizes, which bear directly on D-16 and the measure | Also the licence that decides whether the face can be self-hosted rather than pulled from Google Fonts |
+| todo | `rough-stuff/rough`, MIT, 21,190 stars | Hand-drawn, sketchy graphics. Flagged as a lead to check against the aesthetic, not as a recommendation | Likely wrong for Dialecta. Parchment, letterpress and wood frame are refined organic; sketchy is a different thing. Read it to rule it out deliberately rather than by omission |
+
+**Dead end, recorded twice.** Keyword searches for paper grain, `feTurbulence` texture, noise
+overlays and organic pattern libraries returned nothing above noise on both 2026-09-19 and
+2026-09-20. There is no credible off-the-shelf repository for the aesthetic Dialecta and Trinity
+share. The only reference implementation is the one in `2026-trinity-apex-design-system.md`, and
+that is Dan's own. Stop searching for it.
