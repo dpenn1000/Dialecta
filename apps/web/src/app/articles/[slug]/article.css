@@ -14,3 +14,30 @@
   font-style: italic;
   color: var(--brass-deep);
 }
+
+/*
+ * The featured image (Regression 4). Live bleeds it to the card's own
+ * edges: figure.post-feature carries a negative margin equal to the
+ * article's own top/side padding, so the image spans full width while the
+ * title beneath keeps the normal inset. --sheet-pad-x and --sheet-pad-top
+ * are the same custom properties .dialecta-sheet sets on itself
+ * (src/styles/dialecta-surfaces.css) for that padding, read here rather
+ * than repeated, so the bleed tracks the card's own responsive clamp() at
+ * every width without a second number to keep in sync. A block element's
+ * width is auto by default, so pulling the side margins negative is enough
+ * to widen it; no explicit width is needed. line-height: 0 drops the
+ * inline image's descender gap, and overflow: hidden on the figure clips
+ * the image to the card's own top corners instead of squaring them off.
+ */
+.article-feature {
+  margin: calc(-1 * var(--sheet-pad-top)) calc(-1 * var(--sheet-pad-x)) 32px;
+  line-height: 0;
+  overflow: hidden;
+  border-radius: 4px 4px 0 0;
+}
+
+.article-feature-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}

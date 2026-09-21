@@ -17,6 +17,21 @@ export interface ArticleSummary {
 export interface Article extends ArticleSummary {
   body_html: string;
   declared_claims: unknown[];
+  /**
+   * The URL live renders above the title (designer's live-vs-localhost
+   * audit, Regression 4). Optional and NOT selected below: `articles` has
+   * no column for it today, verified against the live schema (Supabase MCP,
+   * project mguulnibvzusfvyuowwh, 2026-09-21) across all 32 public tables,
+   * and scripts/import-ghost.mjs never requested `feature_image` in its
+   * Ghost Content API `fields` param either, so even the Ghost-era rows'
+   * raw payload was never captured. Selecting a column that does not exist
+   * fails the whole query (PostgREST 400), which would take down every
+   * article page and the home feed through the `error` throw below, so this
+   * stays unselected until a migration adds the column. Once it exists, add
+   * it to SUMMARY_COLUMNS and this activates: ArticlePage already renders it
+   * behind `article.feature_image ? ... : null`.
+   */
+  feature_image?: string | null;
 }
 
 /**

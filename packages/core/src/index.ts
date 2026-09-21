@@ -136,3 +136,13 @@ export {
 } from './fingerprint-svg';
 
 export { RETURN_PATH_FALLBACK, RETURN_PATH_MAX_LENGTH, safeReturnPath } from './return-path';
+
+export {
+  DAY_MS,
+  HOUR_MS,
+  MINUTE_MS,
+  WEEK_MS,
+  relativeTimeParts,
+  type RelativeTimeParts,
+  type RelativeTimeUnit,
+} from './relative-time';

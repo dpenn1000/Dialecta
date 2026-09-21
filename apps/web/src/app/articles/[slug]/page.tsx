@@ -122,6 +122,27 @@ export default async function ArticlePage({ params, searchParams }: ArticlePageP
   return (
     <main className="dialecta-wide">
       <article className="dialecta-sheet dialecta-article">
+        {/*
+          post.hbs's figure.post-feature: the first element in the article,
+          bled to the card's edges, above the breadcrumb and title (confirmed
+          DOM order on dialecta.org, 2026-09-21: post-feature, post-breadcrumb,
+          post-title). Inert today: article.feature_image is never selected
+          (see the field's own comment in lib/articles.ts), so this renders
+          nothing until that lands. A plain <img>, not next/image: the same
+          call this app already made for a per-row image whose host is not
+          fixed (Avatar, profile/_components/bits.tsx: "avatar_url points at
+          Ghost, Gravatar and Supabase Storage, and next/image would need
+          every one of them listed in next.config.ts"). Live serves this one
+          from dialecta.org's Ghost today; ADR-001 retires Ghost, so whatever
+          host this column holds once it exists should not be assumed fixed.
+        */}
+        {article.feature_image ? (
+          <figure className="article-feature">
+            {/* eslint-disable-next-line @next/next/no-img-element -- remote host not fixed; see the comment above */}
+            <img className="article-feature-image" src={article.feature_image} alt={article.title} />
+          </figure>
+        ) : null}
+
         <div className="dialecta-meta dialecta-breadcrumb">
           <Link href="/">{strings.articlePage.breadcrumb}</Link>
           {topic ? (

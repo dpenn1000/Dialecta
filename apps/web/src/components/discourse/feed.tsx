@@ -40,7 +40,7 @@
  *     highlighted, unlinked, until the profile route settles what its id is.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { TIER_IDS, tierName, type Tier } from '@dialecta/core';
+import { MINUTE_MS, TIER_IDS, relativeTimeParts, tierName, type Tier } from '@dialecta/core';
 import { strings } from '@/strings';
 import { TierBadge, TierIcon, tierLabel } from './tier-badge';
 import type { CommentMention, DiscourseComment } from './types';
@@ -56,25 +56,51 @@ const TIER_RANK: Readonly<Record<Tier, number>> = Object.fromEntries(TIER_IDS.ma
   number
 >;
 
-const MS_MINUTE = 60_000;
-const MS_HOUR = 60 * MS_MINUTE;
-const MS_DAY = 24 * MS_HOUR;
-const MS_WEEK = 7 * MS_DAY;
-
 /**
- * The recovered relativeTime(), with one change: past five weeks it gives
- * the date, where the recovered helper counted weeks forever.
+ * Matches live exactly (designer's live-vs-localhost audit, Regression 6:
+ * both comments read "20w ago" on dialecta.org, "Apr 30, 2026" here). The
+ * Discourse Layer UX spec names the timestamp's type treatment and leaves
+ * the format open, so live is the tie-break. Bucket math is @dialecta/core's
+ * relativeTimeParts, pure and tested (packages/core/test/relative-time.test.ts);
+ * this only chooses the words, which stay this app's own voice.
  */
 function relativeTime(iso: string, now: number): string {
-  const t = new Date(iso).getTime();
-  if (Number.isNaN(t)) return '';
-  const diff = Math.max(0, now - t);
-  if (diff < MS_MINUTE) return s.time.justNow;
-  if (diff < MS_HOUR) return s.time.minutes(Math.floor(diff / MS_MINUTE));
-  if (diff < MS_DAY) return s.time.hours(Math.floor(diff / MS_HOUR));
-  if (diff < MS_WEEK) return s.time.days(Math.floor(diff / MS_DAY));
-  if (diff < 5 * MS_WEEK) return s.time.weeks(Math.floor(diff / MS_WEEK));
-  return new Date(t).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  const parts = relativeTimeParts(iso, now);
+  if (!parts) return '';
+  switch (parts.unit) {
+    case 'now':
+      return s.time.justNow;
+    case 'minutes':
+      return s.time.minutes(parts.count);
+    case 'hours':
+      return s.time.hours(parts.count);
+    case 'days':
+      return s.time.days(parts.count);
+    case 'weeks':
+      return s.time.weeks(parts.count);
+  }
+}
+
+/**
+ * The full date and time behind a relative stamp, for the <time> element's
+ * title (hover/long-press). Always UTC, like the article page's own
+ * publishedDate(): the same instant must format to the same string on the
+ * server's render and the browser's hydration regardless of which zone
+ * either machine is in, since a difference here would be a second hydration
+ * mismatch alongside the one useNow() already guards against below.
+ */
+function fullDateTime(iso: string): string {
+  const t = new Date(iso);
+  if (Number.isNaN(t.getTime())) return '';
+  return t.toLocaleString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'UTC',
+    timeZoneName: 'short',
+  });
 }
 
 /** The server's clock on the first render, the browser's after it, refreshed each minute. */
@@ -82,7 +108,7 @@ function useNow(renderedAt: string): number {
   const [now, setNow] = useState(() => new Date(renderedAt).getTime());
   useEffect(() => {
     setNow(Date.now());
-    const i = setInterval(() => setNow(Date.now()), MS_MINUTE);
+    const i = setInterval(() => setNow(Date.now()), MINUTE_MS);
     return () => clearInterval(i);
   }, []);
   return now;
@@ -349,7 +375,7 @@ function CommentCard({
               {name}
               {comment.isOwn ? <span className="dd-you">{s.card.you}</span> : null}
             </div>
-            <time className="dd-when" dateTime={comment.createdAt}>
+            <time className="dd-when" dateTime={comment.createdAt} title={fullDateTime(comment.createdAt)}>
               {relativeTime(comment.createdAt, now)}
             </time>
           </div>
