@@ -375,6 +375,7 @@ Each was caught by a seat or by measuring, and each is corrected in the file whe
 | The subscription model | `docs/SUBSCRIPTION-MODEL.md` |
 | The architect seat | `docs/handoffs/ARCHITECT-THREAD.md` |
 | The membership page | `council/designer/research/membership-prototype.html` |
+| The live and local sites compared, six regressions ranked | `council/designer/research/2026-09-21-live-vs-localhost/REPORT.md` |
 | The analytics spec | `team/builder/2026-09-20-analytics-spec.md` |
 | Every seat and its training | `docs/COUNCIL.md` |
 | The production fix for `/api/comments` and uploads | `council/security/hotfix-2026-09-21-api-comments/README.md` |
