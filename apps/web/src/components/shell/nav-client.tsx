@@ -24,6 +24,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { loginHref } from '@/lib/return-path';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { signOut } from './actions';
 import logo from './dialecta-logo.png';
@@ -222,7 +223,7 @@ export function NavDrawer({ items, member, labels }: NavDrawerProps) {
                 </button>
               </form>
             ) : (
-              <Link href="/login" className="nav-drawer-pill" onClick={close}>
+              <Link href={loginHref(pathname)} className="nav-drawer-pill" onClick={close}>
                 {labels.signIn}
               </Link>
             )}

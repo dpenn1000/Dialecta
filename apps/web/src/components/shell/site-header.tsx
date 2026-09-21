@@ -35,6 +35,7 @@ import { StripCurveIcon } from './icons';
 import { readShellMember } from './member';
 import { NavDrawer, PrimaryNav, type DrawerLabels } from './nav-client';
 import { navItems } from './nav-items';
+import { SignInLink } from './sign-in-link';
 
 export async function SiteHeader() {
   const member = await readShellMember();
@@ -84,9 +85,7 @@ export async function SiteHeader() {
                 <span className="nav-member-link">{memberChip}</span>
               )
             ) : (
-              <Link href="/login" className="nav-signin-link">
-                {s.signIn}
-              </Link>
+              <SignInLink className="nav-signin-link">{s.signIn}</SignInLink>
             )}
             <NavDrawer items={items} member={member} labels={drawerLabels} />
           </div>

@@ -50,7 +50,7 @@ export default async function ArticlesPage() {
           ) : (
             articles.map((article) => <ArticleCard key={article.id} article={article} />)
           )}
-          {signedIn ? null : <JoinCta />}
+          {signedIn ? null : <JoinCta returnTo="/articles" />}
         </div>
       </div>
     </main>

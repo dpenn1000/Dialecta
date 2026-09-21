@@ -23,6 +23,7 @@
  */
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
+import { loginHref } from '@/lib/return-path';
 import { strings } from '@/strings';
 import s from './pact.module.css';
 
@@ -67,12 +68,12 @@ export function PactCommitment({ member }: { member: boolean }) {
         </p>
         <p className={s.signedOutNote}>{t.signedOut}</p>
         <div className={s.commitWrap}>
-          <Link href="/login" className={s.brass}>
+          <Link href={loginHref('/pact')} className={s.brass}>
             {t.signInToCommit}
           </Link>
         </div>
         <p className={s.joinNote}>
-          {t.noAccount} <Link href="/login">{t.join}</Link>.
+          {t.noAccount} <Link href={loginHref('/pact')}>{t.join}</Link>.
         </p>
       </div>
     );
