@@ -192,6 +192,7 @@ staging, since it is a plan and cost choice.
 | **The header scrolls with the page instead of staying fixed.** A fixed header would cover the writer's sticky stage bar. Everything else about the two-bar nav, its icons and the drawer is ported from live | `builder` | `apps/web/src/components/shell/`, commit `18ccd76` |
 | **One Sign in link and no Join button**, because the magic link does both. Write shows to visitors, since anyone can draft | `builder` | same |
 | **The downstream runner, ADR-005**: `after()` in the action that resolves a comment, plus a nightly Vercel Cron job that reconciles and replays. No queue and no database triggers until the nightly run passes half its time limit or finds lost work on two nights in seven; both numbers go on `/analytics`, and they are yours | `decider` | `docs/decisions/ADR-005-downstream-runner.md` |
+| **The fingerprint's halo scales with the figure's size**, by size / 400. At 400, the reference size, the render is pixel-identical to before; below it the old fixed-pixel halo covered most of the shape. Compare `docs/fingerprint-examples/live-vs-new/halo-scaled-mature.png` | `builder` | commit `d4819f8` |
 | **The content pages add no client component.** Every filter, tab and step of the Pact's tier exercise is a plain link, so all of it works without script. Where the live Pact and its prototype differ, the live template won, since it is what the three members signed | `builder` | commit `95bac6c` |
 | **The comment feed is a client island**, so its filter and sort stay instant as in the original. The architect's list names six islands and not this one; filter and sort can become plain links instead | `builder` | `apps/web/src/components/discourse/`, commit `1cb785a` |
 | **"Forum density" is now "Graduations"** on the profile, because each comment's tier sits in a table the public key cannot read. And one addition to the fingerprint beyond the recovered engine: a Newborn's potential ring draws darker. One value (`guide.newbornOpacity`) turns it off | `builder` | `apps/web/src/app/profile/`, commit `84c1fd4` |
@@ -250,9 +251,6 @@ staging, since it is a plan and cost choice.
 
 **Still running:**
 
-- **A builder on `/fingerprint`'s weight**: drawing the figures on the server so the page stops
-  hydrating 17 of them, and making the halo scale with a figure's size so small ones stop drowning
-  in it. The 400px render must stay pixel-identical, and the builder proves it with a diff.
 - **The architect seat's top-to-bottom review**, in your own session "engineerL architect seat
   handoff". Its rebuild map is in, section 2A.
 
@@ -264,7 +262,7 @@ staging, since it is a plan and cost choice.
 | `decider` on identity, "forming" and the runner | ADR-005 ruled (section 3), two yes-or-no answers for you (2.10) |
 | `legal` on the terms beside the Pact | Section 0B, and four drafts in `council/legal/drafts/` |
 | `security` | The production fix, prepared (section 0); tier reads without the service key (section 4) |
-| Five builders | The site in section 1: shell, discourse layer, profiles, content pages, `/fingerprint` and the gaps |
+| Six builders | The site in section 1: shell, discourse layer, profiles, content pages, `/fingerprint` and the gaps, and the fingerprints drawn on the server with a halo that scales |
 
 ---
 
@@ -322,8 +320,11 @@ else, which serves as the acceptance test. `builder` implements.
   yet (section 0B).
 - Every visitor sees a profile's fingerprint. The Council recommends owner-only until the human
   study passes (section 0A).
-- `/fingerprint` sends 4.3MB of HTML on every request, from 35,000 nodes, because every figure
-  hydrates. Drawing the static figures without hydrating them fixes it, in `components/fingerprint`.
+- `/fingerprint` is heavy. Its figures are now drawn on the server, which cut its main-thread
+  blocking from 451 ms to 123 ms in a production build, but its HTML grew from 4.35 MB to 5.12 MB,
+  since Next sends a server component's output twice, and it still carries about 35,000 nodes.
+  Serving its fixed figures as cached SVG images would cut all three, and needs one decision: how
+  the token colours reach an image.
 - On `/fingerprint`, the Early figure's copy ("Discourse already carries Heat") does not describe its
   data, which has Discourse at 0 and no Heat; Mature's colour words no longer match the twelve-topic
   palette; and the demo carousel has no topic history, so "the topics they wrote about" shows
