@@ -176,6 +176,44 @@ export function turbulenceWave(theta: number, field: RingField, turbulence: numb
   return (waveAt(t, field.phase, lo) * (1 - frac) + waveAt(t, field.phase, lo + 1) * frac) * turbulence;
 }
 
+/**
+ * TUNING: how much colour survives at zero purity. 0.30 keeps a murky version
+ * of the topic rather than going fully grey, so a low-purity region still says
+ * which territory it came from.
+ */
+export const PURITY_SATURATION_FLOOR = 0.3;
+
+/**
+ * How saturated a ring's colour should be, given the purity behind it.
+ *
+ * THE CHANNEL THE SPEC PROMISES AND THE ENGINE NEVER BUILT. The recovered
+ * engine computes `localPurity` and uses it in exactly one place, the base
+ * noise amplitude at line 500. Its own comment at line 175 says purity "drives
+ * base color saturation" and the live fingerprint page tells readers the same
+ * thing. Neither is true: colour comes from `topicColor()`, which never sees
+ * purity. Verified by reading every use of the variable.
+ *
+ * It matters for legibility rather than fidelity. Without it, every ring of a
+ * single-territory contributor renders at the palette's full strength and the
+ * whole shape reads as one saturated mass, which is what Dan reported on
+ * 2026-09-20 looking at the six-profile gallery.
+ */
+export function saturationForPurity(purity: number): number {
+  const p = Math.max(0, Math.min(1, purity));
+  return PURITY_SATURATION_FLOOR + p * (1 - PURITY_SATURATION_FLOOR);
+}
+
+/** Pull a colour toward its own luminance grey by the purity behind it. */
+export function applyPurity(rgb: readonly [number, number, number], purity: number): [number, number, number] {
+  const k = saturationForPurity(purity);
+  const grey = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
+  return [
+    Math.round(grey + (rgb[0] - grey) * k),
+    Math.round(grey + (rgb[1] - grey) * k),
+    Math.round(grey + (rgb[2] - grey) * k),
+  ];
+}
+
 /** `depth` is 0 at the outermost ring and 1 at the innermost. */
 export function baseNoiseAmplitude(purity: number, depth: number): number {
   return ((1 - purity) * BASE_NOISE_IMPURITY_GAIN + BASE_NOISE_FLOOR) * (1 + (1 - depth) * 0.4);

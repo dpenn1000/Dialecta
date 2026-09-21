@@ -50,6 +50,25 @@ def mix(a, b, t):
     return tuple(round(a[i] + (b[i] - a[i]) * t) for i in range(3))
 
 
+def desaturate(rgb, purity):
+    """
+    Pull a colour toward its own grey as purity falls.
+
+    The engine computes `localPurity` and uses it in exactly one place, the base
+    noise amplitude at line 500. Its own comment at line 175 says purity "drives
+    base color saturation" and the live page says "Purity drives color
+    saturation". Neither is true in the implementation: colour comes from
+    topicColor(), which never sees purity. This is that channel, built.
+
+    It matters for legibility rather than fidelity. Without it every ring of a
+    single-territory contributor renders at the palette's full strength and the
+    shape reads as one saturated mass.
+    """
+    k = 0.30 + max(0.0, min(1.0, purity)) * 0.70
+    grey = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]
+    return tuple(round(grey + (c - grey) * k) for c in rgb)
+
+
 def smoothstep(t):
     return t * t * (3 - 2 * t)
 
@@ -134,8 +153,13 @@ def build(profile, max_r, salt):
             cb = sharp_blend((deg - i * 60) / 60)
             ca = TOPICS.get(topic_at(a0) or "", ("#8a8278", "#5a5248"))
             cbb = TOPICS.get(topic_at(a1) or "", ("#8a8278", "#5a5248"))
-            col = mix(hex_rgb(ca[0]), hex_rgb(cbb[0]), cb)
-            pts.append((math.cos(theta - math.pi / 2) * r, math.sin(theta - math.pi / 2) * r, col))
+            col = desaturate(mix(hex_rgb(ca[0]), hex_rgb(cbb[0]), cb), pur)
+            deep = desaturate(mix(hex_rgb(ca[1]), hex_rgb(cbb[1]), cb), pur)
+            clar = met[a0][2] * (1 - blend) + met[a1][2] * blend
+            strength = (min(grad[a0], HORIZON) / HORIZON * (1 - blend)
+                        + min(grad[a1], HORIZON) / HORIZON * blend)
+            pts.append((math.cos(theta - math.pi / 2) * r, math.sin(theta - math.pi / 2) * r,
+                        col, deep, strength, clar))
         rings.append(pts)
 
     counts = {}
@@ -166,7 +190,7 @@ def render_one(profile, salt):
         rc = res**0.7
         glow = Image.new("L", (S, S), 0)
         gd = ImageDraw.Draw(glow)
-        gd.polygon([(cx + x, cy + y) for x, y, _ in rings[0]], fill=int(70 + rc * 150))
+        gd.polygon([(cx + pt[0], cy + pt[1]) for pt in rings[0]], fill=int(70 + rc * 150))
         glow = glow.filter(ImageFilter.GaussianBlur((8 + rc * 22) * SUP * 0.55))
         tint = Image.new("RGB", (S, S), halo_rgb)
         layer = Image.composite(tint, layer, glow.point(lambda v: int(v * (0.25 + rc * 0.6))))
@@ -188,15 +212,25 @@ def render_one(profile, salt):
             fill=RING_C, width=SUP,
         )
 
+    # The engine's own bands, which my first pass flattened into one ramp and
+    # which is most of why the shape read as a blob: one strong silhouette in
+    # DEEP colour, two medium rings, and an interior that fades to 0.22.
     n = len(rings)
-    for k, pts in enumerate(rings):
-        fade = 0.30 + 0.70 * (1 - k / max(1, n - 1))
-        wid = SUP if k else SUP * 2
+    for k in range(n - 1, -1, -1):
+        pts = rings[k]
+        if k == 0:
+            opacity, base_w, use_deep = 0.95, 1.6, True
+        elif k <= 2:
+            opacity, base_w, use_deep = 0.78 - (k - 1) * 0.08, 1.2, False
+        else:
+            interior = (k - 3) / max(1, n - 4)
+            opacity, base_w, use_deep = max(0.22, 0.55 - interior * 0.30), 1.25, False
         for j in range(len(pts)):
-            x0, y0, c0 = pts[j]
-            x1, y1, _ = pts[(j + 1) % len(pts)]
-            col = mix(BG, c0, fade)
-            d.line([cx + x0, cy + y0, cx + x1, cy + y1], fill=col, width=wid)
+            x0, y0, c0, deep0, st0, cl0 = pts[j]
+            x1, y1, _, _, st1, _ = pts[(j + 1) % len(pts)]
+            col = deep0 if use_deep else c0
+            w = max(1, round(base_w * (0.55 + (st0 + st1) / 2 * 0.90) * SUP))
+            d.line([cx + x0, cy + y0, cx + x1, cy + y1], fill=mix(BG, col, opacity), width=w)
 
     d.ellipse([cx - 4 * SUP, cy - 4 * SUP, cx + 4 * SUP, cy + 4 * SUP], fill=hex_rgb("#b8862e"))
     return layer.resize((CELL, CELL), Image.LANCZOS), dominant

@@ -51,11 +51,19 @@ signal, none of them sharing.
 | --- | --- | --- |
 | Petal extent | `graduations` per axis | The shape itself |
 | Ring hue | Topic history, laid down outward in time | Lines 50 to 66, 212 onward |
-| Saturation | `purity = forum / total` | Line 175 |
 | Wave amplitude and frequency | `turbulence = (heat + stance) / total` | Line 176 |
-| Line crispness | `clarity = forum / (forum + echo + fog)` | Line 177 |
+| Line crispness | `clarity = forum / (forum + echo + fog)` | Line 177, three blur buckets at 838 |
+| Stroke weight | `localStrength`, graduations at that angle | Line 549, scaled 0.55 to 1.45 |
+| Silhouette against interior | Ring index | `colorDeep` on k=0, opacity 0.95 down to 0.22 |
 | Halo throw and opacity | `resonance`, 0 to 1 | Lines 604 to 676 |
 | Halo hue | `dominantTopic` | Line 626 |
+| ~~Saturation~~ | ~~`purity = forum / total`~~ | **Documented at line 175, not implemented** |
+
+**The saturation channel does not exist in the engine.** `localPurity` is computed and then used in exactly one place, the base noise amplitude at line 500. The engine's own comment says purity "drives base color saturation" and the live fingerprint page tells readers the same thing. Colour comes from `topicColor()`, which never sees purity. An earlier version of this table repeated the comment's claim rather than the code's behaviour.
+
+It is built now, in `packages/core/src/fingerprint-texture.ts` as `saturationForPurity` and
+`applyPurity`, because it is the channel that keeps a single-territory contributor from rendering
+as one saturated mass.
 
 **Hue is not axis identity.** The engine says so in its own comment on the axis table: `color` is a
 fallback used for seed dots, legends, and when topic history is missing, and is explicitly not used

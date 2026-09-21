@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   NOISE_OCTAVES,
+  PURITY_SATURATION_FLOOR,
+  applyPurity,
+  saturationForPurity,
   ROTATION_WALK_STEP,
   baseNoiseAmplitude,
   perimeterNoise,
@@ -132,5 +135,37 @@ describe('textureOffset', () => {
   it('closes around the perimeter with every channel live', () => {
     const input = { field: field(0.9), depth: 0.2, purity: 0.4, turbulence: 0.63, maturity: 19 };
     expect(textureOffset({ ...input, theta: 0 })).toBeCloseTo(textureOffset({ ...input, theta: TAU }), 9);
+  });
+});
+
+describe('saturationForPurity', () => {
+  // The engine documents this channel at line 175 and the live page promises it
+  // to readers, and neither is implemented: localPurity only ever reaches the
+  // base noise amplitude. These tests are the channel actually existing.
+  it('gives full colour to a pure history', () => {
+    expect(saturationForPurity(1)).toBe(1);
+  });
+
+  it('keeps a floor, so a murky region still says which territory it came from', () => {
+    expect(saturationForPurity(0)).toBe(PURITY_SATURATION_FLOOR);
+    expect(saturationForPurity(-3)).toBe(PURITY_SATURATION_FLOOR);
+  });
+
+  it('rises with purity', () => {
+    expect(saturationForPurity(0.2)).toBeLessThan(saturationForPurity(0.8));
+  });
+
+  it('pulls a colour toward its own grey, never toward another hue', () => {
+    const red = [158, 32, 32] as const;
+    const grey = 0.299 * red[0] + 0.587 * red[1] + 0.114 * red[2];
+    const muted = applyPurity(red, 0);
+    expect(muted[0]).toBeLessThan(red[0]);
+    expect(muted[1]).toBeGreaterThan(red[1]);
+    // still on the same side of grey, so the hue survives
+    expect(muted[0]).toBeGreaterThan(grey);
+  });
+
+  it('leaves a pure colour alone', () => {
+    expect(applyPurity([158, 32, 32], 1)).toEqual([158, 32, 32]);
   });
 });
