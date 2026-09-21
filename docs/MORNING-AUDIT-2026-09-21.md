@@ -38,6 +38,17 @@ Fixing either is a production change, so both wait for you. **`security` has the
   their own `*.vercel.app` addresses with the old handlers, and promoting a new deployment does not
   touch them. Standard Protection closes those and leaves `dialecta.vercel.app` public.
 
+## 0A. The fingerprint Council's answer
+
+Readable at profile size with a key, and false about heat. Blind readers matched marks to people
+19 of 21 times against 3 by chance, and 5 of 21 at byline size. Every single-mark reader described
+a heated person, including Father Anselm, who has no Heat at all; the organic wobble is what the
+legend teaches as heat. The Council recommends marks stay visible only to their owner until a test
+with real people passes ($137 small, $411 full), and fixing what the database records first.
+Seven decisions are yours, in the log's closing section "For Dan, in the morning":
+`council/log/2026-09-20-fingerprint-legibility-and-model.md`. On your live renders: what you liked
+is lightness, which either colour choice can keep.
+
 ## 0B. The terms beside the Pact, drafted
 
 You asked for them tonight, and `legal` wrote four: terms of service, a privacy notice, membership
@@ -64,17 +75,6 @@ What the terms cannot truthfully say yet: nobody can accept them, because the Pa
 records nothing and sign-in shows no terms; a membership buys no working feature in the new app; and
 seven Pact lines contradict them, each with a proposed fix in `exchange/open/2026-09-21-legal-01`.
 
-## 0A. The fingerprint Council's answer
-
-Readable at profile size with a key, and false about heat. Blind readers matched marks to people
-19 of 21 times against 3 by chance, and 5 of 21 at byline size. Every single-mark reader described
-a heated person, including Father Anselm, who has no Heat at all; the organic wobble is what the
-legend teaches as heat. The Council recommends marks stay visible only to their owner until a test
-with real people passes ($137 small, $411 full), and fixing what the database records first.
-Seven decisions are yours, in the log's closing section "For Dan, in the morning":
-`council/log/2026-09-20-fingerprint-legibility-and-model.md`. On your live renders: what you liked
-is lightness, which either colour choice can keep.
-
 ---
 
 ## 1. What you can open this morning
@@ -94,11 +94,11 @@ Every page sits inside the ported header, drawer and footer.
 | `/guidebook`, `/community`, `/about`, `/stewards` | Ported from their live templates. Community lacks archetypes and feed names until the identity work (section 4) |
 | `/profile/dpenn1000` | Your profile: signature, Order, articles, book covers. The fingerprint says it could not be read, because it needs the service key on this machine (2.4) |
 | `/profile/fingerprint-lab` | **The fingerprint on real data**: three demo profiles' real `axis_scores` rows, plus Newborn and Early. `?example=wen-zhao&size=760` draws one large. Development only |
+| `/fingerprint` | **The explainer page, every figure drawn by the new engine.** Compared side by side against the live page you liked, same data, same size: `docs/fingerprint-examples/live-vs-new/`, starting with `compare-archetypes-1.png`. Silhouette, halo and colour track the live renders closely; the rings run concentric where live's swirl, which is the spiral you asked to lose |
 | `/write` | The publishing engine: nine stages from blank page to publish. Publishing needs 2.1 |
 | `/analytics` | Platform analytics with real numbers, every card naming the decision it changes. Open under `next dev`, gated in production |
 | `/login` | Magic link and Google. Every sign-in link now brings you back to the page you clicked it on |
 
-| `/fingerprint` | **The explainer page, every figure drawn by the new engine.** Compared side by side against the live page you liked, same data, same size: `docs/fingerprint-examples/live-vs-new/`, starting with `compare-archetypes-1.png`. Silhouette, halo and colour track the live renders closely; the rings run concentric where live's swirl, which is the spiral you asked to lose |
 
 **It is a prototype, as you asked.** Nothing here is deployed, and nothing can be until the cutover.
 
@@ -121,9 +121,9 @@ Ranked by what they unblock. The first three are between you and publishing an a
 | **2.12** | **Heat and Stance badge ink, in the design spec.** The spec's Heat text measures 1.96:1 on its own fill against a 4.5:1 floor, and Stance's 4.26:1. Designer's D-24 replacements, `#1D0A02` and `#F9EAE6`, reach 4.61:1 and 4.91:1 at their worst stops (recomputed tonight). The spec is locked, so decider sent this to you on 2026-09-20, and nothing records an answer. The discourse layer carries the fix in its own CSS; the writer's badge and the analytics chips read the spec and still fail | Readable Heat and Stance badges everywhere: one `npm run tokens` carries it, and the discourse override comes out | Two values, yes or no |
 | **2.13** | **Two sentences in the Pact that `philosopher` ruled false.** Section IV: "Every stage is transparent. Every decision is contestable.", repeated in its stage III as "The system is always contestable." Section VI says the private profile tracks patterns "not as a score, not as a judgment". The new `/pact` ports both as written, each with a comment pointing at the ruling, because the copy is yours. The Pact is also the consent instrument `legal` builds on, so its terms drafting will say what these sentences cost | A Pact that is true when someone signs it | A rewrite of two sentences |
 | **2.14** | **An article published under a seeded persona.** "On Doubt and Devotion: When Faith Pauses" is published under Maya Reiss, one of the three seeded personas, on the live site and on the new front page. The personas themselves are off Community tonight, because backlog B-5 already ruled "real members only ... no seeded personas"; the article is yours to keep, relabel or unpublish | The front page and the article index | A decision, then one line |
-| **2.5** | **The price rise trigger.** The membership page raises the price on the hundredth member; `legal` and `philosopher` ruled to publish a date. A third option nobody has argued: first hundred or one year, whichever comes first | The membership page. `exchange/open/2026-09-21-convener-04` | A sentence |
+| **2.5** | **The price rise trigger.** The membership page raises the price on the hundredth member; `legal` and `philosopher` ruled to publish a date. `legal` has since moved to a third option: the first hundred or the date, whichever comes first, the only trigger where the people holding the founding price and the people with the Charter badge are the same group | The membership page. `exchange/open/2026-09-21-convener-04` | A sentence |
 | **2.6** | **The Underwriter price itself**, $50 against $100. Both seats support the ladder | The gifting rebuild and the Vercel licence | Free to decide |
-| **2.7** | **Colour: rings by axis or by territory.** Pending the fingerprint debate, section 5 | The fingerprint | After you read the debate |
+| **2.7** | **The fingerprint's seven decisions**, colour by subject or by pillar among them. The Council has answered (section 0A), and its log's closing section lists all seven | The fingerprint | After you read the log |
 
 ---
 
@@ -150,8 +150,9 @@ hunted down query by query.
 So read what you see this morning as **the prototype**, and the map as **the plan for the real build**.
 They are not in conflict, and the second is not started.
 
-Three of its six decisions are with `decider` now, debated overnight: the identity key column,
-"forming", and the downstream runner. One is yours alone: staging, since it is a plan and cost choice.
+Three of its six decisions went to `decider` overnight: the downstream runner is ruled (ADR-005, section 3),
+and the identity key and "forming" are yours as two yes-or-no answers (2.10). One is yours alone:
+staging, since it is a plan and cost choice.
 
 **Two conflicts in `CLAUDE.md` itself, both yours, neither changed by me:**
 
@@ -245,29 +246,25 @@ Three of its six decisions are with `decider` now, debated overnight: the identi
 
 ---
 
-## 5. Still running
+## 5. Still running, and what finished overnight
 
-- **The fingerprint Council**, with every seat, framed on your six properties. It was also given
-  your live renders and the reading that those rings are running the axis fallback palette, which
-  would mean the page you like is doing rings-by-axis and halo-by-territory at once. Its log will
-  have a section called `For Dan, in the morning`.
+**Still running:**
+
+- **A builder on `/fingerprint`'s weight**: drawing the figures on the server so the page stops
+  hydrating 17 of them, and making the halo scale with a figure's size so small ones stop drowning
+  in it. The 400px render must stay pixel-identical, and the builder proves it with a diff.
 - **The architect seat's top-to-bottom review**, in your own session "engineerL architect seat
-  handoff". It has been given everything found tonight so it starts from what is fixed. Its rebuild
-  map is in, section 2A.
-- **Builders: all five done and committed.** The site shell, the discourse layer, profiles with the
-  fingerprint, the content pages, and the gaps: `/fingerprint`, the writer's brass, sign-in that
-  returns you, and a root 404.
-- **One more builder, on `/fingerprint`'s weight**: drawing the figures on the server so the page
-  stops hydrating 17 of them, and making the halo scale with a figure's size so small ones stop
-  drowning in it. The 400px render must stay pixel-identical, and the builder proves it with a diff.
-- **`security`, preparing the production fix** for `/api/comments` and the upload route, section 0.
-  Its tier-read functions are done and in use (section 4).
-- **`decider` on three architecture rulings**: the identity key, "forming", and the downstream runner
-  (2.10), with positions from six seats. `council/log/2026-09-21-identity-forming-and-the-runner.md`.
-- **`legal`, drafting the terms that sit beside the Pact**, at your request: terms of service, a
-  privacy notice, membership terms with the separate renewal consent, and a cover note listing every
-  value left for you, what the build has to do before each clause is true, and what needs a lawyer
-  before any of it binds. Drafts land in `council/legal/drafts/`.
+  handoff". Its rebuild map is in, section 2A.
+
+**Finished, and where each one landed:**
+
+| Work | Result |
+| --- | --- |
+| The fingerprint Council | Section 0A, and seven decisions in its log |
+| `decider` on identity, "forming" and the runner | ADR-005 ruled (section 3), two yes-or-no answers for you (2.10) |
+| `legal` on the terms beside the Pact | Section 0B, and four drafts in `council/legal/drafts/` |
+| `security` | The production fix, prepared (section 0); tier reads without the service key (section 4) |
+| Five builders | The site in section 1: shell, discourse layer, profiles, content pages, `/fingerprint` and the gaps |
 
 ---
 
@@ -359,7 +356,8 @@ else, which serves as the acceptance test. `builder` implements.
   looked like a pending migration and a `db push` would have tried to run it again. All five now carry
   their live versions and the SQL live actually ran. Three more migrations from tonight, mine and the
   architect's, had no file at all; they are restored byte for byte from the history table. Measured
-  after: 14 of 16 September migrations match live, and nothing reads as pending. The two that differ,
+  after: 15 of 17 September migrations match live, `security`'s tier-read migration included, and
+  nothing reads as pending. The two that differ,
   `041504` and `043008`, are data fixes edited after they ran so a fresh replay would pass, and the ruling
   on them is `migrator`'s, along with the twenty April and May migrations that have no file (`architect-04`).
 
@@ -378,4 +376,10 @@ Each was caught by a seat or by measuring, and each is corrected in the file whe
 | The membership page | `council/designer/research/membership-prototype.html` |
 | The analytics spec | `team/builder/2026-09-20-analytics-spec.md` |
 | Every seat and its training | `docs/COUNCIL.md` |
+| The production fix for `/api/comments` and uploads | `council/security/hotfix-2026-09-21-api-comments/README.md` |
+| The terms, privacy notice and membership terms | `council/legal/drafts/` |
+| The fingerprint Council | `council/log/2026-09-20-fingerprint-legibility-and-model.md` |
+| Live against new fingerprints | `docs/fingerprint-examples/live-vs-new/` |
+| Identity, "forming" and the runner | `council/log/2026-09-21-identity-forming-and-the-runner.md`, `docs/decisions/ADR-005-downstream-runner.md` |
+| The rebuild map | `team/architect/architecture/2026-09-21-rebuild-map.md` |
 | Open records | `exchange/open/` |
