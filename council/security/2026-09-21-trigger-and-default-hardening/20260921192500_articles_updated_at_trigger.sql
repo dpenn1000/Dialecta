@@ -1,0 +1,95 @@
+-- DRAFT. Not applied. Written by the security seat on the convener's brief, 2026-09-21, closing
+-- the "still open, deliberately" bullet in docs/MORNING-AUDIT-2026-09-21.md: "articles has no
+-- live trigger keeping updated_at current, so an amended article keeps its insert time there."
+--
+-- The placeholder timestamp in this filename is not binding; see the note in the first file in
+-- this folder on why.
+--
+-- MEASURED, mguulnibvzusfvyuowwh, 2026-09-21, read-only role. public.articles carries
+-- created_at and updated_at, both timestamptz not null default now(); the column default is
+-- what gives a new row a sane value at insert without needing a trigger for that half. Zero
+-- triggers exist on public.articles today (pg_trigger, not tgisinternal, joined to articles'
+-- oid, empty). The audit's premise is confirmed rather than assumed: nothing on this table has
+-- ever touched updated_at after the row was created, so an edited article's updated_at is
+-- identical to its created_at for as long as the row lives.
+--
+-- REUSES public.set_updated_at() RATHER THAN A NEW FUNCTION. That function already exists,
+-- already does exactly this (`NEW.updated_at := now(); RETURN NEW;`), already carries
+-- search_path '' pinned, and already runs identically on two other tables:
+--   aspirations_set_updated_at  before update on public.aspirations
+--   profiles_updated_at         before update on public.profiles
+-- A dedicated articles_set_updated_at() was considered and rejected. Every new function in this
+-- schema is born with PUBLIC and anon EXECUTE by default (the sibling migration in this same
+-- folder, 20260921191500, exists to close that for functions written from here forward; until it
+-- lands, a new function is exactly as open as the three the first migration in this folder
+-- closes). A fourth trigger function would recreate the class of exposure the other two files in
+-- this folder spend their whole effort closing, for zero behavioral difference from reusing the
+-- one that already exists, is already proven safe on two tables, and this migration is about to
+-- help close for good. Reusing it costs one CREATE TRIGGER statement and adds no new grant
+-- surface at all.
+--
+-- SECURITY DEFINER: not used, and not needed. A trigger fires under the privileges of the role
+-- performing the triggering statement, not under any privilege of its own, unless the function
+-- is marked SECURITY DEFINER, in which case it runs as its owner instead. set_updated_at() reads
+-- nothing beyond the NEW row already in flight for the very statement that fired it and writes
+-- only NEW.updated_at, so there is no privilege gap between what the invoking role can already do
+-- (perform the UPDATE the trigger is attached to) and what the trigger body needs to do. Contrast
+-- opinion_map_positions_resolve_identity, which is SECURITY DEFINER because it looks up rows in
+-- profiles and articles by a Ghost id the invoking role may or may not otherwise hold SELECT on,
+-- a cross-table read set_updated_at() never performs. Its own migration comment is explicit that
+-- the elevation there is for consistent behavior across callers, not because it is strictly
+-- required either; set_updated_at() does not reach even that bar, since it has no cross-table
+-- read to make consistent. Matches both existing uses of this function, neither of which is
+-- SECURITY DEFINER.
+--
+-- WHO CAN FIRE IT, AND WHY THAT IS UNCHANGED BY THIS MIGRATION. has_table_privilege /
+-- has_column_privilege, measured 2026-09-21: anon holds no UPDATE on articles at all (table or
+-- column). authenticated holds table-level UPDATE revoked and column-level UPDATE re-granted on
+-- exactly ten columns by 20260921053807_articles_author_write_policy.sql (title, excerpt, topic,
+-- body_json, body_html, declared_claims, declaration, declared_tier, stage_2_5_choice,
+-- author_note); updated_at is not one of them; that migration's own comment records the choice
+-- as deliberate ("Left on the table grant: DELETE, TRUNCATE, REFERENCES, TRIGGER, MAINTAIN", by
+-- omission everything else, including updated_at, is not given back). service_role holds full
+-- table-level UPDATE, untouched. A BEFORE ROW trigger's own modification of NEW is not subject to
+-- a fresh column-privilege check: PostgreSQL checks column privileges once, against the columns
+-- named in the client's own UPDATE target list, at executor startup; a trigger mutating NEW
+-- afterward is not re-checked against the invoking role's column grants. This is standard
+-- PostgreSQL trigger behavior (the same mechanism the fact this folder's first migration relies
+-- on rests on: firing is gated by table/column privilege on the write, not by a fresh check on
+-- whatever the trigger body itself touches) and is the reason this pattern is usable at all for
+-- an audit column a client is deliberately not allowed to set directly: an author can revise
+-- title or body_html and updated_at advances regardless, without articles_author_update's column
+-- grant ever needing to include it, the same way published_at's five-minute check in that same
+-- migration keeps a client from writing a timestamp column directly while the database still
+-- keeps it honest. Not measured by a live write against production, since that is a mutation this
+-- reads-only session does not perform; stated here as PostgreSQL's documented privilege-check
+-- architecture, and the folder's README gives the convener the one write that would confirm it
+-- directly.
+--
+-- articles_author_update's own WITH CHECK (author_profile_id, author_member_id,
+-- current_member_is_author) does not reference updated_at, so nothing about this trigger
+-- interacts with that policy either.
+--
+-- NO ORDERING REQUIREMENT WITH THE OTHER TWO FILES IN THIS FOLDER. This migration's trigger calls
+-- set_updated_at() regardless of what EXECUTE grants that function currently holds, for the same
+-- reason the first migration in this folder is safe to apply at all: trigger firing does not
+-- check EXECUTE. Apply this before, after, or in the same sitting as either sibling file, in any
+-- order, independently.
+--
+-- BEFORE UPDATE only, no BEFORE INSERT. The column default already gives a new row a correct
+-- updated_at; a second trigger for insert would be redundant with the default, not a fix for
+-- anything broken. Matches both existing uses of set_updated_at(), neither of which fires on
+-- insert either.
+--
+-- No WHEN clause. Neither profiles_updated_at nor quotes_updated_at guards on OLD.* is distinct
+-- from NEW.*; both touch updated_at unconditionally on any UPDATE statement against their table,
+-- classified content edited through nothing else. Matching that rather than introducing a
+-- narrower rule for articles alone.
+
+create trigger articles_updated_at
+  before update on public.articles
+  for each row
+  execute function public.set_updated_at();
+
+-- No grant or revoke statement, and no `notify pgrst, 'reload schema'`. A trigger is not a
+-- PostgREST-exposed object; nothing in the Data API's schema cache changes because one was added.

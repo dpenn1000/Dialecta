@@ -58,6 +58,14 @@ Committed and on `backup/2026-09-21-overnight`; `main` is still not pushed.
   answers-its-own-question check, rank by the article's tensions, retire the binary.
 - **Placement has no keyboard path.** The opinion-map figures are images with click, touch and
   pointer handlers only; a reader who can't use a pointer can't place themselves.
+- **A written owner's guide to the stack** is published: [The Dialecta stack](https://claude.ai/artifact/LPW4KzWTEKDiCrX1ib6Jfi),
+  what Next.js, Vercel, Supabase and Anthropic each do and what's actually live today. Sent
+  before the Vercel/Next.js walkthrough itself, which is still open.
+- **The designer's loose opinion-map ideas** are filed, not built, at
+  `council/designer/research/2026-09-21-opinion-map-ideas.md`: an ink-settle animation on commit,
+  poles brightening toward a live drag, concentric conviction rings in place of the meaningless
+  quarter-grid, dropping the cartesian's crosshair, a drag-to-smudge gesture for a torn reader,
+  and keeping the binary's pill shape for some future smaller control.
 - **Four em dashes sit in stored declarations**, one in Far Shore's Strongest Objection (now the
   first thing the overlay shows) and three in Kathryn's piece. They are the authors' words, so they
   are untouched until Dan says.
@@ -285,8 +293,10 @@ staging, since it is a plan and cost choice.
   each table's policies; `comments.member_id` and `articles.author_member_id` certainly do, and the
   legacy API that trusts those values is still your production API. `security` holds this under your
   no-half-measures rule. `exchange/open/2026-09-21-convener-05`.
-- Three trigger functions still hold public execute. Revoking should be safe and was not tested
-  against production overnight.
+- ~~Three trigger functions still hold public execute~~ **Closed 2026-09-21.** `set_updated_at`,
+  `quotes_set_updated_at` and `profiles_subscription_tier_touch` closed to public, anon and
+  authenticated; the future-function default closed too, for both PUBLIC's built-in default and
+  anon's per-schema one, which need opposite REVOKE forms. `security-02`.
 - A classified article keeps its tier through a rewrite (2.11).
 - ~~Breach bodies are withheld by the new app's server, not yet by the database~~ **Closed
   2026-09-21.** `comment_bodies()` releases text only for classified, unsuppressed, non-Breach
@@ -303,8 +313,8 @@ staging, since it is a plan and cost choice.
 - The architecture map's single `alter default privileges ... from public` would repeat tonight's
   half-revoke on every future function, because Supabase's defaults also grant `anon` by name. It
   takes a second statement for `anon`. `security`'s finding, filed to the architect.
-- `articles` has no live trigger keeping `updated_at` current, so an amended article keeps its
-  insert time there. `security`'s finding, for `migrator`.
+- ~~`articles` has no live trigger keeping `updated_at` current~~ **Closed 2026-09-21.** A trigger
+  reusing the existing `set_updated_at()` now fires before every update. `security-02`.
 
 ---
 

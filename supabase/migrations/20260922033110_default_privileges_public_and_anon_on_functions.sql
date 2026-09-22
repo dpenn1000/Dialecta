@@ -1,0 +1,120 @@
+-- Recorded as 20260922033110 by apply_migration, 2026-09-21, from the security seat's draft
+-- council/security/2026-09-21-trigger-and-default-hardening/20260921191500_default_privileges_public_and_anon_on_functions.sql.
+--
+-- the "still open, deliberately" bullet in docs/MORNING-AUDIT-2026-09-21.md: "The architecture
+-- map's single `alter default privileges ... from public` would repeat tonight's half-revoke on
+-- every future function, because Supabase's own defaults also grant anon by name, separately
+-- from PUBLIC."
+--
+-- The placeholder timestamp in this filename is not binding; see the note in the sibling file
+-- in this folder on why.
+--
+-- WHAT THIS CLOSES. team/architect/architecture/2026-09-21-rebuild-map.md, "Functions" row,
+-- proposes exactly one statement: "One global `alter default privileges revoke execute on
+-- functions from public`, and every function revokes from `public` and `anon` by name." That row
+-- is a plan, not a migration; nothing in supabase/migrations/ has run it yet. This file is that
+-- statement, made concrete, plus the second statement the map's own row does not carry: a
+-- default-privilege revoke of anon, so a function created after this migration without its own
+-- explicit revoke does not ship anon-executable by default. The per-function half of the map's
+-- row, "every function revokes from public and anon by name", is unaffected by this migration
+-- either way; every function shipped tonight already does that explicitly
+-- (20260921063139, 20260921152637, 20260921154615, 20260921160005) and keeps doing it, since a
+-- default is only what applies when a migration forgets to.
+--
+-- MEASURED, mguulnibvzusfvyuowwh, 2026-09-21, read-only role. pg_default_acl, every row:
+--
+--   role       | schema (null = global) | objtype | acl
+--   postgres   | public                  | S (sequence) | postgres=rwU, anon=rwU, authenticated=rwU, service_role=rwU
+--   postgres   | public                  | f (function) | postgres=X, anon=X, authenticated=X, service_role=X
+--   postgres   | public                  | r (table)    | postgres=arwdDxtm, anon=arwdDxtm, authenticated=arwdDxtm, service_role=arwdDxtm
+--   postgres   | storage                 | S, f, r      | same shape as public
+--   supabase_admin | extensions, graphql, graphql_public, public | S, f, r | supabase_admin's own defaults
+--   supabase_auth_admin | auth           | S, f, r      | supabase_auth_admin's own defaults
+--
+-- No row has a null schema. Every default-privilege customization on this project, for every
+-- role and every object type, was made per-schema. None was ever made globally. The function row
+-- for (role postgres, schema public) is the one this migration acts on: it grants EXECUTE to
+-- anon, authenticated and service_role BY NAME, set up by Supabase's own project bootstrap before
+-- this repository's first commit (nothing in supabase/migrations/ or _recovered/supabase/
+-- migrations/ contains an ALTER DEFAULT PRIVILEGES statement of any kind; grepped both trees,
+-- zero hits). PUBLIC holds no entry of its own in that ACL string, which is expected: PUBLIC's
+-- EXECUTE on a new function is PostgreSQL's built-in default for the function object type, never
+-- written to pg_default_acl unless a statement has explicitly customized it, exactly as
+-- team/architect/knowledge/2026-postgres-alter-default-privileges.md already found and quotes.
+--
+-- THE TWO STATEMENTS BELOW ARE DIFFERENT FORMS ON PURPOSE, AND THAT IS THE FINDING. PostgreSQL,
+-- "ALTER DEFAULT PRIVILEGES" (postgresql.org/docs/current/sql-alterdefaultprivileges.html,
+-- fetched verbatim 2026-09-21, corroborating and extending the architect's own citation of the
+-- same page):
+--
+--   "Default privileges that are specified per-schema are added to whatever the global default
+--   privileges are for the particular object type."
+--
+--   On a per-schema REVOKE trying to undo PUBLIC's built-in default: "This command has no
+--   effect, unless it is undoing a matching GRANT... That's because per-schema default
+--   privileges can only add privileges to the global setting, not remove privileges granted by
+--   it."
+--
+--   On the reverse direction, a GLOBAL REVOKE trying to undo a PER-SCHEMA GRANT: "This means you
+--   cannot revoke privileges per-schema if they are granted globally... A global REVOKE also
+--   cannot undo privileges added via a per-schema GRANT; you must use a per-schema REVOKE in the
+--   same schema where the grant was made."
+--
+-- PUBLIC's EXECUTE comes from PostgreSQL's own built-in global default, not from any GRANT this
+-- project's history contains, so only the global form (no IN SCHEMA) can revoke it; a per-schema
+-- attempt is accepted, succeeds, and does nothing, which is the exact trap the architect's note
+-- already names. anon's EXECUTE is the opposite provenance: it was added by an explicit
+-- PER-SCHEMA grant (IN SCHEMA public), so per the documentation's own final sentence above, only
+-- a per-schema REVOKE in that same schema can undo it. A global-form revoke of anon
+-- (`alter default privileges revoke execute on functions from anon;`, no IN SCHEMA) would be
+-- accepted, would succeed, and would do nothing for schema public, for the mirror-image reason
+-- the per-schema PUBLIC attempt does nothing: two statements that read almost identically, two
+-- opposite required forms, because the two grants they target were made through two different
+-- mechanisms. This was checked against the documentation before drafting rather than assumed
+-- from the shape of the PUBLIC fix; the naive global form for anon was the first draft of this
+-- file and was replaced after the fetch above, not before.
+--
+-- Not run live. ALTER DEFAULT PRIVILEGES has a real, non-transactional-in-the-useful-sense side
+-- effect (it edits pg_default_acl), so confirming this by trial against mguulnibvzusfvyuowwh was
+-- out of scope for a reads-only session; the Verification section in this folder's README gives
+-- the convener a create-inside-a-transaction-and-rollback probe that proves it without leaving
+-- anything behind.
+--
+-- WHY AUTHENTICATED IS NOT A THIRD STATEMENT HERE. The same pg_default_acl row also names
+-- authenticated by default, alongside anon, and a future function would inherit authenticated's
+-- EXECUTE the same way it would anon's without an explicit per-function revoke. This migration
+-- does not touch it. The brief that opened this scoped the fix to anon; every SECURITY DEFINER
+-- function shipped tonight that needs a client role at all has ended up granting authenticated
+-- (claim_profile, current_profile_id, get_own_profile_for_comment, own_comment_readings,
+-- place_opinion_map_position, comment_tiers, comment_bodies), so a default that already leans
+-- toward authenticated is closer to this schema's actual, observed shape than one that leans
+-- toward anon. Revoking authenticated's default too is the same one-line, same-form fix
+-- (`alter default privileges in schema public revoke execute on functions from authenticated;`)
+-- if the convener wants full closure rather than closure-plus-the-existing-lean; not drafted here
+-- because it was not asked and because it is a judgment call about what a forgotten-revoke
+-- should fail open toward, not a mechanical extension of this one.
+--
+-- NOT RETROACTIVE, CONFIRMED FOR EVERY FUNCTION THIS COULD PLAUSIBLY TOUCH. PostgreSQL, same
+-- page: "It does not affect privileges assigned to already-existing objects." Measured against
+-- proacl for the seven functions the brief named, 2026-09-21: comment_bodies, comment_tiers,
+-- own_comment_readings, current_profile_id, place_opinion_map_position, claim_profile,
+-- get_own_profile_for_comment. Every one already carries its own explicit ACL with no PUBLIC
+-- entry (each was created with the by-name revoke-then-grant pattern this repo has used since
+-- 20260921004527), so none of the seven changes shape when this migration runs. The two
+-- statements below only change what a function not yet written will be born with.
+
+-- 1. PUBLIC's built-in default. Global form (no IN SCHEMA), the form
+--    team/architect/architecture/2026-09-21-rebuild-map.md's "Functions" row already calls for.
+alter default privileges
+  revoke execute on functions from public;
+
+-- 2. anon's explicit per-schema default. Per-schema form (IN SCHEMA public), matching the schema
+--    the original grant was made in, because the documentation quoted above says that is the
+--    only form that can reverse it.
+alter default privileges in schema public
+  revoke execute on functions from anon;
+
+-- No `notify pgrst, 'reload schema'`. This migration changes no existing function's grants and
+-- adds or removes no object PostgREST has ever seen; the schema cache has nothing to reload
+-- until the first function created under these new defaults lands, and that migration will carry
+-- its own notify the way every one tonight already has.
