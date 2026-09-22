@@ -95,7 +95,6 @@ function AiDisclosure({
   tierReason,
   alignmentNote,
   coreClaimDetected,
-  authorMessage,
   flaggedPassages,
   tensions,
 }: {
@@ -103,7 +102,6 @@ function AiDisclosure({
   tierReason: string | null;
   alignmentNote: string | null;
   coreClaimDetected: string | null;
-  authorMessage: string | null;
   flaggedPassages: FlaggedPassage[];
   tensions: Tension[];
 }) {
@@ -130,7 +128,15 @@ function AiDisclosure({
         <Field label={s.aiDisclosure.tierReason} value={tierReason} />
         <Field label={s.aiDisclosure.alignmentNote} value={alignmentNote} />
         <Field label={s.aiDisclosure.coreClaimDetected} value={coreClaimDetected} />
-        <Field label={s.aiDisclosure.authorMessage} value={authorMessage} />
+        {/* authorMessage ("Note to the Author") is deliberately not rendered here: it is the
+           engine's private coaching to the author, and the Council review of 2026-09-21 found it
+           reads as a verdict on the author to a reader browsing tiers, which Editorial Voice bars.
+           Dan approved removing it from this reader-facing surface (council/log/2026-09-21-
+           opinion-maps-and-the-declaration.md, item 6, "I agree 100%"). The author still sees it
+           privately in the editor's own Stage 2.5 step (docs/Dialecta_Article_Editorial_Template.md),
+           and may choose to publish their own reply there. aiAnalysis.authorMessage and
+           AiDisclosure's own prop are kept, both because the editor still needs the field and so a
+           later private surface can read it without a data-layer change. */}
 
         {flaggedPassages.length > 0 ? (
           <div className="ad-group">
@@ -211,7 +217,10 @@ export async function ArticleDeclaration({
         <div className="om-section">
           <div className="om-section-head">
             <div className="om-section-eyebrow">{maps.length === 1 ? sm.heading.one : sm.heading.many}</div>
-            <div className="om-section-intro">{maps.length === 1 ? sm.intro.one : sm.intro.many}</div>
+            {(() => {
+              const intro = maps.length === 1 ? sm.intro.one : sm.intro.many;
+              return intro ? <div className="om-section-intro">{intro}</div> : null;
+            })()}
           </div>
 
           <div className="om-figures">
@@ -244,7 +253,6 @@ export async function ArticleDeclaration({
           tierReason={aiAnalysis.tierReason}
           alignmentNote={aiAnalysis.alignmentNote}
           coreClaimDetected={coreClaimDetected}
-          authorMessage={aiAnalysis.authorMessage}
           flaggedPassages={aiAnalysis.flaggedPassages}
           tensions={aiAnalysis.tensions}
         />

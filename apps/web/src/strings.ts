@@ -2677,10 +2677,17 @@ export const strings = {
       bio: { label: 'Bio', meta: 'Author' },
       share: { label: 'Share', meta: null as string | null },
     },
+    /**
+     * Voice-editor's label audit, 2026-09-21 (council/log/2026-09-21-opinion-maps-and-the-
+     * declaration-voice-demo.md, Part C), Dan: "Yes, perfect". titleEm/titleRest replace
+     * "What was committed; what shifted", a tagline doing the kicker's job a second time, with
+     * a name that stops. Held back: the audit's "How the engine read this" -> "The Engine's
+     * Reading" fix, since Dan asked for a better word than "the Engine" first and this uses it.
+     */
     declare: {
       kicker: "⁂ The Author's Declaration",
-      titleEm: 'What was committed;',
-      titleRest: 'what shifted',
+      titleEm: 'The',
+      titleRest: 'Declaration',
       close: 'Close',
     },
     /**
@@ -2814,7 +2821,9 @@ export const strings = {
    */
   opinionMap: {
     declaration: {
-      eyebrow: 'What this article claims',
+      // "The Claim": voice-editor's fix for a header starting with "What", the pattern the
+      // house rule names as wrong. Dan: "Yes, perfect" (2026-09-21).
+      eyebrow: 'The Claim',
       coreClaim: 'Core Claim',
       scopeBoundary: 'Scope Boundary',
       strongestObjection: 'Strongest Objection',
@@ -2844,7 +2853,9 @@ export const strings = {
     maps: {
       question: 'The question',
       heading: { one: 'The opinion map', many: 'The opinion maps' },
-      intro: { one: 'Where the argument splits.', many: 'Two debates this article opens.' },
+      // many has no intro line: voice-editor's fix cut "Two debates this article opens.", a
+      // sentence describing the section the two maps below already show. Dan: "Yes, perfect".
+      intro: { one: 'Where the argument splits.', many: null as string | null },
       /**
        * The caption under every map's author marker. These two strings are
        * Dan's copy (council 2026-09-21, decisions 4 and 5): the marker is the
