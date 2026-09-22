@@ -55,3 +55,4 @@ One line per record, appended on open and rewritten on close. The index; the rec
 2026-09-21-migrator-01 | handoff | migrator -> convener | A-10 | open | Five article images inventoried, downloaded, verified; migration planned, not executed
 2026-09-21-migrator-02 | handoff | migrator -> convener | none | open | opinion_map_positions expand/contract drafted; live's writer confirmed, nothing applied
 2026-09-21-convener-07 | handoff | convener -> circulation | C0 | open | Live's share descriptions are Ghost data, not theme code; three excerpts to edit in Ghost Admin, and the card type cannot be fixed on Ghost
+2026-09-21-security-02 | handoff | security -> convener | none | open | Three trigger functions closed, the anon default-privilege gap drafted in its correct form, articles gets an updated_at trigger
